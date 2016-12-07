@@ -1,0 +1,18 @@
+{
+    "description": "New extension \"raml2yii\"",
+    "type": "rjapi-extension",
+    "name": "rjapi/extension-yii2-raml",
+    "require": {
+        "php": "^7.0",
+        "yiisoft/yii2": "^2.0",
+        "codeception/codeception": "^2.2",
+        "alecsammon/php-raml-parser": "^2.1",
+        "rjapi/extension-json-api": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "rjapi\\extension\\yii2\\raml\\": "src",
+            "rjapitest\\extension\\yii2\\raml\\": "tests"
+        }
+    }
+}

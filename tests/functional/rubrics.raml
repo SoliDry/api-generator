@@ -1,0 +1,127 @@
+#%RAML 1.0
+title: ITAR-TASS API
+version: v1
+description: ITAR-TASS API description RAML templates
+types:
+  ID:
+    type: integer
+    required: true
+  Type:
+    type: string
+    required: true
+    minLength: 1
+    maxLength: 255
+  Data:
+    type: object
+    required: true
+  TagRelationships:
+    type: object
+    properties:
+      data:
+        type: Data
+        properties:
+         id: ID
+         type: Type
+  TagAttributes:
+    type: object
+    properties:
+      title:
+        type: string
+        required: true
+        minLength: 3
+        maxLength: 255
+  Tag:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: TagAttributes
+  RubricRelationships:
+    type: object
+    properties:
+      data:
+        type: Data
+        properties:
+         id: ID
+         type: Type
+  RubricAttributes:
+    type: object
+    properties:
+      name_rubric:
+        type: string
+        required: true
+        maxLength: 500
+      url:
+        type: string
+        required: true
+        maxLength: 255
+      meta_title:
+        type: string
+        required: false
+        maxLength: 255
+      meta_description:
+        type: string
+        required: false
+        maxLength: 255
+      show_menu:
+        type: boolean
+        required: true
+      publish_rss:
+        type: boolean
+        required: true
+      post_aggregator:
+        type: boolean
+        required: true
+      display_tape:
+        type: boolean
+        required: true
+  Rubric:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: RubricAttributes
+      relationships: TagRelationships[]
+/rubrics:
+  get:
+    responses:
+      200:
+        body:
+          application/json.vnd+json:
+            type: Rubric[]
+  post:
+    body:
+     application/json.vnd+json:
+      type: Rubric
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json.vnd+json:
+              type: Rubric
+    patch:
+      body:
+       application/json.vnd+json:
+        type: Rubric
+    delete:
+      responses:
+        204:
+    /relationships/{relation}:
+      get:
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      post:
+        body:
+         application/json.vnd+json:
+          type: TagRelationships
+      patch:
+        body:
+         application/json.vnd+json:
+          type: TagRelationships
+      delete:
+        responses:
+          204:

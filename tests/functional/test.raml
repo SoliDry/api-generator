@@ -1,0 +1,740 @@
+#%RAML 1.0
+title: Articles #controller name
+version: v1 #api version
+baseUri: http://mysite.com/{version}
+# protocols: [http, https]
+
+/rubric/:
+  post:
+    description: |
+      Создание рубрики.
+    body:
+      application/vnd.api+json:
+        schema: |
+          {
+            "description": "Create rubric",
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "required": true,
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "required": true,
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "properties": {
+                      "name_rubric": {
+                        "type": "string",
+                        "required": true,
+                        "maxLength": 500
+                      },
+                      "url": {
+                        "type": "string",
+                        "required": true,
+                        "maxLength": 255
+                      },
+                      "meta_title": {
+                        "type": "string",
+                        "required": false,
+                        "maxLength": 255
+                      },
+                      "meta_description": {
+                        "type": "string",
+                        "required": false,
+                        "maxLength": 255
+                      },
+                      "show_menu": {
+                        "type": "boolean",
+                        "required": true
+                      },
+                      "publish_rss": {
+                        "type": "boolean",
+                        "required": true
+                      },
+                      "post_aggregator": {
+                        "type": "boolean",
+                        "required": true
+                      },
+                      "display_tape": {
+                        "type": "boolean",
+                        "required": true
+                      }
+                    }
+                  }
+                },
+                "relationships": {
+                  "type": "object",
+                  "properties": {
+                    "tags": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "array",
+                          "items": [{
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "required": true,
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "type": {
+                                "type": "string",
+                                "pattern": "/^tag$/",
+                                "required": true
+                              }
+                            }
+                          }]
+                        }
+                      }
+                    },
+                    "parent": {
+                      "type": "object",
+                      "properties": {
+                        "data": {
+                          "type": "object",
+                          "properties": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer",
+                                "required": true,
+                                "minLength": 1,
+                                "maxLength": 255
+                              },
+                              "type": {
+                                "type": "string",
+                                "pattern": "/^rubric$/",
+                                "required": true
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+
+                }
+              }
+            }
+          }
+        example: |
+          {
+            "data": {
+              "type":          "rubric",
+              "attributes":    {
+                "name_rubric":      "name_rubric",
+                "url":              "mysite.ru",
+                "meta_title":       "meta_title",
+                "meta_description": "meta_description",
+                "show_menu":        true,
+                "publish_rss":      true,
+                "post_aggregator":  false,
+                "display_tape":     true
+              },
+              "relationships": {
+                "tags":   {
+                  "data": [
+                    {
+                      "id":   1,
+                      "type": "tag"
+                    },
+                    {
+                      "id":   2,
+                      "type": "tag"
+                    }
+                  ]
+                },
+                "parent": {
+                  "data": {
+                    "id":   1,
+                    "type": "rubric"
+                  }
+                }
+              }
+            }
+          }
+    responses:
+      201:
+        body:
+          application/vnd.api+json:
+            schema: |
+              {
+                "description": "Create rubric",
+                "type":        "object",
+                "properties":  {
+                  "data": {
+                    "type":          "object",
+                    "required":      true,
+                    "properties":    {
+                      "type":       {
+                        "type":      "string",
+                        "required":  true,
+                        "minLength": 1,
+                        "maxLength": 255
+                      },
+                      "id":         {
+                        "type":      "integer",
+                        "required":  true,
+                        "minLength": 1,
+                        "maxLength": 255
+                      },
+                      "attributes": {
+                        "type":       "object",
+                        "properties": {
+                          "name_rubric":      {
+                            "type":      "string",
+                            "required":  true,
+                            "maxLength": 500
+                          },
+                          "url":              {
+                            "type":      "string",
+                            "required":  true,
+                            "maxLength": 255
+                          },
+                          "meta_title":       {
+                            "type":      "string",
+                            "required":  false,
+                            "maxLength": 255
+                          },
+                          "meta_description": {
+                            "type":      "string",
+                            "required":  false,
+                            "maxLength": 255
+                          },
+                          "show_menu":        {
+                            "type":     "boolean",
+                            "required": true
+                          },
+                          "publish_rss":      {
+                            "type":     "boolean",
+                            "required": true
+                          },
+                          "post_aggregator":  {
+                            "type":     "boolean",
+                            "required": true
+                          },
+                          "display_tape":     {
+                            "type":     "boolean",
+                            "required": true
+                          }
+                        }
+                      }
+                    },
+                    "relationships": {
+                      "type":       "object",
+                      "properties": {
+                        "tags":   {
+                          "type":       "object",
+                          "properties": {
+                            "data": {
+                              "type":  "array",
+                              "items": [
+                                {
+                                  "type":       "object",
+                                  "properties": {
+                                    "id":   {
+                                      "type":      "integer",
+                                      "required":  true,
+                                      "minLength": 1,
+                                      "maxLength": 255
+                                    },
+                                    "type": {
+                                      "type":     "string",
+                                      "pattern":  "/^tag$/",
+                                      "required": true
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        },
+                        "parent": {
+                          "type":       "object",
+                          "properties": {
+                            "data": {
+                              "type":       "object",
+                              "properties": {
+                                "type":       "object",
+                                "properties": {
+                                  "id":   {
+                                    "type":      "integer",
+                                    "required":  true,
+                                    "minLength": 1,
+                                    "maxLength": 255
+                                  },
+                                  "type": {
+                                    "type":     "string",
+                                    "pattern":  "/^rubric$/",
+                                    "required": true
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            example: |
+                {
+                  "data": {
+                    "type":          "rubric",
+                    "id":2,
+                    "attributes":    {
+                      "name_rubric":      "name_rubric",
+                      "url":              "mysite.ru",
+                      "meta_title":       "meta_title",
+                      "meta_description": "meta_description",
+                      "show_menu":        true,
+                      "publish_rss":      true,
+                      "post_aggregator":  false,
+                      "display_tape":     true
+                    },
+                    "relationships": {
+                      "tags":   {
+                        "data": [
+                          {
+                            "id":   1,
+                            "type": "tag"
+                          },
+                          {
+                            "id":   2,
+                            "type": "tag"
+                          }
+                        ]
+                      },
+                      "parent": {
+                        "data": {
+                          "id":   1,
+                          "type": "rubric"
+                        }
+                      }
+                    }
+                  }
+                }
+      400:
+        body:
+          application/vnd.api+json:
+            schema: |
+              {
+                "description": "Error",
+                "type":        "object",
+                "properties":  {
+                  "errors": {
+                    "type":       "object",
+                    "required":   true,
+                    "properties": {
+                      "id":     {
+                        "type":     "string | integer",
+                        "required": true
+                      },
+                      "code":   {
+                        "type":     "string | integer",
+                        "required": false
+                      },
+                      "status": {
+                        "type":     "integer",
+                        "required": false
+                      },
+                      "title":  {
+                        "type":     "string",
+                        "required": false
+                      },
+                      "detail": {
+                        "type":     "string",
+                        "required": false
+                      },
+                      "source": {
+                        "type":       "object",
+                        "required":   false,
+                        "properties": {
+                          "pointer":   {
+                            "type":     "string",
+                            "required": true
+                          },
+                          "parameter": {
+                            "type":     "string",
+                            "required": false
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            example: |
+              {
+                  "errors": [
+                      {
+                          "status": 400,
+                          "code"  : "RESOURCE_NOT_FOUND",
+                          "title" : "Resource not found",
+                          "detail": "The requested resource is not found!"
+                      }
+                  ]
+              }
+  get:
+    responses:
+      200:
+        body:
+          application/vnd.api+json:
+            schema: |
+              {
+                "description": "Get list rubrics",
+                "type":        "object",
+                "properties":  {
+                  "data":     {
+                    "type":     "array",
+                    "required": true,
+                    "items":    [
+                      {
+                        "type":          {
+                          "type":      "string",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "id":            {
+                          "type":      "integer",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "attributes":    {
+                          "type":       "object",
+                          "properties": {
+                            "name_rubric":      {
+                              "type":      "string",
+                              "required":  true,
+                              "maxLength": 500
+                            },
+                            "url":              {
+                              "type":      "string",
+                              "required":  true,
+                              "maxLength": 255
+                            },
+                            "meta_title":       {
+                              "type":      "string",
+                              "required":  false,
+                              "maxLength": 255
+                            },
+                            "meta_description": {
+                              "type":      "string",
+                              "required":  false,
+                              "maxLength": 255
+                            },
+                            "show_menu":        {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "publish_rss":      {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "post_aggregator":  {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "display_tape":     {
+                              "type":     "boolean",
+                              "required": true
+                            }
+                          }
+                        },
+                        "relationships": {
+                          "type":       "object",
+                          "properties": {
+                            "tags":   {
+                              "type":       "object",
+                              "properties": {
+                                "data": {
+                                  "type":  "array",
+                                  "items": [
+                                    {
+                                      "type":       "object",
+                                      "properties": {
+                                        "id":   {
+                                          "type":      "integer",
+                                          "required":  true,
+                                          "minLength": 1,
+                                          "maxLength": 255
+                                        },
+                                        "type": {
+                                          "type":     "string",
+                                          "pattern":  "/^tag$/",
+                                          "required": true
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "parent": {
+                              "type":       "object",
+                              "properties": {
+                                "data": {
+                                  "type":       "object",
+                                  "properties": {
+                                    "type":       "object",
+                                    "properties": {
+                                      "id":   {
+                                        "type":      "integer",
+                                        "required":  true,
+                                        "minLength": 1,
+                                        "maxLength": 255
+                                      },
+                                      "type": {
+                                        "type":     "string",
+                                        "pattern":  "/^rubric$/",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "children": {
+                              "type":       "object",
+                              "properties": {
+                                "data": {
+                                  "type":       "array",
+                                  "items": [{
+                                    "type":       "object",
+                                    "properties": {
+                                      "id":   {
+                                        "type":      "integer",
+                                        "required":  true,
+                                        "minLength": 1,
+                                        "maxLength": 255
+                                      },
+                                      "type": {
+                                        "type":     "string",
+                                        "pattern":  "/^rubric$/",
+                                        "required": true
+                                      }
+                                    }
+                                  }]
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "included": {
+                    "type":     "array",
+                    "required": false,
+                    "items":    [
+                      {
+                        "type":          {
+                          "type":      "string",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "id":            {
+                          "type":      "integer",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "attributes":    {
+                          "type":       "object",
+                          "properties": {
+                            "text": {
+                              "type":     "string",
+                              "required": true
+                            }
+                          }
+                        },
+                        "relationships": {
+                          "type":       "object",
+                          "properties": {
+                            "rubrics": {
+                              "type":  "array",
+                              "items": [
+                                {
+                                  "type":       "object",
+                                  "properties": {
+                                    "id":   {
+                                      "type":      "integer",
+                                      "required":  true,
+                                      "minLength": 1,
+                                      "maxLength": 255
+                                    },
+                                    "type": {
+                                      "type":      "string",
+                                      "required":  true,
+                                      "minLength": 1,
+                                      "maxLength": 255
+                                    }
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      {
+                        "type":          {
+                          "type":      "string",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "id":            {
+                          "type":      "integer",
+                          "required":  true,
+                          "minLength": 1,
+                          "maxLength": 255
+                        },
+                        "attributes":    {
+                          "type":       "object",
+                          "properties": {
+                            "name_rubric":      {
+                              "type":      "string",
+                              "required":  true,
+                              "maxLength": 500
+                            },
+                            "url":              {
+                              "type":      "string",
+                              "required":  true,
+                              "maxLength": 255
+                            },
+                            "meta_title":       {
+                              "type":      "string",
+                              "required":  false,
+                              "maxLength": 255
+                            },
+                            "meta_description": {
+                              "type":      "string",
+                              "required":  false,
+                              "maxLength": 255
+                            },
+                            "show_menu":        {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "publish_rss":      {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "post_aggregator":  {
+                              "type":     "boolean",
+                              "required": true
+                            },
+                            "display_tape":     {
+                              "type":     "boolean",
+                              "required": true
+                            }
+                          }
+                        },
+                        "relationships": {
+                          "type":       "object",
+                          "properties": {
+                            "tags":   {
+                              "type":       "object",
+                              "properties": {
+                                "data": {
+                                  "type":  "array",
+                                  "items": [
+                                    {
+                                      "type":       "object",
+                                      "properties": {
+                                        "id":   {
+                                          "type":      "integer",
+                                          "required":  true,
+                                          "minLength": 1,
+                                          "maxLength": 255
+                                        },
+                                        "type": {
+                                          "type":     "string",
+                                          "pattern":  "/^tag$/",
+                                          "required": true
+                                        }
+                                      }
+                                    }
+                                  ]
+                                }
+                              }
+                            },
+                            "parent": {
+                              "type":       "object",
+                              "properties": {
+                                "data": {
+                                  "type":       "object",
+                                  "properties": {
+                                    "type":       "object",
+                                    "properties": {
+                                      "id":   {
+                                        "type":      "integer",
+                                        "required":  true,
+                                        "minLength": 1,
+                                        "maxLength": 255
+                                      },
+                                      "type": {
+                                        "type":     "string",
+                                        "pattern":  "/^rubric$/",
+                                        "required": true
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            example: |
+                {
+                  "data": {
+                    "type":          "rubric",
+                    "id":2,
+                    "attributes":    {
+                      "name_rubric":      "name_rubric",
+                      "url":              "mysite.ru",
+                      "meta_title":       "meta_title",
+                      "meta_description": "meta_description",
+                      "show_menu":        true,
+                      "publish_rss":      true,
+                      "post_aggregator":  false,
+                      "display_tape":     true
+                    },
+                    "relationships": {
+                      "tags":   {
+                        "data": [
+                          {
+                            "id":   1,
+                            "type": "tag"
+                          },
+                          {
+                            "id":   2,
+                            "type": "tag"
+                          }
+                        ]
+                      },
+                      "parent": {
+                        "data": {
+                          "id":   1,
+                          "type": "rubric"
+                        }
+                      }
+                    }
+                  }
+                }
