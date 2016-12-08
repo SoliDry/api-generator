@@ -15,8 +15,11 @@ types:
     required: true
     minLength: 1
     maxLength: 255
-  Data:
+  DataObject:
     type: object
+    required: true
+  DataArray:
+    type: array
     required: true
   RelationshipsDataItem:
     type: object
@@ -28,8 +31,7 @@ types:
     type: object
     properties:
       data:
-        type: array
-        required: true
+        type: DataArray
         items:
           type: RelationshipsDataItem
   TagAttributes:
@@ -53,8 +55,7 @@ types:
     type: object
     properties:
       data:
-        type: array
-        required: true
+        type: DataArray
         items:
           type: RelationshipsDataItem
   RubricAttributes:

@@ -28,8 +28,11 @@ Types ``` ID, Type, Data``` are special helper types
     required: true
     minLength: 1
     maxLength: 255
-  Data:
+  DataObject:
     type: object
+    required: true
+  DataArray:
+    type: array
     required: true
 ```
 
