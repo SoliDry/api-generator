@@ -35,7 +35,7 @@ class InModels extends Models
             $this->sourceCode .= SchemaController::PHP_NAMESPACE . ' ' . $this->generator->appDir . SchemaController::BACKSLASH . $this->generator->modulesDir . SchemaController::BACKSLASH . $this->generator->version . SchemaController::BACKSLASH . $this->generator->modelsFormDir .
                                  SchemaController::BACKSLASH . $this->generator->formsDir . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
-            $this->sourceCode .= SchemaController::PHP_USE . ' tass\extension\json\api\forms\\' . SchemaController::DEFAULT_MODEL_IN . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
+            $this->sourceCode .= SchemaController::PHP_USE . ' rjapi\extension\json\api\forms\\' . SchemaController::DEFAULT_MODEL_IN . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
             $this->sourceCode .= SchemaController::PHP_CLASS . ' ' . SchemaController::FORM_PREFIX . $this->generator->controller . SchemaController::FORM_ACTION . $this->generator->actions[strtolower($method->getType())]
                                  . SchemaController::FORM_IN . ' ' . SchemaController::PHP_EXTENDS . ' ' . SchemaController::DEFAULT_MODEL_IN . ' ' . SchemaController::OPEN_BRACE . PHP_EOL;

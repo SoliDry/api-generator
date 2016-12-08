@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\extension\yii2\raml\ramlblocks;
 
-use tass\extension\json\api\forms\BaseFormResourceIn;
+use rjapi\extension\json\api\forms\BaseFormResourceIn;
 use rjapi\extension\yii2\raml\controllers\TypesController;
 use yii\console\Controller;
 use yii\helpers\StringHelper;

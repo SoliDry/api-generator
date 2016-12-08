@@ -2,7 +2,7 @@
 
 namespace rjapi\extension\yii2\raml\ramlblocks;
 
-use tass\extension\json\api\db\BaseActiveDataMapper;
+use rjapi\extension\json\api\db\BaseActiveDataMapper;
 use rjapi\extension\yii2\raml\controllers\TypesController;
 use yii\console\Controller;
 use yii\helpers\StringHelper;

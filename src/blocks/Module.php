@@ -25,7 +25,7 @@ class Module
     {
         $this->sourceCode = SchemaController::PHP_OPEN_TAG . PHP_EOL;
         $this->sourceCode .= SchemaController::PHP_NAMESPACE . ' ' . $this->generator->appDir . SchemaController::BACKSLASH . $this->generator->modulesDir . SchemaController::BACKSLASH . $this->generator->version . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
-        $this->sourceCode .= SchemaController::PHP_CLASS . ' ' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::PHP_EXTENDS . ' \tass\extension\json\api\base\\' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::OPEN_BRACE . PHP_EOL;
+        $this->sourceCode .= SchemaController::PHP_CLASS . ' ' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::PHP_EXTENDS . ' \rjapi\extension\json\api\base\\' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::OPEN_BRACE . PHP_EOL;
         $this->sourceCode .= PHP_EOL . SchemaController::CLOSE_BRACE . PHP_EOL;
         $this->createModuleFile();
     }
