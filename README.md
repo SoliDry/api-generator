@@ -110,6 +110,6 @@ where may any business logic be applied
 Complete directory structure after generator will end up it`s work will be like:
 ```RAML
 modules/{version}/controllers/ - contains controllers that extends the DefaultController
-modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as ```*Attributes``` in RAML)
+modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as *Attributes in RAML)
 modules/{version}/models/mappers/ - contains ActiveRecord mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
 ```
