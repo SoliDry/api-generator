@@ -18,7 +18,7 @@ uses:
 ```
 creates dir/file structure for Yii2 FrameWork
 
-Types ``` ID, Type, Data``` are special helper types
+Types ``` ID, Type, Data``` are special helper types - !required
 ```RAML
   ID:
     type: integer
@@ -36,7 +36,7 @@ Types ``` ID, Type, Data``` are special helper types
     required: true
 ```
 
-Special data type ``` RelationshipsDataItem ```  
+Special data type ``` RelationshipsDataItem ``` - !required
 ```RAML
   RelationshipsDataItem:
     type: object
@@ -46,7 +46,7 @@ Special data type ``` RelationshipsDataItem ```
 ```
 defined in every relationship custom type
 
-Attributes ```*Attributes``` are defined for every Object ex.:
+Attributes ```*Attributes``` are defined for every custom Object ex.:
 ```RAML
   RubricAttributes:
     description: Rubric attributes description
@@ -82,7 +82,7 @@ Attributes ```*Attributes``` are defined for every Object ex.:
         required: true
 ```
 
-Relationships type definition semantics ```*Relationships```
+Relationships custom type definition semantics ```*Relationships```
 ```RAML
   TagsRelationships:
     description: Tag relationship description
@@ -94,7 +94,7 @@ Relationships type definition semantics ```*Relationships```
           type: RelationshipsDataItem
 ```
 
-The complete composite Object looks like this: 
+Complete composite Object looks like this: 
 ```RAML
   Rubric:
     type: object
@@ -103,4 +103,13 @@ The complete composite Object looks like this:
       id: ID
       attributes: RubricAttributes
       relationships: TagsRelationships
+```
+That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Yii2 framework, 
+where may any business logic be applied
+
+Complete directory structure after generator will end up it`s work will be like:
+```RAML
+modules/{version}/controllers/ - contains controllers that extends the DefaultController
+modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as ```*Attributes``` in RAML)
+modules/{version}/models/mappers/ - contains ActiveRecord mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
 ```
