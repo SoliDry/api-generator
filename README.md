@@ -1,7 +1,7 @@
 # raml-json-api
 RAML-JSON-API PHP-code generator for different FrameWorks aka Laravel/Yii/Symfony etc
 
-## Yii2 Configuration
+## RAML Types and Declarations
 
 Use sample RAML file from the root (the same file is in the tests codeception directory)
 
@@ -16,7 +16,7 @@ The ```uses``` root property - !required
 uses:
   FrameWork: yii
 ```
-creates dir/file structure for Yii2 FrameWork
+creates dirs/files structure for specified FrameWork
 
 Types ``` ID, Type, Data``` are special helper types - !required
 ```RAML
