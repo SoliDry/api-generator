@@ -195,6 +195,7 @@ php yii raml -rf raml/rubric.raml
 ```-rf``` flag means "raml file" and raml/rubric.raml just a raml file that You have been created 
 
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
+
 To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
 
 After understanding the key idea and creation of structured picture You will never want to reinvent the wheel, happy coding ;-)
