@@ -22,34 +22,34 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
     const RESPONSE_CODE_200 = '200';
     const RESPONSE_CODE_201 = '201';
 
-    public $rootDir           = '';
-    public $appDir            = 'app';
-    public $modulesDir        = 'modules';
-    public $controllersDir    = 'controllers';
-    public $modelsFormDir     = 'models';
-    public $formsDir          = 'forms';
-    public $mappersDir        = 'mappers';
+    public $rootDir = '';
+    public $appDir = 'app';
+    public $modulesDir = 'modules';
+    public $controllersDir = 'controllers';
+    public $modelsFormDir = 'models';
+    public $formsDir = 'forms';
+    public $mappersDir = 'mappers';
     public $version;
-    public $objectName        = '';
+    public $objectName = '';
     public $defaultController = 'Default';
-    public $uriNamedParams    = null;
-    public $ramlFile          = '';
-    public $force             = null;
-    public $customTypes       = [
+    public $uriNamedParams = null;
+    public $ramlFile = '';
+    public $force = null;
+    public $customTypes = [
         self::CUSTOM_TYPES_ID,
         self::CUSTOM_TYPES_TYPE,
         self::CUSTOM_TYPES_RELATIONSHIPS,
         self::CUSTOM_TYPES_SINGLE_DATA_RELATIONSHIPS,
         self::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
     ];
-    public $types             = [];
-    public $frameWork         = '';
-    public $objectProps       = [];
+    public $types = [];
+    public $frameWork = '';
+    public $objectProps = [];
 
-    private $forms            = null;
-    private $controllers      = null;
-    private $moduleObject     = null;
-    private $mappers          = null;
+    private $forms = null;
+    private $controllers = null;
+    private $moduleObject = null;
+    private $mappers = null;
     private $excludedSubtypes = [
         self::CUSTOM_TYPES_ATTRIBUTES,
         self::CUSTOM_TYPES_RELATIONSHIPS,
@@ -73,7 +73,7 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
     public function optionAliases()
     {
         return [
-            'f'  => 'force', // force override files
+            'f' => 'force', // force override files
             'rf' => 'ramlFile' // pass RAML file
         ];
     }
@@ -84,42 +84,33 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
     public function actionIndex($ramlFile)
     {
         $data = Yaml::parse(file_get_contents($ramlFile));
-
         $this->version = str_replace('/', '', $data['version']);
+        $this->frameWork = $data['uses']['FrameWork'];
         $this->createDirs();
 
-        $this->types     = $data['types'];
-        $this->frameWork = $data['uses']['FrameWork'];
+        $this->types = $data['types'];
         $this->runGenerator();
     }
 
     private function runGenerator()
     {
-        switch ($this->frameWork)
-        {
+        switch ($this->frameWork) {
             case self::FRAMEWORK_YII:
-                foreach($this->types as $objName => $objData)
-                {
-                    if(!in_array($objName, $this->customTypes))
-                    { // if this is not a custom type generate resources
+                foreach ($this->types as $objName => $objData) {
+                    if (!in_array($objName, $this->customTypes)) { // if this is not a custom type generate resources
                         $excluded = false;
-                        foreach($this->excludedSubtypes as $type)
-                        {
-                            if(strpos($objName, $type) !== false)
-                            {
+                        foreach ($this->excludedSubtypes as $type) {
+                            if (strpos($objName, $type) !== false) {
                                 $excluded = true;
                             }
                         }
                         // if the type is among excluded - continue
-                        if($excluded === true)
-                        {
+                        if ($excluded === true) {
                             continue;
                         }
 
-                        foreach($objData as $k => $v)
-                        {
-                            if($k === self::RAML_PROPS)
-                            { // process props
+                        foreach ($objData as $k => $v) {
+                            if ($k === self::RAML_PROPS) { // process props
                                 $this->setObjectName($objName);
                                 $this->setObjectProps($v);
                                 $this->generateResources();
@@ -129,21 +120,28 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
                 }
                 break;
             case self::FRAMEWORK_LARAVEL:
-
+                // TODO: implement laravel gen
                 break;
         }
     }
 
     private function createDirs()
     {
-        // create modules dir
-        FileManager::createPath(FileManager::getModulePath($this));
-        // create controllers dir
-        FileManager::createPath($this->formatControllersPath());
-        // create forms dir
-        FileManager::createPath($this->formatFormsPath());
-        // create mapper dir
-        FileManager::createPath($this->formatMappersPath());
+        switch ($this->frameWork) {
+            case self::FRAMEWORK_YII:
+                // create modules dir
+                FileManager::createPath(FileManager::getModulePath($this));
+                // create controllers dir
+                FileManager::createPath($this->formatControllersPath());
+                // create forms dir
+                FileManager::createPath($this->formatFormsPath());
+                // create mapper dir
+                FileManager::createPath($this->formatMappersPath());
+                break;
+            case self::FRAMEWORK_LARAVEL:
+                // TODO: implement laravel gen
+                break;
+        }
     }
 
     public function formatControllersPath()

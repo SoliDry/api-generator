@@ -14,7 +14,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $this->controllerNamespace = $app->controllerNamespace;
             $this->controllerMap = [
                 'types'  => TypesController::class,
-                'schema' => SchemaController::class,
+//                'schema' => SchemaController::class,
             ];
         }
     }

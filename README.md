@@ -114,7 +114,88 @@ modules/{version}/models/forms/ - contains forms that extends the BaseFormResour
 modules/{version}/models/mappers/ - contains ActiveRecord mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
 ```
 
+Properties of Input json-api parameters - Yii Form generation example:
+```php
+    // ID
+    public $id = null;
+
+    // Attributes
+    public $title                  = null;
+    public $body                   = null;
+    public $lead                   = null;
+    public $copyright              = null;
+    public $url                    = null;
+    public $meta_title             = null;
+    public $meta_description       = null;
+    public $title_vk_fb            = null;
+    public $body_vk_fb             = null;
+    public $body_twitter           = null;
+    public $fb_image               = null;
+    public $vk_image               = null;
+    public $view_options           = null;
+    public $status                 = null;
+    public $show_in_menu           = null;
+    public $publish_to_rss         = null;
+    public $publish_to_aggregators = null;
+    public $show_in_tape           = null;
+```
+
+Rules of Input json-api parameters - Yii Form generation example:
+```php
+    public function rules()
+    {
+        return [
+            ["id", "integer"],
+            ["title", "string"],
+            ["body", "string"],
+            ["lead", "string"],
+            ["copyright", "string"],
+            ["url", "string"],
+            ["meta_title", "string", "min" => "2", "max" => "128"],
+            ["meta_description", "string", "min" => "2", "max" => "128"],
+            ["body_twitter", "string"],
+            ["title_vk_fb", "string", "max" => "255"],
+            ["body_vk_fb", "string", "max" => "255"],
+            ["fb_image", "string", "max" => "255"],
+            ["vk_image", "string", "max" => "255"],
+            ['view_options', 'integer', 'max' => '64'],
+            ["status" , "in", "range" => ["draft", "published", "postponed", "archived"]],
+            ["show_in_menu", "integer", "max" => "1"],
+            ["publish_to_rss", "integer", "max" => "1"],
+            ["publish_to_aggregators", "integer", "max" => "1"],
+            ["show_in_tape", "integer", "max" => "1"],
+        ];
+    }
+```
+
+Relations based on Yii Forms generation example: 
+```php
+    public function relations(): array {
+        return [
+            "tags",
+            "topics"
+        ];
+    }
+```
+
+### Yii2 specific configuration
+
+Add this lines to Your console.php config:
+```php
+    'bootstrap'           => ['log', 'raml'],
+    'modules'             => [
+        'raml' => \rjapi\extension\yii2\raml\Module::class,
+    ],
+```
+
+then just use it like a console command:
+```php
+php yii raml -rf raml/rubric.raml
+```
+```-rf``` flag means "raml file" and raml/rubric.raml just a raml file that You have been created 
+
 To get deep-into raml specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 To get deep-into json-api specification - http://jsonapi.org/format/
 
 After understanding the key idea and creation of structured picture You will never want to reinvent the wheel, happy coding ;-)
+
