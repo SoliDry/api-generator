@@ -14,7 +14,7 @@ use rjapi\extension\yii2\raml\ramlblocks\Mappers;
 use rjapi\extension\yii2\raml\ramlblocks\Module;
 use yii\console\Controller;
 
-class TypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface, 
+class TypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
     RamlInterface, CustomsInterface
 {
     const CONTENT_TYPE = 'application/vnd.api+json';
@@ -43,6 +43,7 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
         self::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
     ];
     public $types             = [];
+    public $frameWork         = '';
     public $objectProps       = [];
 
     private $forms            = null;
@@ -87,35 +88,49 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
         $this->version = str_replace('/', '', $data['version']);
         $this->createDirs();
 
-        $this->types = $data['types'];
-        foreach($this->types as $objName => $objData)
-        {
-            if(!in_array($objName, $this->customTypes))
-            { // if this is not a custom type generate resources
-                $excluded = false;
-                foreach($this->excludedSubtypes as $type)
-                {
-                    if(strpos($objName, $type) !== false)
-                    {
-                        $excluded = true;
-                    }
-                }
-                // if the type is among excluded - continue
-                if($excluded === true)
-                {
-                    continue;
-                }
+        $this->types     = $data['types'];
+        $this->frameWork = $data['uses']['FrameWork'];
+        $this->runGenerator();
+    }
 
-                foreach($objData as $k => $v)
+    private function runGenerator()
+    {
+        switch ($this->frameWork)
+        {
+            case self::FRAMEWORK_YII:
+                foreach($this->types as $objName => $objData)
                 {
-                    if($k === self::RAML_PROPS)
-                    { // process props
-                        $this->setObjectName($objName);
-                        $this->setObjectProps($v);
-                        $this->generateResources();
+                    if(!in_array($objName, $this->customTypes))
+                    { // if this is not a custom type generate resources
+                        $excluded = false;
+                        foreach($this->excludedSubtypes as $type)
+                        {
+                            if(strpos($objName, $type) !== false)
+                            {
+                                $excluded = true;
+                            }
+                        }
+                        // if the type is among excluded - continue
+                        if($excluded === true)
+                        {
+                            continue;
+                        }
+
+                        foreach($objData as $k => $v)
+                        {
+                            if($k === self::RAML_PROPS)
+                            { // process props
+                                $this->setObjectName($objName);
+                                $this->setObjectProps($v);
+                                $this->generateResources();
+                            }
+                        }
                     }
                 }
-            }
+                break;
+            case self::FRAMEWORK_LARAVEL:
+
+                break;
         }
     }
 

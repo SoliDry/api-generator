@@ -113,3 +113,8 @@ modules/{version}/controllers/ - contains controllers that extends the DefaultCo
 modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as *Attributes in RAML)
 modules/{version}/models/mappers/ - contains ActiveRecord mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
 ```
+
+To get deep-into raml specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
+To get deep-into json-api specification - http://jsonapi.org/format/
+
+After understanding the key idea and creation of structured picture You will never want to reinvent the wheel, happy coding ;-)
