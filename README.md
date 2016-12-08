@@ -18,7 +18,7 @@ uses:
 ```
 creates dirs/files structure for specified FrameWork
 
-Types ``` ID, Type, Data``` are special helper types - !required
+Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
 ```RAML
   ID:
     type: integer
