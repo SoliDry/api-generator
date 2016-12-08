@@ -42,7 +42,7 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
 
     public function testRaml()
     {
-        $this->gen->actionIndex('./tests/functional/rubric-final.raml');
+        $this->gen->actionIndex('./tests/functional/rubric.raml');
     }
 
     /**

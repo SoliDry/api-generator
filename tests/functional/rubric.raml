@@ -1,8 +1,11 @@
 #%RAML 1.0
-title: ITAR-TASS API
-baseUri: http://s-planning-backend.dev1.tass.ru/{version}
+title: My Company API
+baseUri: http://my-company.com/{version}
 version: v1
-description: ITAR-TASS API description RAML templates
+mediaType:  application/vnd.api+json
+description: My Company API description RAML templates
+uses:
+  FrameWork: yii
 types:
   ID:
     type: integer
@@ -21,7 +24,7 @@ types:
       id: ID
       type: Type
   TagsRelationships:
-    description: Tag описание отношений
+    description: Tag relationship description
     type: object
     properties:
       data:
@@ -30,7 +33,7 @@ types:
         items:
           type: RelationshipsDataItem
   TagAttributes:
-    description: Всегда указываем описание атрибутов
+    description: Always set attributes for object
     type: object
     properties:
       title:
@@ -55,7 +58,7 @@ types:
         items:
           type: RelationshipsDataItem
   RubricAttributes:
-    description: Описание атрибутов Рубрики
+    description: Rubric attributes description
     type: object
     properties:
       name_rubric:
@@ -99,9 +102,10 @@ types:
   FilterAttribute:
     type: object
     properties:
-      {attribute}:
+      \{attribute\}:
         type: string
-        pattern: '/^((AND|OR)\s+)?((NE|LT|LTE|GT|GTE|IN|NOTIN|LIKE|BETWEEN)\s+)?(\d+(.\d+)?|(\\'|\\")[^\\'\\"](\\'|\\"))/'
+      attributes: RubricAttributes
+      relationships: TagsRelationships
   JsonApiQuerySearch:
     type: object
     properties:
@@ -113,30 +117,17 @@ types:
             required: true
             default: 1
             example: 1
-            description: номер страницы
+            description: page number
           size:
             type: integer
             required: true
             default: 15
             example: 15
-            description: количество элементов на странице
+            description: elements per page
       sort:
         type: string
         pattern: "/^[-a-z,\ ]*$/"
-      fileds:
-        type: object
-        properties:
-          {entity}:
-            type: string
-            pattern: "/^[-a-z,\ ]*$/"
-      include:
-        type: string
-        pattern: "/^[-a-z,\ \.]*$/"
-      filters:
-        type: object
-        properties:
-          {entity}:
-            type: FilterID | FilterAttribute
+
 /rubrics:
   get:
     queryParameters:
