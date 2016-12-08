@@ -1,7 +1,7 @@
 <?php
 namespace app\modules\v1\models\forms;
 
-use tass\extension\json\api\forms\BaseFormResource;
+use rjapi\extension\json\api\forms\BaseFormResource;
 
 class BaseFormRubric extends BaseFormResource 
 {

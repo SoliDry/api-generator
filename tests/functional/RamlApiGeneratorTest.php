@@ -36,7 +36,8 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
 
     public static function tearDownAfterClass()
     {
-        self::rmdir('./tests/functional/modules/');
+        // TODO: uncomment this if need to be deleted
+//        self::rmdir('./tests/functional/modules/');
     }
 
     public function testRaml()
