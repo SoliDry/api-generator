@@ -29,7 +29,7 @@ class Module
                              . TypesController::BACKSLASH . $this->generator->modulesDir . TypesController::BACKSLASH
                              . $this->generator->version . TypesController::SEMICOLON . PHP_EOL . PHP_EOL;
 
-        $baseFullFormOut = \tass\extension\json\api\base\Module::class;
+        $baseFullFormOut = \rjapi\extension\json\api\base\Module::class;
         $this->startClass(TypesController::DEFAULT_MODULE, $baseFullFormOut);
         $this->endClass();
 

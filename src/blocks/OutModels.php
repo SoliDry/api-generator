@@ -34,7 +34,7 @@ class OutModels extends Models
                 $this->sourceCode .= 'namespace ' . $this->generator->appDir . SchemaController::BACKSLASH . $this->generator->modulesDir . SchemaController::BACKSLASH . $this->generator->version . SchemaController::BACKSLASH . $this->generator->modelsFormDir .
                                      SchemaController::BACKSLASH . $this->generator->formsDir . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
-                $this->sourceCode .= 'use tass\extension\json\api\forms\\' . SchemaController::DEFAULT_MODEL_OUT . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
+                $this->sourceCode .= 'use rjapi\extension\json\api\forms\\' . SchemaController::DEFAULT_MODEL_OUT . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
                 $this->sourceCode .= 'class ' . SchemaController::FORM_BASE . SchemaController::FORM_PREFIX . $this->generator->controller
                                      . SchemaController::FORM_OUT . ' extends ' . SchemaController::DEFAULT_MODEL_OUT . ' ' . SchemaController::OPEN_BRACE . PHP_EOL;

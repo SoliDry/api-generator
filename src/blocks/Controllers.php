@@ -34,7 +34,7 @@ class Controllers implements IControllers
             $this->sourceCode .= SchemaController::PHP_NAMESPACE . ' ' . $this->generator->appDir . SchemaController::BACKSLASH . $this->generator->modulesDir . SchemaController::BACKSLASH . $this->generator->version . SchemaController::BACKSLASH
                                  . $this->generator->controllersDir . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
-            $this->sourceCode .= SchemaController::PHP_USE . ' tass\extension\json\api\rest\mapper\\' . SchemaController::DEFAULT_CONTROLLER . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
+            $this->sourceCode .= SchemaController::PHP_USE . ' rjapi\extension\json\api\rest\mapper\\' . SchemaController::DEFAULT_CONTROLLER . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
 
             $this->sourceCode .= SchemaController::PHP_CLASS . ' ' . $this->generator->defaultController . SchemaController::DEFAULT_POSTFIX . ' ' . SchemaController::PHP_EXTENDS . ' ' . SchemaController::DEFAULT_CONTROLLER . ' ' . SchemaController::OPEN_BRACE;
             $this->sourceCode .= SchemaController::CLOSE_BRACE;
