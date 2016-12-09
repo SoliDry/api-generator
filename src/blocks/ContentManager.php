@@ -20,9 +20,10 @@ trait ContentManager
                              . PHP_EOL . PHP_EOL;
     }
 
-    protected function setUse($path)
+    protected function setUse($path, $isTrait = false)
     {
-        $this->sourceCode .= YiiTypesController::PHP_USE . ' ' . $path . YiiTypesController::SEMICOLON .
+        $this->sourceCode .= (($isTrait === false) ? '' : PhpEntitiesInterface::TAB_PSR4) .
+                             YiiTypesController::PHP_USE . ' ' . $path . YiiTypesController::SEMICOLON .
                              PHP_EOL . PHP_EOL;
     }
 
