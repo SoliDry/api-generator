@@ -184,7 +184,7 @@ Add this lines to Your console.php config:
 ```php
     'bootstrap'           => ['log', 'raml'],
     'modules'             => [
-        'raml' => \rjapi\extension\yii2\raml\Module::class,
+        'raml' => \rjapi\Module::class,
     ],
 ```
 
@@ -192,7 +192,7 @@ then just use it like a console command:
 ```php
 php yii raml -rf raml/rubric.raml
 ```
-```-rf``` flag means "raml file" and raml/rubric.raml just a raml file that You have been created 
+```-rf``` flag means "raml file" and ```raml/rubric.raml``` raml file in raml directory in the root of Your project 
 
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 
