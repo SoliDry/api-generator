@@ -45,15 +45,20 @@ trait ContentManager
 
     protected function startMethod($name, $modifier, $returnType, $static = false)
     {
-        $this->sourceCode .= YiiTypesController::TAB_PSR4 . $modifier . ' ' . YiiTypesController::PHP_FUNCTION . ' ' . $name .
+        $this->sourceCode .= YiiTypesController::TAB_PSR4 . $modifier .
+                             (($static !== false) ? PhpEntitiesInterface::PHP_STATIC : '') . ' ' .
+                             YiiTypesController::PHP_FUNCTION . ' ' .
+                             $name .
                              YiiTypesController::OPEN_PARENTHESES . YiiTypesController::CLOSE_PARENTHESES .
                              YiiTypesController::COLON
                              . ' ' . $returnType . ' ' . YiiTypesController::OPEN_BRACE . PHP_EOL;
     }
 
-    protected function methodReturn($ret)
+    protected function methodReturn($value, $isString = false)
     {
-        return $ret;
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+                             PhpEntitiesInterface::PHP_RETURN . ' ' . (($isString === false) ? $value :
+                '"' . $value . '"') . PhpEntitiesInterface::SEMICOLON . PHP_EOL;
     }
 
     protected function endMethod()
@@ -63,7 +68,8 @@ trait ContentManager
 
     protected function startArray()
     {
-        $this->sourceCode .= YiiTypesController::TAB_PSR4 . YiiTypesController::TAB_PSR4 . YiiTypesController::PHP_RETURN . ' ' .
+        $this->sourceCode .= YiiTypesController::TAB_PSR4 . YiiTypesController::TAB_PSR4 .
+                             YiiTypesController::PHP_RETURN . ' ' .
                              YiiTypesController::OPEN_BRACKET . PHP_EOL;
     }
 

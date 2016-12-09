@@ -12,6 +12,7 @@ namespace rjapi\controllers;
 use rjapi\blocks\BaseModels;
 use rjapi\blocks\Containers;
 use rjapi\blocks\Controllers;
+use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
@@ -37,11 +38,11 @@ trait ControllersTrait
     public $ramlFile = '';
     public $force = null;
     public $customTypes = [
-        YiiTypesController::CUSTOM_TYPES_ID,
-        YiiTypesController::CUSTOM_TYPES_TYPE,
-        YiiTypesController::CUSTOM_TYPES_RELATIONSHIPS,
-        YiiTypesController::CUSTOM_TYPES_SINGLE_DATA_RELATIONSHIPS,
-        YiiTypesController::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
+        CustomsInterface::CUSTOM_TYPES_ID,
+        CustomsInterface::CUSTOM_TYPES_TYPE,
+        CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
+        CustomsInterface::CUSTOM_TYPES_SINGLE_DATA_RELATIONSHIPS,
+        CustomsInterface::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
     ];
     public $types = [];
     public $frameWork = '';

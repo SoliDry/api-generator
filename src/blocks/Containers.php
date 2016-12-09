@@ -3,6 +3,7 @@ namespace rjapi\blocks;
 
 use rjapi\controllers\YiiTypesController;
 use yii\console\Controller;
+use yii\db\ActiveRecord;
 
 class Containers
 {
@@ -26,6 +27,7 @@ class Containers
     {
         $this->setTag();
         $this->setNamespace($this->generator->containersDir);
+        $this->setUse(ActiveRecord::class);
         $this->startClass(
             $this->generator->objectName . DefaultInterface::CONTAINER_POSTFIX,
             ModelsInterface::YII_ACTIVE_RECORD
@@ -37,7 +39,7 @@ class Containers
             ModelsInterface::YII_ACTIVE_RECORD,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING, true
         );
-        $this->methodReturn($this->generator->objectName);
+        $this->methodReturn(strtolower($this->generator->objectName), true);
         $this->endMethod();
 
         $this->endClass();
