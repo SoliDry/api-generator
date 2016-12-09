@@ -1,13 +1,12 @@
 <?php
 namespace app\modules\v1\containers;
 
+use rjapi\extension\json\api\db\DataObjectTrait;
 use yii\db\ActiveRecord;
-
-use app\modules\v1\models\mappers\DataObjectTrait;
 
 class RubricContainer extends ActiveRecord 
 {
-    use app\modules\v1\models\mappers\DataObjectTrait;
+    use DataObjectTrait;
 
     public static function tableName(): string {
         return "rubric";

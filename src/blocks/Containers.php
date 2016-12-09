@@ -1,8 +1,8 @@
 <?php
 namespace rjapi\blocks;
 
-use app\modules\v1\models\mappers\DataObjectTrait;
 use rjapi\controllers\YiiTypesController;
+use rjapi\extension\json\api\db\DataObjectTrait;
 use yii\console\Controller;
 use yii\db\ActiveRecord;
 
