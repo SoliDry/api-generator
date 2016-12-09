@@ -22,6 +22,7 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
     {
         spl_autoload_register(
             function ($class) {
+                echo $class;
                 require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . YiiTypesController::PHP_EXT;
             }
         );

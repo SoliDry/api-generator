@@ -32,10 +32,13 @@ interface PhpEntitiesInterface
 
     const PHP_TYPES_ARRAY = 'array';
     const PHP_TYPES_NULL  = 'null';
+    const PHP_TYPES_STRING  = 'string';
 
     const PHP_MODIFIER_PUBLIC    = 'public';
     const PHP_MODIFIER_PRIVATE   = 'private';
     const PHP_MODIFIER_PROTECTED = 'protected';
+
+    const PHP_STATIC = 'static';
 
     const PHP_YII_RULES     = 'rules';
     const PHP_YII_RELATIONS = 'relations';

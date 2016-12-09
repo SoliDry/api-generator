@@ -43,12 +43,17 @@ trait ContentManager
         $this->sourceCode .= PHP_EOL . YiiTypesController::CLOSE_BRACE . PHP_EOL;
     }
 
-    protected function startMethod($name, $modifier, $returnType)
+    protected function startMethod($name, $modifier, $returnType, $static = false)
     {
         $this->sourceCode .= YiiTypesController::TAB_PSR4 . $modifier . ' ' . YiiTypesController::PHP_FUNCTION . ' ' . $name .
                              YiiTypesController::OPEN_PARENTHESES . YiiTypesController::CLOSE_PARENTHESES .
                              YiiTypesController::COLON
                              . ' ' . $returnType . ' ' . YiiTypesController::OPEN_BRACE . PHP_EOL;
+    }
+
+    protected function methodReturn($ret)
+    {
+        return $ret;
     }
 
     protected function endMethod()
