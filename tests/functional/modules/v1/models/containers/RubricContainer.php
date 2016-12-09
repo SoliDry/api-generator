@@ -5,7 +5,7 @@ use yii\db\ActiveRecord;
 
 class RubricContainer extends ActiveRecord 
 {
-    public function ActiveRecord(): string {
-        return "Rubric";
+    public static function ActiveRecord(): string {
+        return "rubric";
     }
 }

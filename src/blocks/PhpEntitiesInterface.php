@@ -20,7 +20,7 @@ interface PhpEntitiesInterface
     const OPEN_PARENTHESES  = '(';
     const CLOSE_PARENTHESES = ')';
 
-    const TAB_PSR4    = "    ";
+    const TAB_PSR4    = '    ';
     const COLON       = ':';
     const SEMICOLON   = ';';
     const DOLLAR_SIGN = '$';
@@ -30,9 +30,9 @@ interface PhpEntitiesInterface
     const SPACE       = ' ';
     const COMMENT     = '//';
 
-    const PHP_TYPES_ARRAY = 'array';
-    const PHP_TYPES_NULL  = 'null';
-    const PHP_TYPES_STRING  = 'string';
+    const PHP_TYPES_ARRAY  = 'array';
+    const PHP_TYPES_NULL   = 'null';
+    const PHP_TYPES_STRING = 'string';
 
     const PHP_MODIFIER_PUBLIC    = 'public';
     const PHP_MODIFIER_PRIVATE   = 'private';

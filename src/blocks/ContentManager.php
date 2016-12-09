@@ -45,7 +45,7 @@ trait ContentManager
 
     protected function startMethod($name, $modifier, $returnType, $static = false)
     {
-        $this->sourceCode .= YiiTypesController::TAB_PSR4 . $modifier .
+        $this->sourceCode .= YiiTypesController::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
                              (($static !== false) ? PhpEntitiesInterface::PHP_STATIC : '') . ' ' .
                              YiiTypesController::PHP_FUNCTION . ' ' .
                              $name .
