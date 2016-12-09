@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
 class Logger
 {

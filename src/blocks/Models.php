@@ -6,11 +6,11 @@
  * Time: 10:56
  */
 
-namespace rjapi\extension\yii2\raml\blocks;
+namespace rjapi\blocks;
 
 use Raml\Method;
 
-class Models
+abstract class Models
 {
     private function setProps(Method $method)
     {
@@ -30,5 +30,41 @@ class Models
 
     private function createFormFiles(Method $method)
     {
+    }
+
+    protected function setProperty($attrVal)
+    {
+        if(isset($attrVal['type']))
+        {
+            $this->sourceCode .= ', "' . $attrVal['type'] . '"';
+        }
+        if(isset($attrVal['enum']))
+        {
+            $this->sourceCode .= ', "in", "range" => ["' . implode('", "', $attrVal['enum']) . '"]';
+        }
+        if(isset($attrVal['pattern']))
+        {
+            $this->sourceCode .= ', "pattern" => "' . $attrVal['pattern'] . '"';
+        }
+        if(isset($attrVal['minLength']))
+        {
+            $this->sourceCode .= ', "min" => "' . $attrVal['minLength'] . '"';
+        }
+        if(isset($attrVal['minLength']))
+        {
+            $this->sourceCode .= ', "max" => "' . $attrVal['maxLength'] . '"';
+        }
+        if(isset($attrVal['minimum']))
+        {
+            $this->sourceCode .= ', "min" => "' . $attrVal['minimum'] . '"';
+        }
+        if(isset($attrVal['maximum']))
+        {
+            $this->sourceCode .= ', "max" => "' . $attrVal['maximum'] . '"';
+        }
+        if(isset($attrVal['errorMessage']))
+        {
+            $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';
+        }
     }
 }

@@ -11,8 +11,8 @@
     },
     "autoload": {
         "psr-4": {
-            "rjapi\\extension\\yii2\\raml\\": "src",
-            "rjapitest\\extension\\yii2\\raml\\": "tests"
+            "rjapi\\": "src",
+            "rjapitest\\": "tests"
         }
     }
 }

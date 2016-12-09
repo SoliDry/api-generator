@@ -1,14 +1,14 @@
 <?php
 
+use rjapi\controllers\YiiTypesController;
+use yii\base\Model;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
-use rjapi\extension\yii2\raml\controllers\TypesController;
-use yii\base\Model;
 
 /**
  * Class ApiGeneratorTest
  *
- * @property TypesController gen
+ * @property YiiTypesController gen
  */
 class RamlApiGeneratorTest extends \Codeception\Test\Unit
 {
@@ -16,18 +16,17 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
      * @var \FunctionalTester
      */
     protected $tester;
-    public    $gen;
+    public $gen;
 
     protected function _before()
     {
-        $this->gen          = new TypesController(1, new \yii\base\Module(1, '2', []), []);
-        $this->gen->rootDir = './tests/functional/';
         spl_autoload_register(
-            function ($class)
-            {
-                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . TypesController::PHP_EXT;
+            function ($class) {
+                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . YiiTypesController::PHP_EXT;
             }
         );
+        $this->gen = new YiiTypesController(1, new \yii\base\Module(1, '2', []), []);
+        $this->gen->rootDir = './tests/functional/';
     }
 
     protected function _after()
@@ -74,19 +73,13 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
 
     private static function rmdir($dir)
     {
-        if(is_dir($dir))
-        {
+        if (is_dir($dir)) {
             $objects = scandir($dir);
-            foreach($objects as $object)
-            {
-                if($object != "." && $object != "..")
-                {
-                    if(is_dir($dir . "/" . $object))
-                    {
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (is_dir($dir . "/" . $object)) {
                         self::rmdir($dir . "/" . $object);
-                    }
-                    else
-                    {
+                    } else {
                         unlink($dir . "/" . $object);
                     }
                 }

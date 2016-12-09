@@ -1,17 +1,17 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
 use rjapi\extension\json\api\rest\mapper\BaseMapperController;
-use rjapi\extension\yii2\raml\controllers\TypesController;
+use rjapi\controllers\YiiTypesController;
 use yii\console\Controller;
 use yii\helpers\StringHelper;
 
-class Controllers implements ControllersInterface
+class Containers implements ControllersInterface
 {
     use ContentManager;
 
-    /** @var TypesController generator */
+    /** @var YiiTypesController generator */
     private $generator  = null;
     private $sourceCode = '';
 
@@ -31,10 +31,10 @@ class Controllers implements ControllersInterface
     public function createDefault()
     {
         $fileController = $this->generator->formatControllersPath()
-                          . TypesController::SLASH
+                          . YiiTypesController::SLASH
                           . $this->generator->defaultController
-                          . TypesController::DEFAULT_POSTFIX
-                          . TypesController::PHP_EXT;
+                          . YiiTypesController::DEFAULT_POSTFIX
+                          . YiiTypesController::PHP_EXT;
 
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
@@ -42,7 +42,7 @@ class Controllers implements ControllersInterface
         $baseMapperName = StringHelper::basename($baseFullMapper);
 
         $this->setUse($baseFullMapper);
-        $this->startClass($this->generator->defaultController . TypesController::DEFAULT_POSTFIX, $baseMapperName);
+        $this->startClass($this->generator->defaultController . YiiTypesController::DEFAULT_POSTFIX, $baseMapperName);
         $this->endClass();
         FileManager::createFile($fileController, $this->sourceCode);
     }
@@ -52,15 +52,15 @@ class Controllers implements ControllersInterface
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
         $this->startClass(
-            $this->generator->objectName . TypesController::DEFAULT_POSTFIX,
-            $this->generator->defaultController . TypesController::DEFAULT_POSTFIX
+            $this->generator->objectName . YiiTypesController::DEFAULT_POSTFIX,
+            $this->generator->defaultController . YiiTypesController::DEFAULT_POSTFIX
         );
         $this->endClass();
         $fileController = $this->generator->formatControllersPath()
-                          . TypesController::SLASH
+                          . YiiTypesController::SLASH
                           . $this->generator->objectName
-                          . TypesController::DEFAULT_POSTFIX
-                          . TypesController::PHP_EXT;
+                          . YiiTypesController::DEFAULT_POSTFIX
+                          . YiiTypesController::PHP_EXT;
         FileManager::createFile($fileController, $this->sourceCode);
     }
 }

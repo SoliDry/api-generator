@@ -1,12 +1,12 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
-use rjapi\extension\yii2\raml\controllers\TypesController;
-use rjapi\extension\yii2\raml\exception\DirectoryException;
+use rjapi\controllers\YiiTypesController;
+use rjapi\exception\DirectoryException;
 use yii\console\Controller;
 
-class FileManager
+class FileManager implements DirsInterface
 {
     const FILE_MODE_CREATE = 'w';
     const DIR_MODE         = 0755;
@@ -58,10 +58,10 @@ class FileManager
      */
     public static function getModulePath(Controller $obj, $withModel = false) : string
     {
-        $path = $obj->rootDir . $obj->modulesDir . TypesController::SLASH . $obj->version . TypesController::SLASH;
+        $path = $obj->rootDir . $obj->modulesDir . YiiTypesController::SLASH . $obj->version . YiiTypesController::SLASH;
         if($withModel === true)
         {
-            $path .= $obj->modelsFormDir . TypesController::SLASH;
+            $path .= $obj->modelsFormDir . YiiTypesController::SLASH;
         }
 
         return $path;

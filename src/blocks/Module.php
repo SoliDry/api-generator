@@ -1,13 +1,14 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\blocks;
+namespace rjapi\blocks;
 
-use rjapi\extension\yii2\raml\controllers\SchemaController;
+use rjapi\controllers\YiiTypesController;
 use yii\console\Controller;
 
 class Module
 {
-    /** @var SchemaController generator */
+    use ContentManager;
+    /** @var YiiTypesController generator */
     private $generator  = null;
     private $sourceCode = '';
 
@@ -23,19 +24,17 @@ class Module
 
     public function createModule()
     {
-        $this->sourceCode = SchemaController::PHP_OPEN_TAG . PHP_EOL;
-        $this->sourceCode .= SchemaController::PHP_NAMESPACE . ' ' . $this->generator->appDir . SchemaController::BACKSLASH . $this->generator->modulesDir . SchemaController::BACKSLASH . $this->generator->version . SchemaController::SEMICOLON . PHP_EOL . PHP_EOL;
-        $this->sourceCode .= SchemaController::PHP_CLASS . ' ' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::PHP_EXTENDS . ' \rjapi\extension\json\api\base\\' . SchemaController::DEFAULT_MODULE . ' ' . SchemaController::OPEN_BRACE . PHP_EOL;
-        $this->sourceCode .= PHP_EOL . SchemaController::CLOSE_BRACE . PHP_EOL;
-        $this->createModuleFile();
-    }
+        $this->setTag();
+        $this->sourceCode .= YiiTypesController::PHP_NAMESPACE . ' ' . $this->generator->appDir
+                             . YiiTypesController::BACKSLASH . $this->generator->modulesDir . YiiTypesController::BACKSLASH
+                             . $this->generator->version . YiiTypesController::SEMICOLON . PHP_EOL . PHP_EOL;
 
-    private function createModuleFile()
-    {
-        $fileModule = $this->generator->rootDir . $this->generator->modulesDir . SchemaController::SLASH . $this->generator->version . SchemaController::SLASH . SchemaController::DEFAULT_MODULE . SchemaController::PHP_EXT;
+        $baseFullFormOut = \rjapi\extension\json\api\base\Module::class;
+        $this->startClass(YiiTypesController::DEFAULT_MODULE, $baseFullFormOut);
+        $this->endClass();
 
-        $fpModule = fopen($fileModule, 'w');
-        fwrite($fpModule, $this->sourceCode);
-        fclose($fpModule);
+        $fileModule = FileManager::getModulePath($this->generator) . YiiTypesController::DEFAULT_MODULE
+                      . YiiTypesController::PHP_EXT;
+        FileManager::createFile($fileModule, $this->sourceCode);
     }
 }

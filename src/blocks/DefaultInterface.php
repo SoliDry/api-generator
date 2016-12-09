@@ -1,12 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 02/11/2016
- * Time: 17:26
- */
-
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
 interface DefaultInterface
 {

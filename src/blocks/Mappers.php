@@ -1,16 +1,16 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
 use rjapi\extension\json\api\db\BaseActiveDataMapper;
-use rjapi\extension\yii2\raml\controllers\TypesController;
+use rjapi\controllers\YiiTypesController;
 use yii\console\Controller;
 use yii\helpers\StringHelper;
 
 class Mappers extends Models
 {
     use ContentManager;
-    /** @var TypesController $generator */
+    /** @var YiiTypesController $generator */
     private   $generator  = null;
     protected $sourceCode = '';
 
@@ -28,20 +28,20 @@ class Mappers extends Models
     {
         $this->setTag();
         $this->setNamespace($this->generator->modelsFormDir .
-                            TypesController::BACKSLASH . $this->generator->mappersDir);
+                            YiiTypesController::BACKSLASH . $this->generator->mappersDir);
         $baseMapper     = BaseActiveDataMapper::class;
         $baseMapperName = StringHelper::basename($baseMapper);
 
         $this->setUse($baseMapper);
         $this->startClass(
-            TypesController::FORM_BASE
-            . TypesController::MAPPER_PREFIX . $this->generator->objectName, $baseMapperName
+            YiiTypesController::FORM_BASE
+            . YiiTypesController::MAPPER_PREFIX . $this->generator->objectName, $baseMapperName
         );
         $this->endClass();
 
-        $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir . TypesController::SLASH
-                . TypesController::FORM_BASE . TypesController::MAPPER_PREFIX .
-                $this->generator->objectName . TypesController::PHP_EXT;
+        $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir . YiiTypesController::SLASH
+                . YiiTypesController::FORM_BASE . YiiTypesController::MAPPER_PREFIX .
+                $this->generator->objectName . YiiTypesController::PHP_EXT;
         FileManager::createFile($file, $this->sourceCode);
     }
 }

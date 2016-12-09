@@ -1,34 +1,35 @@
 <?php
-namespace rjapi\extension\yii2\raml\controllers;
+namespace rjapi\controllers;
 
+use rjapi\blocks\DirsInterface;
 use Symfony\Component\Yaml\Yaml;
-use rjapi\extension\yii2\raml\ramlblocks\BaseModels;
-use rjapi\extension\yii2\raml\ramlblocks\Controllers;
-use rjapi\extension\yii2\raml\ramlblocks\CustomsInterface;
-use rjapi\extension\yii2\raml\ramlblocks\FileManager;
-use rjapi\extension\yii2\raml\ramlblocks\DefaultInterface;
-use rjapi\extension\yii2\raml\ramlblocks\HTTPMethodsInterface;
-use rjapi\extension\yii2\raml\ramlblocks\PhpEntitiesInterface;
-use rjapi\extension\yii2\raml\ramlblocks\RamlInterface;
-use rjapi\extension\yii2\raml\ramlblocks\Mappers;
-use rjapi\extension\yii2\raml\ramlblocks\Module;
+use rjapi\blocks\BaseModels;
+use rjapi\blocks\Controllers;
+use rjapi\blocks\CustomsInterface;
+use rjapi\blocks\FileManager;
+use rjapi\blocks\DefaultInterface;
+use rjapi\blocks\HTTPMethodsInterface;
+use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\RamlInterface;
+use rjapi\blocks\Mappers;
+use rjapi\blocks\Module;
 use yii\console\Controller;
 
-class TypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
+class YiiTypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
     RamlInterface, CustomsInterface
 {
     const CONTENT_TYPE = 'application/vnd.api+json';
 
-    const RESPONSE_CODE_200 = '200';
-    const RESPONSE_CODE_201 = '201';
-
+    // paths
     public $rootDir = '';
-    public $appDir = 'app';
-    public $modulesDir = 'modules';
-    public $controllersDir = 'controllers';
-    public $modelsFormDir = 'models';
-    public $formsDir = 'forms';
-    public $mappersDir = 'mappers';
+    public $appDir = '';
+    public $modulesDir = '';
+    public $controllersDir = '';
+    public $modelsFormDir = '';
+    public $formsDir = '';
+    public $mappersDir = '';
+    public $containersDir = '';
+
     public $version;
     public $objectName = '';
     public $defaultController = 'Default';
@@ -83,6 +84,14 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
      */
     public function actionIndex($ramlFile)
     {
+        $this->appDir = DirsInterface::YII_APPLICATION_DIR;
+        $this->controllersDir = DirsInterface::YII_CONTROLLERS_DIR;
+        $this->formsDir = DirsInterface::YII_FORMS_DIR;
+        $this->mappersDir = DirsInterface::YII_MAPPERS_DIR;
+        $this->modelsFormDir = DirsInterface::YII_MODELS_DIR;
+        $this->modulesDir = DirsInterface::YII_MODULES_DIR;
+        $this->containersDir = DirsInterface::YII_CONTAINERS_DIR;
+
         $data = Yaml::parse(file_get_contents($ramlFile));
         $this->version = str_replace('/', '', $data['version']);
         $this->frameWork = $data['uses']['FrameWork'];
@@ -137,6 +146,8 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
                 FileManager::createPath($this->formatFormsPath());
                 // create mapper dir
                 FileManager::createPath($this->formatMappersPath());
+                // create containers dir
+                FileManager::createPath($this->formatContainersPath());
                 break;
             case self::FRAMEWORK_LARAVEL:
                 // TODO: implement laravel gen
@@ -162,6 +173,11 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
     public function formatMappersPath() : string
     {
         return FileManager::getModulePath($this, true) . $this->mappersDir;
+    }
+
+    public function formatContainersPath() : string
+    {
+        return FileManager::getModulePath($this, true) . $this->containersDir;
     }
 
     private function setObjectName($name)
@@ -192,5 +208,8 @@ class TypesController extends Controller implements DefaultInterface, PhpEntitie
         // create mappers
         $this->mappers = new Mappers($this);
         $this->mappers->create();
+
+        // create db containers
+        
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapi\extension\yii2\raml\exception;
+namespace rjapi\exception;
 
 class DirectoryException extends \Exception
 {

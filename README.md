@@ -198,5 +198,4 @@ To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spe
 
 To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
 
-After understanding the key idea and creation of structured picture You will never want to reinvent the wheel, happy coding ;-)
-
+Happy coding ;-)

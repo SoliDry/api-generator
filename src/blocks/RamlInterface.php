@@ -6,7 +6,7 @@
  * Time: 18:08
  */
 
-namespace rjapi\extension\yii2\raml\ramlblocks;
+namespace rjapi\blocks;
 
 interface RamlInterface
 {
