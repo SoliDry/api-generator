@@ -1,5 +1,5 @@
 # raml-json-api
-RAML-JSON-API PHP-code generator for different FrameWorks aka Laravel/Yii/Symfony etc
+RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks aka Laravel/Yii/Symfony etc, with complete support of JSON-API data format
 
 ## RAML Types and Declarations
 
