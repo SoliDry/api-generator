@@ -1,7 +1,7 @@
 # raml-json-api
 RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks aka Laravel/Yii/Symfony etc, with complete support of JSON-API data format
 
-Installation via composer:
+### Installation via composer:
 ``` composer require rjapi/raml-json-api ```
 
 ## RAML Types and Declarations
