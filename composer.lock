@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1a7532d2788cdd4f1446f21042c62b24",
-    "content-hash": "6c9318384d648a0611847394bb5652f9",
+    "hash": "7bdf7d56aa82994c07c735a44b1dbe95",
+    "content-hash": "07117f6afb94112f6d56d420af305eea",
     "packages": [
         {
             "name": "alecsammon/php-raml-parser",
@@ -1604,6 +1604,42 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "New extension \"json-api\"",
             "time": "2016-12-09 20:23:30"
+        },
+        {
+            "name": "rjapi/json-api-raml",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RJAPI/json-api-raml.git",
+                "reference": "e64f9077bb068cfc6a46e72e65b3698c275df826"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RJAPI/json-api-raml/zipball/e64f9077bb068cfc6a46e72e65b3698c275df826",
+                "reference": "e64f9077bb068cfc6a46e72e65b3698c275df826",
+                "shasum": ""
+            },
+            "require": {
+                "guzzlehttp/psr7": "~1.0",
+                "php": "^7.0",
+                "woohoolabs/yin": "^1.0",
+                "yiisoft/yii2": "^2.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "dev-master",
+                "phpmd/phpmd": "^2.4",
+                "squizlabs/php_codesniffer": "^2.7",
+                "yiisoft/yii2-codeception": "^2.0"
+            },
+            "type": "rjapi-json-api",
+            "autoload": {
+                "psr-4": {
+                    "rjapi\\extension\\json\\api\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "description": "New extension \"json-api\"",
+            "time": "2016-12-10 07:43:04"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

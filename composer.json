@@ -1,5 +1,5 @@
 {
-    "description": "New extension \"raml2yii\"",
+    "description": "RAML-JSON-API PHP-code generator for different FrameWorks aka Laravel/Yii/Symfony etc",
     "type": "rjapi-raml",
     "name": "rjapi/raml-json-api",
     "require": {
