@@ -4,7 +4,7 @@ RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks 
 ### Installation via composer:
 ``` composer require rjapi/raml-json-api ```
 
-## RAML Types and Declarations
+### RAML Types and Declarations
 
 Use sample RAML file from the root (the same file is in the tests codeception directory)
 
@@ -114,7 +114,8 @@ Complete directory structure after generator will end up it`s work will be like:
 ```RAML
 modules/{version}/controllers/ - contains controllers that extends the DefaultController
 modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as *Attributes in RAML)
-modules/{version}/models/mappers/ - contains ActiveRecord mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
+modules/{version}/models/mappers/ - contains mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
+modules/{version}/models/containers/ - extends ActiveRecord and provides straight access to CRUD
 ```
 
 Properties of Input json-api parameters - Yii Form generation example:
