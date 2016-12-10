@@ -1,8 +1,9 @@
 <?php
 namespace app\modules\v1\containers;
 
-use rjapi\extension\json\api\db\DataObjectTrait;
 use yii\db\ActiveRecord;
+
+use rjapi\extension\json\api\db\DataObjectTrait;
 
 class RubricContainer extends ActiveRecord 
 {
