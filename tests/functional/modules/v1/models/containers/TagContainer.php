@@ -5,7 +5,7 @@ use yii\db\ActiveRecord;
 
 class TagContainer extends ActiveRecord 
 {
-    use app\modules\v1\models\mappers\DataObjectTrait;
+    use rjapi\extension\json\api\db\DataObjectTrait;
 
     public static function tableName(): string {
         return "tag";

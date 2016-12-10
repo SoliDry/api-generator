@@ -3,6 +3,7 @@ namespace rjapi\blocks;
 
 use rjapi\controllers\YiiTypesController;
 use rjapi\extension\json\api\db\DataObjectTrait;
+use rjapi\helpers\Classes;
 use yii\console\Controller;
 use yii\db\ActiveRecord;
 
@@ -29,14 +30,15 @@ class Containers
         $this->setTag();
         $this->setNamespace($this->generator->containersDir);
         $this->setUse(ActiveRecord::class);
+        $this->setUse(DataObjectTrait::class);
 
         $this->startClass(
             $this->generator->objectName . DefaultInterface::CONTAINER_POSTFIX,
             ModelsInterface::YII_ACTIVE_RECORD
 //            constant('ModelsInterface::' . strtoupper($this->generator->frameWork) . '_ACTIVE_RECORD')
         );
-        
-        $this->setUse(DataObjectTrait::class, true);
+
+        $this->setUse(Classes::getName(DataObjectTrait::class), true);
         
         // fill with methods
         $this->startMethod(

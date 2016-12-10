@@ -16,7 +16,7 @@ class BaseFormRubric extends BaseFormResource
     public $post_aggregator = null;
     public $display_tape = null;
 
-    public function rules(): array {
+    public  function rules(): array {
         return [
             [["name_rubric", "url", "show_menu", "publish_rss", "post_aggregator", "display_tape"], "required"], 
             ["id" , "integer"], 
@@ -31,7 +31,7 @@ class BaseFormRubric extends BaseFormResource
         ];
     }
 
-    public function relations(): array {
+    public  function relations(): array {
         return [
             "tags",
         ];

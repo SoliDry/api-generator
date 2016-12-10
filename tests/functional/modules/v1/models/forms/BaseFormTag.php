@@ -11,7 +11,7 @@ class BaseFormTag extends BaseFormResource
 
     // Relations
 
-    public function rules(): array {
+    public  function rules(): array {
         return [
             [["title"], "required"], 
             ["id" , "integer"], 
@@ -19,7 +19,7 @@ class BaseFormTag extends BaseFormResource
         ];
     }
 
-    public function relations(): array {
+    public  function relations(): array {
         return [
             "rubric",
         ];
