@@ -1,7 +1,7 @@
 {
     "description": "New extension \"raml2yii\"",
-    "type": "rjapi-extension",
-    "name": "rjapi/extension-yii2-raml",
+    "type": "rjapi-raml",
+    "name": "rjapi/raml-json-api",
     "require": {
         "php": "^7.0",
         "yiisoft/yii2": "^2.0",
