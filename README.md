@@ -198,6 +198,8 @@ php yii raml -rf raml/rubric.raml
 ```
 ```-rf``` flag means "raml file" and ```raml/rubric.raml``` raml file in raml directory in the root of Your project 
 
+Yii2 basic project example with generated files can be found here - https://github.com/RJAPI/rjapi-yii 
+
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 
 To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
