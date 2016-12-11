@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 09.12.16
- * Time: 8:33
- */
-
 namespace rjapi\controllers;
-
 
 use rjapi\blocks\BaseModels;
 use rjapi\blocks\Containers;
@@ -17,6 +9,7 @@ use rjapi\blocks\DirsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
 use rjapi\blocks\Module;
+use rjapi\blocks\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -57,14 +50,13 @@ trait ControllersTrait
         $this->version = str_replace('/', '', $data['version']);
         $this->frameWork = $data['uses']['FrameWork'];
 
-        $this->appDir = DirsInterface::YII_APPLICATION_DIR;
-        $this->controllersDir = DirsInterface::YII_CONTROLLERS_DIR;
-        $this->formsDir = DirsInterface::YII_FORMS_DIR;
-        $this->mappersDir = DirsInterface::YII_MAPPERS_DIR;
-        $this->modelsFormDir = DirsInterface::YII_MODELS_DIR;
-        $this->modulesDir = DirsInterface::YII_MODULES_DIR;
-        $this->containersDir = DirsInterface::YII_CONTAINERS_DIR;
-
+        $this->appDir = constant('self::' . strtoupper($this->frameWork) . '_APPLICATION_DIR');
+        $this->controllersDir = constant('self::' . strtoupper($this->frameWork) . '_CONTROLLERS_DIR');
+        $this->formsDir = constant('self::' . strtoupper($this->frameWork) . '_FORMS_DIR');
+        $this->mappersDir = constant('self::' . strtoupper($this->frameWork) . '_MAPPERS_DIR');
+        $this->modelsFormDir = constant('self::' . strtoupper($this->frameWork) . '_MODELS_DIR');
+        $this->modulesDir = constant('self::' . strtoupper($this->frameWork) . '_MODULES_DIR');
+        $this->containersDir = constant('self::' . strtoupper($this->frameWork) . '_CONTAINERS_DIR');
         $this->createDirs();
 
         $this->types = $data['types'];
@@ -106,23 +98,16 @@ trait ControllersTrait
 
     private function createDirs()
     {
-        switch ($this->frameWork) {
-            case self::FRAMEWORK_YII:
-                // create modules dir
-                FileManager::createPath(FileManager::getModulePath($this));
-                // create controllers dir
-                FileManager::createPath($this->formatControllersPath());
-                // create forms dir
-                FileManager::createPath($this->formatFormsPath());
-                // create mapper dir
-                FileManager::createPath($this->formatMappersPath());
-                // create containers dir
-                FileManager::createPath($this->formatContainersPath());
-                break;
-            case self::FRAMEWORK_LARAVEL:
-                // TODO: implement laravel gen
-                break;
-        }
+        // create modules dir
+        FileManager::createPath(FileManager::getModulePath($this));
+        // create controllers dir
+        FileManager::createPath($this->formatControllersPath());
+        // create forms dir
+        FileManager::createPath($this->formatFormsPath());
+        // create mapper dir
+        FileManager::createPath($this->formatMappersPath());
+        // create containers dir
+        FileManager::createPath($this->formatContainersPath());
     }
 
     public function formatControllersPath()

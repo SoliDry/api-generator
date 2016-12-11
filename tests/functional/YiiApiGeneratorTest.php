@@ -22,8 +22,7 @@ class YiiApiGeneratorTest extends \Codeception\Test\Unit
     {
         spl_autoload_register(
             function ($class) {
-                echo $class;
-                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . YiiTypesController::PHP_EXT;
+                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . '.php';
             }
         );
         $this->gen = new YiiTypesController(1, new \yii\base\Module(1, '2', []), []);

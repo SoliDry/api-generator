@@ -3,13 +3,14 @@ namespace rjapi\controllers;
 
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\DefaultInterface;
+use rjapi\blocks\DirsInterface;
 use rjapi\blocks\HTTPMethodsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use yii\console\Controller;
 
 class YiiTypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
-    RamlInterface, CustomsInterface
+    RamlInterface, CustomsInterface, DirsInterface
 {
     use ControllersTrait;
     

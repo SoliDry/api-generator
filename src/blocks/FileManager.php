@@ -58,10 +58,10 @@ class FileManager implements DirsInterface
      */
     public static function getModulePath(Controller $obj, $withModel = false) : string
     {
-        $path = $obj->rootDir . $obj->modulesDir . YiiTypesController::SLASH . $obj->version . YiiTypesController::SLASH;
+        $path = $obj->rootDir . $obj->modulesDir . PhpEntitiesInterface::SLASH . $obj->version . YiiTypesController::SLASH;
         if($withModel === true)
         {
-            $path .= $obj->modelsFormDir . YiiTypesController::SLASH;
+            $path .= $obj->modelsFormDir . PhpEntitiesInterface::SLASH;
         }
 
         return $path;

@@ -1,8 +1,10 @@
 <?php
 
+use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\controllers\LaravelTypesController;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
+use yii\base\Model;
 
 /**
  * Class ApiGeneratorTest
@@ -21,8 +23,7 @@ class LaravelApiGeneratorTest extends \Codeception\Test\Unit
     {
         spl_autoload_register(
             function ($class) {
-                echo $class;
-                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . YiiTypesController::PHP_EXT;
+                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . PhpEntitiesInterface::PHP_EXT;
             }
         );
         $this->gen = new LaravelTypesController();
