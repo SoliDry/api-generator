@@ -1,7 +1,6 @@
 <?php
 
-use rjapi\controllers\YiiTypesController;
-use yii\base\Model;
+use rjapi\controllers\LaravelTypesController;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
 
@@ -10,7 +9,7 @@ use app\modules\v1\controllers\RubricController;
  *
  * @property YiiTypesController gen
  */
-class RamlApiGeneratorTest extends \Codeception\Test\Unit
+class LaravelApiGeneratorTest extends \Codeception\Test\Unit
 {
     /**
      * @var \FunctionalTester
@@ -26,7 +25,7 @@ class RamlApiGeneratorTest extends \Codeception\Test\Unit
                 require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . YiiTypesController::PHP_EXT;
             }
         );
-        $this->gen = new YiiTypesController(1, new \yii\base\Module(1, '2', []), []);
+        $this->gen = new LaravelTypesController();
         $this->gen->rootDir = './tests/functional/';
     }
 

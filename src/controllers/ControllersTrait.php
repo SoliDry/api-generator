@@ -53,6 +53,10 @@ trait ControllersTrait
      */
     public function actionIndex($ramlFile)
     {
+        $data = Yaml::parse(file_get_contents($ramlFile));
+        $this->version = str_replace('/', '', $data['version']);
+        $this->frameWork = $data['uses']['FrameWork'];
+
         $this->appDir = DirsInterface::YII_APPLICATION_DIR;
         $this->controllersDir = DirsInterface::YII_CONTROLLERS_DIR;
         $this->formsDir = DirsInterface::YII_FORMS_DIR;
@@ -61,9 +65,6 @@ trait ControllersTrait
         $this->modulesDir = DirsInterface::YII_MODULES_DIR;
         $this->containersDir = DirsInterface::YII_CONTAINERS_DIR;
 
-        $data = Yaml::parse(file_get_contents($ramlFile));
-        $this->version = str_replace('/', '', $data['version']);
-        $this->frameWork = $data['uses']['FrameWork'];
         $this->createDirs();
 
         $this->types = $data['types'];
