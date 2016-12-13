@@ -211,6 +211,7 @@ Run in console:
 ```php
 php artisan raml:generate raml/rubric.raml
 ```
+```raml/rubric.raml``` - raml file in raml directory in the root of Your project
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel
 
