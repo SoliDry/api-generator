@@ -20,4 +20,6 @@ interface DefaultInterface
     const FORM_ACTION   = 'Action';
     const FORM_IN       = 'In';
     const FORM_OUT      = 'Out';
+    
+    const GENERATOR_METHOD = 'generateResources';
 }
