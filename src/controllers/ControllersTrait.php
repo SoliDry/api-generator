@@ -5,11 +5,10 @@ use rjapi\blocks\BaseModels;
 use rjapi\blocks\Containers;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
-use rjapi\blocks\DirsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
 use rjapi\blocks\Module;
-use rjapi\blocks\RamlInterface;
+use rjapi\exception\MethodNotFoundException;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -65,34 +64,31 @@ trait ControllersTrait
 
     private function runGenerator()
     {
-        switch ($this->frameWork) {
-            case self::FRAMEWORK_YII:
-                foreach ($this->types as $objName => $objData) {
-                    if (!in_array($objName, $this->customTypes)) { // if this is not a custom type generate resources
-                        $excluded = false;
-                        foreach ($this->excludedSubtypes as $type) {
-                            if (strpos($objName, $type) !== false) {
-                                $excluded = true;
-                            }
-                        }
-                        // if the type is among excluded - continue
-                        if ($excluded === true) {
-                            continue;
-                        }
-
-                        foreach ($objData as $k => $v) {
-                            if ($k === self::RAML_PROPS) { // process props
-                                $this->setObjectName($objName);
-                                $this->setObjectProps($v);
-                                $this->generateResources();
-                            }
-                        }
+        foreach ($this->types as $objName => $objData) {
+            if (!in_array($objName, $this->customTypes)) { // if this is not a custom type generate resources
+                $excluded = false;
+                foreach ($this->excludedSubtypes as $type) {
+                    if (strpos($objName, $type) !== false) {
+                        $excluded = true;
                     }
                 }
-                break;
-            case self::FRAMEWORK_LARAVEL:
-                // TODO: implement laravel gen
-                break;
+                // if the type is among excluded - continue
+                if ($excluded === true) {
+                    continue;
+                }
+
+                foreach ($objData as $k => $v) {
+                    if ($k === self::RAML_PROPS) { // process props
+                        $this->setObjectName($objName);
+                        $this->setObjectProps($v);
+                        $generator = self::GENERATOR_METHOD . ucfirst($this->frameWork);
+                        if (method_exists($this, $generator) === false) {
+                            throw new MethodNotFoundException('The method ' . $generator . ' has not been found.');
+                        }
+                        $this->$generator();
+                    }
+                }
+            }
         }
     }
 
@@ -145,7 +141,31 @@ trait ControllersTrait
         $this->objectProps = $props;
     }
 
-    private function generateResources()
+    private function generateResourcesYii()
+    {
+        // create controller
+        $this->controllers = new Controllers($this);
+        $this->controllers->createDefault();
+        $this->controllers->create();
+
+        // create module
+        $this->moduleObject = new Module($this);
+        $this->moduleObject->createModule();
+
+        // create model
+        $this->forms = new BaseModels($this);
+        $this->forms->create();
+
+        // create mappers
+        $this->mappers = new Mappers($this);
+        $this->mappers->create();
+
+        // create db containers
+        $this->containers = new Containers($this);
+        $this->containers->create();
+    }
+
+    private function generateResourcesLaravel()
     {
         // create controller
         $this->controllers = new Controllers($this);
