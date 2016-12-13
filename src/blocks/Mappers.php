@@ -2,24 +2,24 @@
 
 namespace rjapi\blocks;
 
+use rjapi\controllers\LaravelRJApiGenerator;
 use rjapi\extension\json\api\db\BaseActiveDataMapper;
 use rjapi\controllers\YiiRJApiGenerator;
-use yii\console\Controller;
-use yii\helpers\StringHelper;
+use rjapi\helpers\Classes;
 
 class Mappers extends Models
 {
     use ContentManager;
-    /** @var YiiRJApiGenerator $generator */
+    /** @var YiiRJApiGenerator | LaravelRJApiGenerator $generator */
     private   $generator  = null;
     protected $sourceCode = '';
 
-    public function __construct(Controller $generator)
+    public function __construct($generator)
     {
         $this->generator = $generator;
     }
 
-    public function setCodeState(Controller $generator)
+    public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
@@ -28,20 +28,20 @@ class Mappers extends Models
     {
         $this->setTag();
         $this->setNamespace($this->generator->modelsFormDir .
-                            YiiRJApiGenerator::BACKSLASH . $this->generator->mappersDir);
+                            PhpEntitiesInterface::BACKSLASH . $this->generator->mappersDir);
         $baseMapper     = BaseActiveDataMapper::class;
-        $baseMapperName = StringHelper::basename($baseMapper);
+        $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper);
         $this->startClass(
-            YiiRJApiGenerator::FORM_BASE
-            . YiiRJApiGenerator::MAPPER_PREFIX . $this->generator->objectName, $baseMapperName
+            DefaultInterface::FORM_BASE
+            . DefaultInterface::MAPPER_PREFIX . $this->generator->objectName, $baseMapperName
         );
         $this->endClass();
 
-        $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir . YiiRJApiGenerator::SLASH
-                . YiiRJApiGenerator::FORM_BASE . YiiRJApiGenerator::MAPPER_PREFIX .
-                $this->generator->objectName . YiiRJApiGenerator::PHP_EXT;
+        $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir . PhpEntitiesInterface::SLASH
+                . DefaultInterface::FORM_BASE . DefaultInterface::MAPPER_PREFIX .
+                $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($file, $this->sourceCode);
     }
 }

@@ -15,7 +15,7 @@ class Classes
      * @param string $class
      * @return string
      */
-    public static function getName(string $class)
+    public static function getName(string $class): string
     {
         $ref = new \ReflectionClass($class);
         return (string) $ref->getShortName();
