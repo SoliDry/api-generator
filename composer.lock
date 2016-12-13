@@ -1784,53 +1784,17 @@
             "time": "2016-10-10 12:19:37"
         },
         {
-            "name": "rjapi/extension-json-api",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RJAPI/json-api-raml.git",
-                "reference": "ab2685d650f45c626ee6ad208aca445eed9319e1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RJAPI/json-api-raml/zipball/ab2685d650f45c626ee6ad208aca445eed9319e1",
-                "reference": "ab2685d650f45c626ee6ad208aca445eed9319e1",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/psr7": "~1.0",
-                "php": "^7.0",
-                "woohoolabs/yin": "^1.0",
-                "yiisoft/yii2": "^2.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "dev-master",
-                "phpmd/phpmd": "^2.4",
-                "squizlabs/php_codesniffer": "^2.7",
-                "yiisoft/yii2-codeception": "^2.0"
-            },
-            "type": "rjapi-extension",
-            "autoload": {
-                "psr-4": {
-                    "rjapi\\extension\\json\\api\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "New extension \"json-api\"",
-            "time": "2016-12-09 20:23:30"
-        },
-        {
             "name": "rjapi/json-api-raml",
-            "version": "v1.0.2",
+            "version": "1.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RJAPI/json-api-raml.git",
-                "reference": "e64f9077bb068cfc6a46e72e65b3698c275df826"
+                "reference": "13740d32fc2434c4b91e37be34a5f422760be27e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RJAPI/json-api-raml/zipball/e64f9077bb068cfc6a46e72e65b3698c275df826",
-                "reference": "e64f9077bb068cfc6a46e72e65b3698c275df826",
+                "url": "https://api.github.com/repos/RJAPI/json-api-raml/zipball/13740d32fc2434c4b91e37be34a5f422760be27e",
+                "reference": "13740d32fc2434c4b91e37be34a5f422760be27e",
                 "shasum": ""
             },
             "require": {
@@ -1852,8 +1816,8 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "description": "New extension \"json-api\"",
-            "time": "2016-12-10 07:43:04"
+            "description": "JSON-API-RAML dependency for generated PHP-code (based on RAML-types) support of json-api data format",
+            "time": "2016-12-10 12:34:24"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",

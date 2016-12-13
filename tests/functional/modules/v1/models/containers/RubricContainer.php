@@ -13,11 +13,11 @@ class RubricContainer extends ActiveRecord
         return "rubric";
     }
 
-    public  function rules(): string {
+    public  function tableName(): string {
         return [];
     }
 
-    public  function containers(): string {
+    public  function tableName(): string {
         return [];
     }
 }

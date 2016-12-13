@@ -6,7 +6,7 @@ use rjapi\extension\json\api\db\DataObjectTrait;
 use rjapi\helpers\Classes;
 use yii\db\ActiveRecord;
 
-class Containers
+class Containers implements ModelsInterface
 {
     use ContentManager;
 
@@ -33,8 +33,7 @@ class Containers
 
         $this->startClass(
             $this->generator->objectName . DefaultInterface::CONTAINER_POSTFIX,
-            ModelsInterface::YII_ACTIVE_RECORD
-//            constant('ModelsInterface::' . strtoupper($this->generator->frameWork) . '_ACTIVE_RECORD')
+            constant('self::' . strtoupper($this->generator->frameWork) . '_ACTIVE_RECORD')
         );
 
         $this->setUse(Classes::getName(DataObjectTrait::class), true);
@@ -42,7 +41,6 @@ class Containers
         // fill with methods
         $this->startMethod(
             constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-//            ModelsInterface::YII_METHOD_TABLE_NAME,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING, true
         );
         $this->methodReturn(strtolower($this->generator->objectName), true);
@@ -52,7 +50,6 @@ class Containers
 
         $this->startMethod(
             constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-//            ModelsInterface::YII_METHOD_RULES,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING
         );
         $this->methodReturn('[]');
@@ -62,7 +59,6 @@ class Containers
 
         $this->startMethod(
             constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-//            ModelsInterface::YII_METHOD_CONTAINERS,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING
         );
         $this->methodReturn('[]');

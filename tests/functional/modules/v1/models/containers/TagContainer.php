@@ -13,11 +13,11 @@ class TagContainer extends ActiveRecord
         return "tag";
     }
 
-    public  function rules(): string {
+    public  function tableName(): string {
         return [];
     }
 
-    public  function containers(): string {
+    public  function tableName(): string {
         return [];
     }
 }
