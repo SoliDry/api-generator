@@ -4,7 +4,6 @@ namespace rjapi\blocks;
 use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\extension\json\api\db\DataObjectTrait;
 use rjapi\helpers\Classes;
-use yii\console\Controller;
 use yii\db\ActiveRecord;
 
 class Containers
@@ -15,12 +14,12 @@ class Containers
     private $generator  = null;
     private $sourceCode = '';
 
-    public function __construct(Controller $generator)
+    public function __construct($generator)
     {
         $this->generator = $generator;
     }
 
-    public function setCodeState(Controller $generator)
+    public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
@@ -42,8 +41,8 @@ class Containers
         
         // fill with methods
         $this->startMethod(
-//            constant('ModelsInterface::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-            ModelsInterface::YII_METHOD_TABLE_NAME,
+            constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
+//            ModelsInterface::YII_METHOD_TABLE_NAME,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING, true
         );
         $this->methodReturn(strtolower($this->generator->objectName), true);
@@ -52,8 +51,8 @@ class Containers
         $this->sourceCode .= PHP_EOL . PHP_EOL;
 
         $this->startMethod(
-//            constant('ModelsInterface::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-            ModelsInterface::YII_METHOD_RULES,
+            constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
+//            ModelsInterface::YII_METHOD_RULES,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING
         );
         $this->methodReturn('[]');
@@ -62,8 +61,8 @@ class Containers
         $this->sourceCode .= PHP_EOL . PHP_EOL;
 
         $this->startMethod(
-//            constant('ModelsInterface::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
-            ModelsInterface::YII_METHOD_CONTAINERS,
+            constant('self::' . strtoupper($this->generator->frameWork) . '_METHOD_TABLE_NAME'),
+//            ModelsInterface::YII_METHOD_CONTAINERS,
             PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_STRING
         );
         $this->methodReturn('[]');
