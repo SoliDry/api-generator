@@ -2,25 +2,32 @@
 
 namespace rjapi\blocks;
 
+use rjapi\controllers\LaravelRJApiGenerator;
 use rjapi\extension\json\api\rest\mapper\BaseMapperController;
 use rjapi\controllers\YiiRJApiGenerator;
-use yii\console\Controller;
-use yii\helpers\StringHelper;
+use rjapi\helpers\Classes;
 
 class Controllers implements ControllersInterface
 {
     use ContentManager;
 
-    /** @var YiiRJApiGenerator generator */
+    /** @var YiiRJApiGenerator | LaravelRJApiGenerator generator */
     private $generator  = null;
     private $sourceCode = '';
 
-    public function __construct(Controller $generator)
+    /**
+     * Controllers constructor.
+     * @param LaravelRJApiGenerator | YiiRJApiGenerator $generator
+     */
+    public function __construct($generator)
     {
         $this->generator = $generator;
     }
 
-    public function setCodeState(Controller $generator)
+    /**
+     * @param $generator
+     */
+    public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
@@ -31,18 +38,18 @@ class Controllers implements ControllersInterface
     public function createDefault()
     {
         $fileController = $this->generator->formatControllersPath()
-                          . YiiRJApiGenerator::SLASH
+                          . PhpEntitiesInterface::SLASH
                           . $this->generator->defaultController
-                          . YiiRJApiGenerator::DEFAULT_POSTFIX
-                          . YiiRJApiGenerator::PHP_EXT;
+                          . DefaultInterface::DEFAULT_POSTFIX
+                          . PhpEntitiesInterface::PHP_EXT;
 
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
         $baseFullMapper = BaseMapperController::class;
-        $baseMapperName = StringHelper::basename($baseFullMapper);
+        $baseMapperName = Classes::getName($baseFullMapper);
 
         $this->setUse($baseFullMapper);
-        $this->startClass($this->generator->defaultController . YiiRJApiGenerator::DEFAULT_POSTFIX, $baseMapperName);
+        $this->startClass($this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX, $baseMapperName);
         $this->endClass();
         FileManager::createFile($fileController, $this->sourceCode);
     }
@@ -52,15 +59,15 @@ class Controllers implements ControllersInterface
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
         $this->startClass(
-            $this->generator->objectName . YiiRJApiGenerator::DEFAULT_POSTFIX,
-            $this->generator->defaultController . YiiRJApiGenerator::DEFAULT_POSTFIX
+            $this->generator->objectName . DefaultInterface::DEFAULT_POSTFIX,
+            $this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX
         );
         $this->endClass();
         $fileController = $this->generator->formatControllersPath()
-                          . YiiRJApiGenerator::SLASH
+                          . PhpEntitiesInterface::SLASH
                           . $this->generator->objectName
-                          . YiiRJApiGenerator::DEFAULT_POSTFIX
-                          . YiiRJApiGenerator::PHP_EXT;
+                          . DefaultInterface::DEFAULT_POSTFIX
+                          . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($fileController, $this->sourceCode);
     }
 }

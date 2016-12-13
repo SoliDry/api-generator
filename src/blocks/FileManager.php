@@ -5,8 +5,6 @@ namespace rjapi\blocks;
 use rjapi\controllers\LaravelRJApiGenerator;
 use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\exception\DirectoryException;
-use Symfony\Component\Console\Command\Command;
-use yii\console\Controller;
 
 class FileManager implements DirsInterface
 {
