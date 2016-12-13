@@ -3,6 +3,7 @@ namespace rjapi\blocks;
 
 use rjapi\extension\json\api\forms\BaseFormResource;
 use rjapi\controllers\YiiRJApiGenerator;
+use rjapi\helpers\Classes;
 use yii\console\Controller;
 use yii\helpers\StringHelper;
 
@@ -19,12 +20,12 @@ class BaseModels extends Models
         ],
     ];
 
-    public function __construct(Controller $generator)
+    public function __construct($generator)
     {
         $this->generator = $generator;
     }
 
-    public function setCodeState(Controller $generator)
+    public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
@@ -34,25 +35,25 @@ class BaseModels extends Models
         $this->setTag();
         $this->setNamespace(
             $this->generator->modelsFormDir .
-            YiiRJApiGenerator::BACKSLASH . $this->generator->formsDir
+            PhpEntitiesInterface::BACKSLASH . $this->generator->formsDir
         );
 
         $baseFullForm = BaseFormResource::class;
-        $baseFormName = StringHelper::basename($baseFullForm);
+        $baseFormName = Classes::getName($baseFullForm);
         $this->setUse($baseFullForm);
         $this->startClass(
-            YiiRJApiGenerator::FORM_BASE .
-            YiiRJApiGenerator::FORM_PREFIX . $this->generator->objectName, $baseFormName
+            DefaultInterface::FORM_BASE .
+            DefaultInterface::FORM_PREFIX . $this->generator->objectName, $baseFormName
         );
 
-        if(!empty($this->generator->objectProps[YiiRJApiGenerator::RAML_RELATIONSHIPS][YiiRJApiGenerator::RAML_TYPE])
+        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
            &&
-           !empty($this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_RELATIONSHIPS][YiiRJApiGenerator::RAML_TYPE]])
+           !empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]])
         )
         {
             $this->setProps(
-                $this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_RELATIONSHIPS][YiiRJApiGenerator::RAML_TYPE]]
-                [YiiRJApiGenerator::RAML_PROPS][YiiRJApiGenerator::RAML_DATA][YiiRJApiGenerator::RAML_ITEMS]
+                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
+                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
             );
         }
         else
@@ -61,19 +62,19 @@ class BaseModels extends Models
         }
 
         $this->constructRules();
-        if(!empty($this->generator->objectProps[YiiRJApiGenerator::RAML_RELATIONSHIPS]))
+        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS]))
         {
-            $this->constructRelations($this->generator->objectProps[YiiRJApiGenerator::RAML_RELATIONSHIPS]);
+            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS]);
         }
         // create closing brace
         $this->endClass();
 
         $fileForm = $this->generator->formatFormsPath()
-                    . YiiRJApiGenerator::SLASH
-                    . YiiRJApiGenerator::FORM_BASE
-                    . YiiRJApiGenerator::FORM_PREFIX
+                    . PhpEntitiesInterface::SLASH
+                    . DefaultInterface::FORM_BASE
+                    . DefaultInterface::FORM_PREFIX
                     . $this->generator->objectName
-                    . YiiRJApiGenerator::PHP_EXT;
+                    . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($fileForm, $this->sourceCode);
     }
 
@@ -84,18 +85,18 @@ class BaseModels extends Models
         {
             foreach($this->additionalProps as $prop => $propVal)
             {
-                $this->createProperty($prop, YiiRJApiGenerator::PHP_MODIFIER_PUBLIC);
+                $this->createProperty($prop, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
             }
         }
 
         // properties creation
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::COMMENT . ' Attributes' . PHP_EOL;
-        foreach($this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_ATTRS]]
-        [YiiRJApiGenerator::RAML_PROPS] as $propKey => $propVal)
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . ' Attributes' . PHP_EOL;
+        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
+        [RamlInterface::RAML_PROPS] as $propKey => $propVal)
         {
             if(is_array($propVal))
             {
-                $this->createProperty($propKey, YiiRJApiGenerator::PHP_MODIFIER_PUBLIC);
+                $this->createProperty($propKey, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
             }
         }
         $this->sourceCode .= PHP_EOL;
@@ -103,13 +104,13 @@ class BaseModels extends Models
         // related props
         if($relationTypes !== null)
         {
-            $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::COMMENT . ' Relations' . PHP_EOL;
+            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . ' Relations' . PHP_EOL;
             foreach($relationTypes as $attrKey => $attrVal)
             {
                 // determine attr
-                if($attrKey !== YiiRJApiGenerator::RAML_ID && $attrKey !== YiiRJApiGenerator::RAML_TYPE)
+                if($attrKey !== RamlInterface::RAML_ID && $attrKey !== RamlInterface::RAML_TYPE)
                 {
-                    $this->createProperty($attrKey, YiiRJApiGenerator::PHP_MODIFIER_PUBLIC);
+                    $this->createProperty($attrKey, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
                 }
             }
             $this->sourceCode .= PHP_EOL;
@@ -118,7 +119,7 @@ class BaseModels extends Models
 
     private function constructRules()
     {
-        $this->startMethod(YiiRJApiGenerator::PHP_YII_RULES, YiiRJApiGenerator::PHP_MODIFIER_PUBLIC, YiiRJApiGenerator::PHP_TYPES_ARRAY);
+        $this->startMethod(PhpEntitiesInterface::PHP_YII_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
         // gather required fields
@@ -138,8 +139,8 @@ class BaseModels extends Models
         {
             foreach($this->additionalProps as $prop => $propVal)
             {
-                if(empty($propVal[YiiRJApiGenerator::RAML_REQUIRED]) === false &&
-                   (bool) $propVal[YiiRJApiGenerator::RAML_REQUIRED] === true
+                if(empty($propVal[RamlInterface::RAML_REQUIRED]) === false &&
+                   (bool) $propVal[RamlInterface::RAML_REQUIRED] === true
                 )
                 {
                     if($keysCnt > 0)
@@ -152,14 +153,14 @@ class BaseModels extends Models
             }
         }
 
-        foreach($this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_ATTRS]]
+        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
         [YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
         {
             // determine attr
             if(is_array($attrVal))
             {
-                if(isset($attrVal[YiiRJApiGenerator::RAML_REQUIRED]) &&
-                   (bool) $attrVal[YiiRJApiGenerator::RAML_REQUIRED] === true
+                if(isset($attrVal[RamlInterface::RAML_REQUIRED]) &&
+                   (bool) $attrVal[RamlInterface::RAML_REQUIRED] === true
                 )
                 {
                     if($keysCnt > 0)
@@ -174,11 +175,11 @@ class BaseModels extends Models
 
         if($keysCnt > 0)
         {
-            $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4
-                                 . YiiRJApiGenerator::OPEN_BRACKET . YiiRJApiGenerator::OPEN_BRACKET
-                                 . $reqKeys . YiiRJApiGenerator::CLOSE_BRACKET;
-            $this->sourceCode .= ', "' . YiiRJApiGenerator::RAML_REQUIRED . '"';
-            $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4
+                                 . PhpEntitiesInterface::OPEN_BRACKET . PhpEntitiesInterface::OPEN_BRACKET
+                                 . $reqKeys . PhpEntitiesInterface::CLOSE_BRACKET;
+            $this->sourceCode .= ', "' . RamlInterface::RAML_REQUIRED . '"';
+            $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
             $this->sourceCode .= ', ' . PHP_EOL;
         }
     }
@@ -189,31 +190,31 @@ class BaseModels extends Models
         {
             foreach($this->additionalProps as $prop => $propVal)
             {
-                $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                                     YiiRJApiGenerator::TAB_PSR4
-                                     . YiiRJApiGenerator::OPEN_BRACKET . '"' . $prop . '" ';
+                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+                                     PhpEntitiesInterface::TAB_PSR4
+                                     . PhpEntitiesInterface::OPEN_BRACKET . '"' . $prop . '" ';
                 $this->setProperty($propVal);
-                $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+                $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
                 $this->sourceCode .= ', ' . PHP_EOL;
             }
         }
 
         $attrsCnt =
-            count($this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_ATTRS]][YiiRJApiGenerator::RAML_PROPS]);
-        foreach($this->generator->types[$this->generator->objectProps[YiiRJApiGenerator::RAML_ATTRS]]
-        [YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
+            count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
+        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
+        [RamlInterface::RAML_PROPS] as $attrKey => $attrVal)
         {
             --$attrsCnt;
             // determine attr
-            if($attrKey !== YiiRJApiGenerator::RAML_TYPE && $attrKey !== YiiRJApiGenerator::RAML_REQUIRED &&
+            if($attrKey !== RamlInterface::RAML_TYPE && $attrKey !== RamlInterface::RAML_REQUIRED &&
                is_array($attrVal)
             )
             {
-                $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                                     YiiRJApiGenerator::TAB_PSR4
-                                     . YiiRJApiGenerator::OPEN_BRACKET . '"' . $attrKey . '" ';
+                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+                                     PhpEntitiesInterface::TAB_PSR4
+                                     . PhpEntitiesInterface::OPEN_BRACKET . '"' . $attrKey . '" ';
                 $this->setProperty($attrVal);
-                $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+                $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
                 if($attrsCnt > 0)
                 {
                     $this->sourceCode .= ', ' . PHP_EOL;
@@ -225,7 +226,7 @@ class BaseModels extends Models
     private function constructRelations($relationTypes)
     {
         $this->sourceCode .= PHP_EOL . PHP_EOL;
-        $this->startMethod(YiiRJApiGenerator::PHP_YII_RELATIONS, YiiRJApiGenerator::PHP_MODIFIER_PUBLIC, YiiRJApiGenerator::PHP_TYPES_ARRAY);
+        $this->startMethod(YiiRJApiGenerator::PHP_YII_RELATIONS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
         $rel = empty($relationTypes[YiiRJApiGenerator::RAML_TYPE]) ? $relationTypes :

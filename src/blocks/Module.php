@@ -2,22 +2,23 @@
 
 namespace rjapi\blocks;
 
+use rjapi\controllers\LaravelRJApiGenerator;
 use rjapi\controllers\YiiRJApiGenerator;
 use yii\console\Controller;
 
 class Module
 {
     use ContentManager;
-    /** @var YiiRJApiGenerator generator */
+    /** @var YiiRJApiGenerator | LaravelRJApiGenerator generator */
     private $generator  = null;
     private $sourceCode = '';
 
-    public function __construct(Controller $generator)
+    public function __construct($generator)
     {
         $this->generator = $generator;
     }
 
-    public function setCodeState(Controller $generator)
+    public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
@@ -25,16 +26,16 @@ class Module
     public function createModule()
     {
         $this->setTag();
-        $this->sourceCode .= YiiRJApiGenerator::PHP_NAMESPACE . ' ' . $this->generator->appDir
-                             . YiiRJApiGenerator::BACKSLASH . $this->generator->modulesDir . YiiRJApiGenerator::BACKSLASH
-                             . $this->generator->version . YiiRJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
+        $this->sourceCode .= PhpEntitiesInterface::PHP_NAMESPACE . ' ' . $this->generator->appDir
+                             . PhpEntitiesInterface::BACKSLASH . $this->generator->modulesDir . PhpEntitiesInterface::BACKSLASH
+                             . $this->generator->version . PhpEntitiesInterface::SEMICOLON . PHP_EOL . PHP_EOL;
 
         $baseFullFormOut = \rjapi\extension\json\api\base\Module::class;
-        $this->startClass(YiiRJApiGenerator::DEFAULT_MODULE, $baseFullFormOut);
+        $this->startClass(DefaultInterface::DEFAULT_MODULE, $baseFullFormOut);
         $this->endClass();
 
-        $fileModule = FileManager::getModulePath($this->generator) . YiiRJApiGenerator::DEFAULT_MODULE
-                      . YiiRJApiGenerator::PHP_EXT;
+        $fileModule = FileManager::getModulePath($this->generator) . DefaultInterface::DEFAULT_MODULE
+                      . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($fileModule, $this->sourceCode);
     }
 }
