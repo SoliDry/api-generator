@@ -7,13 +7,27 @@ use rjapi\blocks\DirsInterface;
 use rjapi\blocks\HTTPMethodsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
-use yii\console\Controller;
+use Illuminate\Console\Command;
 
-class YiiTypesController extends Controller implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
+class LaravelRJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
     RamlInterface, CustomsInterface, DirsInterface
 {
     use ControllersTrait;
-    
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'raml:generate {ramlFile}';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'RAML-JSON-API PHP-code generator (based on RAML-types), with complete support of JSON-API data format';
+
     private $forms = null;
     private $controllers = null;
     private $moduleObject = null;
@@ -26,24 +40,9 @@ class YiiTypesController extends Controller implements DefaultInterface, PhpEnti
         self::CUSTOM_TYPES_FILTER,
     ];
 
-    /**
-     * @param string $actionId the action id of the current request
-     *
-     * @return array
-     */
-    public function options($actionId)
+    public function handle()
     {
-        return ['force', 'ramlFile'];
-    }
-
-    /**
-     * @return array
-     */
-    public function optionAliases()
-    {
-        return [
-            'f' => 'force', // force override files
-            'rf' => 'ramlFile' // pass RAML file
-        ];
+        $ramlFile = $this->argument('ramlFile');
+        $this->actionIndex($ramlFile);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\controllers\LaravelTypesController;
+use rjapi\controllers\LaravelRJApiGenerator;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
 use yii\base\Model;
@@ -26,7 +26,7 @@ class LaravelApiGeneratorTest extends \Codeception\Test\Unit
                 require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . PhpEntitiesInterface::PHP_EXT;
             }
         );
-        $this->gen = new LaravelTypesController();
+        $this->gen = new LaravelRJApiGenerator();
         $this->gen->rootDir = './tests/functional/';
     }
 

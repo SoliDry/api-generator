@@ -3,7 +3,7 @@
 namespace rjapi\blocks;
 
 use Raml\Method;
-use rjapi\controllers\YiiTypesController;
+use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\exception\AttributesException;
 
 class Methods
@@ -29,66 +29,66 @@ class Methods
         $bodies     = $this->method->getBodies();
         $attributes = null;
 
-        if(empty($bodies[YiiTypesController::CONTENT_TYPE]))
+        if(empty($bodies[YiiRJApiGenerator::CONTENT_TYPE]))
         {
 //            throw new SchemaException('There is no schema defined.');
             return $attributes;
         }
-        $jsonBodyArr = $bodies[YiiTypesController::CONTENT_TYPE]->getSchema()->getJsonArray();
+        $jsonBodyArr = $bodies[YiiRJApiGenerator::CONTENT_TYPE]->getSchema()->getJsonArray();
 
-        if(empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['type']))
+        if(empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['type']))
         {
             return $attributes;
         }
 
         if($related === true) // parse relations
         {
-            if($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['type'] === YiiTypesController::RAML_TYPE_OBJECT
+            if($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['type'] === YiiRJApiGenerator::RAML_TYPE_OBJECT
                &&
-               !empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['relationships'][YiiTypesController::RAML_PROPS])
+               !empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['relationships'][YiiRJApiGenerator::RAML_PROPS])
             )
             {
                 $attributes =
-                    $jsonBodyArr[YiiTypesController::RAML_PROPS]['data'][YiiTypesController::RAML_PROPS]['relationships'][YiiTypesController::RAML_PROPS];
+                    $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data'][YiiRJApiGenerator::RAML_PROPS]['relationships'][YiiRJApiGenerator::RAML_PROPS];
             }
 
-            if($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['type'] === YiiTypesController::RAML_TYPE_ARRAY)
+            if($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['type'] === YiiRJApiGenerator::RAML_TYPE_ARRAY)
             {
-                if(!empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['relationships'][YiiTypesController::RAML_PROPS]))
+                if(!empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['relationships'][YiiRJApiGenerator::RAML_PROPS]))
                 {
                     $attributes =
-                        $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['relationships'][YiiTypesController::RAML_PROPS];
+                        $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['relationships'][YiiRJApiGenerator::RAML_PROPS];
                 }
-                if(!empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][YiiTypesController::RAML_PROPS]))
+                if(!empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][YiiRJApiGenerator::RAML_PROPS]))
                 {
                     $attributes =
-                        $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][YiiTypesController::RAML_PROPS];
+                        $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][YiiRJApiGenerator::RAML_PROPS];
                 }
             }
         }
         else
         {// parse attributes
-            if($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['type'] === YiiTypesController::RAML_TYPE_OBJECT)
+            if($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['type'] === YiiRJApiGenerator::RAML_TYPE_OBJECT)
             {
                 $attributes       =
-                    $jsonBodyArr[YiiTypesController::RAML_PROPS]['data'][YiiTypesController::RAML_PROPS]['attributes'][YiiTypesController::RAML_PROPS];
+                    $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data'][YiiRJApiGenerator::RAML_PROPS]['attributes'][YiiRJApiGenerator::RAML_PROPS];
                 $attributes['id'] =
-                    $jsonBodyArr[YiiTypesController::RAML_PROPS]['data'][YiiTypesController::RAML_PROPS]['id'];
+                    $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data'][YiiRJApiGenerator::RAML_PROPS]['id'];
             }
 
-            if($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['type'] === YiiTypesController::RAML_TYPE_ARRAY)
+            if($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['type'] === YiiRJApiGenerator::RAML_TYPE_ARRAY)
             {
-                if(!empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['attributes'][YiiTypesController::RAML_PROPS]))
+                if(!empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['attributes'][YiiRJApiGenerator::RAML_PROPS]))
                 {
                     $attributes       =
-                        $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['attributes'][YiiTypesController::RAML_PROPS];
-                    $attributes['id'] = $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['id'];
+                        $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['attributes'][YiiRJApiGenerator::RAML_PROPS];
+                    $attributes['id'] = $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['id'];
                 }
-                if(!empty($jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][YiiTypesController::RAML_PROPS]))
+                if(!empty($jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][YiiRJApiGenerator::RAML_PROPS]))
                 {
                     $attributes       =
-                        $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][YiiTypesController::RAML_PROPS];
-                    $attributes['id'] = $jsonBodyArr[YiiTypesController::RAML_PROPS]['data']['items'][0]['id'];
+                        $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][YiiRJApiGenerator::RAML_PROPS];
+                    $attributes['id'] = $jsonBodyArr[YiiRJApiGenerator::RAML_PROPS]['data']['items'][0]['id'];
                 }
             }
         }

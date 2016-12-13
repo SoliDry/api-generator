@@ -15,6 +15,7 @@ class BaseFormRubric extends BaseFormResource
     public $publish_rss = null;
     public $post_aggregator = null;
     public $display_tape = null;
+    public $status = null;
 
     public  function rules(): array {
         return [
@@ -27,7 +28,8 @@ class BaseFormRubric extends BaseFormResource
             ["show_menu" , "boolean"], 
             ["publish_rss" , "boolean"], 
             ["post_aggregator" , "boolean"], 
-            ["display_tape" , "boolean"]
+            ["display_tape" , "boolean"], 
+            ["status" , "in", "range" => ["draft", "published", "postponed", "archived"]]
         ];
     }
 

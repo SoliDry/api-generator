@@ -1,6 +1,6 @@
 <?php
 
-use rjapi\controllers\YiiTypesController;
+use rjapi\controllers\YiiRJApiGenerator;
 use yii\base\Model;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
@@ -8,7 +8,7 @@ use app\modules\v1\controllers\RubricController;
 /**
  * Class ApiGeneratorTest
  *
- * @property YiiTypesController gen
+ * @property YiiRJApiGenerator gen
  */
 class YiiApiGeneratorTest extends \Codeception\Test\Unit
 {
@@ -25,7 +25,7 @@ class YiiApiGeneratorTest extends \Codeception\Test\Unit
                 require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . '.php';
             }
         );
-        $this->gen = new YiiTypesController(1, new \yii\base\Module(1, '2', []), []);
+        $this->gen = new YiiRJApiGenerator(1, new \yii\base\Module(1, '2', []), []);
         $this->gen->rootDir = './tests/functional/';
     }
 
@@ -35,7 +35,7 @@ class YiiApiGeneratorTest extends \Codeception\Test\Unit
 
     public static function tearDownAfterClass()
     {
-        // TODO: uncomment this if need to be deleted
+        // TODO: uncomment this if need to be deleted recursively
 //        self::rmdir('./tests/functional/modules/');
     }
 
@@ -62,13 +62,29 @@ class YiiApiGeneratorTest extends \Codeception\Test\Unit
         $formIn = new \app\modules\v1\models\forms\BaseFormRubric();
         $this->assertInstanceOf(Model::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
-        $this->assertArraySubset([], $formIn->rules());
+        $this->assertArraySubset([
+            [["name_rubric", "url", "show_menu", "publish_rss", "post_aggregator", "display_tape"], "required"],
+            ["id" , "integer"],
+            ["name_rubric" , "string"],
+            ["url" , "string"],
+            ["meta_title" , "string"],
+            ["meta_description" , "string"],
+            ["show_menu" , "boolean"],
+            ["publish_rss" , "boolean"],
+            ["post_aggregator" , "boolean"],
+            ["display_tape" , "boolean"],
+            ["status" , "in", "range" => ["draft", "published", "postponed", "archived"]]
+        ], $formIn->rules());
 
         // related
         $formIn = new \app\modules\v1\models\forms\BaseFormTag();
         $this->assertInstanceOf(Model::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
-        $this->assertArraySubset([], $formIn->rules());
+        $this->assertArraySubset([
+            [["title"], "required"],
+            ["id" , "integer"],
+            ["title" , "string", "min" => "3", "max" => "255"]
+        ], $formIn->rules());
     }
 
     private static function rmdir($dir)

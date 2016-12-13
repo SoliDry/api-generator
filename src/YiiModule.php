@@ -1,7 +1,7 @@
 <?php
 namespace rjapi;
 
-use rjapi\controllers\YiiTypesController;
+use rjapi\controllers\YiiRJApiGenerator;
 use yii\base\BootstrapInterface;
 use yii\console\Application;
 
@@ -12,7 +12,7 @@ class YiiModule extends \yii\base\Module implements BootstrapInterface
         if ($app instanceof Application) {
             $this->controllerNamespace = $app->controllerNamespace;
             $this->controllerMap = [
-                'types'  => YiiTypesController::class,
+                'types'  => YiiRJApiGenerator::class,
             ];
         }
     }

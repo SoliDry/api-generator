@@ -2,13 +2,10 @@
 namespace rjapi;
 
 use Illuminate\Support\ServiceProvider;
-use rjapi\controllers\LaravelTypesController;
-use yii\console\Application;
+use rjapi\controllers\LaravelRJApiGenerator;
 
 class LaravelServiceProvider extends ServiceProvider
 {
-    protected $defer = true;
-
     /**
      * Bootstrap any application services.
      *
@@ -16,7 +13,6 @@ class LaravelServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        self::boot();
     }
 
     /**
@@ -28,7 +24,7 @@ class LaravelServiceProvider extends ServiceProvider
     {
         //
         $this->commands([
-            LaravelTypesController::class
+            LaravelRJApiGenerator::class
         ]);
     }
 }

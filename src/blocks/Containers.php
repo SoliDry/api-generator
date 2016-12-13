@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\blocks;
 
-use rjapi\controllers\YiiTypesController;
+use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\extension\json\api\db\DataObjectTrait;
 use rjapi\helpers\Classes;
 use yii\console\Controller;
@@ -11,7 +11,7 @@ class Containers
 {
     use ContentManager;
 
-    /** @var YiiTypesController generator */
+    /** @var YiiRJApiGenerator generator */
     private $generator  = null;
     private $sourceCode = '';
 

@@ -90,6 +90,9 @@ types:
       display_tape:
         type: boolean
         required: true
+      status:
+        description: The state of an article
+        enum: ["draft", "published", "postponed", "archived"]
   Rubric:
     type: object
     properties:

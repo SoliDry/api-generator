@@ -2,8 +2,10 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\YiiTypesController;
+use rjapi\controllers\LaravelRJApiGenerator;
+use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\exception\DirectoryException;
+use Symfony\Component\Console\Command\Command;
 use yii\console\Controller;
 
 class FileManager implements DirsInterface
@@ -50,15 +52,15 @@ class FileManager implements DirsInterface
     }
 
     /**
-     * @param Controller $obj
+     * @param LaravelRJApiGenerator | YiiRJApiGenerator $obj
      *
      * @param bool       $withModel
      *
      * @return string
      */
-    public static function getModulePath(Controller $obj, $withModel = false) : string
+    public static function getModulePath($obj, $withModel = false) : string
     {
-        $path = $obj->rootDir . $obj->modulesDir . PhpEntitiesInterface::SLASH . $obj->version . YiiTypesController::SLASH;
+        $path = $obj->rootDir . $obj->modulesDir . PhpEntitiesInterface::SLASH . $obj->version . YiiRJApiGenerator::SLASH;
         if($withModel === true)
         {
             $path .= $obj->modelsFormDir . PhpEntitiesInterface::SLASH;
