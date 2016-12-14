@@ -183,7 +183,7 @@ Relations based on Yii Forms generation example:
 Add command to ```$commands``` array in ```app/Console/Kernel.php```
 ```php
     protected $commands = [
-        LaravelRJApiGenerator::class,
+        RJApiGenerator::class,
     ];
 ```
 
