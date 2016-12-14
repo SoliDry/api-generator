@@ -2,15 +2,13 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\LaravelRJApiGenerator;
-use rjapi\extension\json\api\db\BaseActiveDataMapper;
-use rjapi\controllers\YiiRJApiGenerator;
 use rjapi\helpers\Classes;
+use rjapi\RJApiGenerator;
 
 class Mappers extends Models
 {
     use ContentManager;
-    /** @var YiiRJApiGenerator | LaravelRJApiGenerator $generator */
+    /** @var RJApiGenerator $generator */
     private   $generator  = null;
     protected $sourceCode = '';
 

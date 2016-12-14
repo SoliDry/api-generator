@@ -1,16 +1,16 @@
 <?php
 
-use rjapi\controllers\YiiRJApiGenerator;
-use yii\base\Model;
+use Illuminate\Database\Eloquent\Model;
+use rjapi\RJApiGenerator;
 use app\modules\v1\controllers\DefaultController;
 use app\modules\v1\controllers\RubricController;
 
 /**
  * Class ApiGeneratorTest
  *
- * @property YiiRJApiGenerator gen
+ * @property RJApiGenerator gen
  */
-class YiiApiGeneratorTest extends \Codeception\Test\Unit
+class RJApiGeneratorTest extends \Codeception\Test\Unit
 {
     /**
      * @var \FunctionalTester
@@ -25,7 +25,7 @@ class YiiApiGeneratorTest extends \Codeception\Test\Unit
                 require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . '.php';
             }
         );
-        $this->gen = new YiiRJApiGenerator(1, new \yii\base\Module(1, '2', []), []);
+        $this->gen = new RJApiGenerator();
         $this->gen->rootDir = './tests/functional/';
     }
 

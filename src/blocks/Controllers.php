@@ -2,22 +2,21 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\LaravelRJApiGenerator;
-use rjapi\extension\json\api\rest\mapper\BaseMapperController;
-use rjapi\controllers\YiiRJApiGenerator;
+use Illuminate\Routing\Controller;
 use rjapi\helpers\Classes;
+use rjapi\RJApiGenerator;
 
 class Controllers implements ControllersInterface
 {
     use ContentManager;
 
-    /** @var YiiRJApiGenerator | LaravelRJApiGenerator generator */
+    /** @var RJApiGenerator generator */
     private $generator  = null;
     private $sourceCode = '';
 
     /**
      * Controllers constructor.
-     * @param LaravelRJApiGenerator | YiiRJApiGenerator $generator
+     * @param RJApiGenerator $generator
      */
     public function __construct($generator)
     {
@@ -45,7 +44,7 @@ class Controllers implements ControllersInterface
 
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
-        $baseFullMapper = BaseMapperController::class;
+        $baseFullMapper = Controller::class;
         $baseMapperName = Classes::getName($baseFullMapper);
 
         $this->setUse($baseFullMapper);

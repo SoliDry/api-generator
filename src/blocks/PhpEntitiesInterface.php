@@ -40,9 +40,6 @@ interface PhpEntitiesInterface
 
     const PHP_STATIC = 'static';
 
-    const PHP_YII_RULES     = 'rules';
-    const PHP_YII_RELATIONS = 'relations';
-
-    const PHP_LARAVEL_RULES = 'rules';
-    const PHP_LARAVEL_RELATIONS = 'relations';
+    const PHP_RULES     = 'rules';
+    const PHP_RELATIONS = 'relations';
 }

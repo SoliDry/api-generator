@@ -2,14 +2,13 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\LaravelRJApiGenerator;
-use rjapi\controllers\YiiRJApiGenerator;
+use Illuminate\Console\Command;
 use rjapi\exception\DirectoryException;
 
 class FileManager implements DirsInterface
 {
     const FILE_MODE_CREATE = 'w';
-    const DIR_MODE         = 0755;
+    const DIR_MODE = 0755;
 
     private static $modulePath = '';
 
@@ -19,8 +18,7 @@ class FileManager implements DirsInterface
      */
     public static function createFile($fileName, $content)
     {
-        if(file_exists($fileName) === false)
-        {
+        if (file_exists($fileName) === false) {
             $fp = fopen($fileName, self::FILE_MODE_CREATE);
             fwrite($fp, $content);
             fclose($fp);
@@ -34,10 +32,8 @@ class FileManager implements DirsInterface
      */
     public static function createPath($path)
     {
-        if(is_dir($path) === false)
-        {
-            if(mkdir($path, self::DIR_MODE, true) === false)
-            {
+        if (is_dir($path) === false) {
+            if (mkdir($path, self::DIR_MODE, true) === false) {
                 throw new DirectoryException(
                     'Couldn`t create directory '
                     . $path
@@ -50,17 +46,15 @@ class FileManager implements DirsInterface
     }
 
     /**
-     * @param LaravelRJApiGenerator | YiiRJApiGenerator $obj
+     * @param Command $obj
      *
-     * @param bool       $withModel
-     *
+     * @param bool $withModel
      * @return string
      */
-    public static function getModulePath($obj, $withModel = false) : string
+    public static function getModulePath(Command $obj, $withModel = false) : string
     {
         $path = $obj->rootDir . $obj->modulesDir . PhpEntitiesInterface::SLASH . $obj->version . YiiRJApiGenerator::SLASH;
-        if($withModel === true)
-        {
+        if ($withModel === true) {
             $path .= $obj->modelsFormDir . PhpEntitiesInterface::SLASH;
         }
 

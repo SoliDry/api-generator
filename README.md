@@ -12,14 +12,7 @@ The ```version``` root property !required
 ```RAML
 version: v1
 ```
-converts to /modules/v1/ directory.
-
-The ```uses``` root property - !required
-```RAML
-uses:
-  FrameWork: yii
-```
-creates dirs/files structure for specified FrameWork
+converts to ```/modules/v1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
 ```RAML
@@ -182,22 +175,6 @@ Relations based on Yii Forms generation example:
     }
 ```
 
-### Yii2 specific configuration
-
-Add this lines to Your console.php config:
-```php
-    'bootstrap'           => ['log', 'raml'],
-    'modules'             => [
-        'raml' => \rjapi\Module::class,
-    ],
-```
-
-then just use it like a console command:
-```php
-php yii raml -rf raml/rubric.raml
-```
-```-rf``` flag means "raml file" and ```raml/rubric.raml``` raml file in raml directory in the root of Your project 
-
 ### Laravel specific configuration
 
 Add command to ```$commands``` array in ```app/Console/Kernel.php```
@@ -213,9 +190,7 @@ php artisan raml:generate raml/rubric.raml
 ```
 ```raml/rubric.raml``` - raml file in raml directory in the root of Your project
 
-Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel
-
-Yii2 basic project example with generated files can be found here - https://github.com/RJAPI/rjapi-yii 
+Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 

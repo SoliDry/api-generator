@@ -2,57 +2,57 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\YiiRJApiGenerator;
+use rjapi\RJApiGenerator;
 
 trait ContentManager
 {
     protected function setTag()
     {
-        $this->sourceCode = YiiRJApiGenerator::PHP_OPEN_TAG . PHP_EOL;
+        $this->sourceCode = RJApiGenerator::PHP_OPEN_TAG . PHP_EOL;
     }
 
     protected function setNamespace($postfix)
     {
-        $this->sourceCode .= YiiRJApiGenerator::PHP_NAMESPACE . ' ' . $this->generator->appDir .
-                             YiiRJApiGenerator::BACKSLASH
-                             . $this->generator->modulesDir . YiiRJApiGenerator::BACKSLASH . $this->generator->version
-                             . YiiRJApiGenerator::BACKSLASH . $postfix . YiiRJApiGenerator::SEMICOLON
+        $this->sourceCode .= RJApiGenerator::PHP_NAMESPACE . ' ' . $this->generator->appDir .
+                             RJApiGenerator::BACKSLASH
+                             . $this->generator->modulesDir . RJApiGenerator::BACKSLASH . $this->generator->version
+                             . RJApiGenerator::BACKSLASH . $postfix . RJApiGenerator::SEMICOLON
                              . PHP_EOL . PHP_EOL;
     }
 
     protected function setUse($path, $isTrait = false)
     {
         $this->sourceCode .= (($isTrait === false) ? '' : PhpEntitiesInterface::TAB_PSR4) .
-                             YiiRJApiGenerator::PHP_USE . ' ' . $path . YiiRJApiGenerator::SEMICOLON .
+                             RJApiGenerator::PHP_USE . ' ' . $path . RJApiGenerator::SEMICOLON .
                              PHP_EOL . PHP_EOL;
     }
 
     protected function startClass($name, $extends = null)
     {
-        $this->sourceCode .= YiiRJApiGenerator::PHP_CLASS . ' ' . $name . ' ';
+        $this->sourceCode .= RJApiGenerator::PHP_CLASS . ' ' . $name . ' ';
         if($extends !== null)
         {
             $this->sourceCode .=
-                YiiRJApiGenerator::PHP_EXTENDS
+                RJApiGenerator::PHP_EXTENDS
                 . ' ' . $extends . ' ';
         }
-        $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::OPEN_BRACE . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . RJApiGenerator::OPEN_BRACE . PHP_EOL;
     }
 
     protected function endClass()
     {
-        $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::CLOSE_BRACE . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . RJApiGenerator::CLOSE_BRACE . PHP_EOL;
     }
 
     protected function startMethod($name, $modifier, $returnType, $static = false)
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
                              (($static !== false) ? PhpEntitiesInterface::PHP_STATIC : '') . ' ' .
-                             YiiRJApiGenerator::PHP_FUNCTION . ' ' .
+                             RJApiGenerator::PHP_FUNCTION . ' ' .
                              $name .
-                             YiiRJApiGenerator::OPEN_PARENTHESES . YiiRJApiGenerator::CLOSE_PARENTHESES .
-                             YiiRJApiGenerator::COLON
-                             . ' ' . $returnType . ' ' . YiiRJApiGenerator::OPEN_BRACE . PHP_EOL;
+                             RJApiGenerator::OPEN_PARENTHESES . RJApiGenerator::CLOSE_PARENTHESES .
+                             RJApiGenerator::COLON
+                             . ' ' . $returnType . ' ' . RJApiGenerator::OPEN_BRACE . PHP_EOL;
     }
 
     protected function methodReturn($value, $isString = false)
@@ -64,26 +64,26 @@ trait ContentManager
 
     protected function endMethod()
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::CLOSE_BRACE;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE;
     }
 
     protected function startArray()
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                             YiiRJApiGenerator::PHP_RETURN . ' ' .
-                             YiiRJApiGenerator::OPEN_BRACKET . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                             RJApiGenerator::PHP_RETURN . ' ' .
+                             RJApiGenerator::OPEN_BRACKET . PHP_EOL;
     }
 
     protected function endArray()
     {
-        $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4
-                             . YiiRJApiGenerator::CLOSE_BRACKET . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4
+                             . RJApiGenerator::CLOSE_BRACKET . RJApiGenerator::SEMICOLON . PHP_EOL;
     }
 
     protected function createProperty($prop, $modifier)
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . $modifier . ' ' . YiiRJApiGenerator::DOLLAR_SIGN . $prop
-                             . YiiRJApiGenerator::SPACE . YiiRJApiGenerator::EQUALS . YiiRJApiGenerator::SPACE
-                             . YiiRJApiGenerator::PHP_TYPES_NULL . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . ' ' . RJApiGenerator::DOLLAR_SIGN . $prop
+                             . RJApiGenerator::SPACE . RJApiGenerator::EQUALS . RJApiGenerator::SPACE
+                             . RJApiGenerator::PHP_TYPES_NULL . RJApiGenerator::SEMICOLON . PHP_EOL;
     }
 }

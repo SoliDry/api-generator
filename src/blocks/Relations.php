@@ -1,14 +1,13 @@
 <?php
 namespace rjapi\blocks;
 
-use rjapi\extension\json\api\forms\BaseFormResourceIn;
-use rjapi\controllers\YiiRJApiGenerator;
+use rjapi\RJApiGenerator;
 use yii\console\Controller;
 use yii\helpers\StringHelper;
 
 class Relations extends Models
 {
-    /** @var YiiRJApiGenerator $generator */
+    /** @var RJApiGenerator $generator */
     private   $generator  = null;
     protected $sourceCode = '';
 
@@ -28,28 +27,28 @@ class Relations extends Models
     {
         foreach($this->generator->types as $typeKey => $type)
         {
-            if(strpos($typeKey, YiiRJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS) !== false)
+            if(strpos($typeKey, RJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS) !== false)
             {
-                $object           = str_replace(YiiRJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $typeKey);
-                $this->sourceCode = YiiRJApiGenerator::PHP_OPEN_TAG . PHP_EOL;
+                $object           = str_replace(RJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $typeKey);
+                $this->sourceCode = RJApiGenerator::PHP_OPEN_TAG . PHP_EOL;
 
-                $this->sourceCode .= YiiRJApiGenerator::PHP_NAMESPACE . ' ' . $this->generator->appDir .
-                                     YiiRJApiGenerator::BACKSLASH . $this->generator->modulesDir .
-                                     YiiRJApiGenerator::BACKSLASH . $this->generator->version .
-                                     YiiRJApiGenerator::BACKSLASH . $this->generator->modelsFormDir .
-                                     YiiRJApiGenerator::BACKSLASH . $this->generator->formsDir .
-                                     YiiRJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
+                $this->sourceCode .= RJApiGenerator::PHP_NAMESPACE . ' ' . $this->generator->appDir .
+                                     RJApiGenerator::BACKSLASH . $this->generator->modulesDir .
+                                     RJApiGenerator::BACKSLASH . $this->generator->version .
+                                     RJApiGenerator::BACKSLASH . $this->generator->modelsFormDir .
+                                     RJApiGenerator::BACKSLASH . $this->generator->formsDir .
+                                     RJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
 
                 $fullRelation     = BaseFormResourceIn::class;
                 $baseRelationName = StringHelper::basename($fullRelation);
 
-                $this->sourceCode .= YiiRJApiGenerator::PHP_USE . ' ' . $fullRelation . YiiRJApiGenerator::SEMICOLON .
+                $this->sourceCode .= RJApiGenerator::PHP_USE . ' ' . $fullRelation . RJApiGenerator::SEMICOLON .
                                      PHP_EOL . PHP_EOL;
 
-                $this->sourceCode .= YiiRJApiGenerator::PHP_CLASS . ' ' . YiiRJApiGenerator::FORM_BASE .
-                                     YiiRJApiGenerator::FORM_PREFIX . $object .
-                                     YiiRJApiGenerator::FORM_IN . ' ' . YiiRJApiGenerator::PHP_EXTENDS . ' '
-                                     . $baseRelationName . ' ' . YiiRJApiGenerator::OPEN_BRACE . PHP_EOL;
+                $this->sourceCode .= RJApiGenerator::PHP_CLASS . ' ' . RJApiGenerator::FORM_BASE .
+                                     RJApiGenerator::FORM_PREFIX . $object .
+                                     RJApiGenerator::FORM_IN . ' ' . RJApiGenerator::PHP_EXTENDS . ' '
+                                     . $baseRelationName . ' ' . RJApiGenerator::OPEN_BRACE . PHP_EOL;
 
                 $this->additionalProps = [
                     'id' => [
@@ -58,25 +57,25 @@ class Relations extends Models
                     ],
                 ];
 
-                $objectAttrs = $object . YiiRJApiGenerator::CUSTOM_TYPES_ATTRIBUTES;
+                $objectAttrs = $object . RJApiGenerator::CUSTOM_TYPES_ATTRIBUTES;
                 $this->setProps($objectAttrs);
                 $this->constructRules($objectAttrs);
 
-                if(!empty($type[YiiRJApiGenerator::RAML_PROPS][YiiRJApiGenerator::RAML_DATA][YiiRJApiGenerator::RAML_PROPS]
-                [YiiRJApiGenerator::RAML_RELATIONSHIPS])
+                if(!empty($type[RJApiGenerator::RAML_PROPS][RJApiGenerator::RAML_DATA][RJApiGenerator::RAML_PROPS]
+                [RJApiGenerator::RAML_RELATIONSHIPS])
                 )
                 {
                     $this->constructRelations(
-                        $type[YiiRJApiGenerator::RAML_PROPS][YiiRJApiGenerator::RAML_DATA]
-                        [YiiRJApiGenerator::RAML_PROPS][YiiRJApiGenerator::RAML_RELATIONSHIPS]
+                        $type[RJApiGenerator::RAML_PROPS][RJApiGenerator::RAML_DATA]
+                        [RJApiGenerator::RAML_PROPS][RJApiGenerator::RAML_RELATIONSHIPS]
                     );
                 }
-                $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::CLOSE_BRACE . PHP_EOL;
-                $fileFormIn = $this->generator->rootDir . $this->generator->modulesDir . YiiRJApiGenerator::SLASH .
-                              $this->generator->version . YiiRJApiGenerator::SLASH . $this->generator->modelsFormDir
-                              . YiiRJApiGenerator::SLASH . $this->generator->formsDir . YiiRJApiGenerator::SLASH .
-                              YiiRJApiGenerator::FORM_BASE . YiiRJApiGenerator::FORM_PREFIX .
-                              $object . YiiRJApiGenerator::FORM_IN . YiiRJApiGenerator::PHP_EXT;
+                $this->sourceCode .= PHP_EOL . RJApiGenerator::CLOSE_BRACE . PHP_EOL;
+                $fileFormIn = $this->generator->rootDir . $this->generator->modulesDir . RJApiGenerator::SLASH .
+                              $this->generator->version . RJApiGenerator::SLASH . $this->generator->modelsFormDir
+                              . RJApiGenerator::SLASH . $this->generator->formsDir . RJApiGenerator::SLASH .
+                              RJApiGenerator::FORM_BASE . RJApiGenerator::FORM_PREFIX .
+                              $object . RJApiGenerator::FORM_IN . RJApiGenerator::PHP_EXT;
                 FileManager::createFile($fileFormIn, $this->sourceCode);
             }
         }
@@ -93,40 +92,40 @@ class Relations extends Models
         {
             foreach($this->additionalProps as $prop => $propVal)
             {
-                $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . 'public ' . YiiRJApiGenerator::DOLLAR_SIGN . $prop .
-                                     YiiRJApiGenerator::SPACE
-                                     . YiiRJApiGenerator::EQUALS . YiiRJApiGenerator::SPACE .
-                                     YiiRJApiGenerator::PHP_TYPES_NULL . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
+                $this->sourceCode .= RJApiGenerator::TAB_PSR4 . 'public ' . RJApiGenerator::DOLLAR_SIGN . $prop .
+                                     RJApiGenerator::SPACE
+                                     . RJApiGenerator::EQUALS . RJApiGenerator::SPACE .
+                                     RJApiGenerator::PHP_TYPES_NULL . RJApiGenerator::SEMICOLON . PHP_EOL;
             }
         }
 
         // properties creation
-        foreach($this->generator->types[$objectAttrs][YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
+        foreach($this->generator->types[$objectAttrs][RJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
         {
-            $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . 'public ' . YiiRJApiGenerator::DOLLAR_SIGN . $attrKey .
-                                 YiiRJApiGenerator::SPACE
-                                 . YiiRJApiGenerator::EQUALS . YiiRJApiGenerator::SPACE .
-                                 YiiRJApiGenerator::PHP_TYPES_NULL . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
+            $this->sourceCode .= RJApiGenerator::TAB_PSR4 . 'public ' . RJApiGenerator::DOLLAR_SIGN . $attrKey .
+                                 RJApiGenerator::SPACE
+                                 . RJApiGenerator::EQUALS . RJApiGenerator::SPACE .
+                                 RJApiGenerator::PHP_TYPES_NULL . RJApiGenerator::SEMICOLON . PHP_EOL;
         }
         $this->sourceCode .= PHP_EOL;
     }
 
     private function constructRules($objectAttrs)
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . 'public function rules() ' . YiiRJApiGenerator::OPEN_BRACE .
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . 'public function rules() ' . RJApiGenerator::OPEN_BRACE .
                              PHP_EOL;
 
         // attrs validation
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . 'return ' .
-                             YiiRJApiGenerator::OPEN_BRACKET . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . 'return ' .
+                             RJApiGenerator::OPEN_BRACKET . PHP_EOL;
         // gather required fields
         $this->setRequired($objectAttrs);
         // gather types and constraints
         $this->setTypesAndConstraints($objectAttrs);
 
-        $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                             YiiRJApiGenerator::CLOSE_BRACKET . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::CLOSE_BRACE;
+        $this->sourceCode .= PHP_EOL . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                             RJApiGenerator::CLOSE_BRACKET . RJApiGenerator::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE;
     }
 
     /**
@@ -154,7 +153,7 @@ class Relations extends Models
             }
         }
 
-        foreach($this->generator->types[$objectAttrs][YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
+        foreach($this->generator->types[$objectAttrs][RJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
         {
             if(is_array($attrVal))
             {
@@ -172,11 +171,11 @@ class Relations extends Models
 
         if($keysCnt > 0)
         {
-            $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                                 YiiRJApiGenerator::OPEN_BRACKET . YiiRJApiGenerator::OPEN_BRACKET
-                                 . $reqKeys . YiiRJApiGenerator::CLOSE_BRACKET;
+            $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                                 RJApiGenerator::OPEN_BRACKET . RJApiGenerator::OPEN_BRACKET
+                                 . $reqKeys . RJApiGenerator::CLOSE_BRACKET;
             $this->sourceCode .= ', "required"';
-            $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+            $this->sourceCode .= RJApiGenerator::CLOSE_BRACKET;
             $this->sourceCode .= ', ' . PHP_EOL;
         }
     }
@@ -191,26 +190,26 @@ class Relations extends Models
         {
             foreach($this->additionalProps as $prop => $propVal)
             {
-                $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                                     YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::OPEN_BRACKET . '"' . $prop . '" ';
+                $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                                     RJApiGenerator::TAB_PSR4 . RJApiGenerator::OPEN_BRACKET . '"' . $prop . '" ';
                 $this->setProperty($propVal);
-                $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+                $this->sourceCode .= RJApiGenerator::CLOSE_BRACKET;
                 $this->sourceCode .= ', ' . PHP_EOL;
             }
         }
 
-        $attrsCnt = count($this->generator->types[$objectAttrs][YiiRJApiGenerator::RAML_PROPS]);
-        foreach($this->generator->types[$objectAttrs][YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
+        $attrsCnt = count($this->generator->types[$objectAttrs][RJApiGenerator::RAML_PROPS]);
+        foreach($this->generator->types[$objectAttrs][RJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
         {
             --$attrsCnt;
             // determine attr
             if(is_array($attrVal))
             {
-                $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                                     YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::OPEN_BRACKET . '"' . $attrKey .
+                $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                                     RJApiGenerator::TAB_PSR4 . RJApiGenerator::OPEN_BRACKET . '"' . $attrKey .
                                      '" ';
                 $this->setProperty($attrVal);
-                $this->sourceCode .= YiiRJApiGenerator::CLOSE_BRACKET;
+                $this->sourceCode .= RJApiGenerator::CLOSE_BRACKET;
                 if($attrsCnt > 0)
                 {
                     $this->sourceCode .= ', ' . PHP_EOL;
@@ -222,31 +221,31 @@ class Relations extends Models
     private function constructRelations($relationTypes)
     {
         $this->sourceCode .= PHP_EOL . PHP_EOL;
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . 'public function relations()' . YiiRJApiGenerator::COLON .
-                             ' ' . YiiRJApiGenerator::PHP_TYPES_ARRAY . ' ' . YiiRJApiGenerator::OPEN_BRACE . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . 'public function relations()' . RJApiGenerator::COLON .
+                             ' ' . RJApiGenerator::PHP_TYPES_ARRAY . ' ' . RJApiGenerator::OPEN_BRACE . PHP_EOL;
 
         // attrs validation
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . 'return ' .
-                             YiiRJApiGenerator::OPEN_BRACKET . PHP_EOL;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . 'return ' .
+                             RJApiGenerator::OPEN_BRACKET . PHP_EOL;
 
         $rels = explode('|', str_replace('[]', '', $relationTypes));
         foreach($rels as $k => $rel)
         {
-            $this->setRelations(strtolower(trim(str_replace(YiiRJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
+            $this->setRelations(strtolower(trim(str_replace(RJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
             if(!empty($rels[$k + 1]))
             {
                 $this->sourceCode .= PHP_EOL;
             }
         }
-        $this->sourceCode .= PHP_EOL . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
-                             YiiRJApiGenerator::CLOSE_BRACKET . YiiRJApiGenerator::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
+                             RJApiGenerator::CLOSE_BRACKET . RJApiGenerator::SEMICOLON . PHP_EOL;
 
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::CLOSE_BRACE;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE;
     }
 
     private function setRelations($relationTypes)
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 .
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
                              '"' . $relationTypes . '",';
     }
 }

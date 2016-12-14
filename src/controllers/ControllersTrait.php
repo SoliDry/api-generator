@@ -8,7 +8,6 @@ use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
 use rjapi\blocks\Module;
-use rjapi\exception\MethodNotFoundException;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -81,11 +80,7 @@ trait ControllersTrait
                     if ($k === self::RAML_PROPS) { // process props
                         $this->setObjectName($objName);
                         $this->setObjectProps($v);
-                        $generator = self::GENERATOR_METHOD . ucfirst($this->frameWork);
-                        if (method_exists($this, $generator) === false) {
-                            throw new MethodNotFoundException('The method ' . $generator . ' has not been found.');
-                        }
-                        $this->$generator();
+                        $this->generateResources();
                     }
                 }
             }
@@ -141,31 +136,7 @@ trait ControllersTrait
         $this->objectProps = $props;
     }
 
-    private function generateResourcesYii()
-    {
-        // create controller
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->create();
-
-        // create module
-        $this->moduleObject = new Module($this);
-        $this->moduleObject->createModule();
-
-        // create model
-        $this->forms = new BaseModels($this);
-        $this->forms->create();
-
-        // create mappers
-        $this->mappers = new Mappers($this);
-        $this->mappers->create();
-
-        // create db containers
-        $this->containers = new Containers($this);
-        $this->containers->create();
-    }
-
-    private function generateResourcesLaravel()
+    private function generateResources()
     {
         // create controller
         $this->controllers = new Controllers($this);

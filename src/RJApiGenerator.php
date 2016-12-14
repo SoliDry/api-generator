@@ -8,6 +8,7 @@ use rjapi\blocks\HTTPMethodsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use Illuminate\Console\Command;
+use rjapi\controllers\ControllersTrait;
 
 class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
     RamlInterface, CustomsInterface, DirsInterface

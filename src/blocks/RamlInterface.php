@@ -10,10 +10,6 @@ namespace rjapi\blocks;
 
 interface RamlInterface
 {
-    // FWs
-    const FRAMEWORK_YII = 'yii';
-    const FRAMEWORK_LARAVEL = 'laravel';
-
     // RAML types
     const RAML_TYPE_ARRAY    = 'array';
     const RAML_TYPE_OBJECT   = 'object';

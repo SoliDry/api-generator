@@ -10,13 +10,7 @@ namespace rjapi\blocks;
 
 interface ModelsInterface
 {
-    // Yii
-    const YII_ACTIVE_RECORD     = 'ActiveRecord';
-    const YII_METHOD_TABLE_NAME = 'tableName';
-    const YII_METHOD_RULES      = 'rules';
-    const YII_METHOD_CONTAINERS = 'containers';
-
     // Laravel
-    const LARAVEL_ACTIVE_RECORD = 'Eloquent';
-    const LARAVEL_METHOD_TABLE  = 'table';
+    const LARAVEL_ACTIVE_RECORD = 'Model';
+    const LARAVEL_PROPERTY_TABLE  = 'table';
 }

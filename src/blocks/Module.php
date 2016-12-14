@@ -2,14 +2,12 @@
 
 namespace rjapi\blocks;
 
-use rjapi\controllers\LaravelRJApiGenerator;
-use rjapi\controllers\YiiRJApiGenerator;
-use yii\console\Controller;
+use rjapi\RJApiGenerator;
 
 class Module
 {
     use ContentManager;
-    /** @var YiiRJApiGenerator | LaravelRJApiGenerator generator */
+    /** @var RJApiGenerator generator */
     private $generator  = null;
     private $sourceCode = '';
 
