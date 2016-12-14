@@ -1,18 +1,15 @@
 <?php
 namespace rjapi\blocks;
 
-use rjapi\extension\json\api\forms\BaseFormResource;
-use rjapi\controllers\YiiRJApiGenerator;
+use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
-use yii\console\Controller;
-use yii\helpers\StringHelper;
 
 class BaseModels extends Models
 {
     use ContentManager;
 
     protected $sourceCode = '';
-    /** @var YiiRJApiGenerator generator */
+    /** @var RJApiGenerator generator */
     private $generator       = null;
     private $additionalProps = [
         'id' => [
