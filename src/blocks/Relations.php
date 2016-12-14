@@ -5,7 +5,7 @@ use rjapi\RJApiGenerator;
 use yii\console\Controller;
 use yii\helpers\StringHelper;
 
-class Relations extends Models
+class Relations extends FormRequestModel
 {
     /** @var RJApiGenerator $generator */
     private   $generator  = null;

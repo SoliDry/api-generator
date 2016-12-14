@@ -1,11 +1,12 @@
 <?php
 namespace rjapi\blocks;
 
+use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
 
-class BaseModels extends Models
+class BaseFormRequestModel extends FormRequestModel
 {
     use ContentManager;
 
@@ -36,7 +37,7 @@ class BaseModels extends Models
             PhpEntitiesInterface::BACKSLASH . $this->generator->formsDir
         );
 
-        $baseFullForm = BaseModel::class;
+        $baseFullForm = BaseFormRequest::class;
         $baseFormName = Classes::getName($baseFullForm);
         $this->setUse($baseFullForm);
         $this->startClass(

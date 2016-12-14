@@ -1,9 +1,9 @@
 <?php
 namespace App\Modules\v1\Controllers;
 
-use Illuminate\Routing\Controller;
+use rjapi\extension\BaseController;
 
-class DefaultController extends Controller 
+class DefaultController extends BaseController 
 {
 
 }

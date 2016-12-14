@@ -1,13 +1,11 @@
 <?php
 namespace rjapi\controllers;
 
-use rjapi\blocks\BaseModels;
-use rjapi\blocks\Containers;
+use rjapi\blocks\BaseFormRequestModel;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
-use rjapi\blocks\Module;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -53,7 +51,6 @@ trait ControllersTrait
         $this->mappersDir = self::MAPPERS_DIR;
         $this->modelsFormDir = self::MODELS_DIR;
         $this->modulesDir = self::MODULES_DIR;
-        $this->containersDir = self::CONTAINERS_DIR;
         $this->createDirs();
 
         $this->types = $data['types'];
@@ -136,7 +133,7 @@ trait ControllersTrait
         $this->controllers->create();
 
         // create model
-        $this->forms = new BaseModels($this);
+        $this->forms = new BaseFormRequestModel($this);
         $this->forms->create();
 
         // create mappers

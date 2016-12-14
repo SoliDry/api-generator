@@ -1,9 +1,9 @@
 <?php
-namespace app\modules\v1\models\forms;
+namespace App\Modules\v1\Models\Forms;
 
-use rjapi\extension\json\api\forms\BaseFormResource;
+use rjapi\extension\BaseFormRequest;
 
-class BaseFormTag extends BaseFormResource 
+class BaseFormTag extends BaseFormRequest 
 {
     public $id = null;
     // Attributes

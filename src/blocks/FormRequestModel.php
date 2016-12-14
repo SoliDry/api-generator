@@ -10,7 +10,7 @@ namespace rjapi\blocks;
 
 use Raml\Method;
 
-abstract class Models
+abstract class FormRequestModel
 {
     private function setProps(Method $method)
     {

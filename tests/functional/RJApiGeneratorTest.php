@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model;
+use App\Modules\v1\Controllers\DefaultController;
+use App\Modules\v1\Controllers\RubricController;
+use App\Modules\v1\Models\Forms\BaseFormRubric;
+use App\Modules\v1\Models\Forms\BaseFormTag;
+use Illuminate\Foundation\Http\FormRequest;
 use rjapi\RJApiGenerator;
-use app\modules\v1\controllers\DefaultController;
-use app\modules\v1\controllers\RubricController;
 
 /**
  * Class ApiGeneratorTest
@@ -22,7 +24,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
     {
         spl_autoload_register(
             function ($class) {
-                require_once str_replace('\\', '/', str_replace('app\\', '', $class)) . '.php';
+                require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
             }
         );
         $this->gen = new RJApiGenerator();
@@ -49,7 +51,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
      */
     public function testControllers()
     {
-        $rubrics = new RubricController(1, new \yii\base\Module(1, '2', []), []);
+        $rubrics = new RubricController();
         $this->assertInstanceOf(DefaultController::class, $rubrics);
     }
 
@@ -59,8 +61,8 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
     public function testModelForms()
     {
         // base model
-        $formIn = new \app\modules\v1\models\forms\BaseFormRubric();
-        $this->assertInstanceOf(Model::class, $formIn);
+        $formIn = new BaseFormRubric();
+        $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
             [["name_rubric", "url", "show_menu", "publish_rss", "post_aggregator", "display_tape"], "required"],
@@ -77,8 +79,8 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         ], $formIn->rules());
 
         // related
-        $formIn = new \app\modules\v1\models\forms\BaseFormTag();
-        $this->assertInstanceOf(Model::class, $formIn);
+        $formIn = new BaseFormTag();
+        $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
             [["title"], "required"],

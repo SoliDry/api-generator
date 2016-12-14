@@ -2,10 +2,11 @@
 
 namespace rjapi\blocks;
 
+use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\RJApiGenerator;
 
-class Mappers extends Models
+class Mappers extends FormRequestModel
 {
     use ContentManager;
     /** @var RJApiGenerator $generator */
@@ -27,7 +28,7 @@ class Mappers extends Models
         $this->setTag();
         $this->setNamespace($this->generator->modelsFormDir .
                             PhpEntitiesInterface::BACKSLASH . $this->generator->mappersDir);
-        $baseMapper     = BaseActiveDataMapper::class;
+        $baseMapper     = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper);
