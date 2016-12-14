@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "99fd3b1e8d80adce836ebdb6bd685fec",
-    "content-hash": "ff9b8fcd4404e2717c4f0a02666e05fe",
+    "hash": "09dbb8ece5db1c5197e2442974ed954f",
+    "content-hash": "e66337644f951a6b79f8d30ccd47d529",
     "packages": [
         {
             "name": "alecsammon/php-raml-parser",
@@ -2502,42 +2502,6 @@
             "time": "2016-11-22 19:21:44"
         },
         {
-            "name": "rjapi/json-api-raml",
-            "version": "1.0.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/RJAPI/json-api-raml.git",
-                "reference": "13740d32fc2434c4b91e37be34a5f422760be27e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/RJAPI/json-api-raml/zipball/13740d32fc2434c4b91e37be34a5f422760be27e",
-                "reference": "13740d32fc2434c4b91e37be34a5f422760be27e",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/psr7": "~1.0",
-                "php": "^7.0",
-                "woohoolabs/yin": "^1.0",
-                "yiisoft/yii2": "^2.0"
-            },
-            "require-dev": {
-                "codeception/codeception": "dev-master",
-                "phpmd/phpmd": "^2.4",
-                "squizlabs/php_codesniffer": "^2.7",
-                "yiisoft/yii2-codeception": "^2.0"
-            },
-            "type": "rjapi-json-api",
-            "autoload": {
-                "psr-4": {
-                    "rjapi\\extension\\json\\api\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "description": "JSON-API-RAML dependency for generated PHP-code (based on RAML-types) support of json-api data format",
-            "time": "2016-12-10 12:34:24"
-        },
-        {
             "name": "sebastian/code-unit-reverse-lookup",
             "version": "1.0.0",
             "source": {
@@ -4203,62 +4167,6 @@
                 "validate"
             ],
             "time": "2016-11-23 20:04:58"
-        },
-        {
-            "name": "woohoolabs/yin",
-            "version": "1.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/woohoolabs/yin.git",
-                "reference": "3d0767d8e64aca3348cda1248ad708da3df7c36a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/woohoolabs/yin/zipball/3d0767d8e64aca3348cda1248ad708da3df7c36a",
-                "reference": "3d0767d8e64aca3348cda1248ad708da3df7c36a",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.6.0||^7.0.0",
-                "psr/http-message-implementation": "^1.0.0"
-            },
-            "require-dev": {
-                "justinrainbow/json-schema": "^2.0.0",
-                "phpunit/phpunit": "^5.4.0",
-                "seld/jsonlint": "^1.4.0",
-                "squizlabs/php_codesniffer": "^2.3.1",
-                "zendframework/zend-diactoros": "^1.3.0"
-            },
-            "suggest": {
-                "justinrainbow/json-schema": "Allows to validate the request and response body against the JSON API schema",
-                "seld/jsonlint": "Allows to lint the request and response body"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "WoohooLabs\\Yin\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Máté Kocsis",
-                    "email": "kocsismate@woohoolabs.com"
-                }
-            ],
-            "description": "Woohoo Labs. Yin",
-            "homepage": "http://yin.woohoolabs.com",
-            "keywords": [
-                "HATEOAS",
-                "Woohoo Labs.",
-                "Yin",
-                "json api",
-                "psr-7"
-            ],
-            "time": "2016-11-17 07:25:55"
         },
         {
             "name": "yiisoft/yii2",

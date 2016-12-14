@@ -1,5 +1,5 @@
 <?php
-namespace rjapi\controllers;
+namespace rjapi;
 
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\DefaultInterface;
@@ -9,7 +9,7 @@ use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use Illuminate\Console\Command;
 
-class LaravelRJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
+class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
     RamlInterface, CustomsInterface, DirsInterface
 {
     use ControllersTrait;
