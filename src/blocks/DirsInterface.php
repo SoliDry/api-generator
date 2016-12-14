@@ -12,11 +12,11 @@ namespace rjapi\blocks;
 interface DirsInterface
 {
     // Laravel dirs
-    const LARAVEL_APPLICATION_DIR = 'App';
-    const LARAVEL_MODULES_DIR = 'Modules';
-    const LARAVEL_CONTROLLERS_DIR = 'Controllers';
-    const LARAVEL_MODELS_DIR = 'Models';
-    const LARAVEL_FORMS_DIR = 'Forms';
-    const LARAVEL_MAPPERS_DIR = 'Mappers';
-    const LARAVEL_CONTAINERS_DIR = 'Containers';
+    const APPLICATION_DIR = 'App';
+    const MODULES_DIR = 'Modules';
+    const CONTROLLERS_DIR = 'Controllers';
+    const MODELS_DIR = 'Models';
+    const FORMS_DIR = 'Forms';
+    const MAPPERS_DIR = 'Mappers';
+    const CONTAINERS_DIR = 'Containers';
 }

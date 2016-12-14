@@ -46,15 +46,14 @@ trait ControllersTrait
     {
         $data = Yaml::parse(file_get_contents($ramlFile));
         $this->version = str_replace('/', '', $data['version']);
-        $this->frameWork = $data['uses']['FrameWork'];
 
-        $this->appDir = constant('self::' . strtoupper($this->frameWork) . '_APPLICATION_DIR');
-        $this->controllersDir = constant('self::' . strtoupper($this->frameWork) . '_CONTROLLERS_DIR');
-        $this->formsDir = constant('self::' . strtoupper($this->frameWork) . '_FORMS_DIR');
-        $this->mappersDir = constant('self::' . strtoupper($this->frameWork) . '_MAPPERS_DIR');
-        $this->modelsFormDir = constant('self::' . strtoupper($this->frameWork) . '_MODELS_DIR');
-        $this->modulesDir = constant('self::' . strtoupper($this->frameWork) . '_MODULES_DIR');
-        $this->containersDir = constant('self::' . strtoupper($this->frameWork) . '_CONTAINERS_DIR');
+        $this->appDir = self::APPLICATION_DIR;
+        $this->controllersDir = self::CONTROLLERS_DIR;
+        $this->formsDir = self::FORMS_DIR;
+        $this->mappersDir = self::MAPPERS_DIR;
+        $this->modelsFormDir = self::MODELS_DIR;
+        $this->modulesDir = self::MODULES_DIR;
+        $this->containersDir = self::CONTAINERS_DIR;
         $this->createDirs();
 
         $this->types = $data['types'];
@@ -97,8 +96,6 @@ trait ControllersTrait
         FileManager::createPath($this->formatFormsPath());
         // create mapper dir
         FileManager::createPath($this->formatMappersPath());
-        // create containers dir
-        FileManager::createPath($this->formatContainersPath());
     }
 
     public function formatControllersPath()
@@ -119,11 +116,6 @@ trait ControllersTrait
     public function formatMappersPath() : string
     {
         return FileManager::getModulePath($this, true) . $this->mappersDir;
-    }
-
-    public function formatContainersPath() : string
-    {
-        return FileManager::getModulePath($this, true) . $this->containersDir;
     }
 
     private function setObjectName($name)
