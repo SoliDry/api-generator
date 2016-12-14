@@ -116,7 +116,7 @@ class BaseModels extends Models
 
     private function constructRules()
     {
-        $this->startMethod(PhpEntitiesInterface::PHP_YII_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $this->startMethod(PhpEntitiesInterface::PHP_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
         // gather required fields
@@ -151,7 +151,7 @@ class BaseModels extends Models
         }
 
         foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-        [YiiRJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
+        [RJApiGenerator::RAML_PROPS] as $attrKey => $attrVal)
         {
             // determine attr
             if(is_array($attrVal))
@@ -223,16 +223,16 @@ class BaseModels extends Models
     private function constructRelations($relationTypes)
     {
         $this->sourceCode .= PHP_EOL . PHP_EOL;
-        $this->startMethod(YiiRJApiGenerator::PHP_YII_RELATIONS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $this->startMethod(RJApiGenerator::PHP_RELATIONS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
-        $rel = empty($relationTypes[YiiRJApiGenerator::RAML_TYPE]) ? $relationTypes :
-            $relationTypes[YiiRJApiGenerator::RAML_TYPE];
+        $rel = empty($relationTypes[RJApiGenerator::RAML_TYPE]) ? $relationTypes :
+            $relationTypes[RJApiGenerator::RAML_TYPE];
 
         $rels = explode('|', str_replace('[]', '', $rel));
         foreach($rels as $k => $rel)
         {
-            $this->setRelations(strtolower(trim(str_replace(YiiRJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
+            $this->setRelations(strtolower(trim(str_replace(RJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
             if(!empty($rels[$k + 1]))
             {
                 $this->sourceCode .= PHP_EOL;
@@ -244,7 +244,7 @@ class BaseModels extends Models
 
     private function setRelations($relationTypes)
     {
-        $this->sourceCode .= YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4 . YiiRJApiGenerator::TAB_PSR4
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4
                              . '"' . $relationTypes . '",';
     }
 }

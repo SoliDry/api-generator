@@ -135,10 +135,6 @@ trait ControllersTrait
         $this->controllers->createDefault();
         $this->controllers->create();
 
-        // create module
-        $this->moduleObject = new Module($this);
-        $this->moduleObject->createModule();
-
         // create model
         $this->forms = new BaseModels($this);
         $this->forms->create();
@@ -146,9 +142,5 @@ trait ControllersTrait
         // create mappers
         $this->mappers = new Mappers($this);
         $this->mappers->create();
-
-        // create db containers
-        $this->containers = new Containers($this);
-        $this->containers->create();
     }
 }
