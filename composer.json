@@ -4,7 +4,6 @@
     "name": "rjapi/raml-json-api",
     "require": {
         "php": "^7.0",
-        "yiisoft/yii2": "^2.0",
         "codeception/codeception": "^2.2",
         "alecsammon/php-raml-parser": "^2.1",
         "laravel/framework": "^5.3"
