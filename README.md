@@ -76,6 +76,9 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
       display_tape:
         type: boolean
         required: true
+      status:
+        description: The state of an article
+        enum: ["draft", "published", "postponed", "archived"]        
 ```
 
 Relationships custom type definition semantics ```*Relationships```
