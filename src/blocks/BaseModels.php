@@ -1,6 +1,7 @@
 <?php
 namespace rjapi\blocks;
 
+use rjapi\extension\BaseModel;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
 
@@ -35,7 +36,7 @@ class BaseModels extends Models
             PhpEntitiesInterface::BACKSLASH . $this->generator->formsDir
         );
 
-        $baseFullForm = BaseFormResource::class;
+        $baseFullForm = BaseModel::class;
         $baseFormName = Classes::getName($baseFullForm);
         $this->setUse($baseFullForm);
         $this->startClass(

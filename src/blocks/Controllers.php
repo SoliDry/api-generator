@@ -2,7 +2,7 @@
 
 namespace rjapi\blocks;
 
-use Illuminate\Routing\Controller;
+use rjapi\extension\BaseController;
 use rjapi\helpers\Classes;
 use rjapi\RJApiGenerator;
 
@@ -44,7 +44,7 @@ class Controllers implements ControllersInterface
 
         $this->setTag();
         $this->setNamespace($this->generator->controllersDir);
-        $baseFullMapper = Controller::class;
+        $baseFullMapper = BaseController::class;
         $baseMapperName = Classes::getName($baseFullMapper);
 
         $this->setUse($baseFullMapper);
