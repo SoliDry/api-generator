@@ -114,9 +114,28 @@ Modules/{version}/Controllers/ - contains controllers that extends the DefaultCo
 Modules/{version}/Models/Forms/ - contains forms that extends the BaseFormRequest (parent of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
 Modules/{version}/Models/Mappers/ - contains mappers that extends the BaseModel (parent of Laravel's Model) and maps attributes to RDBMS
 ```
-
-Properties of Input json-api parameters - Yii Form generation example:
+DefaultController example:
 ```php
+<?php
+namespace App\Modules\v1\Controllers;
+
+class RubricController extends DefaultController 
+{
+
+}
+```
+By default every controller will work with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
+So You don't need to implement anything special here.
+
+Validation BaseFormRequest example:
+```php
+<?php
+namespace App\Modules\v1\Models\Forms;
+
+use rjapi\extension\BaseFormRequest;
+
+class BaseFormRubric extends BaseFormRequest 
+{
     public $id = null;
     // Attributes
     public $name_rubric = null;
@@ -128,41 +147,34 @@ Properties of Input json-api parameters - Yii Form generation example:
     public $post_aggregator = null;
     public $display_tape = null;
     public $status = null;
-```
 
-Authorize method set to return false by default to avoid auth on request 
-```php
     public  function authorize(): bool {
         return false;
     }
-```
 
-Rules of Input json-api parameters - Yii Form generation example:
-```php
     public  function rules(): array {
         return [
-            "name_rubric" => "string|required|max:500", 
-            "url" => "string|required|max:255", 
-            "meta_title" => "string|max:255", 
-            "meta_description" => "string|max:255", 
-            "show_menu" => "boolean|required", 
-            "publish_rss" => "boolean|required", 
-            "post_aggregator" => "boolean|required", 
-            "display_tape" => "boolean|required", 
-            "status" => "in:draft,published,postponed,archived"
+            "name_rubric" => "required|string|min:8|max:500",
+            "url" => "required|string|min:16|max:255",
+            "meta_title" => "string|max:255",
+            "meta_description" => "string|max:255",
+            "show_menu" => "required|boolean",
+            "publish_rss" => "required|boolean",
+            "post_aggregator" => "required|boolean",
+            "display_tape" => "required|boolean",
+            "status" => "in:draft,published,postponed,archived",
         ];
     }
-```
 
-Relations based on Yii Forms generation example: 
-```php
     public  function relations(): array {
         return [
             "tags",
         ];
     }
+}
 ```
-Mapper to RDBMS example:
+
+BaseModel example:
 ```php
 class BaseMapperRubric extends BaseModel 
 {
