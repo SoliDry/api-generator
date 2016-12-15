@@ -21,4 +21,13 @@ interface RamlInterface
     const RAML_DATA          = 'data';
     const RAML_ITEMS         = 'items';
     const RAML_REQUIRED      = 'required';
+    const RAML_DESCRIPTION   = 'description';
+
+    // RAML filters
+    const RAML_STRING_MIN  = 'minLength';
+    const RAML_STRING_MAX  = 'maxLength';
+    const RAML_INTEGER_MIN = 'minimum';
+    const RAML_INTEGER_MAX = 'maximum';
+    const RAML_PATTERN     = 'pattern';
+    const RAML_ENUM        = 'enum';
 }

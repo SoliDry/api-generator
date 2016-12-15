@@ -86,4 +86,9 @@ trait ContentManager
                              . RJApiGenerator::SPACE . RJApiGenerator::EQUALS . RJApiGenerator::SPACE
                              . RJApiGenerator::PHP_TYPES_NULL . RJApiGenerator::SEMICOLON . PHP_EOL;
     }
+
+    protected function setComment($comment)
+    {
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . $comment . PHP_EOL;
+    }
 }

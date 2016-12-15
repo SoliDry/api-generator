@@ -32,39 +32,73 @@ abstract class FormRequestModel
     {
     }
 
-    protected function setProperty($attrVal)
+    protected function setProperty($attrKey, $attrVal, $attrCnt)
     {
-        if(isset($attrVal['type']))
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+                             PhpEntitiesInterface::TAB_PSR4
+                             . PhpEntitiesInterface::QUOTES . $attrKey . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::SPACE
+                             . PhpEntitiesInterface::DOUBLE_ARROW .
+                             PhpEntitiesInterface::SPACE;
+
+        $this->sourceCode .= PhpEntitiesInterface::QUOTES;
+        $cnt = count($attrVal);
+        foreach($attrVal as $k => $v)
         {
-            $this->sourceCode .= ', "' . $attrVal['type'] . '"';
+            --$cnt;
+            if($k === RamlInterface::RAML_REQUIRED && (bool) $v === false)
+            {
+                continue;
+            }
+            if($k === RamlInterface::RAML_REQUIRED && (bool) $v === true)
+            {
+                $this->sourceCode .= RamlInterface::RAML_REQUIRED;
+            }
+//            if($k === RamlInterface::RAML_DESCRIPTION)
+//            {
+//                $this->setComment($v);
+//            }
+            if($k === RamlInterface::RAML_TYPE)
+            {
+                $this->sourceCode .= $v;
+            }
+            if($k === RamlInterface::RAML_ENUM)
+            {
+                $this->sourceCode .= 'in:' . implode(',', $v);
+            }
+            if($k === RamlInterface::RAML_PATTERN)
+            {
+                $this->sourceCode .= 'regex:' . $v;
+            }
+            if($k === RamlInterface::RAML_STRING_MIN)
+            {
+                $this->sourceCode .= 'min:' . $v;
+            }
+            if($k === RamlInterface::RAML_STRING_MAX)
+            {
+                $this->sourceCode .= 'max:' . $v;
+            }
+            if($k === RamlInterface::RAML_INTEGER_MIN)
+            {
+                $this->sourceCode .= 'min:' . $v;
+            }
+            if($k === RamlInterface::RAML_INTEGER_MAX)
+            {
+                $this->sourceCode .= 'max:' . $v;
+            }
+//            if(isset($attrVal['errorMessage']))
+//            {
+//                $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';
+//            }
+            if($cnt > 0 && $k !== RamlInterface::RAML_DESCRIPTION)
+            {
+                $this->sourceCode .= PhpEntitiesInterface::PIPE;
+            }
         }
-        if(isset($attrVal['enum']))
+        $this->sourceCode .= PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA;
+        if($attrCnt > 0)
         {
-            $this->sourceCode .= ', "in", "range" => ["' . implode('", "', $attrVal['enum']) . '"]';
-        }
-        if(isset($attrVal['pattern']))
-        {
-            $this->sourceCode .= ', "pattern" => "' . $attrVal['pattern'] . '"';
-        }
-        if(isset($attrVal['minLength']))
-        {
-            $this->sourceCode .= ', "min" => "' . $attrVal['minLength'] . '"';
-        }
-        if(isset($attrVal['minLength']))
-        {
-            $this->sourceCode .= ', "max" => "' . $attrVal['maxLength'] . '"';
-        }
-        if(isset($attrVal['minimum']))
-        {
-            $this->sourceCode .= ', "min" => "' . $attrVal['minimum'] . '"';
-        }
-        if(isset($attrVal['maximum']))
-        {
-            $this->sourceCode .= ', "max" => "' . $attrVal['maximum'] . '"';
-        }
-        if(isset($attrVal['errorMessage']))
-        {
-            $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';
+            $this->sourceCode .= PHP_EOL;
         }
     }
 }

@@ -17,9 +17,7 @@ class BaseFormTag extends BaseFormRequest
 
     public  function rules(): array {
         return [
-            [["title"], "required"], 
-            ["id" , "integer"], 
-            ["title" , "string", "min" => "3", "max" => "255"]
+            "title" => "string|required|min:3|max:255",
         ];
     }
 

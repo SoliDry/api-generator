@@ -65,17 +65,15 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
-            [["name_rubric", "url", "show_menu", "publish_rss", "post_aggregator", "display_tape"], "required"],
-            ["id" , "integer"],
-            ["name_rubric" , "string"],
-            ["url" , "string"],
-            ["meta_title" , "string"],
-            ["meta_description" , "string"],
-            ["show_menu" , "boolean"],
-            ["publish_rss" , "boolean"],
-            ["post_aggregator" , "boolean"],
-            ["display_tape" , "boolean"],
-            ["status" , "in", "range" => ["draft", "published", "postponed", "archived"]]
+            "name_rubric" => "required|string|min:8|max:500",
+            "url" => "required|string|min:16|max:255",
+            "meta_title" => "string|max:255",
+            "meta_description" => "string|max:255",
+            "show_menu" => "required|boolean",
+            "publish_rss" => "required|boolean",
+            "post_aggregator" => "required|boolean",
+            "display_tape" => "required|boolean",
+            "status" => "in:draft,published,postponed,archived",
         ], $formIn->rules());
 
         // related
@@ -83,9 +81,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
-            [["title"], "required"],
-            ["id" , "integer"],
-            ["title" , "string", "min" => "3", "max" => "255"]
+            "title" => "string|required|min:3|max:255",
         ], $formIn->rules());
     }
 

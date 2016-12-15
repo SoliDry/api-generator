@@ -103,7 +103,8 @@ class BaseFormRequestModel extends FormRequestModel
         // related props
         if($relationTypes !== null)
         {
-            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . ' Relations' . PHP_EOL;
+            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . ' Relations' .
+                                 PHP_EOL;
             foreach($relationTypes as $attrKey => $attrVal)
             {
                 // determine attr
@@ -128,7 +129,7 @@ class BaseFormRequestModel extends FormRequestModel
         // attrs validation
         $this->startArray();
         // gather required fields
-        $this->setRequired();
+//        $this->setRequired();
         // gather types and constraints
         $this->setTypesAndConstraints();
         $this->endArray();
@@ -180,7 +181,8 @@ class BaseFormRequestModel extends FormRequestModel
 
         if($keysCnt > 0)
         {
-            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4
+            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+                                 PhpEntitiesInterface::TAB_PSR4
                                  . PhpEntitiesInterface::OPEN_BRACKET . PhpEntitiesInterface::OPEN_BRACKET
                                  . $reqKeys . PhpEntitiesInterface::CLOSE_BRACKET;
             $this->sourceCode .= ', "' . RamlInterface::RAML_REQUIRED . '"';
@@ -191,39 +193,31 @@ class BaseFormRequestModel extends FormRequestModel
 
     private function setTypesAndConstraints()
     {
-        if(!empty($this->additionalProps))
-        {
-            foreach($this->additionalProps as $prop => $propVal)
-            {
-                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
-                                     PhpEntitiesInterface::TAB_PSR4
-                                     . PhpEntitiesInterface::OPEN_BRACKET . '"' . $prop . '" ';
-                $this->setProperty($propVal);
-                $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
-                $this->sourceCode .= ', ' . PHP_EOL;
-            }
-        }
+//        if(!empty($this->additionalProps))
+//        {
+//            $first = true;
+//            foreach($this->additionalProps as $prop => $propVal)
+//            {
+//                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
+//                                     PhpEntitiesInterface::TAB_PSR4
+//                                     . '"' . $prop . '" ' .
+//                                     PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE;
+//                $this->setProperty($prop, $propVal);
+//                $this->sourceCode .= '", ' . PHP_EOL;
+//                $first = false;
+//            }
+//        }
 
-        $attrsCnt =
+        $attrCnt =
             count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
         foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
         [RamlInterface::RAML_PROPS] as $attrKey => $attrVal)
         {
-            --$attrsCnt;
+            --$attrCnt;
             // determine attr
-            if($attrKey !== RamlInterface::RAML_TYPE && $attrKey !== RamlInterface::RAML_REQUIRED &&
-               is_array($attrVal)
-            )
+            if(is_array($attrVal))
             {
-                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
-                                     PhpEntitiesInterface::TAB_PSR4
-                                     . PhpEntitiesInterface::OPEN_BRACKET . '"' . $attrKey . '" ';
-                $this->setProperty($attrVal);
-                $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
-                if($attrsCnt > 0)
-                {
-                    $this->sourceCode .= ', ' . PHP_EOL;
-                }
+                $this->setProperty($attrKey, $attrVal, $attrCnt);
             }
         }
     }

@@ -61,33 +61,35 @@ types:
     type: object
     properties:
       name_rubric:
-        type: string
         required: true
+        type: string
+        minLength: 8
         maxLength: 500
       url:
-        type: string
         required: true
+        type: string
+        minLength: 16
         maxLength: 255
       meta_title:
-        type: string
         required: false
+        type: string
         maxLength: 255
       meta_description:
-        type: string
         required: false
+        type: string
         maxLength: 255
       show_menu:
-        type: boolean
         required: true
+        type: boolean
       publish_rss:
-        type: boolean
         required: true
+        type: boolean
       post_aggregator:
-        type: boolean
         required: true
+        type: boolean
       display_tape:
-        type: boolean
         required: true
+        type: boolean
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]

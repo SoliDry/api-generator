@@ -20,22 +20,26 @@ interface PhpEntitiesInterface
     const OPEN_PARENTHESES  = '(';
     const CLOSE_PARENTHESES = ')';
 
-    const TAB_PSR4    = '    ';
-    const COLON       = ':';
-    const SEMICOLON   = ';';
-    const DOLLAR_SIGN = '$';
-    const SLASH       = '/';
-    const BACKSLASH   = '\\';
-    const EQUALS      = '=';
-    const SPACE       = ' ';
-    const COMMENT     = '//';
+    const TAB_PSR4     = '    ';
+    const COMMA        = ',';
+    const QUOTES       = '"';
+    const COLON        = ':';
+    const SEMICOLON    = ';';
+    const DOLLAR_SIGN  = '$';
+    const SLASH        = '/';
+    const BACKSLASH    = '\\';
+    const EQUALS       = '=';
+    const SPACE        = ' ';
+    const COMMENT      = '//';
+    const DOUBLE_ARROW = '=>';
+    const PIPE         = '|';
 
-    const PHP_TYPES_ARRAY  = 'array';
-    const PHP_TYPES_NULL   = 'null';
-    const PHP_TYPES_STRING = 'string';
-    const PHP_TYPES_BOOL = 'bool';
+    const PHP_TYPES_ARRAY      = 'array';
+    const PHP_TYPES_NULL       = 'null';
+    const PHP_TYPES_STRING     = 'string';
+    const PHP_TYPES_BOOL       = 'bool';
     const PHP_TYPES_BOOL_FALSE = 'false';
-    const PHP_TYPES_BOOL_TRUE = 'true';
+    const PHP_TYPES_BOOL_TRUE  = 'true';
 
     const PHP_MODIFIER_PUBLIC    = 'public';
     const PHP_MODIFIER_PRIVATE   = 'private';

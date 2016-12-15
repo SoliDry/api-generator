@@ -49,36 +49,38 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
     type: object
     properties:
       name_rubric:
-        type: string
         required: true
+        type: string
+        minLength: 8
         maxLength: 500
       url:
-        type: string
         required: true
+        type: string
+        minLength: 16
         maxLength: 255
       meta_title:
-        type: string
         required: false
+        type: string
         maxLength: 255
       meta_description:
-        type: string
         required: false
+        type: string
         maxLength: 255
       show_menu:
-        type: boolean
         required: true
+        type: boolean
       publish_rss:
-        type: boolean
         required: true
+        type: boolean
       post_aggregator:
-        type: boolean
         required: true
+        type: boolean
       display_tape:
-        type: boolean
         required: true
+        type: boolean
       status:
         description: The state of an article
-        enum: ["draft", "published", "postponed", "archived"]        
+        enum: ["draft", "published", "postponed", "archived"]
 ```
 
 Relationships custom type definition semantics ```*Relationships```
@@ -108,72 +110,55 @@ where may any business logic be applied
 
 Complete directory structure after generator will end up it`s work will be like:
 ```RAML
-modules/{version}/controllers/ - contains controllers that extends the DefaultController
-modules/{version}/models/forms/ - contains forms that extends the BaseFormResource and validates input attributes (that were previously defined as *Attributes in RAML)
-modules/{version}/models/mappers/ - contains mappers that extends the BaseActiveDataMapper which maps to the Containers and saves data to RDBMS like MySQL,PostgreSQL etc
-modules/{version}/models/containers/ - extends ActiveRecord and provides straight access to CRUD
+Modules/{version}/Controllers/ - contains controllers that extends the DefaultController
+Modules/{version}/Models/Forms/ - contains forms that extends the BaseFormRequest (parent of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{version}/Models/Mappers/ - contains mappers that extends the BaseModel (parent of Laravel's Model) and maps attributes to RDBMS
 ```
 
 Properties of Input json-api parameters - Yii Form generation example:
 ```php
-    // ID
     public $id = null;
-
     // Attributes
-    public $title                  = null;
-    public $body                   = null;
-    public $lead                   = null;
-    public $copyright              = null;
-    public $url                    = null;
-    public $meta_title             = null;
-    public $meta_description       = null;
-    public $title_vk_fb            = null;
-    public $body_vk_fb             = null;
-    public $body_twitter           = null;
-    public $fb_image               = null;
-    public $vk_image               = null;
-    public $view_options           = null;
-    public $status                 = null;
-    public $show_in_menu           = null;
-    public $publish_to_rss         = null;
-    public $publish_to_aggregators = null;
-    public $show_in_tape           = null;
+    public $name_rubric = null;
+    public $url = null;
+    public $meta_title = null;
+    public $meta_description = null;
+    public $show_menu = null;
+    public $publish_rss = null;
+    public $post_aggregator = null;
+    public $display_tape = null;
+    public $status = null;
+```
+
+Authorize method set to return false by default to avoid auth on request 
+```php
+    public  function authorize(): bool {
+        return false;
+    }
 ```
 
 Rules of Input json-api parameters - Yii Form generation example:
 ```php
-    public function rules()
-    {
+    public  function rules(): array {
         return [
-            ["id", "integer"],
-            ["title", "string"],
-            ["body", "string"],
-            ["lead", "string"],
-            ["copyright", "string"],
-            ["url", "string"],
-            ["meta_title", "string", "min" => "2", "max" => "128"],
-            ["meta_description", "string", "min" => "2", "max" => "128"],
-            ["body_twitter", "string"],
-            ["title_vk_fb", "string", "max" => "255"],
-            ["body_vk_fb", "string", "max" => "255"],
-            ["fb_image", "string", "max" => "255"],
-            ["vk_image", "string", "max" => "255"],
-            ['view_options', 'integer', 'max' => '64'],
-            ["status" , "in", "range" => ["draft", "published", "postponed", "archived"]],
-            ["show_in_menu", "integer", "max" => "1"],
-            ["publish_to_rss", "integer", "max" => "1"],
-            ["publish_to_aggregators", "integer", "max" => "1"],
-            ["show_in_tape", "integer", "max" => "1"],
+            "name_rubric" => "string|required|max:500", 
+            "url" => "string|required|max:255", 
+            "meta_title" => "string|max:255", 
+            "meta_description" => "string|max:255", 
+            "show_menu" => "boolean|required", 
+            "publish_rss" => "boolean|required", 
+            "post_aggregator" => "boolean|required", 
+            "display_tape" => "boolean|required", 
+            "status" => "in:draft,published,postponed,archived"
         ];
     }
 ```
 
 Relations based on Yii Forms generation example: 
 ```php
-    public function relations(): array {
+    public  function relations(): array {
         return [
             "tags",
-            "topics"
         ];
     }
 ```
