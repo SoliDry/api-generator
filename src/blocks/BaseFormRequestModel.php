@@ -118,6 +118,12 @@ class BaseFormRequestModel extends FormRequestModel
 
     private function constructRules()
     {
+        // Authorize method - defaults to false
+        $this->startMethod(PhpEntitiesInterface::PHP_AUTHORIZE, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_BOOL);
+        $this->methodReturn(PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE);
+        $this->endMethod();
+
+        // Rules method
         $this->startMethod(PhpEntitiesInterface::PHP_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
@@ -224,7 +230,6 @@ class BaseFormRequestModel extends FormRequestModel
 
     private function constructRelations($relationTypes)
     {
-        $this->sourceCode .= PHP_EOL . PHP_EOL;
         $this->startMethod(RJApiGenerator::PHP_RELATIONS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();

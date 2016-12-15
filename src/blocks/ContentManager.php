@@ -64,7 +64,7 @@ trait ContentManager
 
     protected function endMethod()
     {
-        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE;
+        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE . PHP_EOL . PHP_EOL;
     }
 
     protected function startArray()

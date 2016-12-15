@@ -11,6 +11,10 @@ class BaseFormTag extends BaseFormRequest
 
     // Relations
 
+    public  function authorize(): bool {
+        return false;
+    }
+
     public  function rules(): array {
         return [
             [["title"], "required"], 
@@ -24,4 +28,6 @@ class BaseFormTag extends BaseFormRequest
             "rubric",
         ];
     }
+
+
 }

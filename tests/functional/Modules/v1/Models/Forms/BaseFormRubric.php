@@ -17,6 +17,10 @@ class BaseFormRubric extends BaseFormRequest
     public $display_tape = null;
     public $status = null;
 
+    public  function authorize(): bool {
+        return false;
+    }
+
     public  function rules(): array {
         return [
             [["name_rubric", "url", "show_menu", "publish_rss", "post_aggregator", "display_tape"], "required"], 
@@ -38,4 +42,6 @@ class BaseFormRubric extends BaseFormRequest
             "tags",
         ];
     }
+
+
 }

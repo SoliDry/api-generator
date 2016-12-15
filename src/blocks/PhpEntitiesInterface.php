@@ -33,6 +33,9 @@ interface PhpEntitiesInterface
     const PHP_TYPES_ARRAY  = 'array';
     const PHP_TYPES_NULL   = 'null';
     const PHP_TYPES_STRING = 'string';
+    const PHP_TYPES_BOOL = 'bool';
+    const PHP_TYPES_BOOL_FALSE = 'false';
+    const PHP_TYPES_BOOL_TRUE = 'true';
 
     const PHP_MODIFIER_PUBLIC    = 'public';
     const PHP_MODIFIER_PRIVATE   = 'private';
@@ -42,4 +45,5 @@ interface PhpEntitiesInterface
 
     const PHP_RULES     = 'rules';
     const PHP_RELATIONS = 'relations';
+    const PHP_AUTHORIZE = 'authorize';
 }
