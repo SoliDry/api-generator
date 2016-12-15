@@ -5,5 +5,8 @@ use rjapi\extension\BaseModel;
 
 class BaseMapperTag extends BaseModel 
 {
+    protected $primaryKey = "id";
+    protected $table = "tag";
+    public $timestamps = false;
 
 }

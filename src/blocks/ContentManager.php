@@ -80,11 +80,12 @@ trait ContentManager
                              . RJApiGenerator::CLOSE_BRACKET . RJApiGenerator::SEMICOLON . PHP_EOL;
     }
 
-    protected function createProperty($prop, $modifier)
+    protected function createProperty($prop, $modifier, $value = RJApiGenerator::PHP_TYPES_NULL, $isString = false)
     {
         $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . ' ' . RJApiGenerator::DOLLAR_SIGN . $prop
                              . RJApiGenerator::SPACE . RJApiGenerator::EQUALS . RJApiGenerator::SPACE
-                             . RJApiGenerator::PHP_TYPES_NULL . RJApiGenerator::SEMICOLON . PHP_EOL;
+                             . (($isString === false) ? $value : '"' . $value . '"') . RJApiGenerator::SEMICOLON .
+                             PHP_EOL;
     }
 
     protected function setComment($comment)

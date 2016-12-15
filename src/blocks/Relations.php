@@ -192,7 +192,7 @@ class Relations extends FormRequestModel
             {
                 $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
                                      RJApiGenerator::TAB_PSR4 . RJApiGenerator::OPEN_BRACKET . '"' . $prop . '" ';
-                $this->setProperty($propVal);
+                $this->setPropertyFilters($propVal);
                 $this->sourceCode .= RJApiGenerator::CLOSE_BRACKET;
                 $this->sourceCode .= ', ' . PHP_EOL;
             }
@@ -208,7 +208,7 @@ class Relations extends FormRequestModel
                 $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
                                      RJApiGenerator::TAB_PSR4 . RJApiGenerator::OPEN_BRACKET . '"' . $attrKey .
                                      '" ';
-                $this->setProperty($attrVal);
+                $this->setPropertyFilters($attrVal);
                 $this->sourceCode .= RJApiGenerator::CLOSE_BRACKET;
                 if($attrsCnt > 0)
                 {

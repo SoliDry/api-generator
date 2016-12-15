@@ -18,6 +18,8 @@ interface DefaultInterface
     const FORM_BASE     = 'Base';
     const FORM_PREFIX   = 'Form';
     const FORM_ACTION   = 'Action';
-    
-    const GENERATOR_METHOD = 'generateResources';
+
+    const TABLE_PROPERTY       = 'table';
+    const PRIMARY_KEY_PROPERTY = 'primaryKey';
+    const TIMESTAMPS_PROPERTY  = 'timestamps';
 }

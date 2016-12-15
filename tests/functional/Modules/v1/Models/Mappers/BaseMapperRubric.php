@@ -5,5 +5,8 @@ use rjapi\extension\BaseModel;
 
 class BaseMapperRubric extends BaseModel 
 {
+    protected $primaryKey = "id";
+    protected $table = "rubric";
+    public $timestamps = false;
 
 }

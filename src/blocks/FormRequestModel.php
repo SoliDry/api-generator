@@ -32,7 +32,7 @@ abstract class FormRequestModel
     {
     }
 
-    protected function setProperty($attrKey, $attrVal, $attrCnt)
+    protected function setPropertyFilters($attrKey, $attrVal, $attrCnt)
     {
         $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
                              PhpEntitiesInterface::TAB_PSR4
@@ -54,6 +54,7 @@ abstract class FormRequestModel
             {
                 $this->sourceCode .= RamlInterface::RAML_REQUIRED;
             }
+            // TODO: make comments in array of props
 //            if($k === RamlInterface::RAML_DESCRIPTION)
 //            {
 //                $this->setComment($v);
@@ -86,6 +87,7 @@ abstract class FormRequestModel
             {
                 $this->sourceCode .= 'max:' . $v;
             }
+            // TODO: make prepared errors, probably not here
 //            if(isset($attrVal['errorMessage']))
 //            {
 //                $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';

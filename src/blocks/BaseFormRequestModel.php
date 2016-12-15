@@ -217,7 +217,7 @@ class BaseFormRequestModel extends FormRequestModel
             // determine attr
             if(is_array($attrVal))
             {
-                $this->setProperty($attrKey, $attrVal, $attrCnt);
+                $this->setPropertyFilters($attrKey, $attrVal, $attrCnt);
             }
         }
     }

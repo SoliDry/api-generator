@@ -12,7 +12,7 @@ The ```version``` root property !required
 ```RAML
 version: v1
 ```
-converts to ```/modules/v1/``` directory.
+converts to ```/Modules/v1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
 ```RAML
@@ -162,7 +162,15 @@ Relations based on Yii Forms generation example:
         ];
     }
 ```
-
+Mapper to RDBMS example:
+```php
+class BaseMapperRubric extends BaseModel 
+{
+    protected $primaryKey = "id";
+    protected $table = "rubric";
+    public $timestamps = false;
+}
+```
 ### Laravel specific configuration
 
 Add command to ```$commands``` array in ```app/Console/Kernel.php```
