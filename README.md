@@ -4,6 +4,20 @@ RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks 
 ### Installation via composer:
 ``` composer require rjapi/raml-json-api ```
 
+### Laravel specific configuration
+
+Add command to ```$commands``` array in ```app/Console/Kernel.php```
+```php
+    protected $commands = [
+        RJApiGenerator::class,
+    ];
+```
+
+Run in console:
+```php artisan raml:generate raml/rubric.raml```
+
+```raml/rubric.raml``` - raml file in raml directory in the root of Your project
+
 ### RAML Types and Declarations
 
 Use sample RAML file from the root (the same file is in the tests codeception directory)
@@ -109,10 +123,10 @@ That is all that PHP-code generator needs to provide code structure that just wo
 where may any business logic be applied
 
 Complete directory structure after generator will end up it`s work will be like:
-```RAML
-Modules/{version}/Controllers/ - contains controllers that extends the DefaultController
-Modules/{version}/Models/Forms/ - contains forms that extends the BaseFormRequest (parent of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
-Modules/{version}/Models/Mappers/ - contains mappers that extends the BaseModel (parent of Laravel's Model) and maps attributes to RDBMS
+```php
+Modules/{version}/Http/Controllers/ - contains controllers that extends the DefaultController
+Modules/{version}/Http/Middleware/ - contains forms that extends the BaseFormRequest (parent of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{version}/Entities/ - contains mappers that extends the BaseModel (parent of Laravel's Model) and maps attributes to RDBMS
 ```
 DefaultController example:
 ```php
@@ -124,7 +138,7 @@ class RubricController extends DefaultController
 
 }
 ```
-By default every controller will work with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
+By default every controller works with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
 So You don't need to implement anything special here.
 
 Validation BaseFormRequest example:
@@ -183,20 +197,6 @@ class BaseMapperRubric extends BaseModel
     public $timestamps = false;
 }
 ```
-### Laravel specific configuration
-
-Add command to ```$commands``` array in ```app/Console/Kernel.php```
-```php
-    protected $commands = [
-        RJApiGenerator::class,
-    ];
-```
-
-Run in console:
-```php
-php artisan raml:generate raml/rubric.raml
-```
-```raml/rubric.raml``` - raml file in raml directory in the root of Your project
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 

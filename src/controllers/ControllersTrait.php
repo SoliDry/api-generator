@@ -105,25 +105,19 @@ trait ControllersTrait
     public function formatControllersPath()
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this) . $this->httpDir . PhpEntitiesInterface::SLASH . $this->controllersDir;
+        return FileManager::getModulePath($this, true) . $this->controllersDir;
     }
 
     public function formatMiddlewarePath()
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this) . $this->httpDir . PhpEntitiesInterface::SLASH . $this->middlewareDir;
+        return FileManager::getModulePath($this, true) . $this->middlewareDir;
     }
 
     public function formatEntitiesPath() : string
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this, true) . $this->entitiesDir;
-    }
-
-    public function formatMappersPath() : string
-    {
-        /** @var Command $this */
-        return FileManager::getModulePath($this, true) . $this->mappersDir;
+        return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
     private function setObjectName($name)

@@ -49,14 +49,14 @@ class FileManager implements DirsInterface
     /**
      * @param Command $obj
      *
-     * @param bool $withModel
+     * @param bool $http
      * @return string
      */
-    public static function getModulePath(Command $obj, $withModel = false) : string
+    public static function getModulePath(Command $obj, $http = false) : string
     {
         $path = strtolower($obj->appDir) . $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . RJApiGenerator::SLASH;
-        if ($withModel === true) {
-            $path .= $obj->modelsFormDir . PhpEntitiesInterface::SLASH;
+        if ($http === true) {
+            $path .= $obj->httpDir . PhpEntitiesInterface::SLASH;
         }
 
         return $path;

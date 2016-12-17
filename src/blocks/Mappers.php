@@ -10,7 +10,7 @@ class Mappers extends FormRequestModel
 {
     use ContentManager;
     /** @var RJApiGenerator $generator */
-    private   $generator  = null;
+    private $generator = null;
     protected $sourceCode = '';
 
     public function __construct($generator)
@@ -27,17 +27,13 @@ class Mappers extends FormRequestModel
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->middlewareDir .
-            PhpEntitiesInterface::BACKSLASH . $this->generator->mappersDir
+            DirsInterface::HTTP_DIR . PhpEntitiesInterface::BACKSLASH . $this->generator->middlewareDir
         );
-        $baseMapper     = BaseModel::class;
+        $baseMapper = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper);
-        $this->startClass(
-            DefaultInterface::FORM_BASE
-            . DefaultInterface::MAPPER_PREFIX . $this->generator->objectName, $baseMapperName
-        );
+        $this->startClass($this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX, $baseMapperName);
 
         $this->createProperty(
             DefaultInterface::PRIMARY_KEY_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
@@ -54,9 +50,8 @@ class Mappers extends FormRequestModel
         $this->endClass();
 
         $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir .
-                PhpEntitiesInterface::SLASH
-                . DefaultInterface::FORM_BASE . DefaultInterface::MAPPER_PREFIX .
-                $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
+            PhpEntitiesInterface::SLASH .
+            $this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($file, $this->sourceCode);
     }
 }
