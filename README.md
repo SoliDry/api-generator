@@ -10,14 +10,14 @@ composer require rjapi/raml-json-api
 
 Add command to ```$commands``` array in ```app/Console/Kernel.php```
 ```php
-    protected $commands = [
-        RJApiGenerator::class,
-    ];
+protected $commands = [
+    RJApiGenerator::class,
+];
 ```
 
 Run in console:
 ```
-    php artisan raml:generate raml/rubric.raml
+php artisan raml:generate raml/rubric.raml
 ```
 
 ```raml/rubric.raml``` - raml file in raml directory in the root of Your project, 

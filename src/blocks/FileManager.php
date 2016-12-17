@@ -54,7 +54,7 @@ class FileManager implements DirsInterface
      */
     public static function getModulePath(Command $obj, $http = false) : string
     {
-        $path = strtolower($obj->appDir) . PhpEntitiesInterface::SLASH . $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
+        $path = $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
         if ($http === true) {
             $path .= $obj->httpDir . PhpEntitiesInterface::SLASH;
         }
