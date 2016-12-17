@@ -122,7 +122,7 @@ Complete composite Object looks like this:
       attributes: RubricAttributes
       relationships: TagsRelationships
 ```
-That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Yii2 framework, 
+That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied
 
 Complete directory structure after generator will end up it`s work will be like:
