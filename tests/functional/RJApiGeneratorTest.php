@@ -14,6 +14,8 @@ use rjapi\RJApiGenerator;
  */
 class RJApiGeneratorTest extends \Codeception\Test\Unit
 {
+    const MODULES_DIR = './Modules/';
+
     /**
      * @var \FunctionalTester
      */
@@ -28,7 +30,6 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
             }
         );
         $this->gen = new RJApiGenerator();
-        $this->gen->rootDir = './tests/functional/';
     }
 
     protected function _after()
@@ -37,8 +38,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     public static function tearDownAfterClass()
     {
-        // TODO: uncomment this if need to be deleted recursively
-//        self::rmdir('./tests/functional/modules/');
+        self::rmdir(self::MODULES_DIR);
     }
 
     public function testRaml()

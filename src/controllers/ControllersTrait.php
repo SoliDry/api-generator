@@ -52,8 +52,10 @@ trait ControllersTrait
         $this->entitiesDir = self::ENTITIES_DIR;
         $this->modulesDir = self::MODULES_DIR;
         $this->httpDir = self::HTTP_DIR;
+        $this->middlewareDir = self::MIDDLEWARE_DIR;
 
         $this->types = $data['types'];
+//        $this->createDirs();
         $this->runGenerator();
     }
 
@@ -95,17 +97,17 @@ trait ControllersTrait
         }
     }
 
-    /*private function createDirs()
+    public function createDirs()
     {
         // create modules dir
         FileManager::createPath(FileManager::getModulePath($this));
         // create controllers dir
         FileManager::createPath($this->formatControllersPath());
         // create forms dir
-        FileManager::createPath($this->formatFormsPath());
+        FileManager::createPath($this->formatMiddlewarePath());
         // create mapper dir
-        FileManager::createPath($this->formatMappersPath());
-    }*/
+        FileManager::createPath($this->formatEntitiesPath());
+    }
 
     public function formatControllersPath()
     {

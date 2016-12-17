@@ -32,7 +32,7 @@ class Mappers extends FormRequestModel
         $baseMapper = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
-        $this->setUse($baseMapper);
+        $this->setUse($baseMapper, false, true);
         $this->startClass($this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX, $baseMapperName);
 
         $this->createProperty(
@@ -49,9 +49,9 @@ class Mappers extends FormRequestModel
         );
         $this->endClass();
 
-        $file = FileManager::getModulePath($this->generator, true) . $this->generator->mappersDir .
+        $file = $this->generator->formatEntitiesPath() .
             PhpEntitiesInterface::SLASH .
-            $this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX . PhpEntitiesInterface::PHP_EXT;
+            $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($file, $this->sourceCode);
     }
 }

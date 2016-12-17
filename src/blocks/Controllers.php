@@ -47,7 +47,7 @@ class Controllers implements ControllersInterface
         $baseFullMapper = BaseController::class;
         $baseMapperName = Classes::getName($baseFullMapper);
 
-        $this->setUse($baseFullMapper);
+        $this->setUse($baseFullMapper, false, true);
         $this->startClass($this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX, $baseMapperName);
         $this->endClass();
         FileManager::createFile($fileController, $this->sourceCode);
