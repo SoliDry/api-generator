@@ -13,7 +13,6 @@ trait ContentManager
 
     protected function setNamespace($postfix)
     {
-        // ex.: namespace Modules\V1\Http\Middleware
         $this->sourceCode .= RJApiGenerator::PHP_NAMESPACE . ' ' .
             $this->generator->modulesDir . RJApiGenerator::BACKSLASH . strtoupper($this->generator->version) .
                              RJApiGenerator::BACKSLASH . $postfix . RJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;

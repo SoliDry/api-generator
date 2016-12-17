@@ -6,7 +6,7 @@ use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\RJApiGenerator;
 
-class Mappers extends FormRequestModel
+class Entities extends FormRequestModel
 {
     use ContentManager;
     /** @var RJApiGenerator $generator */
@@ -27,13 +27,13 @@ class Mappers extends FormRequestModel
     {
         $this->setTag();
         $this->setNamespace(
-            DirsInterface::HTTP_DIR . PhpEntitiesInterface::BACKSLASH . $this->generator->middlewareDir
+            $this->generator->entitiesDir
         );
         $baseMapper = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper, false, true);
-        $this->startClass($this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX, $baseMapperName);
+        $this->startClass($this->generator->objectName, $baseMapperName);
 
         $this->createProperty(
             DefaultInterface::PRIMARY_KEY_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,

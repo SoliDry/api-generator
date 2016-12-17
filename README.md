@@ -23,6 +23,22 @@ php artisan raml:generate raml/rubric.raml
 ```raml/rubric.raml``` - raml file in raml directory in the root of Your project, 
 which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/rubric.raml```
 
+The output will look something like this:
+```
+Created : /srv/projects_root/Modules/V2/start.php
+Created : /srv/projects_root/Modules/V2/Http/routes.php
+Created : /srv/projects_root/Modules/V2/module.json
+Created : /srv/projects_root/Modules/V2/Resources/views/index.blade.php
+Created : /srv/projects_root/Modules/V2/Resources/views/layouts/master.blade.php
+Created : /srv/projects_root/Modules/V2/Config/config.php
+Created : /srv/projects_root/Modules/V2/composer.json
+Created : /srv/projects_root/Modules/V2/Database/Seeders/V2DatabaseSeeder.php
+Created : /srv/projects_root/Modules/V2/Providers/V2ServiceProvider.php
+Created : /srv/projects_root/Modules/V2/Http/Controllers/V2Controller.php
+Module [V2] created successfully.
+Module [V2] used successfully.
+```
+
 ### RAML Types and Declarations
 
 The ```version``` root property !required

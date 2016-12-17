@@ -2,12 +2,12 @@
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
-use rjapi\blocks\BaseFormRequestModel;
+use rjapi\blocks\Middleware;
 use rjapi\blocks\CommandsInterface;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
-use rjapi\blocks\Mappers;
+use rjapi\blocks\Entities;
 use rjapi\blocks\PhpEntitiesInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -38,6 +38,7 @@ trait ControllersTrait
     public $types = [];
     public $frameWork = '';
     public $objectProps = [];
+    public $generatedFiles = [];
 
     /**
      *  Generates api Controllers + Models to support RAML validation
@@ -91,7 +92,6 @@ trait ControllersTrait
         $output = [];
         exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version, $output);
         exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version, $output);
-        exec(CommandsInterface::LARAVEL_MODULE_LIST . PhpEntitiesInterface::SPACE . $this->version, $output);
         foreach ($output as $str) {
             echo $str . PHP_EOL;
         }
@@ -109,13 +109,13 @@ trait ControllersTrait
         FileManager::createPath($this->formatEntitiesPath());
     }
 
-    public function formatControllersPath()
+    public function formatControllersPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->controllersDir;
     }
 
-    public function formatMiddlewarePath()
+    public function formatMiddlewarePath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->middlewareDir;
@@ -127,7 +127,7 @@ trait ControllersTrait
         return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
-    private function setObjectName($name)
+    private function setObjectName(string $name)
     {
         $this->objectName = $name;
     }
@@ -146,11 +146,27 @@ trait ControllersTrait
         $this->controllers->create();
 
         // create middleware
-        $this->forms = new BaseFormRequestModel($this);
+        $this->forms = new Middleware($this);
         $this->forms->create();
 
-        // create mappers
-        $this->mappers = new Mappers($this);
+        // create entities/models
+        $this->mappers = new Entities($this);
         $this->mappers->create();
+    }
+
+    /**
+     * @return array
+     */
+    public function getGeneratedFiles(): array
+    {
+        return $this->generatedFiles;
+    }
+
+    /**
+     * @param string $path
+     */
+    public function setGeneratedFiles(string $path)
+    {
+        $this->generatedFiles[] = $path;
     }
 }

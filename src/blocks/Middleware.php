@@ -5,7 +5,7 @@ use rjapi\extension\BaseFormRequest;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
 
-class BaseFormRequestModel extends FormRequestModel
+class Middleware extends FormRequestModel
 {
     use ContentManager;
 
@@ -32,17 +32,15 @@ class BaseFormRequestModel extends FormRequestModel
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->middlewareDir .
-            PhpEntitiesInterface::BACKSLASH . $this->generator->entitiesDir
+            $this->generator->httpDir .
+            PhpEntitiesInterface::BACKSLASH .
+            $this->generator->middlewareDir
         );
 
         $baseFullForm = BaseFormRequest::class;
         $baseFormName = Classes::getName($baseFullForm);
         $this->setUse($baseFullForm, false, true);
-        $this->startClass(
-            DefaultInterface::FORM_BASE .
-            DefaultInterface::FORM_PREFIX . $this->generator->objectName, $baseFormName
-        );
+        $this->startClass($this->generator->objectName . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
 
         if (!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
             &&
