@@ -120,7 +120,7 @@ class BaseFormRequestModel extends FormRequestModel
     {
         // Authorize method - defaults to false
         $this->startMethod(PhpEntitiesInterface::PHP_AUTHORIZE, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_BOOL);
-        $this->methodReturn(PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE);
+        $this->methodReturn(PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE);
         $this->endMethod();
 
         // Rules method

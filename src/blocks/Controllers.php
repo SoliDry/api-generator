@@ -43,7 +43,7 @@ class Controllers implements ControllersInterface
                           . PhpEntitiesInterface::PHP_EXT;
 
         $this->setTag();
-        $this->setNamespace($this->generator->controllersDir);
+        $this->setNamespace($this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir);
         $baseFullMapper = BaseController::class;
         $baseMapperName = Classes::getName($baseFullMapper);
 
@@ -56,7 +56,7 @@ class Controllers implements ControllersInterface
     public function create()
     {
         $this->setTag();
-        $this->setNamespace($this->generator->controllersDir);
+        $this->setNamespace($this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir);
         $this->startClass(
             $this->generator->objectName . DefaultInterface::DEFAULT_POSTFIX,
             $this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX
