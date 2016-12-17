@@ -2,7 +2,6 @@
 namespace rjapi\blocks;
 
 use rjapi\extension\BaseFormRequest;
-use rjapi\extension\BaseModel;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
 
@@ -33,8 +32,8 @@ class BaseFormRequestModel extends FormRequestModel
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->modelsFormDir .
-            PhpEntitiesInterface::BACKSLASH . $this->generator->formsDir
+            $this->generator->middlewareDir .
+            PhpEntitiesInterface::BACKSLASH . $this->generator->entitiesDir
         );
 
         $baseFullForm = BaseFormRequest::class;
@@ -68,7 +67,7 @@ class BaseFormRequestModel extends FormRequestModel
         // create closing brace
         $this->endClass();
 
-        $fileForm = $this->generator->formatFormsPath()
+        $fileForm = $this->generator->formatEntitiesPath()
                     . PhpEntitiesInterface::SLASH
                     . DefaultInterface::FORM_BASE
                     . DefaultInterface::FORM_PREFIX

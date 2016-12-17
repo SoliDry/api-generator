@@ -14,9 +14,8 @@ interface DirsInterface
     // Laravel dirs
     const APPLICATION_DIR = 'App';
     const MODULES_DIR = 'Modules';
+    const HTTP_DIR = 'Http';
     const CONTROLLERS_DIR = 'Controllers';
-    const MODELS_DIR = 'Models';
-    const FORMS_DIR = 'Forms';
-    const MAPPERS_DIR = 'Mappers';
-    const CONTAINERS_DIR = 'Containers';
+    const MIDDLEWARE_DIR = 'Middleware';
+    const ENTITIES_DIR = 'Entities';
 }

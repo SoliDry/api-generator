@@ -27,7 +27,7 @@ class Mappers extends FormRequestModel
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->modelsFormDir .
+            $this->generator->middlewareDir .
             PhpEntitiesInterface::BACKSLASH . $this->generator->mappersDir
         );
         $baseMapper     = BaseModel::class;

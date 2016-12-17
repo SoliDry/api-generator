@@ -11,7 +11,7 @@ namespace rjapi\extension;
 
 use Illuminate\Routing\Controller;
 
-class BaseController extends Controller
+class BaseController extends Controller implements HTTPMethodsInterface
 {
-    
+        
 }

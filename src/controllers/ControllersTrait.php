@@ -1,11 +1,14 @@
 <?php
 namespace rjapi\controllers;
 
+use Illuminate\Console\Command;
 use rjapi\blocks\BaseFormRequestModel;
+use rjapi\blocks\CommandsInterface;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Mappers;
+use rjapi\blocks\PhpEntitiesInterface;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -14,11 +17,10 @@ trait ControllersTrait
     public $rootDir = '';
     public $appDir = '';
     public $modulesDir = '';
+    public $httpDir = '';
     public $controllersDir = '';
-    public $modelsFormDir = '';
-    public $formsDir = '';
-    public $mappersDir = '';
-    public $containersDir = '';
+    public $middlewareDir = '';
+    public $entitiesDir = '';
 
     public $version;
     public $objectName = '';
@@ -43,15 +45,12 @@ trait ControllersTrait
     public function actionIndex($ramlFile)
     {
         $data = Yaml::parse(file_get_contents($ramlFile));
-        $this->version = str_replace('/', '', $data['version']);
 
+        $this->version = str_replace('/', '', $data['version']);
         $this->appDir = self::APPLICATION_DIR;
         $this->controllersDir = self::CONTROLLERS_DIR;
-        $this->formsDir = self::FORMS_DIR;
-        $this->mappersDir = self::MAPPERS_DIR;
-        $this->modelsFormDir = self::MODELS_DIR;
+        $this->entitiesDir = self::ENTITIES_DIR;
         $this->modulesDir = self::MODULES_DIR;
-        $this->createDirs();
 
         $this->types = $data['types'];
         $this->runGenerator();
@@ -59,6 +58,7 @@ trait ControllersTrait
 
     private function runGenerator()
     {
+        $this->generateModule();
         foreach ($this->types as $objName => $objData) {
             if (!in_array($objName, $this->customTypes)) { // if this is not a custom type generate resources
                 $excluded = false;
@@ -83,7 +83,14 @@ trait ControllersTrait
         }
     }
 
-    private function createDirs()
+    private function generateModule()
+    {
+        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version);
+        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version);
+        exec(CommandsInterface::LARAVEL_MODULE_LIST . PhpEntitiesInterface::SPACE . $this->version);
+    }
+
+    /*private function createDirs()
     {
         // create modules dir
         FileManager::createPath(FileManager::getModulePath($this));
@@ -93,25 +100,29 @@ trait ControllersTrait
         FileManager::createPath($this->formatFormsPath());
         // create mapper dir
         FileManager::createPath($this->formatMappersPath());
-    }
+    }*/
 
     public function formatControllersPath()
     {
-        return FileManager::getModulePath($this) . $this->controllersDir;
+        /** @var Command $this */
+        return FileManager::getModulePath($this) . $this->httpDir . PhpEntitiesInterface::SLASH . $this->controllersDir;
     }
 
-    public function formatModelsPath()
+    public function formatMiddlewarePath()
     {
-        return FileManager::getModulePath($this) . $this->modelsFormDir;
+        /** @var Command $this */
+        return FileManager::getModulePath($this) . $this->httpDir . PhpEntitiesInterface::SLASH . $this->middlewareDir;
     }
 
-    public function formatFormsPath() : string
+    public function formatEntitiesPath() : string
     {
-        return FileManager::getModulePath($this, true) . $this->formsDir;
+        /** @var Command $this */
+        return FileManager::getModulePath($this, true) . $this->entitiesDir;
     }
 
     public function formatMappersPath() : string
     {
+        /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->mappersDir;
     }
 
@@ -127,12 +138,13 @@ trait ControllersTrait
 
     private function generateResources()
     {
+        /** @var Command $this */
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
         $this->controllers->create();
 
-        // create model
+        // create middleware
         $this->forms = new BaseFormRequestModel($this);
         $this->forms->create();
 
