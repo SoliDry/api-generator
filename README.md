@@ -2,7 +2,9 @@
 RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks aka Laravel/Yii/Symfony etc, with complete support of JSON-API data format
 
 ### Installation via composer:
-``` composer require rjapi/raml-json-api ```
+``` 
+composer require rjapi/raml-json-api 
+```
 
 ### Laravel specific configuration
 
@@ -14,19 +16,20 @@ Add command to ```$commands``` array in ```app/Console/Kernel.php```
 ```
 
 Run in console:
-```php artisan raml:generate raml/rubric.raml```
+```
+    php artisan raml:generate raml/rubric.raml
+```
 
-```raml/rubric.raml``` - raml file in raml directory in the root of Your project
+```raml/rubric.raml``` - raml file in raml directory in the root of Your project, 
+which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/rubric.raml```
 
 ### RAML Types and Declarations
 
-Use sample RAML file from the root (the same file is in the tests codeception directory)
-
 The ```version``` root property !required
 ```RAML
-version: v1
+version: V1
 ```
-converts to ```/Modules/v1/``` directory.
+converts to ```/Modules/V1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
 ```RAML

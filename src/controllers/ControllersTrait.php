@@ -51,6 +51,7 @@ trait ControllersTrait
         $this->controllersDir = self::CONTROLLERS_DIR;
         $this->entitiesDir = self::ENTITIES_DIR;
         $this->modulesDir = self::MODULES_DIR;
+        $this->httpDir = self::HTTP_DIR;
 
         $this->types = $data['types'];
         $this->runGenerator();
@@ -85,9 +86,13 @@ trait ControllersTrait
 
     private function generateModule()
     {
-        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version);
-        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version);
-        exec(CommandsInterface::LARAVEL_MODULE_LIST . PhpEntitiesInterface::SPACE . $this->version);
+        $output = [];
+        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version, $output);
+        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version, $output);
+        exec(CommandsInterface::LARAVEL_MODULE_LIST . PhpEntitiesInterface::SPACE . $this->version, $output);
+        foreach ($output as $str) {
+            echo $str . PHP_EOL;
+        }
     }
 
     /*private function createDirs()
