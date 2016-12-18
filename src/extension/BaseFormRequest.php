@@ -9,9 +9,13 @@
 namespace rjapi\extension;
 
 
+use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BaseFormRequest extends FormRequest
 {
-    
+    public function handle($request, Closure $next)
+    {
+        return $next($request);
+    }
 }

@@ -20,4 +20,10 @@ class Classes
         $ref = new \ReflectionClass($class);
         return (string) $ref->getShortName();
     }
+
+    public static function getObjectName($object): string
+    {
+        $ref = new \ReflectionClass($object);
+        return (string) $ref->getShortName();
+    }
 }

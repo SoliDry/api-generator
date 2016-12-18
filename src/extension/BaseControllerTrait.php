@@ -9,6 +9,12 @@
 namespace rjapi\extension;
 
 
+use Illuminate\Http\Request;
+use rjapi\blocks\DefaultInterface;
+use rjapi\blocks\DirsInterface;
+use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\helpers\Classes;
+
 trait BaseControllerTrait
 {
     private $methods = [
@@ -19,13 +25,55 @@ trait BaseControllerTrait
         self::URI_METHOD_DELETE => self::HTTP_METHOD_DELETE,
     ];
 
-    public function __call($method, $parameters)
+    public function __construct()
     {
-        if ($this->jsonApi === true) {
-            echo $method;
-            print_r($parameters);
-            return true;
-        }
-//        parent::__call($method, $parameters);
+        $entity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') . PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR . PhpEntitiesInterface::BACKSLASH . DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH . Classes::cutName(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX) . DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middleware = new $entity();
+        $properties = get_object_vars($middleware);
+    }
+
+    /**
+     * Output all entries for this Entity
+     */
+    public function index()
+    {
+
+    }
+
+    /**
+     * Output one entry determined by unique id as uri param
+     * @param int $id
+     */
+    public function view(int $id)
+    {
+
+    }
+
+    /**
+     * Creates one entry specified by all input fields in $request
+     * @param Request $request
+     */
+    public function create(Request $request)
+    {
+
+    }
+
+    /**
+     * Updates one entry determined by unique id as uri param for specified fields in $request
+     * @param Request $request
+     * @param int $id
+     */
+    public function update(Request $request, int $id)
+    {
+
+    }
+
+    /**
+     * Deletes one entry determined by unique id as uri param
+     * @param int $id
+     */
+    public function delete(int $id)
+    {
+
     }
 }

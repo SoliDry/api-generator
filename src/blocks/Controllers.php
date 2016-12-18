@@ -39,7 +39,7 @@ class Controllers implements ControllersInterface
         $fileController = $this->generator->formatControllersPath()
                           . PhpEntitiesInterface::SLASH
                           . $this->generator->defaultController
-                          . DefaultInterface::DEFAULT_POSTFIX
+                          . DefaultInterface::CONTROLLER_POSTFIX
                           . PhpEntitiesInterface::PHP_EXT;
 
         $this->setTag();
@@ -48,7 +48,7 @@ class Controllers implements ControllersInterface
         $baseMapperName = Classes::getName($baseFullMapper);
 
         $this->setUse($baseFullMapper, false, true);
-        $this->startClass($this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX, $baseMapperName);
+        $this->startClass($this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX, $baseMapperName);
         $this->endClass();
         FileManager::createFile($fileController, $this->sourceCode);
     }
@@ -58,14 +58,14 @@ class Controllers implements ControllersInterface
         $this->setTag();
         $this->setNamespace($this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir);
         $this->startClass(
-            $this->generator->objectName . DefaultInterface::DEFAULT_POSTFIX,
-            $this->generator->defaultController . DefaultInterface::DEFAULT_POSTFIX
+            $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX,
+            $this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX
         );
         $this->endClass();
         $fileController = $this->generator->formatControllersPath()
                           . PhpEntitiesInterface::SLASH
                           . $this->generator->objectName
-                          . DefaultInterface::DEFAULT_POSTFIX
+                          . DefaultInterface::CONTROLLER_POSTFIX
                           . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($fileController, $this->sourceCode);
     }

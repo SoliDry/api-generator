@@ -5,7 +5,7 @@ interface DefaultInterface
 {
     const CONTENT_TYPE = 'application/vnd.api+json';
 
-    const DEFAULT_POSTFIX = 'Controller';
+    const CONTROLLER_POSTFIX = 'Controller';
     const CONTAINER_POSTFIX = 'Container';
     const QUERY_SEARCH_POSTFIX = 'QuerySearch';
 
