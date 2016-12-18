@@ -40,6 +40,8 @@ Created : /srv/projects_root/Modules/V2/Http/Controllers/V2Controller.php
 Module [V2] created successfully.
 Module [V2] used successfully.
 ```
+This "magic" is done (behind the scene) by wonderful package laravel-modules, 
+many thx to nWidart https://github.com/nWidart/laravel-modules 
 
 ### RAML Types and Declarations
 

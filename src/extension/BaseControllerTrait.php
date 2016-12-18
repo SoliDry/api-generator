@@ -17,6 +17,8 @@ use rjapi\helpers\Classes;
 
 trait BaseControllerTrait
 {
+    private $props = [];
+
     private $methods = [
         self::URI_METHOD_INDEX => self::HTTP_METHOD_GET,
         self::URI_METHOD_VIEW => self::HTTP_METHOD_GET,
@@ -29,7 +31,7 @@ trait BaseControllerTrait
     {
         $entity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') . PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR . PhpEntitiesInterface::BACKSLASH . DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH . Classes::cutName(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX) . DefaultInterface::MIDDLEWARE_POSTFIX;
         $middleware = new $entity();
-        $properties = get_object_vars($middleware);
+        $this->props = get_object_vars($middleware);
     }
 
     /**
