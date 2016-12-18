@@ -1,5 +1,7 @@
 # raml-json-api
-RAML-JSON-API PHP-code generator (based on RAML-types) for different FrameWorks aka Laravel/Yii/Symfony etc, with complete support of JSON-API data format
+RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, with complete support of JSON-API data format 
+
+JSON API support turned off by default see `Turn on JSON API support` section bellow 
 
 ### Installation via composer:
 ``` 
@@ -204,6 +206,22 @@ class Article extends BaseModel
     public $timestamps = false;
 }
 ```
+
+### Turn on JSON API support
+If you are willing to apply json api specification mappings into Laravel application, just set ```$jsonApi``` property in DefaultController to true:
+```php
+<?php
+namespace Modules\V1\Http\Controllers;
+
+use rjapi\extension\BaseController;
+
+class DefaultController extends BaseController 
+{
+    protected $jsonApi = true;
+}
+```
+As this class inherited by all Controllers - You don't have to add this property in every Controller class.
+By default JSON API is turned off.
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 

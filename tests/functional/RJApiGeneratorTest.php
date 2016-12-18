@@ -81,6 +81,9 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         ], $formIn->rules());
     }
 
+    /**
+     * @depends testMiddleware
+     */
     public function testEntities()
     {
         $article = new \Modules\V1\Entities\Article();
