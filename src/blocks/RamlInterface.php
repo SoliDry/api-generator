@@ -10,9 +10,14 @@ namespace rjapi\blocks;
 
 interface RamlInterface
 {
-    // RAML types
+    // RAML types map to FW
     const RAML_TYPE_ARRAY    = 'array';
     const RAML_TYPE_OBJECT   = 'object';
+    const RAML_TYPE_DATETIME = 'date';
+    const RAML_TYPE_BOOLEAN  = 'boolean';
+    const RAML_TYPE_STRING   = 'string';
+    const RAML_TYPE_INTEGER  = 'integer';
+
     const RAML_PROPS         = 'properties';
     const RAML_ATTRS         = 'attributes';
     const RAML_RELATIONSHIPS = 'relationships';
@@ -20,8 +25,11 @@ interface RamlInterface
     const RAML_ID            = 'id';
     const RAML_DATA          = 'data';
     const RAML_ITEMS         = 'items';
-    const RAML_REQUIRED      = 'required';
-    const RAML_DESCRIPTION   = 'description';
+
+    // RAML keys
+    const RAML_KEY_REQUIRED      = 'required';
+    const RAML_KEY_DESCRIPTION   = 'description';
+    const RAML_KEY_DEFAULT       = 'default';
 
     // RAML filters
     const RAML_STRING_MIN  = 'minLength';

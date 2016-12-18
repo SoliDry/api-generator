@@ -56,7 +56,9 @@ trait ControllersTrait
         $this->middlewareDir = self::MIDDLEWARE_DIR;
 
         $this->types = $data['types'];
-//        $this->createDirs();
+        if(env('PHP_DEV')) {
+            $this->createDirs();
+        }
         $this->runGenerator();
     }
 

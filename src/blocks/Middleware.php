@@ -11,7 +11,7 @@ class Middleware extends FormRequestModel
 
     protected $sourceCode = '';
     /** @var RJApiGenerator generator */
-    private $generator = null;
+    protected $generator = null;
     private $additionalProps = [
         'id' => [
             'type' => 'integer',
@@ -113,8 +113,6 @@ class Middleware extends FormRequestModel
         $this->startMethod(PhpEntitiesInterface::PHP_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
         // attrs validation
         $this->startArray();
-        // gather required fields
-//        $this->setRequired();
         // gather types and constraints
         $this->setTypesAndConstraints();
         $this->endArray();
@@ -128,8 +126,8 @@ class Middleware extends FormRequestModel
 
         if (!empty($this->additionalProps)) {
             foreach ($this->additionalProps as $prop => $propVal) {
-                if (empty($propVal[RamlInterface::RAML_REQUIRED]) === false &&
-                    (bool)$propVal[RamlInterface::RAML_REQUIRED] === true
+                if (empty($propVal[RamlInterface::RAML_KEY_REQUIRED]) === false &&
+                    (bool)$propVal[RamlInterface::RAML_KEY_REQUIRED] === true
                 ) {
                     if ($keysCnt > 0) {
                         $reqKeys .= ', ';
@@ -144,8 +142,8 @@ class Middleware extends FormRequestModel
                  [RJApiGenerator::RAML_PROPS] as $attrKey => $attrVal) {
             // determine attr
             if (is_array($attrVal)) {
-                if (isset($attrVal[RamlInterface::RAML_REQUIRED]) &&
-                    (bool)$attrVal[RamlInterface::RAML_REQUIRED] === true
+                if (isset($attrVal[RamlInterface::RAML_KEY_REQUIRED]) &&
+                    (bool)$attrVal[RamlInterface::RAML_KEY_REQUIRED] === true
                 ) {
                     if ($keysCnt > 0) {
                         $reqKeys .= ', ';
@@ -161,7 +159,7 @@ class Middleware extends FormRequestModel
                 PhpEntitiesInterface::TAB_PSR4
                 . PhpEntitiesInterface::OPEN_BRACKET . PhpEntitiesInterface::OPEN_BRACKET
                 . $reqKeys . PhpEntitiesInterface::CLOSE_BRACKET;
-            $this->sourceCode .= ', "' . RamlInterface::RAML_REQUIRED . '"';
+            $this->sourceCode .= ', "' . RamlInterface::RAML_KEY_REQUIRED . '"';
             $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
             $this->sourceCode .= ', ' . PHP_EOL;
         }
@@ -184,16 +182,16 @@ class Middleware extends FormRequestModel
 //            }
 //        }
 
-        $attrCnt =
-            count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
-        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-                 [RamlInterface::RAML_PROPS] as $attrKey => $attrVal) {
-            --$attrCnt;
-            // determine attr
-            if (is_array($attrVal)) {
-                $this->setPropertyFilters($attrKey, $attrVal, $attrCnt);
-            }
-        }
+//        $attrCnt =
+//            count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
+//        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
+//                 [RamlInterface::RAML_PROPS] as $attrKey => $attrVal) {
+//            --$attrCnt;
+//            // determine attr
+//            if (is_array($attrVal)) {
+                $this->setPropertyFilters();
+//            }
+//        }
     }
 
     private function constructRelations($relationTypes)

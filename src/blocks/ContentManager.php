@@ -15,7 +15,7 @@ trait ContentManager
     {
         $this->sourceCode .= RJApiGenerator::PHP_NAMESPACE . ' ' .
             $this->generator->modulesDir . RJApiGenerator::BACKSLASH . strtoupper($this->generator->version) .
-                             RJApiGenerator::BACKSLASH . $postfix . RJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
+            RJApiGenerator::BACKSLASH . $postfix . RJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
     }
 
     protected function setUse($path, $isTrait = false, $isLast = false)
@@ -87,6 +87,14 @@ trait ContentManager
 
     protected function setComment($comment)
     {
-        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::COMMENT . $comment . PHP_EOL;
+        $this->sourceCode .= PhpEntitiesInterface::COMMENT
+            . PhpEntitiesInterface::SPACE . $comment . PHP_EOL;
+    }
+
+    protected function setTabs(int $amount = 1)
+    {
+        for ($i = $amount; $i > 0; --$i) {
+            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4;
+        }
     }
 }

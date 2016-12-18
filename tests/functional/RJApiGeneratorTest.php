@@ -1,10 +1,7 @@
 <?php
 
-use App\Modules\v1\Controllers\DefaultController;
-use App\Modules\v1\Controllers\RubricController;
-use App\Modules\v1\Models\Forms\BaseFormRubric;
-use App\Modules\v1\Models\Forms\BaseFormTag;
 use Illuminate\Foundation\Http\FormRequest;
+use Modules\V1\Http\Controllers\DefaultController;
 use rjapi\RJApiGenerator;
 
 /**
@@ -24,6 +21,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     protected function _before()
     {
+        putenv('PHP_DEV=true');
         spl_autoload_register(
             function ($class) {
                 require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
@@ -43,7 +41,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     public function testRaml()
     {
-        $this->gen->actionIndex('./tests/functional/rubric.raml');
+        $this->gen->actionIndex('./tests/functional/articles.raml');
     }
 
     /**
@@ -51,38 +49,44 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
      */
     public function testControllers()
     {
-        $rubrics = new RubricController();
+        $rubrics = new \Modules\V1\Http\Controllers\ArticleController();
         $this->assertInstanceOf(DefaultController::class, $rubrics);
     }
 
     /**
      * @depends testRaml
      */
-    public function testModelForms()
+    public function testMiddleware()
     {
         // base model
-        $formIn = new BaseFormRubric();
+        $formIn = new \Modules\V1\Http\Middleware\ArticleMiddleware();
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
-            "name_rubric" => "required|string|min:8|max:500",
-            "url" => "required|string|min:16|max:255",
-            "meta_title" => "string|max:255",
-            "meta_description" => "string|max:255",
-            "show_menu" => "required|boolean",
-            "publish_rss" => "required|boolean",
-            "post_aggregator" => "required|boolean",
-            "display_tape" => "required|boolean",
+            "title" => "required|string|min:16|max:256",
+            "description" => "required|string|min:32|max:1024",
+            "url" => "string|min:16|max:255",
+            // Show at the top of main page
+            "show_in_top" => "boolean",
+            // The state of an article
             "status" => "in:draft,published,postponed,archived",
         ], $formIn->rules());
 
         // related
-        $formIn = new BaseFormTag();
+        $formIn = new \Modules\V1\Http\Middleware\TagMiddleware();
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
             "title" => "string|required|min:3|max:255",
         ], $formIn->rules());
+    }
+
+    public function testEntities()
+    {
+        $article = new \Modules\V1\Entities\Article();
+        $this->assertObjectHasAttribute('primaryKey', $article);
+        $this->assertObjectHasAttribute('table', $article);
+        $this->assertObjectHasAttribute('timestamps', $article);
     }
 
     private static function rmdir($dir)

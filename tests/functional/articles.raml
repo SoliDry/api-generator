@@ -48,57 +48,46 @@ types:
       id: ID
       attributes: TagAttributes
       relationships:
-        type: RubricRelationships
-  RubricRelationships:
+        type: ArticleRelationships
+  ArticleRelationships:
     type: object
     properties:
       data:
         type: DataArray
         items:
           type: RelationshipsDataItem
-  RubricAttributes:
-    description: Rubric attributes description
+  ArticleAttributes:
+    description: Article attributes description
     type: object
     properties:
-      name_rubric:
-        required: true
-        type: string
-        minLength: 8
-        maxLength: 500
-      url:
+      title:
         required: true
         type: string
         minLength: 16
-        maxLength: 255
-      meta_title:
+        maxLength: 256
+      description:
+        required: true
+        type: string
+        minLength: 32
+        maxLength: 1024
+      url:
         required: false
         type: string
+        minLength: 16
         maxLength: 255
-      meta_description:
+      show_in_top:
+        description: Show at the top of main page
         required: false
-        type: string
-        maxLength: 255
-      show_menu:
-        required: true
-        type: boolean
-      publish_rss:
-        required: true
-        type: boolean
-      post_aggregator:
-        required: true
-        type: boolean
-      display_tape:
-        required: true
         type: boolean
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]
-  Rubric:
+  Article:
     type: object
     properties:
       type: Type
       id: ID
-      attributes: RubricAttributes
+      attributes: ArticleAttributes
       relationships: TagsRelationships
   FilterID:
     type: string
@@ -108,7 +97,7 @@ types:
     properties:
       \{attribute\}:
         type: string
-      attributes: RubricAttributes
+      attributes: ArticleAttributes
       relationships: TagsRelationships
   JsonApiQuerySearch:
     type: object
@@ -132,7 +121,7 @@ types:
         type: string
         pattern: "/^[-a-z,\ ]*$/"
 
-/rubrics:
+/article:
   get:
     queryParameters:
       type: JsonApiQuerySearch
@@ -140,32 +129,32 @@ types:
       200:
         body:
           application/json.vnd+json:
-            type: Rubric[]
+            type: Article[]
   post:
     body:
       application/json.vnd+json:
-        type: Rubric
+        type: Article
     responses:
       200:
         body:
           application/json.vnd+json:
-            type: Rubric
+            type: Article
   /{id}:
     get:
       responses:
         200:
           body:
             application/json.vnd+json:
-              type: Rubric
+              type: Article
     patch:
       body:
         application/json.vnd+json:
-          type: Rubric
+          type: Article
       responses:
         200:
           body:
             application/json.vnd+json:
-              type: Rubric
+              type: Article
     delete:
       responses:
         204:
