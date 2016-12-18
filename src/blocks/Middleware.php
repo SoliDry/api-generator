@@ -114,7 +114,7 @@ class Middleware extends FormRequestModel
         // attrs validation
         $this->startArray();
         // gather types and constraints
-        $this->setTypesAndConstraints();
+        $this->setPropertyFilters();
         $this->endArray();
         $this->endMethod();
     }
@@ -163,35 +163,6 @@ class Middleware extends FormRequestModel
             $this->sourceCode .= PhpEntitiesInterface::CLOSE_BRACKET;
             $this->sourceCode .= ', ' . PHP_EOL;
         }
-    }
-
-    private function setTypesAndConstraints()
-    {
-//        if(!empty($this->additionalProps))
-//        {
-//            $first = true;
-//            foreach($this->additionalProps as $prop => $propVal)
-//            {
-//                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
-//                                     PhpEntitiesInterface::TAB_PSR4
-//                                     . '"' . $prop . '" ' .
-//                                     PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE;
-//                $this->setProperty($prop, $propVal);
-//                $this->sourceCode .= '", ' . PHP_EOL;
-//                $first = false;
-//            }
-//        }
-
-//        $attrCnt =
-//            count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
-//        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-//                 [RamlInterface::RAML_PROPS] as $attrKey => $attrVal) {
-//            --$attrCnt;
-//            // determine attr
-//            if (is_array($attrVal)) {
-                $this->setPropertyFilters();
-//            }
-//        }
     }
 
     private function constructRelations($relationTypes)

@@ -36,7 +36,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     public static function tearDownAfterClass()
     {
-        self::rmdir(self::MODULES_DIR);
+//        self::rmdir(self::MODULES_DIR);
     }
 
     public function testRaml()

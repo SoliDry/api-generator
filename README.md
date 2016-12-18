@@ -17,10 +17,10 @@ protected $commands = [
 
 Run in console:
 ```
-php artisan raml:generate raml/rubric.raml
+php artisan raml:generate raml/articles.raml
 ```
 
-```raml/rubric.raml``` - raml file in raml directory in the root of Your project, 
+```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
 which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/rubric.raml```
 
 The output will look something like this:
@@ -43,7 +43,7 @@ Module [V2] used successfully.
 
 The ```version``` root property !required
 ```RAML
-version: V1
+version: v1
 ```
 converts to ```/Modules/V1/``` directory.
 
@@ -77,39 +77,28 @@ defined in every relationship custom type
 
 Attributes ```*Attributes``` are defined for every custom Object ex.:
 ```RAML
-  RubricAttributes:
-    description: Rubric attributes description
+  ArticleAttributes:
+    description: Article attributes description
     type: object
     properties:
-      name_rubric:
-        required: true
-        type: string
-        minLength: 8
-        maxLength: 500
-      url:
+      title:
         required: true
         type: string
         minLength: 16
-        maxLength: 255
-      meta_title:
+        maxLength: 256
+      description:
+        required: true
+        type: string
+        minLength: 32
+        maxLength: 1024
+      url:
         required: false
         type: string
+        minLength: 16
         maxLength: 255
-      meta_description:
+      show_in_top:
+        description: Show at the top of main page
         required: false
-        type: string
-        maxLength: 255
-      show_menu:
-        required: true
-        type: boolean
-      publish_rss:
-        required: true
-        type: boolean
-      post_aggregator:
-        required: true
-        type: boolean
-      display_tape:
-        required: true
         type: boolean
       status:
         description: The state of an article
@@ -130,12 +119,12 @@ Relationships custom type definition semantics ```*Relationships```
 
 Complete composite Object looks like this: 
 ```RAML
-  Rubric:
+  Article:
     type: object
     properties:
       type: Type
       id: ID
-      attributes: RubricAttributes
+      attributes: ArticleAttributes
       relationships: TagsRelationships
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
@@ -150,9 +139,9 @@ Modules/{version}/Entities/ - contains mappers that extends the BaseModel (paren
 DefaultController example:
 ```php
 <?php
-namespace App\Modules\v1\Controllers;
+namespace Modules\V1\Http\Controllers;
 
-class RubricController extends DefaultController 
+class ArticleController extends DefaultController 
 {
 
 }
@@ -163,38 +152,32 @@ So You don't need to implement anything special here.
 Validation BaseFormRequest example:
 ```php
 <?php
-namespace App\Modules\v1\Models\Forms;
+namespace Modules\V1\Http\Middleware;
 
 use rjapi\extension\BaseFormRequest;
 
-class BaseFormRubric extends BaseFormRequest 
+class ArticleMiddleware extends BaseFormRequest 
 {
     public $id = null;
     // Attributes
-    public $name_rubric = null;
+    public $title = null;
+    public $description = null;
     public $url = null;
-    public $meta_title = null;
-    public $meta_description = null;
-    public $show_menu = null;
-    public $publish_rss = null;
-    public $post_aggregator = null;
-    public $display_tape = null;
+    public $show_in_top = null;
     public $status = null;
 
     public  function authorize(): bool {
-        return false;
+        return true;
     }
 
     public  function rules(): array {
         return [
-            "name_rubric" => "required|string|min:8|max:500",
-            "url" => "required|string|min:16|max:255",
-            "meta_title" => "string|max:255",
-            "meta_description" => "string|max:255",
-            "show_menu" => "required|boolean",
-            "publish_rss" => "required|boolean",
-            "post_aggregator" => "required|boolean",
-            "display_tape" => "required|boolean",
+            "title" => "required|string|min:16|max:256",
+            "description" => "required|string|min:32|max:1024",
+            "url" => "string|min:16|max:255",
+            // Show at the top of main page
+            "show_in_top" => "boolean",
+            // The state of an article
             "status" => "in:draft,published,postponed,archived",
         ];
     }
@@ -209,10 +192,15 @@ class BaseFormRubric extends BaseFormRequest
 
 BaseModel example:
 ```php
-class BaseMapperRubric extends BaseModel 
+<?php
+namespace Modules\V1\Entities;
+
+use rjapi\extension\BaseModel;
+
+class Article extends BaseModel 
 {
     protected $primaryKey = "id";
-    protected $table = "rubric";
+    protected $table = "article";
     public $timestamps = false;
 }
 ```

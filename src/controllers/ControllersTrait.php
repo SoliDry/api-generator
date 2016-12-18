@@ -2,6 +2,7 @@
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
+use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\CommandsInterface;
 use rjapi\blocks\Controllers;
@@ -94,9 +95,12 @@ trait ControllersTrait
         $output = [];
         exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version, $output);
         exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version, $output);
+
+        echo DefaultInterface::ANSI_COLOR_GREEN;
         foreach ($output as $str) {
             echo $str . PHP_EOL;
         }
+        echo DefaultInterface::ANSI_COLOR_RESET;
     }
 
     public function createDirs()
