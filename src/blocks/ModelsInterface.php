@@ -16,5 +16,7 @@ interface ModelsInterface
     const DEFAULT_LIMIT          = 20;
 
     // Methods
-    const MODEL_METHOD_ALL = 'all()';
+    const MODEL_METHOD_ALL = 'all';
+    const MODEL_METHOD_WHERE    = 'where';
+    const MODEL_METHOD_ORDER_BY = 'orderBy';
 }

@@ -43,7 +43,7 @@ trait BaseControllerTrait
         $this->props      = get_object_vars($middleware);
 
         $modelEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') .
-                       PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR . $this->entity;
+                       PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::BACKSLASH . $this->entity;
         $this->model = new $modelEntity();
     }
 
@@ -120,11 +120,20 @@ trait BaseControllerTrait
 
     private function getEntity(int $id)
     {
-        return call_user_func($this->model . PhpEntitiesInterface::DOUBLE_COLON . 'where(\'id\', ' . $id . ')');
+        $obj = call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            . ModelsInterface::MODEL_METHOD_WHERE, ['id', $id]
+        );
+
+        return $obj->first();
     }
 
     private function getAllEntities()
     {
-        return call_user_func($this->model . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ALL);
+        $obj = call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ORDER_BY,
+            ['id', 'desc']
+        );
+        return $obj->take(ModelsInterface::DEFAULT_LIMIT)->get();
     }
 }
