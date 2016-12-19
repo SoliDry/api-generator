@@ -25,7 +25,7 @@ trait BaseControllerTrait
     private $entity = null;
     private $model = null;
     private $modelEntity = null;
-    private $middleware = null;
+    private $middleWare = null;
 
     private $methods = [
         self::URI_METHOD_INDEX => self::HTTP_METHOD_GET,
@@ -44,8 +44,8 @@ trait BaseControllerTrait
             DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
             $this->entity .
             DefaultInterface::MIDDLEWARE_POSTFIX;
-        $this->middleware = new $middlewareEntity();
-        $this->props = get_object_vars($this->middleware);
+        $this->middleWare = new $middlewareEntity();
+        $this->props = get_object_vars($this->middleWare);
 
         $this->modelEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::BACKSLASH . $this->entity;
@@ -58,7 +58,7 @@ trait BaseControllerTrait
     public function index()
     {
         $items = $this->getAllEntities();
-        $transformer = new DefaultTransformer($this->middleware);
+        $transformer = new DefaultTransformer($this->middleWare);
         $resource = new Collection($items, $transformer, strtolower($this->entity));
         Json::outputSerializedData($resource);
     }
@@ -71,7 +71,7 @@ trait BaseControllerTrait
     public function view(int $id)
     {
         $item = $this->getEntity($id);
-        $transformer = new DefaultTransformer($this->middleware);
+        $transformer = new DefaultTransformer($this->middleWare);
         $resource = new Item($item, $transformer, strtolower($this->entity));
         Json::outputSerializedData($resource);
     }
