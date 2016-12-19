@@ -25,10 +25,10 @@ class DefaultTransformer extends TransformerAbstract
 
     public function transform(BaseModel $object)
     {
-        $rules = $this->middleWare->rules();
+        $props = get_object_vars($this->middleWare);
         $arr = [];
         try {
-            foreach ($rules as $prop => $rule) {
+            foreach ($props as $prop => $value) {
                 $arr[$prop] = $object->$prop;
             }
         } catch (ModelException $e) {
