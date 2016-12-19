@@ -24,6 +24,7 @@ interface PhpEntitiesInterface
     const COMMA        = ',';
     const QUOTES       = '"';
     const COLON        = ':';
+    const DOUBLE_COLON = '::';
     const SEMICOLON    = ';';
     const DOLLAR_SIGN  = '$';
     const SLASH        = '/';

@@ -11,6 +11,10 @@ namespace rjapi\blocks;
 interface ModelsInterface
 {
     // Laravel
-    const LARAVEL_ACTIVE_RECORD = 'Model';
-    const LARAVEL_PROPERTY_TABLE  = 'table';
+    const LARAVEL_ACTIVE_RECORD  = 'Model';
+    const LARAVEL_PROPERTY_TABLE = 'table';
+    const DEFAULT_LIMIT          = 20;
+
+    // Methods
+    const MODEL_METHOD_ALL = 'all()';
 }
