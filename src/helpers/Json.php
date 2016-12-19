@@ -31,7 +31,7 @@ class Json
         return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
-    public static function outputSerializedData(ResourceInterface $resource): string
+    public static function outputSerializedData(ResourceInterface $resource)
     {
         $host = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
