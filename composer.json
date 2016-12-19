@@ -7,7 +7,6 @@
         "codeception/codeception": "^2.2",
         "alecsammon/php-raml-parser": "^2.1",
         "laravel/framework": "^5.3",
-        "seld/jsonlint": "^1.5",
         "nwidart/laravel-modules": "^1.14",
         "league/fractal": "^0.14.0"
     },
