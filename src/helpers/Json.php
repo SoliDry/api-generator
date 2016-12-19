@@ -6,6 +6,7 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\Serializer\JsonApiSerializer;
 use rjapi\blocks\RamlInterface;
+use rjapi\extension\HTTPMethodsInterface;
 
 class Json
 {
@@ -31,12 +32,17 @@ class Json
         return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
-    public static function outputSerializedData(ResourceInterface $resource)
+    public static function outputSerializedData(ResourceInterface $resource, int $responseCode = HTTPMethodsInterface::HTTP_RESPONSE_CODE_OK)
     {
+        http_response_code($responseCode);
+        header('Content-Type: ' . self::CONTENT_TYPE);
+        if ($responseCode === HTTPMethodsInterface::HTTP_RESPONSE_CODE_NO_CONTENT)
+        {
+            exit;
+        }
         $host = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
         $manager->setSerializer(new JsonApiSerializer($host));
-        header('Content-Type: ' . self::CONTENT_TYPE);
         echo $manager->createData($resource)->toJson();
     }
 }

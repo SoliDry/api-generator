@@ -91,6 +91,9 @@ trait BaseControllerTrait
             }
         }
         $this->model->save();
+        $transformer = new DefaultTransformer($this->middleWare);
+        $resource = new Item($this->model, $transformer, strtolower($this->entity));
+        Json::outputSerializedData($resource, HTTPMethodsInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -111,6 +114,9 @@ trait BaseControllerTrait
             }
         }
         $entity->save();
+        $transformer = new DefaultTransformer($this->middleWare);
+        $resource = new Item($entity, $transformer, strtolower($this->entity));
+        Json::outputSerializedData($resource);
     }
 
     /**
@@ -120,6 +126,9 @@ trait BaseControllerTrait
      */
     public function delete(int $id)
     {
+        $entity = $this->getEntity($id);
+        $entity->destroy();
+        Json::outputSerializedData($entity, HTTPMethodsInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     private function getEntity(int $id)
@@ -138,7 +147,7 @@ trait BaseControllerTrait
         $to = $count * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ORDER_BY,
-            ['id', 'desc']
+            ['id', ModelsInterface::SQL_DESC]
         );
         return $obj->take($to)->skip($from)->get();
     }

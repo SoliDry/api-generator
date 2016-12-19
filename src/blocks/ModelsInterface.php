@@ -19,4 +19,8 @@ interface ModelsInterface
     const MODEL_METHOD_ALL = 'all';
     const MODEL_METHOD_WHERE    = 'where';
     const MODEL_METHOD_ORDER_BY = 'orderBy';
+
+    // SQL
+    const SQL_DESC = 'desc';
+    const SQL_ASC  = 'asc';
 }

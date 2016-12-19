@@ -23,4 +23,12 @@ interface HTTPMethodsInterface
     const URI_METHOD_UPDATE = 'update';
     const URI_METHOD_DELETE = 'delete';
 
+    // JSON API supported responses
+    const HTTP_RESPONSE_CODE_OK         = 200;
+    const HTTP_RESPONSE_CODE_CREATED    = 201;
+    const HTTP_RESPONSE_CODE_ACCEPTED   = 202;
+    const HTTP_RESPONSE_CODE_FORBIDDEN  = 203;
+    const HTTP_RESPONSE_CODE_NO_CONTENT = 204;
+    const HTTP_RESPONSE_CODE_NOT_FOUND  = 404;
+
 }
