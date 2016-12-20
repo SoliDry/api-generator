@@ -22,6 +22,7 @@ interface PhpEntitiesInterface
 
     const TAB_PSR4     = '    ';
     const COMMA        = ',';
+    const DOT          = '.';
     const QUOTES       = '"';
     const COLON        = ':';
     const DOUBLE_COLON = '::';

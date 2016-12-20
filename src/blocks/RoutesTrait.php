@@ -29,7 +29,7 @@ trait RoutesTrait
                              . $version . PhpEntitiesInterface::COMMA . PhpEntitiesInterface::PHP_NAMESPACE
                              . PhpEntitiesInterface::DOUBLE_ARROW . DirsInterface::MODULES_DIR .
                              PhpEntitiesInterface::BACKSLASH
-                             . $this->generator->version . DirsInterface::HTTP_DIR
+                             . $version . DirsInterface::HTTP_DIR
                              . PhpEntitiesInterface::BACKSLASH . DirsInterface::CONTROLLERS_DIR .
                              PhpEntitiesInterface::QUOTES
                              . PhpEntitiesInterface::CLOSE_BRACKET . PhpEntitiesInterface::COMMA

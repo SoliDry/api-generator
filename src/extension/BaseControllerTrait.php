@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 18.12.16
- * Time: 19:11
- */
-
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
@@ -14,6 +7,7 @@ use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\helpers\Classes;
+use rjapi\helpers\Config;
 use rjapi\helpers\Json;
 
 trait BaseControllerTrait
@@ -34,9 +28,8 @@ trait BaseControllerTrait
 
     public function __construct()
     {
-        print_r(config());die;
         $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') .
+        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
             PhpEntitiesInterface::BACKSLASH .
             DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
@@ -45,7 +38,7 @@ trait BaseControllerTrait
         $this->middleWare = new $middlewareEntity();
         $this->props = get_object_vars($this->middleWare);
 
-        $this->modelEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') .
+        $this->modelEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::BACKSLASH . $this->entity;
         $this->model = new $this->modelEntity();
     }

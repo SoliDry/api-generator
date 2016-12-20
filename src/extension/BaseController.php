@@ -14,6 +14,6 @@ class BaseController extends Controller implements HTTPMethodsInterface
 {
     use BaseControllerTrait;
 
-    // JSON API support disabled by default
-    protected $jsonApi = false;
+    // JSON API support enabled by default
+    protected $jsonApi = true;
 }
