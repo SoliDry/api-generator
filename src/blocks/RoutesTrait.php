@@ -18,6 +18,8 @@ namespace rjapi\blocks;
         Route::delete('/article/{id}', 'ArticleController@delete');
     });
 */
+use rjapi\helpers\Config;
+
 trait RoutesTrait
 {
     public function openGroup(string $version)
@@ -25,13 +27,15 @@ trait RoutesTrait
         $this->sourceCode .= RoutesInterface::CLASS_ROUTE . PhpEntitiesInterface::DOUBLE_COLON
                              . RoutesInterface::METHOD_GROUP . PhpEntitiesInterface::OPEN_PARENTHESES
                              . PhpEntitiesInterface::OPEN_BRACKET
-                             . PhpEntitiesInterface::QUOTES . DefaultInterface::PREFIX_KEY . PhpEntitiesInterface::SPACE
-                             . $version . PhpEntitiesInterface::COMMA . PhpEntitiesInterface::PHP_NAMESPACE
-                             . PhpEntitiesInterface::DOUBLE_ARROW . DirsInterface::MODULES_DIR .
-                             PhpEntitiesInterface::BACKSLASH
-                             . $version . DirsInterface::HTTP_DIR
-                             . PhpEntitiesInterface::BACKSLASH . DirsInterface::CONTROLLERS_DIR .
-                             PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::QUOTES . DefaultInterface::PREFIX_KEY . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE
+                             . PhpEntitiesInterface::QUOTES . $version . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::COMMA . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::PHP_NAMESPACE . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_ARROW
+                             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES. DirsInterface::MODULES_DIR .
+                             PhpEntitiesInterface::BACKSLASH . Config::getModuleName() . DirsInterface::HTTP_DIR
+                             . PhpEntitiesInterface::BACKSLASH . DirsInterface::CONTROLLERS_DIR . PhpEntitiesInterface::QUOTES
                              . PhpEntitiesInterface::CLOSE_BRACKET . PhpEntitiesInterface::COMMA
                              . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::PHP_FUNCTION .
                              PhpEntitiesInterface::OPEN_PARENTHESES
@@ -48,7 +52,7 @@ trait RoutesTrait
 
     public function setRoute($method, $objectName, $uri, $withId = false)
     {
-        $this->sourceCode .= RoutesInterface::CLASS_ROUTE . PhpEntitiesInterface::DOUBLE_COLON
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . RoutesInterface::CLASS_ROUTE . PhpEntitiesInterface::DOUBLE_COLON
                              . $method . PhpEntitiesInterface::OPEN_PARENTHESES;
 
         $this->sourceCode .= PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::SLASH
