@@ -9,15 +9,12 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
-use League\Fractal\Resource\Collection;
-use League\Fractal\Resource\Item;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Json;
-use rjapi\transformers\DefaultTransformer;
 
 trait BaseControllerTrait
 {
@@ -58,8 +55,7 @@ trait BaseControllerTrait
     public function index()
     {
         $items = $this->getAllEntities();
-        $transformer = new DefaultTransformer($this->middleWare);
-        $resource = new Collection($items, $transformer, strtolower($this->entity));
+        $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource);
     }
 
@@ -71,8 +67,7 @@ trait BaseControllerTrait
     public function view(int $id)
     {
         $item = $this->getEntity($id);
-        $transformer = new DefaultTransformer($this->middleWare);
-        $resource = new Item($item, $transformer, strtolower($this->entity));
+        $resource = Json::getResource($this->middleWare, $item, $this->entity);
         Json::outputSerializedData($resource);
     }
 
@@ -91,8 +86,7 @@ trait BaseControllerTrait
             }
         }
         $this->model->save();
-        $transformer = new DefaultTransformer($this->middleWare);
-        $resource = new Item($this->model, $transformer, strtolower($this->entity));
+        $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
         Json::outputSerializedData($resource, HTTPMethodsInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
@@ -106,16 +100,15 @@ trait BaseControllerTrait
     {
         // get json raw input and parse attrs
         $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
-        $entity = $this->getEntity($id);
+        $model = $this->getEntity($id);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
             if (empty($jsonApiAttributes[$k]) === false) {
-                $entity->$k = $jsonApiAttributes[$k];
+                $model->$k = $jsonApiAttributes[$k];
             }
         }
-        $entity->save();
-        $transformer = new DefaultTransformer($this->middleWare);
-        $resource = new Item($entity, $transformer, strtolower($this->entity));
+        $model->save();
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
 
