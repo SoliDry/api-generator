@@ -10,6 +10,7 @@ use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\Routes;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -40,6 +41,19 @@ trait ControllersTrait
     public $frameWork = '';
     public $objectProps = [];
     public $generatedFiles = [];
+
+    private $forms = null;
+    private $controllers = null;
+    private $moduleObject = null;
+    private $mappers = null;
+    private $containers = null;
+    private $routes = null;
+    private $excludedSubtypes = [
+        self::CUSTOM_TYPES_ATTRIBUTES,
+        self::CUSTOM_TYPES_RELATIONSHIPS,
+        self::CUSTOM_TYPES_QUERY_SEARCH,
+        self::CUSTOM_TYPES_FILTER,
+    ];
 
     /**
      *  Generates api Controllers + Models to support RAML validation
@@ -158,6 +172,10 @@ trait ControllersTrait
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->create();
+        
+        // create routes
+        $this->routes = new Routes($this);
+        $this->routes->create();
     }
 
     /**

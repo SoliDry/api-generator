@@ -24,7 +24,6 @@ class Routes
 
     public function create()
     {
-        print_r(config());
         $this->setTag();
         $this->openGroup($this->generator->version);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_INDEX);

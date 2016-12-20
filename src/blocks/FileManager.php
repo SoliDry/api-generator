@@ -16,6 +16,7 @@ class FileManager implements DirsInterface
     /**
      * @param string $fileName
      * @param string $content
+     * @param bool $isNew
      */
     public static function createFile($fileName, $content, $isNew = false)
     {
