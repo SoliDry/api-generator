@@ -33,7 +33,7 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE);
         $this->closeGroup();
 
-        $file = FileManager::getModulePath($this, true) .
+        $file = FileManager::getModulePath($this->generator, true) .
                 RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
         FileManager::createFile($file, $this->sourceCode, true);
     }
