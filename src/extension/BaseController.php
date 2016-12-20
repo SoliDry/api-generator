@@ -10,7 +10,7 @@ namespace rjapi\extension;
 
 use Illuminate\Routing\Controller;
 
-class BaseController extends Controller implements HTTPMethodsInterface
+class BaseController extends Controller implements JSONApiInterface
 {
     use BaseControllerTrait;
 

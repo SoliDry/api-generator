@@ -10,7 +10,7 @@ use League\Fractal\Serializer\JsonApiSerializer;
 use rjapi\blocks\RamlInterface;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
-use rjapi\extension\HTTPMethodsInterface;
+use rjapi\extension\JSONApiInterface;
 use rjapi\transformers\DefaultTransformer;
 
 class Json
@@ -47,11 +47,11 @@ class Json
         return new Item($model, $transformer, strtolower($entity));
     }
 
-    public static function outputSerializedData(ResourceInterface $resource, int $responseCode = HTTPMethodsInterface::HTTP_RESPONSE_CODE_OK)
+    public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK)
     {
         http_response_code($responseCode);
         header('Content-Type: ' . self::CONTENT_TYPE);
-        if ($responseCode === HTTPMethodsInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
+        if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
             exit;
         }
         $host = $_SERVER['HTTP_HOST'];

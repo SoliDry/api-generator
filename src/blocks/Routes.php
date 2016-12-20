@@ -2,7 +2,7 @@
 
 namespace rjapi\blocks;
 
-use rjapi\extension\HTTPMethodsInterface;
+use rjapi\extension\JSONApiInterface;
 use rjapi\RJApiGenerator;
 
 class Routes
@@ -26,11 +26,11 @@ class Routes
     {
         $this->setTag();
         $this->openGroup($this->generator->version);
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_INDEX);
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_VIEW);
-        $this->setRoute(RoutesInterface::METHOD_POST, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_CREATE);
-        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_UPDATE);
-        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, HTTPMethodsInterface::URI_METHOD_DELETE);
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_INDEX);
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_VIEW);
+        $this->setRoute(RoutesInterface::METHOD_POST, $this->generator->objectName, JSONApiInterface::URI_METHOD_CREATE);
+        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->generator->objectName, JSONApiInterface::URI_METHOD_UPDATE);
+        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE);
         $this->closeGroup();
 
         $file = FileManager::getModulePath($this, true) .

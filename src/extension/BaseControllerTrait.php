@@ -81,7 +81,7 @@ trait BaseControllerTrait
         }
         $this->model->save();
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
-        Json::outputSerializedData($resource, HTTPMethodsInterface::HTTP_RESPONSE_CODE_CREATED);
+        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -115,7 +115,7 @@ trait BaseControllerTrait
     {
         $entity = $this->getEntity($id);
         $entity->destroy();
-        Json::outputSerializedData($entity, HTTPMethodsInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        Json::outputSerializedData($entity, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     private function getEntity(int $id)

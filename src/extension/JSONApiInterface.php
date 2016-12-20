@@ -8,7 +8,7 @@
 
 namespace rjapi\extension;
 
-interface HTTPMethodsInterface
+interface JSONApiInterface
 {
     const HTTP_METHOD_GET     = 'GET';
     const HTTP_METHOD_POST    = 'POST';
