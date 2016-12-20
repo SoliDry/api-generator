@@ -18,5 +18,5 @@ interface RoutesInterface
     const METHOD_PATCH  = 'patch';
     const METHOD_DELETE = 'delete';
 
-    const ROUTES_FILE = 'routes';
+    const ROUTES_FILE_NAME = 'routes';
 }

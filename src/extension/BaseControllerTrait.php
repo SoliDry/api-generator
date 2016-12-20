@@ -34,6 +34,7 @@ trait BaseControllerTrait
 
     public function __construct()
     {
+        print_r(config());die;
         $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
         $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . config('v2.name') .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
