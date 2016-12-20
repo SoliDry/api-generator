@@ -9,7 +9,7 @@ use rjapi\RJApiGenerator;
 class FileManager implements DirsInterface
 {
     const FILE_MODE_CREATE = 'w';
-    const DIR_MODE = 0755;
+    const DIR_MODE         = 0755;
 
     private static $modulePath = '';
 
@@ -17,9 +17,10 @@ class FileManager implements DirsInterface
      * @param string $fileName
      * @param string $content
      */
-    public static function createFile($fileName, $content)
+    public static function createFile($fileName, $content, $isNew = false)
     {
-        if (file_exists($fileName) === false) {
+        if(file_exists($fileName) === false || $isNew === true)
+        {
             $fp = fopen($fileName, self::FILE_MODE_CREATE);
             fwrite($fp, $content);
             fclose($fp);
@@ -33,8 +34,10 @@ class FileManager implements DirsInterface
      */
     public static function createPath($path)
     {
-        if (is_dir($path) === false) {
-            if (mkdir($path, self::DIR_MODE, true) === false) {
+        if(is_dir($path) === false)
+        {
+            if(mkdir($path, self::DIR_MODE, true) === false)
+            {
                 throw new DirectoryException(
                     'Couldn`t create directory '
                     . $path
@@ -49,13 +52,16 @@ class FileManager implements DirsInterface
     /**
      * @param Command $obj
      *
-     * @param bool $http
+     * @param bool    $http
+     *
      * @return string
      */
     public static function getModulePath(Command $obj, $http = false) : string
     {
-        $path = $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
-        if ($http === true) {
+        $path =
+            $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
+        if($http === true)
+        {
             $path .= $obj->httpDir . PhpEntitiesInterface::SLASH;
         }
 

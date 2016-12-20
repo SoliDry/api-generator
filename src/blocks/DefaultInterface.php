@@ -8,8 +8,10 @@ interface DefaultInterface
     const CONTROLLER_POSTFIX = 'Controller';
     const CONTAINER_POSTFIX = 'Container';
     const QUERY_SEARCH_POSTFIX = 'QuerySearch';
-
     const MIDDLEWARE_POSTFIX = 'Middleware';
+
+    const PREFIX_KEY = 'prefix';
+
     const FORM_BASE = 'Base';
     const FORM_PREFIX = 'Form';
     const FORM_ACTION = 'Action';

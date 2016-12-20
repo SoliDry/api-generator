@@ -34,6 +34,7 @@ interface PhpEntitiesInterface
     const COMMENT      = '//';
     const DOUBLE_ARROW = '=>';
     const PIPE         = '|';
+    const AT           = '@';
 
     const PHP_TYPES_ARRAY      = 'array';
     const PHP_TYPES_NULL       = 'null';
