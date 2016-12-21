@@ -22,9 +22,13 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
     protected function _before()
     {
         putenv('PHP_DEV=true');
+//        require_once __DIR__.'/../../vendor/laravel/framework/src/illuminate/Foundation/helpers.php';
         spl_autoload_register(
             function ($class) {
-                require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
+                if($class !== 'config')
+                {
+                    require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
+                }
             }
         );
         $this->gen = new RJApiGenerator();

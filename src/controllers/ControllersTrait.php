@@ -11,43 +11,44 @@ use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\Routes;
+use rjapi\helpers\Console;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
 {
     // paths
-    public $rootDir = '';
-    public $appDir = '';
-    public $modulesDir = '';
-    public $httpDir = '';
+    public $rootDir        = '';
+    public $appDir         = '';
+    public $modulesDir     = '';
+    public $httpDir        = '';
     public $controllersDir = '';
-    public $middlewareDir = '';
-    public $entitiesDir = '';
+    public $middlewareDir  = '';
+    public $entitiesDir    = '';
 
     public $version;
-    public $objectName = '';
+    public $objectName        = '';
     public $defaultController = 'Default';
-    public $uriNamedParams = null;
-    public $ramlFile = '';
-    public $force = null;
-    public $customTypes = [
+    public $uriNamedParams    = null;
+    public $ramlFile          = '';
+    public $force             = null;
+    public $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPES_SINGLE_DATA_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
     ];
-    public $types = [];
-    public $frameWork = '';
-    public $objectProps = [];
-    public $generatedFiles = [];
+    public $types             = [];
+    public $frameWork         = '';
+    public $objectProps       = [];
+    public $generatedFiles    = [];
 
-    private $forms = null;
-    private $controllers = null;
-    private $moduleObject = null;
-    private $mappers = null;
-    private $containers = null;
-    private $routes = null;
+    private $forms            = null;
+    private $controllers      = null;
+    private $moduleObject     = null;
+    private $mappers          = null;
+    private $containers       = null;
+    private $routes           = null;
     private $excludedSubtypes = [
         self::CUSTOM_TYPES_ATTRIBUTES,
         self::CUSTOM_TYPES_RELATIONSHIPS,
@@ -62,16 +63,17 @@ trait ControllersTrait
     {
         $data = Yaml::parse(file_get_contents($ramlFile));
 
-        $this->version = str_replace('/', '', $data['version']);
-        $this->appDir = self::APPLICATION_DIR;
+        $this->version        = str_replace('/', '', $data['version']);
+        $this->appDir         = self::APPLICATION_DIR;
         $this->controllersDir = self::CONTROLLERS_DIR;
-        $this->entitiesDir = self::ENTITIES_DIR;
-        $this->modulesDir = self::MODULES_DIR;
-        $this->httpDir = self::HTTP_DIR;
-        $this->middlewareDir = self::MIDDLEWARE_DIR;
+        $this->entitiesDir    = self::ENTITIES_DIR;
+        $this->modulesDir     = self::MODULES_DIR;
+        $this->httpDir        = self::HTTP_DIR;
+        $this->middlewareDir  = self::MIDDLEWARE_DIR;
 
         $this->types = $data['types'];
-        if(env('PHP_DEV')) {
+        if(env('PHP_DEV'))
+        {
             $this->createDirs();
         }
         $this->runGenerator();
@@ -80,21 +82,28 @@ trait ControllersTrait
     private function runGenerator()
     {
         $this->generateModule();
-        foreach ($this->types as $objName => $objData) {
-            if (!in_array($objName, $this->customTypes)) { // if this is not a custom type generate resources
+        foreach($this->types as $objName => $objData)
+        {
+            if(!in_array($objName, $this->customTypes))
+            { // if this is not a custom type generate resources
                 $excluded = false;
-                foreach ($this->excludedSubtypes as $type) {
-                    if (strpos($objName, $type) !== false) {
+                foreach($this->excludedSubtypes as $type)
+                {
+                    if(strpos($objName, $type) !== false)
+                    {
                         $excluded = true;
                     }
                 }
                 // if the type is among excluded - continue
-                if ($excluded === true) {
+                if($excluded === true)
+                {
                     continue;
                 }
 
-                foreach ($objData as $k => $v) {
-                    if ($k === self::RAML_PROPS) { // process props
+                foreach($objData as $k => $v)
+                {
+                    if($k === self::RAML_PROPS)
+                    { // process props
                         $this->setObjectName($objName);
                         $this->setObjectProps($v);
                         $this->generateResources();
@@ -109,12 +118,10 @@ trait ControllersTrait
         $output = [];
         exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version, $output);
         exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version, $output);
-
-        echo DefaultInterface::ANSI_COLOR_GREEN;
-        foreach ($output as $str) {
-            echo $str . PHP_EOL;
+        foreach($output as $str)
+        {
+            Console::out($str, Console::COLOR_GREEN);
         }
-        echo DefaultInterface::ANSI_COLOR_RESET;
     }
 
     public function createDirs()
@@ -159,7 +166,6 @@ trait ControllersTrait
 
     private function generateResources()
     {
-        /** @var Command $this */
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -172,7 +178,7 @@ trait ControllersTrait
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->create();
-        
+
         // create routes
         $this->routes = new Routes($this);
         $this->routes->create();

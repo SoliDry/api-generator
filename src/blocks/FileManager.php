@@ -11,21 +11,22 @@ class FileManager implements DirsInterface
     const FILE_MODE_CREATE = 'w';
     const DIR_MODE         = 0755;
 
-    private static $modulePath = '';
-
     /**
      * @param string $fileName
      * @param string $content
-     * @param bool $isNew
+     * @param bool   $isNew
+     *
+     * @return bool
      */
-    public static function createFile($fileName, $content, $isNew = false)
+    public static function createFile($fileName, $content, $isNew = false): bool
     {
         if(file_exists($fileName) === false || $isNew === true)
         {
             $fp = fopen($fileName, self::FILE_MODE_CREATE);
             fwrite($fp, $content);
-            fclose($fp);
+            return fclose($fp);
         }
+        return false;
     }
 
     /**
@@ -59,6 +60,7 @@ class FileManager implements DirsInterface
      */
     public static function getModulePath(Command $obj, $http = false) : string
     {
+        /** @var RJApiGenerator $obj */
         $path =
             $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
         if($http === true)

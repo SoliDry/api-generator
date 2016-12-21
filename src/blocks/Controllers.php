@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\extension\BaseController;
 use rjapi\helpers\Classes;
+use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
 class Controllers implements ControllersInterface
@@ -50,7 +51,11 @@ class Controllers implements ControllersInterface
         $this->setUse($baseFullMapper, false, true);
         $this->startClass($this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX, $baseMapperName);
         $this->endClass();
-        FileManager::createFile($fileController, $this->sourceCode);
+        $isCreated = FileManager::createFile($fileController, $this->sourceCode);
+        if($isCreated)
+        {
+            Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 
     public function create()
@@ -67,6 +72,10 @@ class Controllers implements ControllersInterface
                           . $this->generator->objectName
                           . DefaultInterface::CONTROLLER_POSTFIX
                           . PhpEntitiesInterface::PHP_EXT;
-        FileManager::createFile($fileController, $this->sourceCode);
+        $isCreated = FileManager::createFile($fileController, $this->sourceCode);
+        if($isCreated)
+        {
+            Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 }
