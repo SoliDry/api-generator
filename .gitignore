@@ -1,3 +1,7 @@
 .idea/
 tests/_output/*
 vendor/
+bootstrap/
+app/
+modules/
+Modules/
