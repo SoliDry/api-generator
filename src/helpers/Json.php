@@ -9,7 +9,6 @@ use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\Serializer\JsonApiSerializer;
 use rjapi\blocks\RamlInterface;
 use rjapi\extension\BaseFormRequest;
-use rjapi\extension\BaseModel;
 use rjapi\extension\JSONApiInterface;
 use rjapi\transformers\DefaultTransformer;
 
