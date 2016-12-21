@@ -113,9 +113,13 @@ trait BaseControllerTrait
      */
     public function delete(int $id)
     {
-        $entity = $this->getEntity($id);
-        $entity->destroy();
-        Json::outputSerializedData($entity, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        $model = $this->getEntity($id);
+        if($model !== null)
+        {
+            $model->delete();
+            $resource = Json::getResource($this->middleWare, $model, $this->entity);
+            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        }
     }
 
     private function getEntity(int $id)
