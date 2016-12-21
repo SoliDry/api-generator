@@ -125,7 +125,7 @@ trait BaseControllerTrait
             . ModelsInterface::MODEL_METHOD_WHERE, ['id', $id]
         );
 
-        return $obj->first()->get();
+        return $obj->first();
     }
 
     private function getAllEntities(int $count = ModelsInterface::DEFAULT_LIMIT, int $page = 1)

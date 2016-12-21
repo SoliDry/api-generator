@@ -37,7 +37,7 @@ class Json
         return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
-    public static function getResource(BaseFormRequest $middleware, $model, string $entity, $isCollection = false)
+    public static function getResource(BaseFormRequest $middleware, BaseModel $model, string $entity, $isCollection = false)
     {
         $transformer = new DefaultTransformer($middleware);
         if($isCollection === true)
