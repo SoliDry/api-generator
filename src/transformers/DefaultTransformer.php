@@ -23,7 +23,7 @@ class DefaultTransformer extends TransformerAbstract
         $this->middleWare = $middleWare;
     }
 
-    public function transform(BaseModel $object)
+    public function transform($object)
     {
         $props = get_object_vars($this->middleWare);
         $arr = [];
