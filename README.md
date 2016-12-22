@@ -43,6 +43,9 @@ Module [V2] used successfully.
 This "magic" is done (behind the scene) by wonderful package laravel-modules, 
 many thx to nWidart https://github.com/nWidart/laravel-modules 
 
+And RAML-types based generated files:
+
+
 ### RAML Types and Declarations
 
 The ```version``` root property !required
@@ -230,5 +233,6 @@ Laravel project example with generated files can be found here -  https://github
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 
 To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
+JSON-API support is provided, particularly for output, by Fractal package - http://fractal.thephpleague.com/
 
 Happy coding ;-)

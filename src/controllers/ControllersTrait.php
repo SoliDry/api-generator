@@ -3,6 +3,7 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\DefaultInterface;
+use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\CommandsInterface;
 use rjapi\blocks\Controllers;
@@ -166,7 +167,8 @@ trait ControllersTrait
 
     private function generateResources()
     {
-        Console::out('================');
+        Console::out('================' . PhpEntitiesInterface::SPACE . $this->objectName
+            . PhpEntitiesInterface::SPACE . DirsInterface::ENTITIES_DIR);
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
