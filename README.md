@@ -44,7 +44,19 @@ This "magic" is done (behind the scene) by wonderful package laravel-modules,
 many thx to nWidart https://github.com/nWidart/laravel-modules 
 
 And RAML-types based generated files:
-
+```sh
+================ Tag Entities
+Modules/V3/Http/Controllers/DefaultController.php created
+Modules/V3/Http/Controllers/TagController.php created
+Modules/V3/Http/Middleware/TagMiddleware.php created
+Modules/V3/Entities/Tag.php created
+Modules/V3/Http/routes.php created
+================ Article Entities
+Modules/V3/Http/Controllers/ArticleController.php created
+Modules/V3/Http/Middleware/ArticleMiddleware.php created
+Modules/V3/Entities/Article.php created
+Modules/V3/Http/routes.php created
+```
 
 ### RAML Types and Declarations
 
