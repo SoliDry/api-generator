@@ -3,6 +3,7 @@
 namespace rjapi\blocks;
 
 use rjapi\extension\JSONApiInterface;
+use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
 class Routes
@@ -35,6 +36,10 @@ class Routes
 
         $file = FileManager::getModulePath($this->generator, true) .
                 RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
-        FileManager::createFile($file, $this->sourceCode, true);
+        $isCreated = FileManager::createFile($file, $this->sourceCode, true);
+        if($isCreated)
+        {
+            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 }

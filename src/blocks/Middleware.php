@@ -2,6 +2,7 @@
 namespace rjapi\blocks;
 
 use rjapi\extension\BaseFormRequest;
+use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
 
@@ -66,7 +67,11 @@ class Middleware extends FormRequestModel
             . $this->generator->objectName
             . DefaultInterface::MIDDLEWARE_POSTFIX
             . PhpEntitiesInterface::PHP_EXT;
-        FileManager::createFile($fileForm, $this->sourceCode);
+        $isCreated = FileManager::createFile($fileForm, $this->sourceCode);
+        if($isCreated)
+        {
+            Console::out($fileForm . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 
     private function setProps($relationTypes = null)

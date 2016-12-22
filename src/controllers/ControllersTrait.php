@@ -166,6 +166,7 @@ trait ControllersTrait
 
     private function generateResources()
     {
+        Console::out('================');
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();

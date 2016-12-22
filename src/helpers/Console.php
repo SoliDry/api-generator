@@ -23,8 +23,8 @@ class Console
         self::COLOR_YELLOW => self::ANSI_COLOR_YELLOW,
     ];
 
-    public static function out(string $str, string $color)
+    public static function out(string $str, $color = null)
     {
-        echo self::$colorMaps[$color] . $str . self::ANSI_COLOR_RESET . PHP_EOL;
+        echo (($color === null) ? '' : self::$colorMaps[$color]) . $str . (($color === null) ? '' : self::ANSI_COLOR_RESET) . PHP_EOL;
     }
 }

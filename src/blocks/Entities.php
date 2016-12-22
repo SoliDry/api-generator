@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
+use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
 class Entities extends FormRequestModel
@@ -52,6 +53,10 @@ class Entities extends FormRequestModel
         $file = $this->generator->formatEntitiesPath() .
             PhpEntitiesInterface::SLASH .
             $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
-        FileManager::createFile($file, $this->sourceCode);
+        $isCreated = FileManager::createFile($file, $this->sourceCode);
+        if($isCreated)
+        {
+            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 }
