@@ -60,8 +60,10 @@ trait ControllersTrait
     /**
      *  Generates api Controllers + Models to support RAML validation
      */
-    public function actionIndex($ramlFile)
+    public function actionIndex($ramlFile, $opts)
     {
+
+        print_r($opts);die;
         $data = Yaml::parse(file_get_contents($ramlFile));
 
         $this->version        = str_replace('/', '', $data['version']);

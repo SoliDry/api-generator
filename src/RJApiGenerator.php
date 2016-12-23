@@ -20,7 +20,7 @@ class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInt
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile}';
+    protected $signature = 'raml:generate {ramlFile} --M|migrations : Whether the migrations will be created.';
 
     /**
      * The console command description.
@@ -32,6 +32,7 @@ class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInt
     public function handle()
     {
         $ramlFile = $this->argument('ramlFile');
-        $this->actionIndex($ramlFile);
+        $opts = $this->options();
+        $this->actionIndex($ramlFile, $opts);
     }
 }
