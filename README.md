@@ -55,7 +55,7 @@ Modules/V3/Http/routes.php created
 Modules/V3/Http/Controllers/ArticleController.php created
 Modules/V3/Http/Middleware/ArticleMiddleware.php created
 Modules/V3/Entities/Article.php created
-Modules/V3/Http/routes.php created
+...
 ```
 
 ### RAML Types and Declarations
@@ -151,9 +151,9 @@ where may any business logic be applied
 
 Complete directory structure after generator will end up it`s work will be like:
 ```php
-Modules/{version}/Http/Controllers/ - contains controllers that extends the DefaultController
-Modules/{version}/Http/Middleware/ - contains forms that extends the BaseFormRequest (parent of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
-Modules/{version}/Entities/ - contains mappers that extends the BaseModel (parent of Laravel's Model) and maps attributes to RDBMS
+Modules/{version}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
+Modules/{version}/Http/Middleware/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{version}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
 ```
 DefaultController example:
 ```php
