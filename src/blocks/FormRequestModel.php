@@ -35,16 +35,16 @@ abstract class FormRequestModel
                 $this->setDescription($attrVal);
                 $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
                     PhpEntitiesInterface::TAB_PSR4
-                    . PhpEntitiesInterface::QUOTES . $attrKey . PhpEntitiesInterface::QUOTES
+                    . PhpEntitiesInterface::DOUBLE_QUOTES . $attrKey . PhpEntitiesInterface::DOUBLE_QUOTES
                     . PhpEntitiesInterface::SPACE
                     . PhpEntitiesInterface::DOUBLE_ARROW .
                     PhpEntitiesInterface::SPACE;
 
-                $this->sourceCode .= PhpEntitiesInterface::QUOTES;
+                $this->sourceCode .= PhpEntitiesInterface::DOUBLE_QUOTES;
                 $cnt = count($attrVal);
                 $this->setFilters($attrVal, $cnt);
 
-                $this->sourceCode .= PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA;
+                $this->sourceCode .= PhpEntitiesInterface::DOUBLE_QUOTES . PhpEntitiesInterface::COMMA;
                 if ($attrCnt > 0) {
                     $this->sourceCode .= PHP_EOL;
                 }

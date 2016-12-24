@@ -57,13 +57,14 @@ trait ControllersTrait
         self::CUSTOM_TYPES_FILTER,
     ];
 
+    private $options = [];
+
     /**
      *  Generates api Controllers + Models to support RAML validation
      */
-    public function actionIndex($ramlFile, $opts)
+    public function actionIndex(string $ramlFile)
     {
-
-        print_r($opts);die;
+        $this->options = $this->options();
         $data = Yaml::parse(file_get_contents($ramlFile));
 
         $this->version        = str_replace('/', '', $data['version']);
@@ -203,5 +204,10 @@ trait ControllersTrait
     public function setGeneratedFiles(string $path)
     {
         $this->generatedFiles[] = $path;
+    }
+
+    private function createMigrations()
+    {
+
     }
 }
