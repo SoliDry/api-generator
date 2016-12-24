@@ -35,7 +35,7 @@ trait MigrationsTrait
         $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4
             . PhpEntitiesInterface::DOLLAR_SIGN . ModelsInterface::MIGRATION_TABLE
             . PhpEntitiesInterface::ARROW . $method . PhpEntitiesInterface::OPEN_PARENTHESES
-            . (($opts === null) ? '' : PhpEntitiesInterface::QUOTES . $property
+            . (($property === null) ? '' : PhpEntitiesInterface::QUOTES . $property
                 . PhpEntitiesInterface::QUOTES) . (($opts === null) ? '' : $opts)
             . PhpEntitiesInterface::CLOSE_PARENTHESES
             . PhpEntitiesInterface::SEMICOLON . PHP_EOL;

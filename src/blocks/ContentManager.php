@@ -41,14 +41,14 @@ trait ContentManager
         $this->sourceCode .= PHP_EOL . RJApiGenerator::CLOSE_BRACE . PHP_EOL;
     }
 
-    protected function startMethod($name, $modifier, $returnType = '', $static = false)
+    protected function startMethod($name, $modifier, $returnType = null, $static = false)
     {
         $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
             (($static !== false) ? PhpEntitiesInterface::PHP_STATIC : '') . ' ' .
             RJApiGenerator::PHP_FUNCTION . ' ' .
             $name . RJApiGenerator::OPEN_PARENTHESES . RJApiGenerator::CLOSE_PARENTHESES .
-            RJApiGenerator::COLON
-            . PhpEntitiesInterface::SPACE . $returnType . PhpEntitiesInterface::SPACE
+            (($returnType === null) ? '' : RJApiGenerator::COLON . PhpEntitiesInterface::SPACE . $returnType) .
+            PhpEntitiesInterface::SPACE
             . RJApiGenerator::OPEN_BRACE . PHP_EOL;
     }
 
