@@ -44,7 +44,7 @@ trait ContentManager
     protected function startMethod($name, $modifier, $returnType = null, $static = false)
     {
         $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
-            (($static !== false) ? PhpEntitiesInterface::PHP_STATIC : '') . ' ' .
+            (($static !== false) ? PhpEntitiesInterface::PHP_STATIC . PhpEntitiesInterface::SPACE : '') .
             RJApiGenerator::PHP_FUNCTION . ' ' .
             $name . RJApiGenerator::OPEN_PARENTHESES . RJApiGenerator::CLOSE_PARENTHESES .
             (($returnType === null) ? '' : RJApiGenerator::COLON . PhpEntitiesInterface::SPACE . $returnType) .
