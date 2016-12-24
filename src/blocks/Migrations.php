@@ -35,8 +35,8 @@ class Migrations extends MigrationsAbstract
         $migrationClass = Migration::class;
         $this->setUse($migrationClass, false, true);
         // migrate up
-        $this->startClass(ModelsInterface::MIGRATION_CREATE . $this->generator->objectName
-            . ModelsInterface::MIGRATION_TABLE, Classes::getName($migrationClass));
+        $this->startClass(ucfirst(ModelsInterface::MIGRATION_CREATE) . $this->generator->objectName
+            . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass));
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
         $this->openSchema($this->generator->objectName);
         $this->setRows();
