@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\V1\Http\Controllers\DefaultController;
 use rjapi\RJApiGenerator;
+use App\Console\Kernel;
 
 /**
  * Class ApiGeneratorTest
@@ -22,7 +23,8 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
     protected function _before()
     {
         putenv('PHP_DEV=true');
-//        require_once __DIR__.'/../../vendor/laravel/framework/src/illuminate/Foundation/helpers.php';
+        require_once __DIR__.'/../../app/Console/Kernel.php';
+        require_once __DIR__.'/../../vendor/laravel/framework/src/Illuminate/Foundation/helpers.php';
         spl_autoload_register(
             function ($class) {
                 if($class !== 'config')

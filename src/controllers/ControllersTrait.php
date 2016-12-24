@@ -10,6 +10,7 @@ use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
+use rjapi\blocks\Migrations;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
@@ -50,6 +51,8 @@ trait ControllersTrait
     private $mappers          = null;
     private $containers       = null;
     private $routes           = null;
+    private $migrations = null;
+
     private $excludedSubtypes = [
         self::CUSTOM_TYPES_ATTRIBUTES,
         self::CUSTOM_TYPES_RELATIONSHIPS,
@@ -64,7 +67,7 @@ trait ControllersTrait
      */
     public function actionIndex(string $ramlFile)
     {
-        $this->options = $this->options();
+//        $this->options = $this->options();
         $data = Yaml::parse(file_get_contents($ramlFile));
 
         $this->version        = str_replace('/', '', $data['version']);
@@ -188,6 +191,10 @@ trait ControllersTrait
         // create routes
         $this->routes = new Routes($this);
         $this->routes->create();
+
+        // create Migrations
+        $this->migrations = new Migrations($this);
+        $this->migrations->create();
     }
 
     /**
@@ -204,10 +211,5 @@ trait ControllersTrait
     public function setGeneratedFiles(string $path)
     {
         $this->generatedFiles[] = $path;
-    }
-
-    private function createMigrations()
-    {
-
     }
 }

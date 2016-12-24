@@ -10,43 +10,36 @@ use rjapi\RJApiGenerator;
  */
 abstract class MigrationsAbstract
 {
-    private $legalTypes = [
-        RamlInterface::RAML_TYPE_DATETIME,
-        RamlInterface::RAML_TYPE_STRING,
-        RamlInterface::RAML_TYPE_INTEGER,
-        RamlInterface::RAML_TYPE_BOOLEAN,
-        RamlInterface::RAML_TYPE_ARRAY,
-    ];
-
-    private $excludedKeys = [
-        RamlInterface::RAML_KEY_DESCRIPTION,
-        RamlInterface::RAML_KEY_DEFAULT,
-    ];
-
     protected function setRows()
     {
+        // always create an auto_increment primary key - id
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
                  [RamlInterface::RAML_PROPS] as $attrKey => $attrVal) {
-            if (is_array($attrVal)) {
-                foreach ($attrVal as $k => $v) {
-                    if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
-                        
+            if (is_array($attrVal) && empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+                $this->setDescription($attrVal);
+                $type = $attrVal[RamlInterface::RAML_TYPE];
+                    switch ($type) {
+                        case RamlInterface::RAML_TYPE_STRING:
+                            $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
+                            break;
+                        case RamlInterface::RAML_TYPE_INTEGER:
+                            $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
+                            break;
+                        case RamlInterface::RAML_TYPE_BOOLEAN:
+                            $this->setRow(ModelsInterface::MIGRATION_METHOD_TINYINT, $attrKey);
+                            break;
+                        case RamlInterface::RAML_TYPE_DATETIME:
+                            $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
+                            break;
+                        // TODO: implement ENUM
+//                        case RamlInterface::RAML_ENUM:
+//                            $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey, );
+//                            break;
                     }
-                }
             }
         }
-    }
-
-    /**
-     * @param array $attrVal
-     */
-    private function setDescription(array $attrVal)
-    {
-        foreach ($attrVal as $k => $v) {
-            if ($k === RamlInterface::RAML_KEY_DESCRIPTION) {
-                $this->setTabs(3);
-                $this->setComment($v);
-            }
-        }
+        // created_at/updated_at created for every table
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }
 }

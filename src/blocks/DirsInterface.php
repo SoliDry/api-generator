@@ -13,9 +13,11 @@ interface DirsInterface
 {
     // Laravel dirs
     const APPLICATION_DIR = 'App';
-    const MODULES_DIR = 'Modules';
-    const HTTP_DIR = 'Http';
+    const MODULES_DIR     = 'Modules';
+    const HTTP_DIR        = 'Http';
     const CONTROLLERS_DIR = 'Controllers';
-    const MIDDLEWARE_DIR = 'Middleware';
-    const ENTITIES_DIR = 'Entities';
+    const MIDDLEWARE_DIR  = 'Middleware';
+    const ENTITIES_DIR    = 'Entities';
+    const DATABASE_DIR    = 'database';
+    const MIGRATIONS_DIR  = 'migrations';
 }

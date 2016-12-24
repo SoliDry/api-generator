@@ -34,4 +34,6 @@ interface ModelsInterface
     const MIGRATION_METHOD_INTEGER    = 'integer';
     const MIGRATION_METHOD_TINYINT    = 'unsignedTinyInteger';
     const MIGRATION_METHOD_TIMESTAMPS = 'timestamps';
+    const MIGRATION_METHOD_DATETIME   = 'dateTime';
+    const MIGRATION_METHOD_ENUM       = 'enum';
 }

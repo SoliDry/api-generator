@@ -97,4 +97,17 @@ trait ContentManager
             $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4;
         }
     }
+
+    /**
+     * @param array $attrVal
+     */
+    public function setDescription(array $attrVal)
+    {
+        foreach ($attrVal as $k => $v) {
+            if ($k === RamlInterface::RAML_KEY_DESCRIPTION) {
+                $this->setTabs(3);
+                $this->setComment($v);
+            }
+        }
+    }
 }

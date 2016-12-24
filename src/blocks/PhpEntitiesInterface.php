@@ -38,6 +38,7 @@ interface PhpEntitiesInterface
     const DOUBLE_ARROW  = '=>';
     const PIPE          = '|';
     const AT            = '@';
+    const UNDERSCORE    = '_';
 
     const PHP_TYPES_ARRAY      = 'array';
     const PHP_TYPES_NULL       = 'null';
