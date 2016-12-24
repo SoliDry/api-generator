@@ -12,6 +12,7 @@ interface ModelsInterface
 {
     // Laravel
     const LARAVEL_ACTIVE_RECORD  = 'Model';
+    const LARAVEL_MIGRATION_CLASS = 'Migration';
     const LARAVEL_PROPERTY_TABLE = 'table';
     const DEFAULT_LIMIT          = 20;
 
@@ -36,4 +37,7 @@ interface ModelsInterface
     const MIGRATION_METHOD_TIMESTAMPS = 'timestamps';
     const MIGRATION_METHOD_DATETIME   = 'dateTime';
     const MIGRATION_METHOD_ENUM       = 'enum';
+    const MIGRATION_METHOD_DROP       = 'dropIfExists';
+    const MIGRATION_METHOD_UP         = 'up';
+    const MIGRATION_METHOD_DOWN       = 'down';
 }

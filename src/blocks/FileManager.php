@@ -71,7 +71,7 @@ class FileManager implements DirsInterface
 
     public static function getMigrationsPath()
     {
-        return PhpEntitiesInterface::SLASH . DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
+        return DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
         . DirsInterface::MIGRATIONS_DIR . PhpEntitiesInterface::SLASH;
     }
 }
