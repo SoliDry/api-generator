@@ -51,13 +51,50 @@ Modules/V3/Http/Controllers/TagController.php created
 Modules/V3/Http/Middleware/TagMiddleware.php created
 Modules/V3/Entities/Tag.php created
 Modules/V3/Http/routes.php created
+database/migrations/24_12_2016_1920702_create_table_tag.php created
 ================ Article Entities
 Modules/V3/Http/Controllers/ArticleController.php created
 Modules/V3/Http/Middleware/ArticleMiddleware.php created
 Modules/V3/Entities/Article.php created
+database/migrations/24_12_2016_1920646_create_table_article.php created
 ...
 ```
 
+Migration option: if U want to automatically create migrations for those entities of RAML - set ```--migrations``` key, ex.: 
+```sh
+php artisan raml:generate raml/articles.raml --migrations
+```
+
+Generated migrations will look like standart migrations in Laravel:
+```php
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateArticleTable extends Migration 
+{
+    public  function up() {
+        Schema::create('article', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->string('description');
+            $table->string('url');
+            // Show at the top of main page
+            $table->unsignedTinyInteger('show_in_top');
+            $table->timestamps();
+        });
+    }
+
+    public  function down() {
+        Schema::create('article', function(Blueprint $table) {
+            $table->dropIfExists('article');
+        });
+    }
+
+
+}
+```
 ### RAML Types and Declarations
 
 The ```version``` root property !required
