@@ -24,7 +24,7 @@ trait RoutesTrait
             . PhpEntitiesInterface::PHP_NAMESPACE . PhpEntitiesInterface::DOUBLE_QUOTES
             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_ARROW
             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_QUOTES. DirsInterface::MODULES_DIR .
-            PhpEntitiesInterface::BACKSLASH . PhpEntitiesInterface::BACKSLASH . Config::getModuleName()
+            PhpEntitiesInterface::BACKSLASH . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version)
             . PhpEntitiesInterface::BACKSLASH . PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR
             . PhpEntitiesInterface::BACKSLASH . PhpEntitiesInterface::BACKSLASH . DirsInterface::CONTROLLERS_DIR . PhpEntitiesInterface::DOUBLE_QUOTES
             . PhpEntitiesInterface::CLOSE_BRACKET . PhpEntitiesInterface::COMMA

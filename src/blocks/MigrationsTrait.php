@@ -30,7 +30,7 @@ trait MigrationsTrait
     {
         $this->sourceCode .= $this->setTabs(3) . Classes::getName(Schema::class) . PhpEntitiesInterface::DOUBLE_COLON
             . $method . PhpEntitiesInterface::OPEN_PARENTHESES . PhpEntitiesInterface::QUOTES . $entity
-            . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::CLOSE_PARENTHESES . PhpEntitiesInterface::SEMICOLON;
+            . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::CLOSE_PARENTHESES . PhpEntitiesInterface::SEMICOLON . PHP_EOL;
     }
 
     public function setRow(string $method, $property = null, $opts = null)
