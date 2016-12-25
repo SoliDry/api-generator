@@ -165,8 +165,9 @@ trait ControllersTrait
 
     public function formatMigrationsPath() : string
     {
-        /** @var Command $this */
-        return FileManager::getModulePath($this) . self::DATABASE_DIR . $this->migrationsDir;
+        /** @var ControllersTrait $this */
+        return FileManager::getModulePath($this) . self::DATABASE_DIR . PhpEntitiesInterface::SLASH
+        . $this->migrationsDir . PhpEntitiesInterface::SLASH;
     }
 
     private function setObjectName(string $name)
