@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 19.12.16
- * Time: 20:14
- */
-
 namespace rjapi\transformers;
 
 use League\Fractal\TransformerAbstract;
 use rjapi\blocks\DefaultInterface;
+use rjapi\blocks\DirsInterface;
+use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\exception\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
@@ -45,11 +40,18 @@ class DefaultTransformer extends TransformerAbstract
     {
         // getting entity relation name, ex.: includeAuthor - author
         $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
-        $entityMiddleWare = $entityName . DefaultInterface::MIDDLEWARE_POSTFIX;
+
+        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
+            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
+            PhpEntitiesInterface::BACKSLASH .
+            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
+            $entityName .
+            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middleWare = new $middlewareEntity();
         $entityNameLow = strtolower($entityName);
         // getting object, ex.: Book
         $obj = $arguments[0];
         $entity = $obj->$entityNameLow;
-        return $this->item($entity, new DefaultTransformer($this->middleWare), $entityNameLow);
+        return $this->item($entity, new DefaultTransformer($middleWare), $entityNameLow);
     }
 }
