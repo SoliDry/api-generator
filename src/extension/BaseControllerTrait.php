@@ -75,7 +75,7 @@ trait BaseControllerTrait
         $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
-            if (empty($jsonApiAttributes[$k]) === false) {
+            if (isset($jsonApiAttributes[$k])) {
                 $this->model->$k = $jsonApiAttributes[$k];
             }
         }
