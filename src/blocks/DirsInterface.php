@@ -18,6 +18,6 @@ interface DirsInterface
     const CONTROLLERS_DIR = 'Controllers';
     const MIDDLEWARE_DIR  = 'Middleware';
     const ENTITIES_DIR    = 'Entities';
-    const DATABASE_DIR    = 'database';
-    const MIGRATIONS_DIR  = 'migrations';
+    const DATABASE_DIR    = 'Database';
+    const MIGRATIONS_DIR  = 'Migrations';
 }

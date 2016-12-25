@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
 {
-    // paths
+    // dirs
     public $rootDir        = '';
     public $appDir         = '';
     public $modulesDir     = '';
@@ -26,6 +26,7 @@ trait ControllersTrait
     public $controllersDir = '';
     public $middlewareDir  = '';
     public $entitiesDir    = '';
+    public $migrationsDir  = '';
 
     public $version;
     public $objectName        = '';
@@ -77,6 +78,7 @@ trait ControllersTrait
         $this->modulesDir     = self::MODULES_DIR;
         $this->httpDir        = self::HTTP_DIR;
         $this->middlewareDir  = self::MIDDLEWARE_DIR;
+        $this->migrationsDir  = self::MIGRATIONS_DIR;
 
         $this->types = $data['types'];
         if(env('PHP_DEV'))
@@ -159,6 +161,12 @@ trait ControllersTrait
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . $this->entitiesDir;
+    }
+
+    public function formatMigrationsPath() : string
+    {
+        /** @var Command $this */
+        return FileManager::getModulePath($this) . self::DATABASE_DIR . $this->migrationsDir;
     }
 
     private function setObjectName(string $name)
