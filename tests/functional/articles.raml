@@ -24,7 +24,7 @@ types:
     properties:
       id: ID
       type: Type
-  TagsRelationships:
+  TagRelationships:
     description: Tag relationship description
     type: object
     properties:
@@ -88,7 +88,7 @@ types:
       type: Type
       id: ID
       attributes: ArticleAttributes
-      relationships: TagsRelationships
+      relationships: TagRelationships
   FilterID:
     type: string
     pattern: '/^[,\ \d]*$/'
@@ -98,7 +98,7 @@ types:
       \{attribute\}:
         type: string
       attributes: ArticleAttributes
-      relationships: TagsRelationships
+      relationships: TagRelationships
   JsonApiQuerySearch:
     type: object
     properties:
@@ -158,35 +158,35 @@ types:
     delete:
       responses:
         204:
-    /relationships/tags:
+    /relationships/tag:
       get:
         responses:
           200:
             body:
               application/json.vnd+json:
-                type: TagsRelationships
+                type: TagRelationships
       post:
         body:
           application/json.vnd+json:
-            type: TagsRelationships
+            type: TagRelationships
         responses:
           201:
             body:
               application/json.vnd+json:
-                type: TagsRelationships
+                type: TagRelationships
       patch:
         body:
           application/json.vnd+json:
-            type: TagsRelationships
+            type: TagRelationships
         responses:
           200:
             body:
               application/json.vnd+json:
-                type: TagsRelationships
+                type: TagRelationships
       delete:
         responses:
           204:
-    /tags:
+    /tag:
       get:
         responses:
           200:
