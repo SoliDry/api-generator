@@ -44,13 +44,11 @@ class Migrations extends MigrationsAbstract
         $this->endMethod();
         // migrate down
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->openSchema($this->generator->objectName);
-        $this->setRow(ModelsInterface::MIGRATION_METHOD_DROP, strtolower($this->generator->objectName));
-        $this->closeSchema();
+        $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, strtolower($this->generator->objectName));
         $this->endMethod();
         $this->endClass();
 
-        $migrationMask = date('d_m_Y_Hi', time()) . mt_rand(10, 999);
+        $migrationMask = date('d_m_Y_Hi', time()) . mt_rand(10, 99);
 
         $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpEntitiesInterface::UNDERSCORE .
             ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE . strtolower($this->generator->objectName) .
