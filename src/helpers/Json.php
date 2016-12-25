@@ -55,6 +55,10 @@ class Json
         }
         $host = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
+
+        if (isset($_GET['include'])) {
+            $manager->parseIncludes($_GET['include']);
+        }
         $manager->setSerializer(new JsonApiSerializer($host));
         echo $manager->createData($resource)->toJson();
     }
