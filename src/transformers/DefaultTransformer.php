@@ -9,6 +9,7 @@
 namespace rjapi\transformers;
 
 use League\Fractal\TransformerAbstract;
+use rjapi\blocks\DefaultInterface;
 use rjapi\exception\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
@@ -43,10 +44,12 @@ class DefaultTransformer extends TransformerAbstract
     public function __call($name, $arguments)
     {
         // getting entity relation name, ex.: includeAuthor - author
-        $entityName = strtolower(str_replace(self::INCLUDE_PREFIX, '', $name));
+        $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
+        $entityMiddleWare = $entityName . DefaultInterface::MIDDLEWARE_POSTFIX;
+        $entityNameLow = strtolower($entityName);
         // getting object, ex.: Book
         $obj = $arguments[0];
-        $entity = $obj->$entityName;
-        return $this->item($entity, new DefaultTransformer($this->middleWare), $entityName);
+        $entity = $obj->$entityNameLow;
+        return $this->item($entity, new DefaultTransformer($this->middleWare), $entityNameLow);
     }
 }

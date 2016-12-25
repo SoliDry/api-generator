@@ -1,4 +1,5 @@
 <?php
+namespace rjapitest;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\V1\Http\Controllers\DefaultController;

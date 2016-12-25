@@ -143,6 +143,8 @@ trait ControllersTrait
         FileManager::createPath($this->formatMiddlewarePath());
         // create mapper dir
         FileManager::createPath($this->formatEntitiesPath());
+        // create migrations dir
+        FileManager::createPath($this->formatMigrationsPath());
     }
 
     public function formatControllersPath(): string
