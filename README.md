@@ -60,6 +60,11 @@ database/migrations/24_12_2016_1920646_create_table_article.php created
 ...
 ```
 
+The dynamic module name similar to: v1, v2 - will be taken on runtime 
+as the last element of the array in ```config/module.php``` file, 
+if You, by strange circumstances, want to use one of the previous modules, 
+just set one of previously registered modules as the last element of an array.  
+
 Migration option: if U want to automatically create migrations for those entities of RAML - set ```--migrations``` key, ex.: 
 ```sh
 php artisan raml:generate raml/articles.raml --migrations
@@ -87,12 +92,8 @@ class CreateArticleTable extends Migration
     }
 
     public function down() {
-        Schema::create('article', function(Blueprint $table) {
-            $table->dropIfExists('article');
-        });
+        Schema::dropIfExists('article');
     }
-
-
 }
 ```
 ### RAML Types and Declarations
