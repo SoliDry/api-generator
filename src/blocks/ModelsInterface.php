@@ -11,10 +11,14 @@ namespace rjapi\blocks;
 interface ModelsInterface
 {
     // Laravel
-    const LARAVEL_ACTIVE_RECORD  = 'Model';
+    const LARAVEL_ACTIVE_RECORD   = 'Model';
     const LARAVEL_MIGRATION_CLASS = 'Migration';
-    const LARAVEL_PROPERTY_TABLE = 'table';
-    const DEFAULT_LIMIT          = 20;
+    const LARAVEL_PROPERTY_TABLE  = 'table';
+    const DEFAULT_LIMIT           = 20;
+    const LARAVEL_FILTER_ENUM     = 'in';
+    const LARAVEL_FILTER_REGEX    = 'regex';
+    const LARAVEL_FILTER_MIN      = 'min';
+    const LARAVEL_FILTER_MAX      = 'max';
 
     // Methods
     const MODEL_METHOD_ALL      = 'all';
