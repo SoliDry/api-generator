@@ -50,7 +50,7 @@ class Entities extends FormRequestModel
             'false'
         );
 
-        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
+        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
             PhpEntitiesInterface::BACKSLASH .
             DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
