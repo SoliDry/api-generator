@@ -83,22 +83,16 @@ abstract class FormRequestModel
                 $this->sourceCode .= $v;
             }
             if ($k === RamlInterface::RAML_ENUM) {
-                $this->sourceCode .= 'in:' . implode(',', $v);
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpEntitiesInterface::COLON . implode(',', $v);
             }
             if ($k === RamlInterface::RAML_PATTERN) {
-                $this->sourceCode .= 'regex:' . $v;
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpEntitiesInterface::COLON . $v;
             }
-            if ($k === RamlInterface::RAML_STRING_MIN) {
-                $this->sourceCode .= 'min:' . $v;
+            if ($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN) {
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpEntitiesInterface::COLON . $v;
             }
-            if ($k === RamlInterface::RAML_STRING_MAX) {
-                $this->sourceCode .= 'max:' . $v;
-            }
-            if ($k === RamlInterface::RAML_INTEGER_MIN) {
-                $this->sourceCode .= 'min:' . $v;
-            }
-            if ($k === RamlInterface::RAML_INTEGER_MAX) {
-                $this->sourceCode .= 'max:' . $v;
+            if ($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX) {
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpEntitiesInterface::COLON . $v;
             }
             // TODO: make prepared errors, probably not here
 //            if(isset($attrVal['errorMessage']))
