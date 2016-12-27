@@ -4,7 +4,6 @@ namespace rjapi\blocks;
 
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
-use rjapi\helpers\Config;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
@@ -57,8 +56,10 @@ class Entities extends FormRequestModel
             $this->generator->objectName .
             DefaultInterface::MIDDLEWARE_POSTFIX;
         $middleWare = new $middlewareEntity();
+
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $relations = $middleWare->relations();
+            $this->sourceCode .= PHP_EOL; // margin top from props
             foreach ($relations as $k => $relationEntity) {
                 $this->startMethod($relationEntity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
                 $this->methodReturn(PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS

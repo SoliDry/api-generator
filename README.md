@@ -70,7 +70,7 @@ Migration option: if U want to automatically create migrations for those entitie
 php artisan raml:generate raml/articles.raml --migrations
 ```
 
-Generated migrations will look like standart migrations in Laravel:
+Generated migrations will look like standard migrations in Laravel:
 ```php
 <?php
 use Illuminate\Support\Facades\Schema;
@@ -96,6 +96,11 @@ class CreateArticleTable extends Migration
     }
 }
 ```
+
+Note that all migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
+
+To execute them all - run: ``` php artisan module:migrate ```
+
 ### RAML Types and Declarations
 
 The ```version``` root property !required
@@ -189,10 +194,13 @@ where may any business logic be applied
 
 Complete directory structure after generator will end up it`s work will be like:
 ```php
-Modules/{version}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
-Modules/{version}/Http/Middleware/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
-Modules/{version}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
+Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
+Modules/{ModuleName}/Http/Middleware/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
+Modules/{ModuleName}/Http/routes.php - contains routings pointing to controllers with JSON API protocol support
+Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
+
 DefaultController example:
 ```php
 <?php
