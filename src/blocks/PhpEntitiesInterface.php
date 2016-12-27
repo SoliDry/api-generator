@@ -12,6 +12,7 @@ interface PhpEntitiesInterface
     const PHP_USE       = 'use';
     const PHP_FUNCTION  = 'function';
     const PHP_RETURN    = 'return';
+    const PHP_THIS      = 'this';
 
     const OPEN_BRACE        = '{';
     const CLOSE_BRACE       = '}';
