@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
+use rjapi\helpers\Config;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
