@@ -1,6 +1,7 @@
 <?php
 namespace rjapi\transformers;
 
+use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
@@ -8,6 +9,7 @@ use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\exception\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
+use rjapi\helpers\Config;
 
 class DefaultTransformer extends TransformerAbstract
 {
@@ -21,16 +23,26 @@ class DefaultTransformer extends TransformerAbstract
         $this->setAvailableIncludes($middleWare->relations());
     }
 
-    public function transform(BaseModel $object)
+    public function transform($object)
     {
-        $props = get_object_vars($this->middleWare);
         $arr = [];
-        try {
-            foreach ($props as $prop => $value) {
-                $arr[$prop] = $object->$prop;
+        if ($object instanceof BaseModel) {
+            $props = get_object_vars($this->middleWare);
+            try {
+                foreach ($props as $prop => $value) {
+                    $arr[$prop] = $object->$prop;
+                }
+            } catch (ModelException $e) {
+                $e->getTraceAsString();
             }
-        } catch (ModelException $e) {
-            $e->getTraceAsString();
+        }
+        if ($object instanceof Collection) {
+            foreach ($object as $k => $v) {
+                $attrs = $v->getAttributes();
+                if (empty($attrs) === false) {
+                    return $attrs;
+                }
+            }
         }
 
         return $arr;
@@ -52,6 +64,7 @@ class DefaultTransformer extends TransformerAbstract
         // getting object, ex.: Book
         $obj = $arguments[0];
         $entity = $obj->$entityNameLow;
-        return $this->item($entity, new DefaultTransformer($middleWare), $entityNameLow);
+
+        return $this->collection($entity, new DefaultTransformer($middleWare), $entityNameLow);
     }
 }
