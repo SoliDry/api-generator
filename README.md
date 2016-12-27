@@ -169,7 +169,7 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
 
 Relationships custom type definition semantics ```*Relationships```
 ```RAML
-  TagsRelationships:
+  TagRelationships:
     description: Tag relationship description
     type: object
     properties:
@@ -187,7 +187,7 @@ Complete composite Object looks like this:
       type: Type
       id: ID
       attributes: ArticleAttributes
-      relationships: TagsRelationships
+      relationships: TagRelationships
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied
@@ -249,7 +249,7 @@ class ArticleMiddleware extends BaseFormRequest
 
     public  function relations(): array {
         return [
-            "tags",
+            "tag",
         ];
     }
 }
@@ -267,6 +267,10 @@ class Article extends BaseModel
     protected $primaryKey = "id";
     protected $table = "article";
     public $timestamps = false;
+    // these guys are JSON-API relationships support
+    public function tag() {
+        return $this->hasMany(Tag::class);
+    }    
 }
 ```
 
