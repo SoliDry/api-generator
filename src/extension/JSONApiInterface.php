@@ -17,11 +17,12 @@ interface JSONApiInterface
     const HTTP_METHOD_HEAD    = 'HEAD';
     const HTTP_METHOD_OPTIONS = 'OPTIONS';
 
-    const URI_METHOD_INDEX  = 'index';
-    const URI_METHOD_VIEW   = 'view';
-    const URI_METHOD_CREATE = 'create';
-    const URI_METHOD_UPDATE = 'update';
-    const URI_METHOD_DELETE = 'delete';
+    const URI_METHOD_INDEX     = 'index';
+    const URI_METHOD_VIEW      = 'view';
+    const URI_METHOD_CREATE    = 'create';
+    const URI_METHOD_UPDATE    = 'update';
+    const URI_METHOD_DELETE    = 'delete';
+    const URI_METHOD_RELATIONS = 'relations';
 
     // JSON API supported responses
     const HTTP_RESPONSE_CODE_OK         = 200;

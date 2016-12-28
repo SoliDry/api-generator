@@ -45,7 +45,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Output all entries for this Entity
+     * GET Output all entries for this Entity
      */
     public function index()
     {
@@ -55,7 +55,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Output one entry determined by unique id as uri param
+     * GET Output one entry determined by unique id as uri param
      *
      * @param int $id
      */
@@ -67,7 +67,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Creates one entry specified by all input fields in $request
+     * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
      */
@@ -98,7 +98,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Updates one entry determined by unique id as uri param for specified fields in $request
+     * PATCH Updates one entry determined by unique id as uri param for specified fields in $request
      *
      * @param Request $request
      * @param int $id
@@ -120,7 +120,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Deletes one entry determined by unique id as uri param
+     * DELETE Deletes one entry determined by unique id as uri param
      *
      * @param int $id
      */
@@ -132,6 +132,18 @@ trait BaseControllerTrait
             $resource = Json::getResource($this->middleWare, $model, $this->entity);
             Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
+    }
+
+    /**
+     * GET the relationships of this particular Entity
+     * @param int    $id
+     * @param string $relation
+     */
+    public function relations(int $id, string $relation)
+    {
+        $item = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $item->$relation, $this->entity);
+        Json::outputSerializedData($resource);
     }
 
     private function getEntity(int $id)
