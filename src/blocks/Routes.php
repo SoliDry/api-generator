@@ -37,14 +37,15 @@ class Routes
         $isCreated = false;
         $file      = FileManager::getModulePath($this->generator, true) .
                      RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
+        // TODO: fix this behaviour - collect data 1-st for ex.
         if(file_exists($file) === false)
         {
             $isCreated = FileManager::createFile($file, $this->sourceCode, true);
         }
         else
         {
-            $content = file_get_contents($file);
-            file_put_contents($file, $content, FILE_APPEND);
+            $this->sourceCode = str_replace(PhpEntitiesInterface::PHP_OPEN_TAG, '', $this->sourceCode);
+            file_put_contents($file, $this->sourceCode, FILE_APPEND);
         }
         if($isCreated)
         {
