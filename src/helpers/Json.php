@@ -36,13 +36,18 @@ class Json
         return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
+    public static function getRelationships(array $jsonApiArr): array
+    {
+        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS];
+    }
+
     public static function getResource(BaseFormRequest $middleware, $model, string $entity, $isCollection = false)
     {
         $transformer = new DefaultTransformer($middleware);
-        if($isCollection === true)
-        {
+        if ($isCollection === true) {
             return new Collection($model, $transformer, strtolower($entity));
         }
+
         return new Item($model, $transformer, strtolower($entity));
     }
 

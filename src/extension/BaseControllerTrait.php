@@ -6,6 +6,7 @@ use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\RamlInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
@@ -19,8 +20,8 @@ trait BaseControllerTrait
     private $middleWare = null;
 
     private $methods = [
-        self::URI_METHOD_INDEX => self::HTTP_METHOD_GET,
-        self::URI_METHOD_VIEW => self::HTTP_METHOD_GET,
+        self::URI_METHOD_INDEX  => self::HTTP_METHOD_GET,
+        self::URI_METHOD_VIEW   => self::HTTP_METHOD_GET,
         self::URI_METHOD_CREATE => self::HTTP_METHOD_POST,
         self::URI_METHOD_UPDATE => self::HTTP_METHOD_PATCH,
         self::URI_METHOD_DELETE => self::HTTP_METHOD_DELETE,
@@ -72,7 +73,8 @@ trait BaseControllerTrait
      */
     public function create(Request $request)
     {
-        $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
+        $json = Json::parse($request->getContent());
+        $jsonApiAttributes = Json::getAttributes($json);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
             if (isset($jsonApiAttributes[$k])) {
@@ -80,6 +82,16 @@ trait BaseControllerTrait
             }
         }
         $this->model->save();
+
+        $jsonApiRels = Json::getRelationships($json);
+        if (empty($jsonApiRels) === false) {
+            foreach ($jsonApiRels as $entity => $value) {
+                foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
+
+                }
+            }
+        }
+
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
@@ -114,8 +126,7 @@ trait BaseControllerTrait
     public function delete(int $id)
     {
         $model = $this->getEntity($id);
-        if($model !== null)
-        {
+        if ($model !== null) {
             $model->delete();
             $resource = Json::getResource($this->middleWare, $model, $this->entity);
             Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
@@ -140,6 +151,7 @@ trait BaseControllerTrait
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ORDER_BY,
             ['id', ModelsInterface::SQL_DESC]
         );
+
         return $obj->take($to)->skip($from)->get();
     }
 
