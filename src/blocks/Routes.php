@@ -34,9 +34,18 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE, true);
         $this->closeGroup();
 
-        $file = FileManager::getModulePath($this->generator, true) .
-                RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($file, $this->sourceCode, true);
+        $isCreated = false;
+        $file      = FileManager::getModulePath($this->generator, true) .
+                     RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
+        if(file_exists($file) === false)
+        {
+            $isCreated = FileManager::createFile($file, $this->sourceCode, true);
+        }
+        else
+        {
+            $content = file_get_contents($file);
+            file_put_contents($file, $content, FILE_APPEND);
+        }
         if($isCreated)
         {
             Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
