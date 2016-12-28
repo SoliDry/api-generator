@@ -13,6 +13,7 @@ class Entities extends FormRequestModel
     /** @var RJApiGenerator $generator */
     private   $generator  = null;
     protected $sourceCode = '';
+    protected $localCode  = '';
 
     public function __construct($generator)
     {
@@ -119,10 +120,51 @@ class Entities extends FormRequestModel
                     if($isManyCurrent !== false && $isManyRelated !== false)
                     {// ManyToMany
                         $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY);
+                        // Create pivot Model to support ManyToMany rels
+//                        $this->createPivot($ucEntitty);
                     }
                 }
             }
         }
+    }
+
+    private function createPivot($ucEntity)
+    {
+        $this->setCode('localCode');
+        $this->setTag();
+        $this->setNamespace(
+            $this->generator->entitiesDir
+        );
+        $baseMapper     = BaseModel::class;
+        $baseMapperName = Classes::getName($baseMapper);
+
+        $this->setUse($baseMapper, false, true);
+        $this->startClass($this->generator->objectName . $ucEntity, $baseMapperName);
+
+        $this->createProperty(
+            DefaultInterface::PRIMARY_KEY_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            RamlInterface::RAML_ID, true
+        );
+        $this->createProperty(
+            DefaultInterface::TABLE_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
+        );
+        $this->createProperty(
+            DefaultInterface::TIMESTAMPS_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
+            'false'
+        );
+        $this->setRelations();
+        $this->endClass();
+
+        $file      = $this->generator->formatEntitiesPath() .
+                     PhpEntitiesInterface::SLASH .
+                     $this->generator->objectName . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+        $isCreated = FileManager::createFile($file, $this->localCode);
+        if($isCreated)
+        {
+            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
+        $this->setCode('sourceCode');
     }
 
     private function setRelation($entity, $method)
