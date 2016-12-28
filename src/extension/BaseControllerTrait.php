@@ -88,7 +88,15 @@ trait BaseControllerTrait
             foreach ($jsonApiRels as $entity => $value) {
                 foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
                     $rId = $val[RamlInterface::RAML_ID];
-                    
+                    // if pivot file exists then save
+                    $entity = ucfirst($entity);
+                    $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+                        . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+                        DirsInterface::ENTITIES_DIR .
+                        $this->entity . PhpEntitiesInterface::PHP_EXT;
+                    if (file_exists($file)) {
+                        $pivot = new $this->entity . $entity();
+                    }
                 }
             }
         }
@@ -136,7 +144,7 @@ trait BaseControllerTrait
 
     /**
      * GET the relationships of this particular Entity
-     * @param int    $id
+     * @param int $id
      * @param string $relation
      */
     public function relations(int $id, string $relation)
