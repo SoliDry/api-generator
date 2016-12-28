@@ -21,11 +21,18 @@ interface ModelsInterface
     const LARAVEL_FILTER_MAX      = 'max';
 
     // Methods
-    const MODEL_METHOD_ALL      = 'all';
-    const MODEL_METHOD_WHERE    = 'where';
-    const MODEL_METHOD_ORDER_BY = 'orderBy';
-    const MODEL_METHOD_HAS_MANY = 'hasMany';
-    const MODEL_METHOD_RELATIONS = 'relations';
+    const MODEL_METHOD_ALL             = 'all';
+    const MODEL_METHOD_WHERE           = 'where';
+    const MODEL_METHOD_ORDER_BY        = 'orderBy';
+    // ONE TO ONE
+    const MODEL_METHOD_HAS_ONE         = 'hasOne';
+    // ONE TO MANY
+    const MODEL_METHOD_HAS_MANY        = 'hasMany';
+    // MANY TO ONE INVERSE
+    conSt MODEL_METHOD_BELONGS_TO      = 'belongsTo';
+    // MANY TO MANY TWO WAY
+    const MODEL_METHOD_BELONGS_TO_MANY = 'belongsToMany';
+    const MODEL_METHOD_RELATIONS       = 'relations';
 
     // SQL
     const SQL_DESC = 'desc';

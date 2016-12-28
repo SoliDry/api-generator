@@ -87,7 +87,8 @@ trait BaseControllerTrait
         if (empty($jsonApiRels) === false) {
             foreach ($jsonApiRels as $entity => $value) {
                 foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
-
+                    $rId = $val[RamlInterface::RAML_ID];
+                    
                 }
             }
         }
