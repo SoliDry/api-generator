@@ -33,7 +33,7 @@ class Json
      */
     public static function getAttributes(array $jsonApiArr): array
     {
-        return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
+        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
     /**
@@ -49,8 +49,8 @@ class Json
     /**
      * @param BaseFormRequest $middleware
      * @param                 $model
-     * @param string          $entity
-     * @param bool            $isCollection
+     * @param string $entity
+     * @param bool $isCollection
      *
      * @return Collection|Item
      */
@@ -66,7 +66,7 @@ class Json
 
     /**
      * @param ResourceInterface $resource
-     * @param int               $responseCode
+     * @param int $responseCode
      */
     public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK)
     {

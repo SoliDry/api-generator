@@ -201,6 +201,7 @@ trait ControllersTrait
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->create();
+        $this->mappers->createPivot();
 
         // create routes
         $this->routes = new Routes($this);

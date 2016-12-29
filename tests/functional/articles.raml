@@ -89,7 +89,7 @@ types:
       id: ID
       attributes: ArticleAttributes
       relationships:
-        type: TagRelationships[]
+        type: TagRelationships[] | AuthorRelationships[]
   FilterID:
     type: string
     pattern: '/^[,\ \d]*$/'
