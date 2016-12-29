@@ -89,13 +89,18 @@ trait BaseControllerTrait
                 foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
                     $rId = $val[RamlInterface::RAML_ID];
                     // if pivot file exists then save
-                    $entity = ucfirst($entity);
+                    $ucEntity = ucfirst($entity);
                     $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
                         . Config::getModuleName() . PhpEntitiesInterface::SLASH .
                         DirsInterface::ENTITIES_DIR .
                         $this->entity . PhpEntitiesInterface::PHP_EXT;
-                    if (file_exists($file)) {
-                        $pivot = new $this->entity . $entity();
+                    if (file_exists($file)) { // ManyToMany rel
+                        $pivot = new $this->entity . $ucEntity();
+                        $pivot->$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $rId;
+                        $pivot->{$this->entity} . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $this->model->id;
+                    } else { // OneToOne/OneToMany
+                        $refModel = new $ucEntity();
+                        
                     }
                 }
             }
