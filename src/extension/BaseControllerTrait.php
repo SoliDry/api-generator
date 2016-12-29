@@ -98,9 +98,11 @@ trait BaseControllerTrait
                         $pivot = new $this->entity . $ucEntity();
                         $pivot->$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $rId;
                         $pivot->{$this->entity} . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $this->model->id;
-                    } else { // OneToOne/OneToMany
+                    } else { // OneToOne
                         $refModel = new $ucEntity();
-                        
+                        $model = $this->getModelEntity($refModel, $rId);
+                        $model->{$this->entity} . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $this->model->id;
+                        $model->save();
                     }
                 }
             }
@@ -163,7 +165,17 @@ trait BaseControllerTrait
     {
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, ['id', $id]
+            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
+        );
+
+        return $obj->first();
+    }
+
+    private function getModelEntity($modelEntity, int $id)
+    {
+        $obj = call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
 
         return $obj->first();
@@ -175,7 +187,7 @@ trait BaseControllerTrait
         $to = $count * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ORDER_BY,
-            ['id', ModelsInterface::SQL_DESC]
+            [RamlInterface::RAML_ID, ModelsInterface::SQL_DESC]
         );
 
         return $obj->take($to)->skip($from)->get();
