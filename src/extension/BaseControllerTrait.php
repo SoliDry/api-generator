@@ -85,6 +85,8 @@ trait BaseControllerTrait
 
         $jsonApiRels = Json::getRelationships($json);
         if (empty($jsonApiRels) === false) {
+            $lowEntity = strtolower($this->entity);
+
             foreach ($jsonApiRels as $entity => $value) {
                 foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
                     $rId = $val[RamlInterface::RAML_ID];
@@ -93,15 +95,15 @@ trait BaseControllerTrait
                     $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
                         . Config::getModuleName() . PhpEntitiesInterface::SLASH .
                         DirsInterface::ENTITIES_DIR .
-                        $this->entity . PhpEntitiesInterface::PHP_EXT;
+                        $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
                     if (file_exists($file)) { // ManyToMany rel
                         $pivot = new $this->entity . $ucEntity();
-                        $pivot->$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $rId;
-                        $pivot->{$this->entity} . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $this->model->id;
+                        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
                     } else { // OneToOne
                         $refModel = new $ucEntity();
                         $model = $this->getModelEntity($refModel, $rId);
-                        $model->{$this->entity} . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID = $this->model->id;
+                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
                         $model->save();
                     }
                 }
@@ -121,7 +123,8 @@ trait BaseControllerTrait
     public function update(Request $request, int $id)
     {
         // get json raw input and parse attrs
-        $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
+        $json = Json::parse($request->getContent());
+        $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
@@ -130,6 +133,37 @@ trait BaseControllerTrait
             }
         }
         $model->save();
+
+        $jsonApiRels = Json::getRelationships($json);
+        if (empty($jsonApiRels) === false) {
+            $lowEntity = strtolower($this->entity);
+            foreach ($jsonApiRels as $entity => $value) {
+                foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
+                    $rId = $val[RamlInterface::RAML_ID];
+                    // if pivot file exists then save
+                    $ucEntity = ucfirst($entity);
+                    $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+                            . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+                            DirsInterface::ENTITIES_DIR .
+                            $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+                    if (file_exists($file)) { // ManyToMany rel
+                        // clean up old links
+                         $this->getModelEntities($this->entity . $ucEntity,
+                             [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId])->delete();
+                        // set up new links
+                        $pivot = new $this->entity . $ucEntity();
+                        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                    } else { // OneToOne
+                        $refModel = new $ucEntity();
+                        $model = $this->getModelEntity($refModel, $rId);
+                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                        $model->save();
+                    }
+                }
+            }
+        }
+
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -161,6 +195,11 @@ trait BaseControllerTrait
         Json::outputSerializedData($resource);
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     private function getEntity(int $id)
     {
         $obj = call_user_func_array(
@@ -171,6 +210,12 @@ trait BaseControllerTrait
         return $obj->first();
     }
 
+    /**
+     * @param string $modelEntity
+     * @param int    $id
+     *
+     * @return mixed
+     */
     private function getModelEntity($modelEntity, int $id)
     {
         $obj = call_user_func_array(
@@ -181,6 +226,26 @@ trait BaseControllerTrait
         return $obj->first();
     }
 
+    /**
+     * @param string $modelEntity
+     * @param array  $params
+     *
+     * @return mixed
+     */
+    private function getModelEntities($modelEntity, array $params)
+    {
+        return call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            . ModelsInterface::MODEL_METHOD_WHERE, $params
+        );
+    }
+
+    /**
+     * @param int $count
+     * @param int $page
+     *
+     * @return mixed
+     */
     private function getAllEntities(int $count = ModelsInterface::DEFAULT_LIMIT, int $page = 1)
     {
         $from = ($count * $page) - $count;
