@@ -4,14 +4,13 @@ namespace rjapi;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
-use rjapi\blocks\HTTPMethodsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use Illuminate\Console\Command;
 use rjapi\controllers\ControllersTrait;
 
-class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, HTTPMethodsInterface,
-    RamlInterface, CustomsInterface, DirsInterface
+class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, RamlInterface,
+    CustomsInterface, DirsInterface
 {
     use ControllersTrait;
 

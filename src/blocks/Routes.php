@@ -33,6 +33,8 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_PATCH, $this->generator->objectName, JSONApiInterface::URI_METHOD_UPDATE, true);
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE, true);
         // create relations process routes
+        $this->setTabs(1);
+        $this->setComment('relation routes');
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_RELATIONS, true, true);
         $this->setRoute(RoutesInterface::METHOD_POST, $this->generator->objectName, JSONApiInterface::URI_METHOD_CREATE
                                                                                     . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS), true, true);

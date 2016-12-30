@@ -19,14 +19,6 @@ trait BaseControllerTrait
     private $modelEntity = null;
     private $middleWare  = null;
 
-    private $methods = [
-        self::URI_METHOD_INDEX  => self::HTTP_METHOD_GET,
-        self::URI_METHOD_VIEW   => self::HTTP_METHOD_GET,
-        self::URI_METHOD_CREATE => self::HTTP_METHOD_POST,
-        self::URI_METHOD_UPDATE => self::HTTP_METHOD_PATCH,
-        self::URI_METHOD_DELETE => self::HTTP_METHOD_DELETE,
-    ];
-
     public function __construct()
     {
         $this->entity     = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
