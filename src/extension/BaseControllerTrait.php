@@ -106,6 +106,7 @@ trait BaseControllerTrait
                         $pivot = new $this->entity . $ucEntity();
                         $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
                         $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                        $pivot->save();
                     } else { // OneToOne
                         $refModel = new $ucEntity();
                         $model = $this->getModelEntity($refModel, $rId);
@@ -168,10 +169,11 @@ trait BaseControllerTrait
                         $pivot = new $this->entity . $ucEntity();
                         $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
                         $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                        $pivot->save();
                     } else { // OneToOne
                         $refModel = new $ucEntity();
-                        $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]);
-                        $model->update([$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->model->id]);
+                        $model = $this->getModelEntity($refModel, $rId);
+                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $id;
                         $model->save();
                     }
                 }
@@ -239,13 +241,14 @@ trait BaseControllerTrait
                     { // ManyToMany rel
                         $pivot = new $this->entity . $ucEntity();
                         $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
-                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $id;
+                        $pivot->save();
                     }
                     else
                     { // ToOne
                         $refModel = new $ucEntity();
                         $model = $this->getModelEntity($refModel, $rId);
-                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
+                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $id;
                         $model->save();
                     }
                 }
@@ -256,11 +259,61 @@ trait BaseControllerTrait
     /**
      * PATCH relationships for specific entity id
      *
-     * @param int    $id
-     * @param string $relation
+     * @param Request $request
+     * @param int     $id
+     * @param string  $relation
      */
-    public function updateRelations(int $id, string $relation)
+    public function updateRelations(Request $request, int $id, string $relation)
     {
+        $json        = Json::parse($request->getContent());
+        $jsonApiRels = Json::getRelationships($json);
+        if(empty($jsonApiRels) === false)
+        {
+            $lowEntity = strtolower($this->entity);
+            foreach($jsonApiRels as $entity => $value)
+            {
+                foreach($value[RamlInterface::RAML_DATA] as $index => $val)
+                {
+                    $rId = $val[RamlInterface::RAML_ID];
+                    // if pivot file exists then save
+                    $ucEntity = ucfirst($entity);
+                    $file     = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+                                . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+                                DirsInterface::ENTITIES_DIR .
+                                $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+                    if(file_exists($file))
+                    { // ManyToMany rel
+                        // clean up old links
+                        $this->getModelEntity(
+                            $this->entity . $ucEntity,
+                            $rId
+                        )->delete();
+                        // set up new links
+                        $pivot = new $this->entity . $ucEntity();
+                        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $id;
+                        $pivot->save();
+                    } else { // OneToOne
+                        $refModel = new $ucEntity();
+                        $model = $this->getModelEntity($refModel, $rId);
+                        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $id;
+                        $model->save();
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * DELETE relationships for specific entity id
+     *
+     * @param Request $request
+     * @param int     $id
+     * @param string  $relation
+     */
+    public function deleteRelations(Request $request, int $id, string $relation)
+    {
+        $json        = Json::parse($request->getContent());
         $jsonApiRels = Json::getRelationships($json);
         if(empty($jsonApiRels) === false)
         {
@@ -283,29 +336,14 @@ trait BaseControllerTrait
                             $this->entity . $ucEntity,
                             [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]
                         )->delete();
-                        // set up new links
-                        $pivot = new $this->entity . $ucEntity();
-                        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
-                        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $this->model->id;
                     } else { // OneToOne
                         $refModel = new $ucEntity();
-                        $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]);
-                        $model->update([$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->model->id]);
-                        $model->save();
+                        $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id]);
+                        $model->update([$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
                     }
                 }
             }
         }
-    }
-
-    /**
-     * DELETE relationships for specific entity id
-     *
-     * @param int    $id
-     * @param string $relation
-     */
-    public function deleteRelations(int $id, string $relation)
-    {
     }
 
     /**
