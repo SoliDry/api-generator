@@ -77,11 +77,11 @@ class Migrations extends MigrationsAbstract
             $relations = $middleWare->relations();
 
             foreach ($relations as $relationEntity) {
-                $file = $this->generator->formatEntitiesPath()
+                $entityFile = $this->generator->formatEntitiesPath()
                     . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
                     PhpEntitiesInterface::PHP_EXT;
 
-                if (file_exists($file)) {
+                if (file_exists($entityFile)) {
                     $this->setTag();
 
                     $this->setUse(Schema::class);
@@ -106,7 +106,8 @@ class Migrations extends MigrationsAbstract
                     $migrationMask = date('d_m_Y_Hi', time()) . mt_rand(10, 99);
 
                     $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpEntitiesInterface::UNDERSCORE .
-                        ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE . strtolower($this->generator->objectName) .
+                        ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE . strtolower($this->generator->objectName)
+                        . PhpEntitiesInterface::UNDERSCORE . $relationEntity .
                         PhpEntitiesInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE . PhpEntitiesInterface::PHP_EXT;
                     // if migration file with the same name ocasionally exists we do not override it
                     $isCreated = FileManager::createFile($file, $this->sourceCode);
