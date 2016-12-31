@@ -94,7 +94,7 @@ class Migrations extends MigrationsAbstract
                     $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
                     $this->openSchema($this->generator->objectName
                         . PhpEntitiesInterface::UNDERSCORE . $relationEntity);
-                    $this->setPivotRows();
+                    $this->setPivotRows($relationEntity);
                     $this->closeSchema();
                     $this->endMethod();
                     // migrate down
