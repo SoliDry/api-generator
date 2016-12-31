@@ -42,4 +42,15 @@ abstract class MigrationsAbstract
         // created_at/updated_at created for every table
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }
+
+    protected function setPivotRows()
+    {
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $this->generator->objectName
+            . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $this->generator->objectName
+            . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
+            . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID);
+    }
 }

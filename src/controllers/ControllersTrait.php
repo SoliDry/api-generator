@@ -210,6 +210,7 @@ trait ControllersTrait
         // create Migrations
         $this->migrations = new Migrations($this);
         $this->migrations->create();
+        $this->migrations->createPivot();
     }
 
     /**

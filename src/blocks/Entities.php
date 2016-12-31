@@ -147,7 +147,6 @@ class Entities extends FormRequestModel
             DefaultInterface::TABLE_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
             strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
         );
-        // TODO: change hard-code str
         $this->createProperty(
             DefaultInterface::TIMESTAMPS_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
             PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE
@@ -183,38 +182,41 @@ class Entities extends FormRequestModel
             foreach($relations as $k => $relationEntity)
             {
                 $ucEntitty = ucfirst($relationEntity);
-                $current   = '';
-                $related   = '';
-                // determine if ManyToMany, OneToMany, OneToOne rels
-                if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $current = trim(
-                        $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
-                if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $related = trim(
-                        $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
-                if(empty($current) === false && empty($related) === false)
-                {
-                    $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
-                    $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
-                    foreach ($currentRels as $current) {
-                        foreach ($relatedRels as $related) {
-                            // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
-                            $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                            $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                            if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                                $this->setPivot($ucEntitty);
+                $file = $this->generator->formatEntitiesPath()
+                    . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
+                    PhpEntitiesInterface::PHP_EXT;
+                // check if inverse Entity pivot exists
+                if (file_exists($file) === false) {
+                    $current = '';
+                    $related = '';
+                    // determine if ManyToMany, OneToMany, OneToOne rels
+                    if (empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
+                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                    ) {
+                        $current = trim(
+                            $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
+                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
+                        );
+                    }
+                    if (empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
+                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                    ) {
+                        $related = trim(
+                            $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
+                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
+                        );
+                    }
+                    if (empty($current) === false && empty($related) === false) {
+                        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
+                        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+                        foreach ($currentRels as $current) {
+                            foreach ($relatedRels as $related) {
+                                // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
+                                $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
+                                $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                                if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                                    $this->setPivot($ucEntitty);
+                                }
                             }
                         }
                     }
