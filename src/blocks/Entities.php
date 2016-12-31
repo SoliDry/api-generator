@@ -11,9 +11,9 @@ class Entities extends FormRequestModel
 {
     use ContentManager;
     /** @var RJApiGenerator $generator */
-    private   $generator  = null;
+    private $generator = null;
     protected $sourceCode = '';
-    protected $localCode  = '';
+    protected $localCode = '';
 
     public function __construct($generator)
     {
@@ -31,7 +31,7 @@ class Entities extends FormRequestModel
         $this->setNamespace(
             $this->generator->entitiesDir
         );
-        $baseMapper     = BaseModel::class;
+        $baseMapper = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper, false, true);
@@ -52,12 +52,11 @@ class Entities extends FormRequestModel
         $this->setRelations();
         $this->endClass();
 
-        $file      = $this->generator->formatEntitiesPath() .
-                     PhpEntitiesInterface::SLASH .
-                     $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
+        $file = $this->generator->formatEntitiesPath() .
+            PhpEntitiesInterface::SLASH .
+            $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
         $isCreated = FileManager::createFile($file, $this->sourceCode);
-        if($isCreated)
-        {
+        if ($isCreated) {
             Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
@@ -71,56 +70,58 @@ class Entities extends FormRequestModel
             DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
             $this->generator->objectName .
             DefaultInterface::MIDDLEWARE_POSTFIX;
-        $middleWare       = new $middlewareEntity();
+        $middleWare = new $middlewareEntity();
 
-        if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
-        {
+        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $relations = $middleWare->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
-            foreach($relations as $k => $relationEntity)
-            {
+            foreach ($relations as $k => $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
-                $current   = '';
-                $related   = '';
+                $current = '';
+                $related = '';
                 // determine if ManyToMany, OneToMany, OneToOne rels
-                if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
+                if (empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
+                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                ) {
                     $current = trim(
                         $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
                     );
                 }
-                if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
+                if (empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
+                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                ) {
                     $related = trim(
                         $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
                     );
                 }
-                if(empty($current) === false && empty($related) === false)
-                {
+                if (empty($current) === false && empty($related) === false) {
                     // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
                     $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
                     $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                    if($isManyCurrent === false && $isManyRelated === false)
-                    {// OneToOne
+                    if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
                         $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
                     }
-                    if($isManyCurrent !== false && $isManyRelated === false)
-                    {// ManyToOne
+                    if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
                         $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
                     }
-                    if($isManyCurrent === false && $isManyRelated !== false)
-                    {// OneToMany
+                    if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany
                         $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
                     }
-                    if($isManyCurrent !== false && $isManyRelated !== false)
-                    {// ManyToMany
-                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY);
+                    if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                        // check inversion of a pivot
+                        $entityFile = $this->generator->formatEntitiesPath()
+                            . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
+                            PhpEntitiesInterface::PHP_EXT;
+                        $relEntity = $relationEntity;
+                        $objName = $this->generator->objectName;
+                        if (file_exists($entityFile) === false) {
+                            $relEntity = $this->generator->objectName;
+                            $objName = $relationEntity;
+                        }
+                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
+                            strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity));
                     }
                 }
             }
@@ -133,7 +134,7 @@ class Entities extends FormRequestModel
         $this->setNamespace(
             $this->generator->entitiesDir
         );
-        $baseMapper     = BaseModel::class;
+        $baseMapper = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
         $this->setUse($baseMapper, false, true);
@@ -154,12 +155,11 @@ class Entities extends FormRequestModel
 
         $this->endClass();
 
-        $file      = $this->generator->formatEntitiesPath() .
-                     PhpEntitiesInterface::SLASH .
-                     $this->generator->objectName . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+        $file = $this->generator->formatEntitiesPath() .
+            PhpEntitiesInterface::SLASH .
+            $this->generator->objectName . $ucEntity . PhpEntitiesInterface::PHP_EXT;
         $isCreated = FileManager::createFile($file, $this->sourceCode);
-        if($isCreated)
-        {
+        if ($isCreated) {
             Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
@@ -173,14 +173,12 @@ class Entities extends FormRequestModel
             DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
             $this->generator->objectName .
             DefaultInterface::MIDDLEWARE_POSTFIX;
-        $middleWare       = new $middlewareEntity();
+        $middleWare = new $middlewareEntity();
 
-        if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
-        {
+        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $relations = $middleWare->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
-            foreach($relations as $k => $relationEntity)
-            {
+            foreach ($relations as $k => $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 $file = $this->generator->formatEntitiesPath()
                     . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
@@ -225,16 +223,22 @@ class Entities extends FormRequestModel
         }
     }
 
-    private function setRelation($entity, $method)
+    private function setRelation($entity, $method, string ...$args)
     {
         $this->startMethod($entity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->methodReturn(
-            PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
+        $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
             . PhpEntitiesInterface::ARROW . $method
             . PhpEntitiesInterface::OPEN_PARENTHESES . ucfirst($entity)
-            . PhpEntitiesInterface::DOUBLE_COLON . PhpEntitiesInterface::PHP_CLASS
-            . PhpEntitiesInterface::CLOSE_PARENTHESES
-        );
+            . PhpEntitiesInterface::DOUBLE_COLON . PhpEntitiesInterface::PHP_CLASS;
+
+        if (empty($args) === false) {
+            foreach ($args as $val) {
+                $toReturn .= PhpEntitiesInterface::COMMA
+                    . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES . $val . PhpEntitiesInterface::QUOTES;
+            }
+        }
+        $toReturn .= PhpEntitiesInterface::CLOSE_PARENTHESES;
+        $this->methodReturn($toReturn);
         $this->endMethod();
     }
 }

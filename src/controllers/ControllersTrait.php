@@ -183,6 +183,9 @@ trait ControllersTrait
         $this->objectProps = $props;
     }
 
+    /**
+     * The creation sequence of every entity element is crucial
+     */
     private function generateResources()
     {
         Console::out(
@@ -200,8 +203,8 @@ trait ControllersTrait
 
         // create entities/models
         $this->mappers = new Entities($this);
-        $this->mappers->create();
         $this->mappers->createPivot();
+        $this->mappers->create();
 
         // create routes
         $this->routes = new Routes($this);
