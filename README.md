@@ -1,4 +1,8 @@
 # raml-json-api
+[![Build Status](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+
 RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, with complete support of JSON-API data format 
 
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
