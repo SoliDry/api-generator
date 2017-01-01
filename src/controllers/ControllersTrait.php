@@ -12,6 +12,7 @@ use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\RamlInterface;
 use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
 use Symfony\Component\Yaml\Yaml;
@@ -45,14 +46,15 @@ trait ControllersTrait
     public $frameWork         = '';
     public $objectProps       = [];
     public $generatedFiles    = [];
+    public $relationships     = [];
 
-    private $forms            = null;
-    private $controllers      = null;
-    private $moduleObject     = null;
-    private $mappers          = null;
-    private $containers       = null;
-    private $routes           = null;
-    private $migrations = null;
+    private $forms        = null;
+    private $controllers  = null;
+    private $moduleObject = null;
+    private $mappers      = null;
+    private $containers   = null;
+    private $routes       = null;
+    private $migrations   = null;
 
     private $excludedSubtypes = [
         self::CUSTOM_TYPES_ATTRIBUTES,
@@ -93,7 +95,7 @@ trait ControllersTrait
         $this->generateModule();
         foreach($this->types as $objName => $objData)
         {
-            if(!in_array($objName, $this->customTypes))
+            if(in_array($objName, $this->customTypes) === false)
             { // if this is not a custom type generate resources
                 $excluded = false;
                 foreach($this->excludedSubtypes as $type)
@@ -108,7 +110,6 @@ trait ControllersTrait
                 {
                     continue;
                 }
-
                 foreach($objData as $k => $v)
                 {
                     if($k === self::RAML_PROPS)
@@ -169,7 +170,7 @@ trait ControllersTrait
     {
         /** @var ControllersTrait $this */
         return FileManager::getModulePath($this) . self::DATABASE_DIR . PhpEntitiesInterface::SLASH
-        . $this->migrationsDir . PhpEntitiesInterface::SLASH;
+               . $this->migrationsDir . PhpEntitiesInterface::SLASH;
     }
 
     private function setObjectName(string $name)
@@ -182,10 +183,15 @@ trait ControllersTrait
         $this->objectProps = $props;
     }
 
+    /**
+     * The creation sequence of every entity element is crucial
+     */
     private function generateResources()
     {
-        Console::out('================' . PhpEntitiesInterface::SPACE . $this->objectName
-            . PhpEntitiesInterface::SPACE . DirsInterface::ENTITIES_DIR);
+        Console::out(
+            '================' . PhpEntitiesInterface::SPACE . $this->objectName
+            . PhpEntitiesInterface::SPACE . DirsInterface::ENTITIES_DIR
+        );
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -197,6 +203,7 @@ trait ControllersTrait
 
         // create entities/models
         $this->mappers = new Entities($this);
+        $this->mappers->createPivot();
         $this->mappers->create();
 
         // create routes
@@ -206,6 +213,7 @@ trait ControllersTrait
         // create Migrations
         $this->migrations = new Migrations($this);
         $this->migrations->create();
+        $this->migrations->createPivot();
     }
 
     /**

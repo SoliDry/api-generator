@@ -10,6 +10,8 @@ use rjapi\RJApiGenerator;
  */
 abstract class FormRequestModel
 {
+    const CHECK_MANY_BRACKETS = '[]';
+
     private $legalTypes = [
         RamlInterface::RAML_TYPE_DATETIME,
         RamlInterface::RAML_TYPE_STRING,

@@ -10,9 +10,10 @@ namespace rjapi\blocks;
 
 interface HTTPMethodsInterface
 {
-    const HTTP_METHOD_GET    = 'View';
-    const HTTP_METHOD_POST   = 'Create';
-    const HTTP_METHOD_DELETE = 'Delete';
-    const HTTP_METHOD_PATCH  = 'Update';
-    const HTTP_METHOD_INDEX  = 'Index';
+    const HTTP_METHOD_GET     = 'GET';
+    const HTTP_METHOD_POST    = 'POST';
+    const HTTP_METHOD_DELETE  = 'DELETE';
+    const HTTP_METHOD_PATCH   = 'PATCH';
+    const HTTP_METHOD_HEAD    = 'HEAD';
+    const HTTP_METHOD_OPTIONS = 'OPTIONS';
 }

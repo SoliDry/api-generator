@@ -33,19 +33,41 @@ class Json
      */
     public static function getAttributes(array $jsonApiArr): array
     {
-        return $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
+        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
+    /**
+     * @param array $jsonApiArr
+     *
+     * @return array
+     */
+    public static function getRelationships(array $jsonApiArr): array
+    {
+        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS];
+    }
+
+    /**
+     * @param BaseFormRequest $middleware
+     * @param                 $model
+     * @param string $entity
+     * @param bool $isCollection
+     *
+     * @return Collection|Item
+     */
     public static function getResource(BaseFormRequest $middleware, $model, string $entity, $isCollection = false)
     {
         $transformer = new DefaultTransformer($middleware);
-        if($isCollection === true)
-        {
+        if ($isCollection === true) {
             return new Collection($model, $transformer, strtolower($entity));
         }
+
         return new Item($model, $transformer, strtolower($entity));
     }
 
+    /**
+     * @param ResourceInterface $resource
+     * @param int $responseCode
+     */
     public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK)
     {
         http_response_code($responseCode);

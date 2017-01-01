@@ -48,7 +48,7 @@ types:
       id: ID
       attributes: TagAttributes
       relationships:
-        type: ArticleRelationships
+        type: ArticleRelationships[]
   ArticleRelationships:
     type: object
     properties:
@@ -88,7 +88,8 @@ types:
       type: Type
       id: ID
       attributes: ArticleAttributes
-      relationships: TagRelationships
+      relationships:
+        type: TagRelationships[] | AuthorRelationships[]
   FilterID:
     type: string
     pattern: '/^[,\ \d]*$/'

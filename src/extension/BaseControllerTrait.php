@@ -6,6 +6,7 @@ use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\RamlInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
@@ -17,14 +18,6 @@ trait BaseControllerTrait
     private $model = null;
     private $modelEntity = null;
     private $middleWare = null;
-
-    private $methods = [
-        self::URI_METHOD_INDEX => self::HTTP_METHOD_GET,
-        self::URI_METHOD_VIEW => self::HTTP_METHOD_GET,
-        self::URI_METHOD_CREATE => self::HTTP_METHOD_POST,
-        self::URI_METHOD_UPDATE => self::HTTP_METHOD_PATCH,
-        self::URI_METHOD_DELETE => self::HTTP_METHOD_DELETE,
-    ];
 
     public function __construct()
     {
@@ -38,13 +31,12 @@ trait BaseControllerTrait
         $this->middleWare = new $middlewareEntity();
         $this->props = get_object_vars($this->middleWare);
 
-        $this->modelEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::BACKSLASH . $this->entity;
+        $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model = new $this->modelEntity();
     }
 
     /**
-     * Output all entries for this Entity
+     * GET Output all entries for this Entity
      */
     public function index()
     {
@@ -54,7 +46,7 @@ trait BaseControllerTrait
     }
 
     /**
-     * Output one entry determined by unique id as uri param
+     * GET Output one entry determined by unique id as uri param
      *
      * @param int $id
      */
@@ -66,13 +58,14 @@ trait BaseControllerTrait
     }
 
     /**
-     * Creates one entry specified by all input fields in $request
+     * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
      */
     public function create(Request $request)
     {
-        $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
+        $json = Json::parse($request->getContent());
+        $jsonApiAttributes = Json::getAttributes($json);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
             if (isset($jsonApiAttributes[$k])) {
@@ -80,12 +73,14 @@ trait BaseControllerTrait
             }
         }
         $this->model->save();
+        $this->setRelationships($json, $this->model->id);
+
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
-     * Updates one entry determined by unique id as uri param for specified fields in $request
+     * PATCH Updates one entry determined by unique id as uri param for specified fields in $request
      *
      * @param Request $request
      * @param int $id
@@ -93,7 +88,8 @@ trait BaseControllerTrait
     public function update(Request $request, int $id)
     {
         // get json raw input and parse attrs
-        $jsonApiAttributes = Json::getAttributes(Json::parse($request->getContent()));
+        $json = Json::parse($request->getContent());
+        $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
@@ -102,45 +98,215 @@ trait BaseControllerTrait
             }
         }
         $model->save();
+        $this->setRelationships($json, $model->id, true);
+
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
 
     /**
-     * Deletes one entry determined by unique id as uri param
+     * DELETE Deletes one entry determined by unique id as uri param
      *
      * @param int $id
      */
     public function delete(int $id)
     {
         $model = $this->getEntity($id);
-        if($model !== null)
-        {
+        if ($model !== null) {
             $model->delete();
             $resource = Json::getResource($this->middleWare, $model, $this->entity);
             Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
     }
 
+    /**
+     * GET the relationships of this particular Entity
+     *
+     * @param int $id
+     * @param string $relation
+     */
+    public function relations(int $id, string $relation)
+    {
+        $item = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $item->$relation, $this->entity);
+        Json::outputSerializedData($resource);
+    }
+
+    /**
+     * POST relationships for specific entity id
+     *
+     * @param Request $request
+     * @param int $id
+     * @param string $relation
+     */
+    public function createRelations(Request $request, int $id, string $relation)
+    {
+        $json = Json::parse($request->getContent());
+        $this->setRelationships($json, $id);
+    }
+
+    /**
+     * PATCH relationships for specific entity id
+     *
+     * @param Request $request
+     * @param int $id
+     * @param string $relation
+     */
+    public function updateRelations(Request $request, int $id, string $relation)
+    {
+        $json = Json::parse($request->getContent());
+        $this->setRelationships($json, $id, true);
+    }
+
+    /**
+     * DELETE relationships for specific entity id
+     *
+     * @param Request $request
+     * @param int $id
+     * @param string $relation
+     */
+    public function deleteRelations(Request $request, int $id, string $relation)
+    {
+        $json = Json::parse($request->getContent());
+        $jsonApiRels = Json::getRelationships($json);
+        if (empty($jsonApiRels) === false) {
+            $lowEntity = strtolower($this->entity);
+            foreach ($jsonApiRels as $entity => $value) {
+                foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
+                    $rId = $val[RamlInterface::RAML_ID];
+                    // if pivot file exists then save
+                    $ucEntity = ucfirst($entity);
+                    $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+                        . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+                        DirsInterface::ENTITIES_DIR .
+                        $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+                    if (file_exists($file)) { // ManyToMany rel
+                        // clean up old links
+                        $this->getModelEntities(
+                            $this->entity . $ucEntity,
+                            [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]
+                        )->delete();
+                    } else { // OneToOne
+                        $refModel = new $ucEntity();
+                        $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id]);
+                        $model->update([$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     private function getEntity(int $id)
     {
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, ['id', $id]
+            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
 
         return $obj->first();
     }
 
+    /**
+     * @param string $modelEntity
+     * @param int $id
+     *
+     * @return mixed
+     */
+    private function getModelEntity($modelEntity, int $id)
+    {
+        $obj = call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
+        );
+
+        return $obj->first();
+    }
+
+    /**
+     * @param string $modelEntity
+     * @param array $params
+     *
+     * @return mixed
+     */
+    private function getModelEntities($modelEntity, array $params)
+    {
+        return call_user_func_array(
+            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            . ModelsInterface::MODEL_METHOD_WHERE, $params
+        );
+    }
+
+    /**
+     * @param int $count
+     * @param int $page
+     *
+     * @return mixed
+     */
     private function getAllEntities(int $count = ModelsInterface::DEFAULT_LIMIT, int $page = 1)
     {
         $from = ($count * $page) - $count;
         $to = $count * $page;
         $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON . ModelsInterface::MODEL_METHOD_ORDER_BY,
-            ['id', ModelsInterface::SQL_DESC]
+            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
+            ModelsInterface::MODEL_METHOD_ORDER_BY,
+            [RamlInterface::RAML_ID, ModelsInterface::SQL_DESC]
         );
+
         return $obj->take($to)->skip($from)->get();
     }
 
+    private function setRelationships(array $json, int $eId, bool $isRemovable = false)
+    {
+        $jsonApiRels = Json::getRelationships($json);
+        if (empty($jsonApiRels) === false) {
+            foreach ($jsonApiRels as $entity => $value) {
+                if (empty($value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID]) === false) {
+                    // if there is only one relationship
+                    $rId = $value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID];
+                    $this->saveRelationship($entity, $eId, $rId, $isRemovable);
+                } else {
+                    // if there is an array of relationships
+                    foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
+                        $rId = $val[RamlInterface::RAML_ID];
+                        $this->saveRelationship($entity, $eId, $rId, $isRemovable);
+                    }
+                }
+            }
+        }
+    }
+
+    private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
+    {
+        $ucEntity = ucfirst($entity);
+        $lowEntity = strtolower($this->entity);
+        // if pivot file exists then save
+        $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+            . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+            DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
+            $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+        if (file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $file)) { // ManyToMany rel
+            if ($isRemovable) {
+                // clean up old links
+                $this->getModelEntities(
+                    $this->entity . $ucEntity,
+                    [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]
+                )->delete();
+            }
+            $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
+            $pivot = new $pivotEntity();
+            $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+            $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+            $pivot->save();
+        } else { // OneToOne
+            $refModel = new $ucEntity();
+            $model = $this->getModelEntity($refModel, $rId);
+            $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+            $model->save();
+        }
+    }
 }

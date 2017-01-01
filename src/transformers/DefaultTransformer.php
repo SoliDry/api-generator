@@ -17,12 +17,22 @@ class DefaultTransformer extends TransformerAbstract
 
     private $middleWare = null;
 
+    /**
+     * DefaultTransformer constructor.
+     *
+     * @param BaseFormRequest $middleWare
+     */
     public function __construct(BaseFormRequest $middleWare)
     {
         $this->middleWare = $middleWare;
         $this->setAvailableIncludes($middleWare->relations());
     }
 
+    /**
+     * @param BaseModel | Collection $object
+     *
+     * @return array
+     */
     public function transform($object)
     {
         $arr = [];
@@ -48,6 +58,12 @@ class DefaultTransformer extends TransformerAbstract
         return $arr;
     }
 
+    /**
+     * @param string $name     Method name
+     * @param array $arguments Method arguments
+     *
+     * @return \League\Fractal\Resource\Collection
+     */
     public function __call($name, $arguments)
     {
         // getting entity relation name, ex.: includeAuthor - author

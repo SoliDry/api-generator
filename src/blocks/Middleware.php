@@ -56,8 +56,8 @@ class Middleware extends FormRequestModel
         }
 
         $this->constructRules();
-        if (!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS])) {
-            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS]);
+        if (!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])) {
+            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]);
         }
         // create closing brace
         $this->endClass();

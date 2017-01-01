@@ -20,7 +20,7 @@ class Config
         $arr = $conf[ModulesInterface::KEY_MODULE][ModulesInterface::KEY_MODULES];
         return end($arr);
     }
-    
+
     public static function getModuleName(): string
     {
         return config(self::getConfigKey() . PhpEntitiesInterface::DOT . ModulesInterface::KEY_NAME);

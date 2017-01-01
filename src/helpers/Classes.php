@@ -8,6 +8,9 @@
 
 namespace rjapi\helpers;
 
+use rjapi\blocks\DirsInterface;
+use rjapi\blocks\PhpEntitiesInterface;
+
 class Classes
 {
     /**
@@ -22,6 +25,10 @@ class Classes
         return (string) $ref->getShortName();
     }
 
+    /**
+     * @param $object
+     * @return string
+     */
     public static function getObjectName($object): string
     {
         $ref = new \ReflectionClass($object);
@@ -29,8 +36,24 @@ class Classes
         return (string) $ref->getShortName();
     }
 
+    /**
+     * @param string $str
+     * @param string $postfix
+     * @return string
+     */
     public static function cutEntity(string $str, string $postfix)
     {
         return substr($str, 0, strpos($str, $postfix));
+    }
+
+    /**
+     * @param string $entity
+     * @return string
+     */
+    public static function getModelEntity(string $entity): string
+    {
+        return DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
+        PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR .
+        PhpEntitiesInterface::BACKSLASH . $entity;
     }
 }
