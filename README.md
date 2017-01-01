@@ -3,6 +3,8 @@ RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, wi
 
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
+[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.png?v=103)](https://opensource.org/licenses/mit-license.php)
+
 ### Installation via composer:
 ``` 
 composer require rjapi/raml-json-api 
