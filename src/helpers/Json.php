@@ -33,7 +33,7 @@ class Json
      */
     public static function getAttributes(array $jsonApiArr): array
     {
-        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
+        return empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
     }
 
     /**
@@ -43,7 +43,17 @@ class Json
      */
     public static function getRelationships(array $jsonApiArr): array
     {
-        return (empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS])) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS];
+        return empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS];
+    }
+
+    /**
+     * @param array $jsonApiArr
+     *
+     * @return array
+     */
+    public static function getData(array $jsonApiArr): array
+    {
+        return empty($jsonApiArr[RamlInterface::RAML_DATA]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA];
     }
 
     /**
