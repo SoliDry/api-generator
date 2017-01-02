@@ -19,24 +19,24 @@ abstract class MigrationsAbstract
             if (is_array($attrVal) && empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
                 $this->setDescription($attrVal);
                 $type = $attrVal[RamlInterface::RAML_TYPE];
-                    switch ($type) {
-                        case RamlInterface::RAML_TYPE_STRING:
-                            $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
-                            break;
-                        case RamlInterface::RAML_TYPE_INTEGER:
-                            $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
-                            break;
-                        case RamlInterface::RAML_TYPE_BOOLEAN:
-                            $this->setRow(ModelsInterface::MIGRATION_METHOD_TINYINT, $attrKey);
-                            break;
-                        case RamlInterface::RAML_TYPE_DATETIME:
-                            $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
-                            break;
-                        // TODO: implement ENUM
+                switch ($type) {
+                    case RamlInterface::RAML_TYPE_STRING:
+                        $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
+                        break;
+                    case RamlInterface::RAML_TYPE_INTEGER:
+                        $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
+                        break;
+                    case RamlInterface::RAML_TYPE_BOOLEAN:
+                        $this->setRow(ModelsInterface::MIGRATION_METHOD_TINYINT, $attrKey);
+                        break;
+                    case RamlInterface::RAML_TYPE_DATETIME:
+                        $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
+                        break;
+                    // TODO: implement ENUM
 //                        case RamlInterface::RAML_ENUM:
 //                            $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey, );
 //                            break;
-                    }
+                }
             }
         }
         // created_at/updated_at created for every table

@@ -18,6 +18,7 @@ trait BaseControllerTrait
     private $model = null;
     private $modelEntity = null;
     private $middleWare = null;
+    private $relsRemoved = false;
 
     public function __construct()
     {
@@ -161,36 +162,37 @@ trait BaseControllerTrait
     /**
      * DELETE relationships for specific entity id
      *
-     * @param Request $request
-     * @param int $id
+     * @param Request $request JSON API formatted string
+     * @param int $id          int id of an entity
      * @param string $relation
      */
     public function deleteRelations(Request $request, int $id, string $relation)
     {
         $json = Json::parse($request->getContent());
-        $jsonApiRels = Json::getRelationships($json);
+        $jsonApiRels = Json::getData($json);
         if (empty($jsonApiRels) === false) {
             $lowEntity = strtolower($this->entity);
-            foreach ($jsonApiRels as $entity => $value) {
-                foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
-                    $rId = $val[RamlInterface::RAML_ID];
-                    // if pivot file exists then save
-                    $ucEntity = ucfirst($entity);
-                    $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
-                        . Config::getModuleName() . PhpEntitiesInterface::SLASH .
-                        DirsInterface::ENTITIES_DIR .
-                        $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
-                    if (file_exists($file)) { // ManyToMany rel
-                        // clean up old links
-                        $this->getModelEntities(
-                            $this->entity . $ucEntity,
-                            [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]
-                        )->delete();
-                    } else { // OneToOne
-                        $refModel = new $ucEntity();
-                        $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id]);
-                        $model->update([$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
-                    }
+            foreach ($jsonApiRels as $index => $val) {
+                $rId = $val[RamlInterface::RAML_ID];
+                // if pivot file exists then save
+                $ucEntity = ucfirst($relation);
+                $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+                    . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+                    DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
+                    $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
+                if (file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $file)) { // ManyToMany rel
+                    $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
+                    // clean up old links
+                    $this->getModelEntities(
+                        $pivotEntity,
+                        [[$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $id,
+                          $relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $rId]]
+                    )->delete();
+                } else { // OneToOne/Many
+                    $relEntity = Classes::getModelEntity($ucEntity);
+                    $refModel = new $relEntity();
+                    $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id]);
+                    $model->update([$relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
                 }
             }
         }
@@ -290,20 +292,22 @@ trait BaseControllerTrait
             DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
             $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
         if (file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $file)) { // ManyToMany rel
-            if ($isRemovable) {
+            $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
+            if ($isRemovable && $this->relsRemoved === false) {
                 // clean up old links
                 $this->getModelEntities(
-                    $this->entity . $ucEntity,
-                    [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $rId]
+                    $pivotEntity,
+                    [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
                 )->delete();
+                $this->relsRemoved = true;
             }
-            $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
             $pivot = new $pivotEntity();
             $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
             $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
             $pivot->save();
         } else { // OneToOne
-            $refModel = new $ucEntity();
+            $relEntity = Classes::getModelEntity($ucEntity);
+            $refModel = new $relEntity();
             $model = $this->getModelEntity($refModel, $rId);
             $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
             $model->save();

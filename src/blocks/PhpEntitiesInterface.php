@@ -14,6 +14,9 @@ interface PhpEntitiesInterface
     const PHP_RETURN    = 'return';
     const PHP_THIS      = 'this';
 
+    const SYSTEM_UPDIR  = '../';
+    const SYSTEM_CURDIR = './';
+
     const OPEN_BRACE        = '{';
     const CLOSE_BRACE       = '}';
     const OPEN_BRACKET      = '[';
