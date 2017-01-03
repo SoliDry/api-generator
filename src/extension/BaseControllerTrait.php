@@ -145,7 +145,11 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id);
-        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        // set include for relations
+        $_GET['include'] = $relation;
+        $model = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        Json::outputSerializedData($resource);
     }
 
     /**
@@ -159,7 +163,11 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id, true);
-        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        // set include for relations
+        $_GET['include'] = $relation;
+        $model = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        Json::outputSerializedData($resource);
     }
 
     /**
