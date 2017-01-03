@@ -23,44 +23,49 @@ protected $commands = [
 
 Run in console:
 ```
-php artisan raml:generate raml/articles.raml
+php artisan raml:generate raml/articles.raml --migrations
 ```
 
+This command creates the whole environment for You to proceed building complex API based on RAML/Laravel/JSON API, 
+in particular it creates: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
+Routes (JSON API compatible) and even migrations to help You create RDBMS structure.
+ 
 ```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
-which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/rubric.raml```
+which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/articles.raml```
 
 The output will look something like this:
 ```
-Created : /srv/projects_root/Modules/V2/start.php
-Created : /srv/projects_root/Modules/V2/Http/routes.php
-Created : /srv/projects_root/Modules/V2/module.json
-Created : /srv/projects_root/Modules/V2/Resources/views/index.blade.php
-Created : /srv/projects_root/Modules/V2/Resources/views/layouts/master.blade.php
-Created : /srv/projects_root/Modules/V2/Config/config.php
-Created : /srv/projects_root/Modules/V2/composer.json
-Created : /srv/projects_root/Modules/V2/Database/Seeders/V2DatabaseSeeder.php
-Created : /srv/projects_root/Modules/V2/Providers/V2ServiceProvider.php
-Created : /srv/projects_root/Modules/V2/Http/Controllers/V2Controller.php
-Module [V2] created successfully.
-Module [V2] used successfully.
+Created : /srv/rjapi-laravel/Modules/V1/start.php
+Created : /srv/rjapi-laravel/Modules/V1/Http/routes.php
+Created : /srv/rjapi-laravel/Modules/V1/module.json
+Created : /srv/rjapi-laravel/Modules/V1/Resources/views/index.blade.php
+Created : /srv/rjapi-laravel/Modules/V1/Resources/views/layouts/master.blade.php
+Created : /srv/rjapi-laravel/Modules/V1/Config/config.php
+Created : /srv/rjapi-laravel/Modules/V1/composer.json
+Created : /srv/rjapi-laravel/Modules/V1/Database/Seeders/V1DatabaseSeeder.php
+Created : /srv/rjapi-laravel/Modules/V1/Providers/V1ServiceProvider.php
+Created : /srv/rjapi-laravel/Modules/V1/Http/Controllers/V1Controller.php
+Module [V1] created successfully.
+Module [V1] used successfully.
 ```
-This "magic" is done (behind the scene) by wonderful package laravel-modules, 
+This is done (behind the scene) by wonderful package laravel-modules, 
 many thx to nWidart https://github.com/nWidart/laravel-modules 
 
 And RAML-types based generated files:
 ```sh
-================ Tag Entities
-Modules/V3/Http/Controllers/DefaultController.php created
-Modules/V3/Http/Controllers/TagController.php created
-Modules/V3/Http/Middleware/TagMiddleware.php created
-Modules/V3/Entities/Tag.php created
-Modules/V3/Http/routes.php created
-database/migrations/24_12_2016_1920702_create_table_tag.php created
 ================ Article Entities
-Modules/V3/Http/Controllers/ArticleController.php created
-Modules/V3/Http/Middleware/ArticleMiddleware.php created
-Modules/V3/Entities/Article.php created
-database/migrations/24_12_2016_1920646_create_table_article.php created
+Modules/V1/Http/Controllers/DefaultController.php created
+Modules/V1/Http/Controllers/ArticleController.php created
+Modules/V1/Http/Middleware/ArticleMiddleware.php created
+Modules/V1/Entities/ArticleTag.php created
+Modules/V1/Entities/Article.php created
+Modules/V1/Database/Migrations/03_01_2017_132841_create_article_table.php created
+Modules/V1/Database/Migrations/03_01_2017_132857_create_article_tag_table.php created
+================ Tag Entities
+Modules/V1/Http/Controllers/TagController.php created
+Modules/V1/Http/Middleware/TagMiddleware.php created
+Modules/V1/Entities/Tag.php created
+Modules/V1/Database/Migrations/03_01_2017_132895_create_tag_table.php created
 ...
 ```
 
@@ -68,11 +73,6 @@ The dynamic module name similar to: v1, v2 - will be taken on runtime
 as the last element of the array in ```config/module.php``` file, 
 if You, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
-
-Migration option: if U want to automatically create migrations for those entities of RAML - set ```--migrations``` key, ex.: 
-```sh
-php artisan raml:generate raml/articles.raml --migrations
-```
 
 Generated migrations will look like standard migrations in Laravel:
 ```php
@@ -191,7 +191,8 @@ Complete composite Object looks like this:
       type: Type
       id: ID
       attributes: ArticleAttributes
-      relationships: TagRelationships
+      relationships:
+        type: TagRelationships[]
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied
@@ -273,7 +274,7 @@ class Article extends BaseModel
     public $timestamps = false;
     // these guys are JSON-API relationships support
     public function tag() {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'article_tag');
     }    
 }
 ```

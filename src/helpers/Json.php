@@ -2,6 +2,8 @@
 
 namespace rjapi\helpers;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -14,8 +16,6 @@ use rjapi\transformers\DefaultTransformer;
 
 class Json
 {
-    const CONTENT_TYPE = 'application/vnd.api+json';
-
     /**
      * @param string $json
      *
@@ -57,6 +57,49 @@ class Json
     }
 
     /**
+     * @param $relation      \Illuminate\Database\Eloquent\Collection | Model
+     * @param string $entity
+     * @return array JSON API rels compatible array
+     */
+    public static function getRelations($relation, string $entity)
+    {
+        $jsonArr = [];
+        if ($relation instanceof \Illuminate\Database\Eloquent\Collection) {
+            $cnt = count($relation);
+            if ($cnt > 1) {
+                foreach ($relation as $v) {
+                    $attrs = $v->getAttributes();
+                    $jsonArr[] = [RamlInterface::RAML_TYPE => $entity,
+                                  RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
+                }
+            } else {
+                foreach ($relation as $v) {
+                    $attrs = $v->getAttributes();
+                    $jsonArr = [RamlInterface::RAML_TYPE => $entity,
+                                RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
+                }
+            }
+        }
+        return $jsonArr;
+    }
+
+    /**
+     * @param Request $request
+     * @param array $data
+     */
+    public static function outputSerializedRelations(Request $request, array $data)
+    {
+        http_response_code(JSONApiInterface::HTTP_RESPONSE_CODE_OK);
+        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
+        $host = $_SERVER['HTTP_HOST'];
+        $arr[JSONApiInterface::CONTENT_LINKS] = [
+            JSONApiInterface::CONTENT_SELF => $request->getUri(),
+        ];
+        $arr[JSONApiInterface::CONTENT_DATA] = $data;
+        echo json_encode($arr);
+    }
+
+    /**
      * @param BaseFormRequest $middleware
      * @param                 $model
      * @param string $entity
@@ -81,7 +124,7 @@ class Json
     public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK)
     {
         http_response_code($responseCode);
-        header('Content-Type: ' . self::CONTENT_TYPE);
+        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
         if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
             exit;
         }

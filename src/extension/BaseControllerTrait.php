@@ -2,6 +2,7 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
@@ -115,22 +116,22 @@ trait BaseControllerTrait
         $model = $this->getEntity($id);
         if ($model !== null) {
             $model->delete();
-            $resource = Json::getResource($this->middleWare, $model, $this->entity);
-            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
+        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
      * GET the relationships of this particular Entity
      *
+     * @param Request $request
      * @param int $id
      * @param string $relation
      */
-    public function relations(int $id, string $relation)
+    public function relations(Request $request, int $id, string $relation)
     {
         $item = $this->getEntity($id);
-        $resource = Json::getResource($this->middleWare, $item->$relation, $this->entity);
-        Json::outputSerializedData($resource);
+        $resource = Json::getRelations($item->$relation, $relation);
+        Json::outputSerializedRelations($request, $resource);
     }
 
     /**
@@ -144,6 +145,11 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id);
+        // set include for relations
+        $_GET['include'] = $relation;
+        $model = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        Json::outputSerializedData($resource);
     }
 
     /**
@@ -157,6 +163,11 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id, true);
+        // set include for relations
+        $_GET['include'] = $relation;
+        $model = $this->getEntity($id);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        Json::outputSerializedData($resource);
     }
 
     /**
@@ -195,6 +206,7 @@ trait BaseControllerTrait
                     $model->update([$relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
                 }
             }
+            Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
     }
 
