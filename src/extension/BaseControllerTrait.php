@@ -2,6 +2,7 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\ModelsInterface;
@@ -115,9 +116,8 @@ trait BaseControllerTrait
         $model = $this->getEntity($id);
         if ($model !== null) {
             $model->delete();
-            $resource = Json::getResource($this->middleWare, $model, $this->entity);
-            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
+        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -145,6 +145,7 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id);
+        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -158,6 +159,7 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id, true);
+        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -196,6 +198,7 @@ trait BaseControllerTrait
                     $model->update([$relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
                 }
             }
+            Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
     }
 
@@ -263,11 +266,6 @@ trait BaseControllerTrait
         return $obj->take($to)->skip($from)->get();
     }
 
-    /**
-     * @param array $json       JSON API input array
-     * @param int $eId          Entity ID
-     * @param bool $isRemovable if there is an update do we need to remove other rows
-     */
     private function setRelationships(array $json, int $eId, bool $isRemovable = false)
     {
         $jsonApiRels = Json::getRelationships($json);
@@ -288,13 +286,7 @@ trait BaseControllerTrait
         }
     }
 
-    /**
-     * @param string $entity    Relationship entity
-     * @param int $eId          Entity ID
-     * @param int $rId          Relationship ID
-     * @param bool $isRemovable if there is an update do we need to remove other rows
-     */
-    private function saveRelationship(string $entity, int $eId, int $rId, bool $isRemovable = false)
+    private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
     {
         $ucEntity = ucfirst($entity);
         $lowEntity = strtolower($this->entity);
