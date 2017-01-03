@@ -123,14 +123,15 @@ trait BaseControllerTrait
     /**
      * GET the relationships of this particular Entity
      *
+     * @param Request $request
      * @param int $id
      * @param string $relation
      */
-    public function relations(int $id, string $relation)
+    public function relations(Request $request, int $id, string $relation)
     {
         $item = $this->getEntity($id);
-        $resource = Json::getResource($this->middleWare, $item->$relation, $this->entity);
-        Json::outputSerializedData($resource);
+        $resource = Json::getRelations($item->$relation, $relation);
+        Json::outputSerializedRelations($request, $resource);
     }
 
     /**
@@ -262,6 +263,11 @@ trait BaseControllerTrait
         return $obj->take($to)->skip($from)->get();
     }
 
+    /**
+     * @param array $json       JSON API input array
+     * @param int $eId          Entity ID
+     * @param bool $isRemovable if there is an update do we need to remove other rows
+     */
     private function setRelationships(array $json, int $eId, bool $isRemovable = false)
     {
         $jsonApiRels = Json::getRelationships($json);
@@ -282,7 +288,13 @@ trait BaseControllerTrait
         }
     }
 
-    private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
+    /**
+     * @param string $entity    Relationship entity
+     * @param int $eId          Entity ID
+     * @param int $rId          Relationship ID
+     * @param bool $isRemovable if there is an update do we need to remove other rows
+     */
+    private function saveRelationship(string $entity, int $eId, int $rId, bool $isRemovable = false)
     {
         $ucEntity = ucfirst($entity);
         $lowEntity = strtolower($this->entity);
