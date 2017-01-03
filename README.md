@@ -35,36 +35,37 @@ which should be prepared before or You may wish to just try by copying an exampl
 
 The output will look something like this:
 ```
-Created : /srv/projects_root/Modules/V2/start.php
-Created : /srv/projects_root/Modules/V2/Http/routes.php
-Created : /srv/projects_root/Modules/V2/module.json
-Created : /srv/projects_root/Modules/V2/Resources/views/index.blade.php
-Created : /srv/projects_root/Modules/V2/Resources/views/layouts/master.blade.php
-Created : /srv/projects_root/Modules/V2/Config/config.php
-Created : /srv/projects_root/Modules/V2/composer.json
-Created : /srv/projects_root/Modules/V2/Database/Seeders/V2DatabaseSeeder.php
-Created : /srv/projects_root/Modules/V2/Providers/V2ServiceProvider.php
-Created : /srv/projects_root/Modules/V2/Http/Controllers/V2Controller.php
-Module [V2] created successfully.
-Module [V2] used successfully.
+Created : /srv/rjapi-laravel/Modules/V1/start.php
+Created : /srv/rjapi-laravel/Modules/V1/Http/routes.php
+Created : /srv/rjapi-laravel/Modules/V1/module.json
+Created : /srv/rjapi-laravel/Modules/V1/Resources/views/index.blade.php
+Created : /srv/rjapi-laravel/Modules/V1/Resources/views/layouts/master.blade.php
+Created : /srv/rjapi-laravel/Modules/V1/Config/config.php
+Created : /srv/rjapi-laravel/Modules/V1/composer.json
+Created : /srv/rjapi-laravel/Modules/V1/Database/Seeders/V1DatabaseSeeder.php
+Created : /srv/rjapi-laravel/Modules/V1/Providers/V1ServiceProvider.php
+Created : /srv/rjapi-laravel/Modules/V1/Http/Controllers/V1Controller.php
+Module [V1] created successfully.
+Module [V1] used successfully.
 ```
-This "magic" is done (behind the scene) by wonderful package laravel-modules, 
+This is done (behind the scene) by wonderful package laravel-modules, 
 many thx to nWidart https://github.com/nWidart/laravel-modules 
 
 And RAML-types based generated files:
 ```sh
-================ Tag Entities
-Modules/V3/Http/Controllers/DefaultController.php created
-Modules/V3/Http/Controllers/TagController.php created
-Modules/V3/Http/Middleware/TagMiddleware.php created
-Modules/V3/Entities/Tag.php created
-Modules/V3/Http/routes.php created
-database/migrations/24_12_2016_1920702_create_table_tag.php created
 ================ Article Entities
-Modules/V3/Http/Controllers/ArticleController.php created
-Modules/V3/Http/Middleware/ArticleMiddleware.php created
-Modules/V3/Entities/Article.php created
-database/migrations/24_12_2016_1920646_create_table_article.php created
+Modules/V1/Http/Controllers/DefaultController.php created
+Modules/V1/Http/Controllers/ArticleController.php created
+Modules/V1/Http/Middleware/ArticleMiddleware.php created
+Modules/V1/Entities/ArticleTag.php created
+Modules/V1/Entities/Article.php created
+Modules/V1/Database/Migrations/03_01_2017_132841_create_article_table.php created
+Modules/V1/Database/Migrations/03_01_2017_132857_create_article_tag_table.php created
+================ Tag Entities
+Modules/V1/Http/Controllers/TagController.php created
+Modules/V1/Http/Middleware/TagMiddleware.php created
+Modules/V1/Entities/Tag.php created
+Modules/V1/Database/Migrations/03_01_2017_132895_create_tag_table.php created
 ...
 ```
 
@@ -273,7 +274,7 @@ class Article extends BaseModel
     public $timestamps = false;
     // these guys are JSON-API relationships support
     public function tag() {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Tag::class, 'article_tag');
     }    
 }
 ```
