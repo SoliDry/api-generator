@@ -82,6 +82,12 @@ types:
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]
+      topic_id:
+        description: ManyToOne Topic relationship
+        required: true
+        type: integer
+        minimum: 1
+        maximum: 9
   Article:
     type: object
     properties:

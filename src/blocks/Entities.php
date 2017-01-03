@@ -9,7 +9,7 @@ use rjapi\RJApiGenerator;
 
 class Entities extends FormRequestModel
 {
-    use ContentManager;
+    use ContentManager, EntitiesTrait;
     /** @var RJApiGenerator $generator */
     private $generator = null;
     protected $sourceCode = '';
@@ -63,13 +63,7 @@ class Entities extends FormRequestModel
 
     private function setRelations()
     {
-        $middlewareEntity =
-            DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->generator->objectName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
         $middleWare = new $middlewareEntity();
 
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
@@ -138,7 +132,10 @@ class Entities extends FormRequestModel
         }
     }
 
-    public function setPivot($ucEntity)
+    /**
+     * @param string $ucEntity
+     */
+    public function setPivot(string $ucEntity)
     {
         $this->setTag();
         $this->setNamespace(
@@ -176,13 +173,7 @@ class Entities extends FormRequestModel
 
     public function createPivot()
     {
-        $middlewareEntity =
-            DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->generator->objectName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
         $middleWare = new $middlewareEntity();
 
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
@@ -237,7 +228,12 @@ class Entities extends FormRequestModel
         }
     }
 
-    private function setRelation($entity, $method, string ...$args)
+    /**
+     * @param string $entity
+     * @param string $method
+     * @param \string[] ...$args
+     */
+    private function setRelation(string $entity, string $method, string ...$args)
     {
         $this->startMethod($entity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
         $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS

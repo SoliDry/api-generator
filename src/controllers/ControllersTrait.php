@@ -173,6 +173,9 @@ trait ControllersTrait
                . $this->migrationsDir . PhpEntitiesInterface::SLASH;
     }
 
+    /**
+     * @param string $name
+     */
     private function setObjectName(string $name)
     {
         $this->objectName = $name;

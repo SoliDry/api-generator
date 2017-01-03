@@ -11,7 +11,7 @@ use rjapi\RJApiGenerator;
 
 class Migrations extends MigrationsAbstract
 {
-    use ContentManager, MigrationsTrait;
+    use ContentManager, MigrationsTrait, EntitiesTrait;
     /** @var RJApiGenerator $generator */
     protected $generator = null;
     protected $sourceCode = '';
@@ -65,12 +65,7 @@ class Migrations extends MigrationsAbstract
      */
     public function createPivot()
     {
-        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->generator->objectName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
         $middleWare = new $middlewareEntity();
 
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
