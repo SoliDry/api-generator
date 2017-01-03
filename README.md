@@ -23,11 +23,15 @@ protected $commands = [
 
 Run in console:
 ```
-php artisan raml:generate raml/articles.raml
+php artisan raml:generate raml/articles.raml --migrations
 ```
 
+This command creates the whole environment for You to proceed building complex API based on RAML/Laravel/JSON API, 
+in particular it creates: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
+Routes (JSON API compatible) and even migrations to help You create RDBMS structure.
+ 
 ```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
-which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/rubric.raml```
+which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/articles.raml```
 
 The output will look something like this:
 ```
@@ -68,11 +72,6 @@ The dynamic module name similar to: v1, v2 - will be taken on runtime
 as the last element of the array in ```config/module.php``` file, 
 if You, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
-
-Migration option: if U want to automatically create migrations for those entities of RAML - set ```--migrations``` key, ex.: 
-```sh
-php artisan raml:generate raml/articles.raml --migrations
-```
 
 Generated migrations will look like standard migrations in Laravel:
 ```php
@@ -191,7 +190,8 @@ Complete composite Object looks like this:
       type: Type
       id: ID
       attributes: ArticleAttributes
-      relationships: TagRelationships
+      relationships:
+        type: TagRelationships[]
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied
