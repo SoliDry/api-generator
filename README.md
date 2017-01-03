@@ -279,6 +279,24 @@ class Article extends BaseModel
 }
 ```
 
+### Relationships particular qualities
+To let generator know about what a particular relationship to apply (ex.: ManyToMany, OneToMany, OneToOne) 
+set the ```relationships``` property in an Entity like so - for ex. let's see how to set ManyToOne relationship between Article and Tag entities.
+
+Define Article with relationships like:
+```
+relationships:
+  type: TagRelationships[]
+```
+and Tag with relationships like:
+```
+relationships:
+  type: ArticleRelationships
+```
+This way You telling to generator: "make the relation between Article and Tag OneToMany from Article to Tag"
+The idea works with any relationship You need - ex. ManyToMany: ```TagRelationships[] -> ArticleRelationships[]```, 
+OneToOne: ```TagRelationships -> ArticleRelationships```
+
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - You need to generate MVC-structure into laravel-module and make Your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
 ```php

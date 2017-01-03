@@ -9,7 +9,7 @@ use rjapi\RJApiGenerator;
 
 class Entities extends FormRequestModel
 {
-    use ContentManager;
+    use ContentManager, EntitiesTrait;
     /** @var RJApiGenerator $generator */
     private $generator = null;
     protected $sourceCode = '';
@@ -63,19 +63,13 @@ class Entities extends FormRequestModel
 
     private function setRelations()
     {
-        $middlewareEntity =
-            DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->generator->objectName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
         $middleWare = new $middlewareEntity();
 
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $relations = $middleWare->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
-            foreach ($relations as $k => $relationEntity) {
+            foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 $current = '';
                 $related = '';
@@ -97,38 +91,51 @@ class Entities extends FormRequestModel
                     );
                 }
                 if (empty($current) === false && empty($related) === false) {
-                    // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
-                    $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                    $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                    if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
-                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
-                    }
-                    if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
-                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
-                    }
-                    if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany
-                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
-                    }
-                    if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                        // check inversion of a pivot
-                        $entityFile = $this->generator->formatEntitiesPath()
-                            . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
-                            PhpEntitiesInterface::PHP_EXT;
-                        $relEntity = $relationEntity;
-                        $objName = $this->generator->objectName;
-                        if (file_exists($entityFile) === false) {
-                            $relEntity = $this->generator->objectName;
-                            $objName = $relationEntity;
+                    $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
+                    $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+                    foreach ($relatedRels as $related) {
+                        if (strpos($related, $this->generator->objectName) !== false) {
+                            foreach ($currentRels as $current) {
+                                if (strpos($current, $ucEntitty) !== false) {
+                                    // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
+                                    $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
+                                    $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                                    if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
+                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
+                                    }
+                                    if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
+                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
+                                    }
+                                    if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany
+                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
+                                    }
+                                    if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                                        // check inversion of a pivot
+                                        $entityFile = $this->generator->formatEntitiesPath()
+                                            . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
+                                            PhpEntitiesInterface::PHP_EXT;
+                                        $relEntity = $relationEntity;
+                                        $objName = $this->generator->objectName;
+                                        if (file_exists($entityFile) === false) {
+                                            $relEntity = $this->generator->objectName;
+                                            $objName = $relationEntity;
+                                        }
+                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
+                                            strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity));
+                                    }
+                                }
+                            }
                         }
-                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
-                            strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity));
                     }
                 }
             }
         }
     }
 
-    public function setPivot($ucEntity)
+    /**
+     * @param string $ucEntity
+     */
+    public function setPivot(string $ucEntity)
     {
         $this->setTag();
         $this->setNamespace(
@@ -166,19 +173,13 @@ class Entities extends FormRequestModel
 
     public function createPivot()
     {
-        $middlewareEntity =
-            DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($this->generator->version) .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->generator->objectName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
         $middleWare = new $middlewareEntity();
 
         if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $relations = $middleWare->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
-            foreach ($relations as $k => $relationEntity) {
+            foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 $file = $this->generator->formatEntitiesPath()
                     . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
@@ -207,13 +208,17 @@ class Entities extends FormRequestModel
                     if (empty($current) === false && empty($related) === false) {
                         $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
                         $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
-                        foreach ($currentRels as $current) {
-                            foreach ($relatedRels as $related) {
-                                // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
-                                $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                                $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                                if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                                    $this->setPivot($ucEntitty);
+                        foreach ($relatedRels as $related) {
+                            if (strpos($related, $this->generator->objectName) !== false) {
+                                foreach ($currentRels as $current) {
+                                    if (strpos($current, $ucEntitty) !== false) {
+                                        // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
+                                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
+                                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                                            $this->setPivot($ucEntitty);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -223,7 +228,12 @@ class Entities extends FormRequestModel
         }
     }
 
-    private function setRelation($entity, $method, string ...$args)
+    /**
+     * @param string $entity
+     * @param string $method
+     * @param \string[] ...$args
+     */
+    private function setRelation(string $entity, string $method, string ...$args)
     {
         $this->startMethod($entity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
         $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
