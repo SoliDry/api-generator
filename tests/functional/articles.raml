@@ -89,7 +89,30 @@ types:
       id: ID
       attributes: ArticleAttributes
       relationships:
-        type: TagRelationships[]
+        type: TagRelationships[] | TopicRelationships
+  TopicRelationships:
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+  TopicAttributes:
+    type: object
+    properties:
+      title:
+        required: true
+        type: string
+        minLength: 16
+        maxLength: 256
+  Topic:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: TopicAttributes
+      relationships:
+        type: ArticleRelationships[]
   FilterID:
     type: string
     pattern: '/^[,\ \d]*$/'
