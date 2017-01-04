@@ -4,3 +4,4 @@ vendor/
 bootstrap/
 app/
 Modules/
+artisan

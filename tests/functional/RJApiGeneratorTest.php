@@ -4,7 +4,6 @@ namespace rjapitest;
 use Illuminate\Foundation\Http\FormRequest;
 use Modules\V1\Http\Controllers\DefaultController;
 use rjapi\RJApiGenerator;
-use App\Console\Kernel;
 
 /**
  * Class ApiGeneratorTest
@@ -78,7 +77,14 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
             "show_in_top" => "boolean",
             // The state of an article
             "status" => "in:draft,published,postponed,archived",
+            // ManyToOne Topic relationship
+            "topic_id" => "required|integer|min:1|max:9",
         ], $formIn->rules());
+        $this->assertNotEmpty($formIn->relations());
+        $this->assertArraySubset([
+            "tag",
+            "topic",
+        ], $formIn->relations());
 
         // related
         $formIn = new \Modules\V1\Http\Middleware\TagMiddleware();
@@ -87,6 +93,21 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         $this->assertArraySubset([
             "title" => "string|required|min:3|max:255",
         ], $formIn->rules());
+        $this->assertNotEmpty($formIn->relations());
+        $this->assertArraySubset([
+            "article",
+        ], $formIn->relations());
+
+        $formIn = new \Modules\V1\Http\Middleware\TopicMiddleware();
+        $this->assertInstanceOf(FormRequest::class, $formIn);
+        $this->assertNotEmpty($formIn->rules());
+        $this->assertArraySubset([
+            "title" => "required|string|min:16|max:256",
+        ], $formIn->rules());
+        $this->assertNotEmpty($formIn->relations());
+        $this->assertArraySubset([
+            "article",
+        ], $formIn->relations());
     }
 
     /**
@@ -98,6 +119,20 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         $this->assertObjectHasAttribute('primaryKey', $article);
         $this->assertObjectHasAttribute('table', $article);
         $this->assertObjectHasAttribute('timestamps', $article);
+        $this->assertTrue(method_exists($article, 'tag'), 'Class Article doesn`t have method tag');
+        $this->assertTrue(method_exists($article, 'topic'), 'Class Article doesn`t have method topic');
+
+        $tag = new \Modules\V1\Entities\Tag();
+        $this->assertObjectHasAttribute('primaryKey', $tag);
+        $this->assertObjectHasAttribute('table', $tag);
+        $this->assertObjectHasAttribute('timestamps', $tag);
+        $this->assertTrue(method_exists($tag, 'article'), 'Class Tag doesn`t have method article');
+
+        $topic = new \Modules\V1\Entities\Topic();
+        $this->assertObjectHasAttribute('primaryKey', $topic);
+        $this->assertObjectHasAttribute('table', $topic);
+        $this->assertObjectHasAttribute('timestamps', $topic);
+        $this->assertTrue(method_exists($topic, 'article'), 'Class Topic doesn`t have method article');
     }
 
     private static function rmdir($dir)
