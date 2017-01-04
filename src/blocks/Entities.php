@@ -91,40 +91,50 @@ class Entities extends FormRequestModel
                     );
                 }
                 if (empty($current) === false && empty($related) === false) {
-                    $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
-                    $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
-                    foreach ($relatedRels as $related) {
-                        if (strpos($related, $this->generator->objectName) !== false) {
-                            foreach ($currentRels as $current) {
-                                if (strpos($current, $ucEntitty) !== false) {
-                                    // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
-                                    $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                                    $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                                    if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
-                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
-                                    }
-                                    if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
-                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
-                                    }
-                                    if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany
-                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
-                                    }
-                                    if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                                        // check inversion of a pivot
-                                        $entityFile = $this->generator->formatEntitiesPath()
-                                            . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
-                                            PhpEntitiesInterface::PHP_EXT;
-                                        $relEntity = $relationEntity;
-                                        $objName = $this->generator->objectName;
-                                        if (file_exists($entityFile) === false) {
-                                            $relEntity = $this->generator->objectName;
-                                            $objName = $relationEntity;
-                                        }
-                                        $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
-                                            strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity));
-                                    }
-                                }
+                    $this->createRelationMethod($current, $related, $relationEntity);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $current           current entity relations
+     * @param string $related           entities from raml file based on relations method array
+     * @param string $relationEntity
+     */
+    private function createRelationMethod(string $current, string $related, string $relationEntity)
+    {
+        $ucEntitty = ucfirst($relationEntity);
+        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
+        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+        foreach ($relatedRels as $related) {
+            if (strpos($related, $this->generator->objectName) !== false) {
+                foreach ($currentRels as $current) {
+                    if (strpos($current, $ucEntitty) !== false) {
+                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
+                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                        if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
+                            $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
+                        }
+                        if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
+                            $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
+                        }
+                        if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany inverse
+                            $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
+                        }
+                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                            // check inversion of a pivot
+                            $entityFile = $this->generator->formatEntitiesPath()
+                                . PhpEntitiesInterface::SLASH . $this->generator->objectName . ucfirst($relationEntity) .
+                                PhpEntitiesInterface::PHP_EXT;
+                            $relEntity = $relationEntity;
+                            $objName = $this->generator->objectName;
+                            if (file_exists($entityFile) === false) {
+                                $relEntity = $this->generator->objectName;
+                                $objName = $relationEntity;
                             }
+                            $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
+                                strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity));
                         }
                     }
                 }
@@ -206,21 +216,31 @@ class Entities extends FormRequestModel
                         );
                     }
                     if (empty($current) === false && empty($related) === false) {
-                        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
-                        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
-                        foreach ($relatedRels as $related) {
-                            if (strpos($related, $this->generator->objectName) !== false) {
-                                foreach ($currentRels as $current) {
-                                    if (strpos($current, $ucEntitty) !== false) {
-                                        // TODO: Process Many Rels with explode like - type: TagRelationships[] | ArticleRelationships[]
-                                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
-                                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                                            $this->setPivot($ucEntitty);
-                                        }
-                                    }
-                                }
-                            }
+                        $this->createPivotClass($current, $related, $relationEntity);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @param string $current           current entity relations
+     * @param string $related           entities from raml file based on relations method array
+     * @param string $relationEntity
+     */
+    private function createPivotClass(string $current, string $related, string $relationEntity)
+    {
+        $ucEntitty = ucfirst($relationEntity);
+        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
+        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+        foreach ($relatedRels as $related) {
+            if (strpos($related, $this->generator->objectName) !== false) {
+                foreach ($currentRels as $current) {
+                    if (strpos($current, $ucEntitty) !== false) {
+                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
+                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
+                            $this->setPivot($ucEntitty);
                         }
                     }
                 }
