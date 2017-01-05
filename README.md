@@ -339,7 +339,7 @@ class DefaultController extends BaseController
 As this class inherited by all Controllers - You don't have to add this property in every Controller class.
 By default JSON API is turned on.
 
-Examples of HTTP requests can be found here - https://github.com/RJAPI/raml-json-api/wiki
+HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/raml-json-api/wiki
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 
