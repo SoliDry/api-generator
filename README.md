@@ -339,6 +339,8 @@ class DefaultController extends BaseController
 As this class inherited by all Controllers - You don't have to add this property in every Controller class.
 By default JSON API is turned on.
 
+Examples of HTTP requests can be found here - https://github.com/RJAPI/raml-json-api/wiki
+
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
