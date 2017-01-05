@@ -67,7 +67,8 @@ class Middleware extends FormRequestModel
             . $this->generator->objectName
             . DefaultInterface::MIDDLEWARE_POSTFIX
             . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($fileForm, $this->sourceCode);
+        $isCreated = FileManager::createFile($fileForm, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options));
         if($isCreated)
         {
             Console::out($fileForm . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);

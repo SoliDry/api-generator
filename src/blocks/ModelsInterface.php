@@ -43,6 +43,7 @@ interface ModelsInterface
     const MIGRATION_CREATE = 'create';
     const MIGRATION_TABLE  = 'table';
 
+    // Migration methods
     const MIGRATION_METHOD_INCREMENTS = 'increments';
     const MIGRATION_METHOD_STRING     = 'string';
     const MIGRATION_METHOD_INTEGER    = 'integer';
@@ -53,4 +54,9 @@ interface ModelsInterface
     const MIGRATION_METHOD_DROP       = 'dropIfExists';
     const MIGRATION_METHOD_UP         = 'up';
     const MIGRATION_METHOD_DOWN       = 'down';
+
+    // base properties
+    const PROPERTY_TABLE = 'table';
+    const PROPERTY_PRIMARY_KEY = 'primaryKey';
+    const PROPERTY_TIMESTAMPS = 'timestamps';
 }

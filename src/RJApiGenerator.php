@@ -19,7 +19,7 @@ class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInt
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile} {--migrations}';
+    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate}';
 
     /**
      * The console command description.

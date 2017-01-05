@@ -43,6 +43,7 @@ interface PhpEntitiesInterface
     const PIPE          = '|';
     const AT            = '@';
     const UNDERSCORE    = '_';
+    const ASTERISK      = '*';
 
     const PHP_TYPES_ARRAY      = 'array';
     const PHP_TYPES_NULL       = 'null';

@@ -2,6 +2,7 @@
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
+use rjapi\blocks\ConsoleInterface;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
@@ -63,14 +64,13 @@ trait ControllersTrait
         self::CUSTOM_TYPES_FILTER,
     ];
 
-    private $options = [];
+    public $options = [];
 
     /**
      *  Generates api Controllers + Models to support RAML validation
      */
     public function actionIndex(string $ramlFile)
     {
-//        $this->options = $this->options();
         $data = Yaml::parse(file_get_contents($ramlFile));
 
         $this->version        = str_replace('/', '', $data['version']);
@@ -83,9 +83,15 @@ trait ControllersTrait
         $this->migrationsDir  = self::MIGRATIONS_DIR;
 
         $this->types = $data['types'];
-        if(env('PHP_DEV'))
+        if(env('PHP_DEV') !== false)
         {
             $this->createDirs();
+            $this->options = [
+                ConsoleInterface::OPTION_MIGRATIONS => 1,
+                ConsoleInterface::OPTION_REGENERATE => 1
+            ];
+        } else {
+            $this->options = $this->options();
         }
         $this->runGenerator();
     }
@@ -213,10 +219,12 @@ trait ControllersTrait
         $this->routes = new Routes($this);
         $this->routes->create();
 
-        // create Migrations
-        $this->migrations = new Migrations($this);
-        $this->migrations->create();
-        $this->migrations->createPivot();
+        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
+            // create Migrations
+            $this->migrations = new Migrations($this);
+            $this->migrations->create();
+            $this->migrations->createPivot();
+        }
     }
 
     /**

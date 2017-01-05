@@ -72,7 +72,8 @@ class Controllers implements ControllersInterface
                           . $this->generator->objectName
                           . DefaultInterface::CONTROLLER_POSTFIX
                           . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($fileController, $this->sourceCode);
+        $isCreated = FileManager::createFile($fileController, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options));
         if($isCreated)
         {
             Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);

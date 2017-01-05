@@ -68,4 +68,29 @@ class FileManager implements DirsInterface
 
         return $path;
     }
+
+    /**
+     * @param array             $options containing array of input options
+     * @return bool             true if option --regenerate is on, false otherwise
+     */
+    public static function isRegenerated(array $options)
+    {
+        return (empty($options[ConsoleInterface::OPTION_REGENERATE])) ? false : true;
+    }
+
+    /**
+     * @param Command $obj          generator object
+     * @param string $migrationName the name of a migration file
+     * @return bool                 true if migration with similar name exists, false otherwise
+     */
+    public static function migrationNotExists(Command $obj, string $migrationName)
+    {
+        $path = FileManager::getModulePath($obj) . self::DATABASE_DIR . PhpEntitiesInterface::SLASH
+            . $obj->migrationsDir . PhpEntitiesInterface::SLASH;
+        $file = $path . PhpEntitiesInterface::ASTERISK . $migrationName
+            . PhpEntitiesInterface::PHP_EXT;
+        $files = glob($file);
+
+        return (empty($files)) ? true : false;
+    }
 }

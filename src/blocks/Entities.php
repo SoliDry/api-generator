@@ -38,15 +38,15 @@ class Entities extends FormRequestModel
         $this->startClass($this->generator->objectName, $baseMapperName);
 
         $this->createProperty(
-            DefaultInterface::PRIMARY_KEY_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
         );
         $this->createProperty(
-            DefaultInterface::TABLE_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
             strtolower($this->generator->objectName), true
         );
         $this->createProperty(
-            DefaultInterface::TIMESTAMPS_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
             PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE
         );
         $this->setRelations();
@@ -55,7 +55,8 @@ class Entities extends FormRequestModel
         $file = $this->generator->formatEntitiesPath() .
             PhpEntitiesInterface::SLASH .
             $this->generator->objectName . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($file, $this->sourceCode);
+        $isCreated = FileManager::createFile($file, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options));
         if ($isCreated) {
             Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
@@ -158,15 +159,15 @@ class Entities extends FormRequestModel
         $this->startClass($this->generator->objectName . $ucEntity, $baseMapperName);
 
         $this->createProperty(
-            DefaultInterface::PRIMARY_KEY_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
         );
         $this->createProperty(
-            DefaultInterface::TABLE_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
             strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
         );
         $this->createProperty(
-            DefaultInterface::TIMESTAMPS_PROPERTY, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
             PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE
         );
 
@@ -175,7 +176,8 @@ class Entities extends FormRequestModel
         $file = $this->generator->formatEntitiesPath() .
             PhpEntitiesInterface::SLASH .
             $this->generator->objectName . $ucEntity . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($file, $this->sourceCode);
+        $isCreated = FileManager::createFile($file, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options));
         if ($isCreated) {
             Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
