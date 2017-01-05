@@ -39,6 +39,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     protected function _after()
     {
+        putenv('PHP_DEV=false');
     }
 
     public static function tearDownAfterClass()

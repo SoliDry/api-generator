@@ -83,7 +83,7 @@ trait ControllersTrait
         $this->migrationsDir  = self::MIGRATIONS_DIR;
 
         $this->types = $data['types'];
-        if(env('PHP_DEV') !== false)
+        if((bool) env('PHP_DEV') === true)
         {
             $this->createDirs();
             $this->options = [
