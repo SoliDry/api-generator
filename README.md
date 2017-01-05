@@ -91,6 +91,8 @@ class CreateArticleTable extends Migration
             $table->string('url');
             // Show at the top of main page
             $table->unsignedTinyInteger('show_in_top');
+            // ManyToOne Topic relationship
+            $table->integer('topic_id');
             $table->timestamps();
         });
     }
@@ -98,6 +100,7 @@ class CreateArticleTable extends Migration
     public function down() {
         Schema::dropIfExists('article');
     }
+
 }
 ```
 
@@ -192,7 +195,7 @@ Complete composite Object looks like this:
       id: ID
       attributes: ArticleAttributes
       relationships:
-        type: TagRelationships[]
+        type: TagRelationships[] | TopicRelationships
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied
@@ -235,12 +238,13 @@ class ArticleMiddleware extends BaseFormRequest
     public $url = null;
     public $show_in_top = null;
     public $status = null;
+    public $topic_id = null;
 
-    public  function authorize(): bool {
+    public function authorize(): bool {
         return true;
     }
 
-    public  function rules(): array {
+    public function rules(): array {
         return [
             "title" => "required|string|min:16|max:256",
             "description" => "required|string|min:32|max:1024",
@@ -249,14 +253,18 @@ class ArticleMiddleware extends BaseFormRequest
             "show_in_top" => "boolean",
             // The state of an article
             "status" => "in:draft,published,postponed,archived",
+            // ManyToOne Topic relationship
+            "topic_id" => "required|integer|min:1|max:9",
         ];
     }
 
-    public  function relations(): array {
+    public function relations(): array {
         return [
             "tag",
+            "topic",
         ];
     }
+
 }
 ```
 
@@ -272,10 +280,15 @@ class Article extends BaseModel
     protected $primaryKey = "id";
     protected $table = "article";
     public $timestamps = false;
-    // these guys are JSON-API relationships support
+
     public function tag() {
-        return $this->belongsToMany(Tag::class, 'article_tag');
-    }    
+        return $this->belongsToMany(Tag::class, 'tag_article');
+    }
+
+    public function topic() {
+        return $this->belongsTo(Topic::class);
+    }
+
 }
 ```
 
@@ -296,6 +309,19 @@ relationships:
 This way You telling to generator: "make the relation between Article and Tag OneToMany from Article to Tag"
 The idea works with any relationship You need - ex. ManyToMany: ```TagRelationships[] -> ArticleRelationships[]```, 
 OneToOne: ```TagRelationships -> ArticleRelationships```
+
+You can also bind several relationships to one entity, for instance - 
+You have an Article entity that must be bound to TagRelationships and TopicRelationships, this mey be done similar to:
+```
+relationships:
+    type: TagRelationships[] | TopicRelationships
+```
+or vise versa 
+```
+relationships:
+    type: TopicRelationships | TagRelationships[]
+```
+Generator will independently detect all relationships between entities.
 
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - You need to generate MVC-structure into laravel-module and make Your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
