@@ -34,7 +34,9 @@ Routes (JSON API compatible) and even migrations to help You create RDBMS struct
 which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/articles.raml```
 
 Options:
+
 ```--migrations``` is an option to create migrations (create_entityName_table) for every entity + pivots if there are ManyToMany relationships.
+
 ```--regenerate``` use this if You need to rewrite all files generated previously.
 
 The output will look something like this:
