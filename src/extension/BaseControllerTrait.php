@@ -308,6 +308,8 @@ trait BaseControllerTrait
         $pivotExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivot);
         $pivotInverseExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivotInverse);
         if ($pivotExists || $pivotInverseExists) { // ManyToMany rel
+            $pivotEntity = null;
+
             if ($pivotExists) {
                 $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
             } else if ($pivotInverseExists) {
@@ -321,6 +323,7 @@ trait BaseControllerTrait
                 )->delete();
                 $this->relsRemoved = true;
             }
+
             $pivot = new $pivotEntity();
             $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
             $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
