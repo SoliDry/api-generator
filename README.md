@@ -37,7 +37,8 @@ Options:
 
 ```--migrations``` is an option to create migrations (create_entityName_table) for every entity + pivots if there are ManyToMany relationships.
 
-```--regenerate``` use this if You need to rewrite all files generated previously.
+```--regenerate``` use this if You need to rewrite all files generated previously. 
+By default generated files preserved to prevent overwriting of added/modified content.   
 
 The output will look something like this:
 ```
