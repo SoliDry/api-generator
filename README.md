@@ -318,7 +318,7 @@ The idea works with any relationship You need - ex. ManyToMany: ```TagRelationsh
 OneToOne: ```TagRelationships -> ArticleRelationships```
 
 You can also bind several relationships to one entity, for instance - 
-You have an Article entity that must be bound to TagRelationships and TopicRelationships, this mey be done similar to:
+You have an Article entity that must be bound to TagRelationships and TopicRelationships, this can be done similar to:
 ```
 relationships:
     type: TagRelationships[] | TopicRelationships

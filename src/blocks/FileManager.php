@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use Illuminate\Console\Command;
 use rjapi\exception\DirectoryException;
+use rjapi\helpers\Config;
 use rjapi\RJApiGenerator;
 
 class FileManager implements DirsInterface
@@ -92,5 +93,19 @@ class FileManager implements DirsInterface
         $files = glob($file);
 
         return (empty($files)) ? true : false;
+    }
+
+    /**
+     * Glues 2 entities in one pivot
+     * @param string $firstEntity
+     * @param string $secondEntity
+     * @return string
+     */
+    public static function getPivotFile(string $firstEntity, string $secondEntity)
+    {
+        return DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
+        . Config::getModuleName() . PhpEntitiesInterface::SLASH .
+        DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
+        $firstEntity . $secondEntity . PhpEntitiesInterface::PHP_EXT;
     }
 }

@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
+use rjapi\blocks\FileManager;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
@@ -129,6 +130,7 @@ trait BaseControllerTrait
      */
     public function relations(Request $request, int $id, string $relation)
     {
+        // TODO: check for existence of an entity for $id
         $item = $this->getEntity($id);
         $resource = Json::getRelations($item->$relation, $relation);
         Json::outputSerializedRelations($request, $resource);
@@ -147,6 +149,7 @@ trait BaseControllerTrait
         $this->setRelationships($json, $id);
         // set include for relations
         $_GET['include'] = $relation;
+        // TODO: check for existence of an entity for $id
         $model = $this->getEntity($id);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
@@ -165,6 +168,7 @@ trait BaseControllerTrait
         $this->setRelationships($json, $id, true);
         // set include for relations
         $_GET['include'] = $relation;
+        // TODO: check for existence of an entity for $id
         $model = $this->getEntity($id);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
@@ -299,12 +303,16 @@ trait BaseControllerTrait
         $ucEntity = ucfirst($entity);
         $lowEntity = strtolower($this->entity);
         // if pivot file exists then save
-        $file = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
-            . Config::getModuleName() . PhpEntitiesInterface::SLASH .
-            DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
-            $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
-        if (file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $file)) { // ManyToMany rel
-            $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
+        $filePivot = FileManager::getPivotFile($this->entity, $ucEntity);
+        $filePivotInverse = FileManager::getPivotFile($ucEntity, $this->entity);
+        $pivotExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivot);
+        $pivotInverseExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivotInverse);
+        if ($pivotExists || $pivotInverseExists) { // ManyToMany rel
+            if ($pivotExists) {
+                $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
+            } else if ($pivotInverseExists) {
+                $pivotEntity = Classes::getModelEntity($ucEntity . $this->entity);
+            }
             if ($isRemovable && $this->relsRemoved === false) {
                 // clean up old links
                 $this->getModelEntities(
