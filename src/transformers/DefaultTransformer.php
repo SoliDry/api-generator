@@ -80,7 +80,9 @@ class DefaultTransformer extends TransformerAbstract
         // getting object, ex.: Book
         $obj = $arguments[0];
         $entity = $obj->$entityNameLow;
-
-        return $this->collection($entity, new DefaultTransformer($middleWare), $entityNameLow);
+        if ($entity instanceof Collection) {
+            return $this->collection($entity, new DefaultTransformer($middleWare), $entityNameLow);
+        }
+        return $this->item($entity, new DefaultTransformer($middleWare), $entityNameLow);
     }
 }

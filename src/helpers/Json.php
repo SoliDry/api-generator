@@ -91,7 +91,7 @@ class Json
     {
         http_response_code(JSONApiInterface::HTTP_RESPONSE_CODE_OK);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
-        $host = $_SERVER['HTTP_HOST'];
+
         $arr[JSONApiInterface::CONTENT_LINKS] = [
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
         ];
