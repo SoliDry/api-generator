@@ -130,9 +130,14 @@ trait BaseControllerTrait
      */
     public function relations(Request $request, int $id, string $relation)
     {
-        // TODO: check for existence of an entity for $id
-        $item = $this->getEntity($id);
-        $resource = Json::getRelations($item->$relation, $relation);
+        $model = $this->getEntity($id);
+        if (empty($model))
+        {
+            Json::outputErrors([
+                [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
+            ]);
+        }
+        $resource = Json::getRelations($model->$relation, $relation);
         Json::outputSerializedRelations($request, $resource);
     }
 
@@ -147,10 +152,15 @@ trait BaseControllerTrait
     {
         $json = Json::parse($request->getContent());
         $this->setRelationships($json, $id);
-        // set include for relations
+
         $_GET['include'] = $relation;
-        // TODO: check for existence of an entity for $id
         $model = $this->getEntity($id);
+        if (empty($model))
+        {
+            Json::outputErrors([
+                [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
+            ]);
+        }
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -168,8 +178,14 @@ trait BaseControllerTrait
         $this->setRelationships($json, $id, true);
         // set include for relations
         $_GET['include'] = $relation;
-        // TODO: check for existence of an entity for $id
+
         $model = $this->getEntity($id);
+        if (empty($model))
+        {
+            Json::outputErrors([
+                [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
+            ]);
+        }
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -278,6 +294,11 @@ trait BaseControllerTrait
         return $obj->take($to)->skip($from)->get();
     }
 
+    /**
+     * @param array $json
+     * @param int $eId
+     * @param bool $isRemovable
+     */
     private function setRelationships(array $json, int $eId, bool $isRemovable = false)
     {
         $jsonApiRels = Json::getRelationships($json);
@@ -298,6 +319,12 @@ trait BaseControllerTrait
         }
     }
 
+    /**
+     * @param $entity
+     * @param int $eId
+     * @param int $rId
+     * @param bool $isRemovable
+     */
     private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
     {
         $ucEntity = ucfirst($entity);

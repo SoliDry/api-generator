@@ -84,6 +84,21 @@ class Json
     }
 
     /**
+     * Output errors in JSON API compatible format
+     * @param array $errors
+     */
+    public static function outputErrors(array $errors)
+    {
+        $arr[JSONApiInterface::CONTENT_ERRORS] = [];
+        if (empty($errors) === false)
+        {
+            $arr[JSONApiInterface::CONTENT_ERRORS] = $errors;
+        }
+        echo self::encode($arr);
+        exit(JSONApiInterface::EXIT_STATUS_ERROR);
+    }
+
+    /**
      * @param Request $request
      * @param array $data
      */
@@ -96,7 +111,8 @@ class Json
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
         ];
         $arr[JSONApiInterface::CONTENT_DATA] = $data;
-        echo json_encode($arr);
+        echo self::encode($arr);
+        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
     }
 
     /**
@@ -136,5 +152,15 @@ class Json
         }
         $manager->setSerializer(new JsonApiSerializer($host));
         echo $manager->createData($resource)->toJson();
+        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
+    }
+
+    /**
+     * @param array $array
+     * @return string
+     */
+    public static function encode(array $array)
+    {
+        return json_encode($array);
     }
 }

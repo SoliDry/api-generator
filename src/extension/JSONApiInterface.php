@@ -34,4 +34,10 @@ interface JSONApiInterface
     const CONTENT_DATA    = 'data';
     const CONTENT_TYPE    = 'type';
     const CONTENT_ID      = 'id';
+    const CONTENT_ERRORS  = 'errors';
+
+    const EXIT_STATUS_SUCCESS = 0;
+    const EXIT_STATUS_ERROR   = 1;
+
+    const ERROR_TITLE = 'title';
 }
