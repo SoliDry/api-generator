@@ -15,6 +15,9 @@ interface ModelsInterface
     const LARAVEL_MIGRATION_CLASS = 'Migration';
     const LARAVEL_PROPERTY_TABLE  = 'table';
     const DEFAULT_LIMIT           = 20;
+    const DEFAULT_PAGE            = 1;
+    const PARAM_PAGE              = 'page';
+    const PARAM_LIMIT             = 'limit';
     const LARAVEL_FILTER_ENUM     = 'in';
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';

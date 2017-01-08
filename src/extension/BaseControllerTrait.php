@@ -16,6 +16,8 @@ use rjapi\helpers\Json;
 
 trait BaseControllerTrait
 {
+    use BaseModelTrait;
+
     private $props = [];
     private $entity = null;
     private $model = null;
@@ -41,13 +43,12 @@ trait BaseControllerTrait
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
         $actionName = $route->getActionName();
         $calledMethod = substr($actionName, strpos($actionName, PhpEntitiesInterface::AT) + 1);
-        if ($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods))
-        {
+        if ($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods)) {
             Json::outputErrors([
                 [
-                    JSONApiInterface::ERROR_TITLE => 'JSON API support disabled',
+                    JSONApiInterface::ERROR_TITLE  => 'JSON API support disabled',
                     JSONApiInterface::ERROR_DETAIL => 'JSON API method ' . $calledMethod
-                        . ' was called. You can`t call this method while JSON API support is disabled.'
+                        . ' was called. You can`t call this method while JSON API support is disabled.',
                 ],
             ]);
         }
@@ -66,11 +67,14 @@ trait BaseControllerTrait
     }
 
     /**
-     * GET Output all entries for this Entity
+     * GET Output all entries for this Entity with page/limit pagination support
+     * @param Request $request
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = $this->getAllEntities();
+        $page = ($request->input('page') === null) ? ModelsInterface::DEFAULT_PAGE : $request->input('page');
+        $limit = ($request->input('limit') === null) ? ModelsInterface::DEFAULT_LIMIT : $request->input('limit');
+        $items = $this->getAllEntities($page, $limit);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource);
     }
@@ -158,8 +162,7 @@ trait BaseControllerTrait
     public function relations(Request $request, int $id, string $relation)
     {
         $model = $this->getEntity($id);
-        if (empty($model))
-        {
+        if (empty($model)) {
             Json::outputErrors([
                 [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
             ]);
@@ -182,8 +185,7 @@ trait BaseControllerTrait
 
         $_GET['include'] = $relation;
         $model = $this->getEntity($id);
-        if (empty($model))
-        {
+        if (empty($model)) {
             Json::outputErrors([
                 [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
             ]);
@@ -207,8 +209,7 @@ trait BaseControllerTrait
         $_GET['include'] = $relation;
 
         $model = $this->getEntity($id);
-        if (empty($model))
-        {
+        if (empty($model)) {
             Json::outputErrors([
                 [JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id . ' - not found.'],
             ]);
@@ -221,7 +222,7 @@ trait BaseControllerTrait
      * DELETE relationships for specific entity id
      *
      * @param Request $request JSON API formatted string
-     * @param int $id          int id of an entity
+     * @param int $id int id of an entity
      * @param string $relation
      */
     public function deleteRelations(Request $request, int $id, string $relation)
@@ -244,9 +245,10 @@ trait BaseControllerTrait
                     $this->getModelEntities(
                         $pivotEntity,
                         [[$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $id,
-                          $relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $rId]]
+                          $relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID  => $rId]]
                     )->delete();
-                } else { // OneToOne/Many
+                }
+                else { // OneToOne/Many
                     $relEntity = Classes::getModelEntity($ucEntity);
                     $refModel = new $relEntity();
                     $model = $this->getModelEntities($refModel, [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id]);
@@ -255,70 +257,6 @@ trait BaseControllerTrait
             }
             Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return mixed
-     */
-    private function getEntity(int $id)
-    {
-        $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
-        );
-
-        return $obj->first();
-    }
-
-    /**
-     * @param string $modelEntity
-     * @param int $id
-     *
-     * @return mixed
-     */
-    private function getModelEntity($modelEntity, int $id)
-    {
-        $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
-        );
-
-        return $obj->first();
-    }
-
-    /**
-     * @param string $modelEntity
-     * @param array $params
-     *
-     * @return mixed
-     */
-    private function getModelEntities($modelEntity, array $params)
-    {
-        return call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, $params
-        );
-    }
-
-    /**
-     * @param int $count
-     * @param int $page
-     *
-     * @return mixed
-     */
-    private function getAllEntities(int $count = ModelsInterface::DEFAULT_LIMIT, int $page = 1)
-    {
-        $from = ($count * $page) - $count;
-        $to = $count * $page;
-        $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
-            ModelsInterface::MODEL_METHOD_ORDER_BY,
-            [RamlInterface::RAML_ID, ModelsInterface::SQL_DESC]
-        );
-
-        return $obj->take($to)->skip($from)->get();
     }
 
     /**
@@ -335,7 +273,8 @@ trait BaseControllerTrait
                     // if there is only one relationship
                     $rId = $value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID];
                     $this->saveRelationship($entity, $eId, $rId, $isRemovable);
-                } else {
+                }
+                else {
                     // if there is an array of relationships
                     foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
                         $rId = $val[RamlInterface::RAML_ID];
@@ -366,28 +305,65 @@ trait BaseControllerTrait
 
             if ($pivotExists) {
                 $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
-            } else if ($pivotInverseExists) {
+            }
+            else if ($pivotInverseExists) {
                 $pivotEntity = Classes::getModelEntity($ucEntity . $this->entity);
             }
-            if ($isRemovable === true && $this->relsRemoved === false) {
-                // clean up old links
-                $this->getModelEntities(
-                    $pivotEntity,
-                    [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
-                )->delete();
-                $this->relsRemoved = true;
-            }
 
-            $pivot = new $pivotEntity();
-            $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
-            $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
-            $pivot->save();
-        } else { // OneToOne
-            $relEntity = Classes::getModelEntity($ucEntity);
-            $refModel = new $relEntity();
-            $model = $this->getModelEntity($refModel, $rId);
-            $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
-            $model->save();
+            if ($isRemovable === true) {
+                $this->clearPivotBeforeSave($pivotEntity, $lowEntity, $eId);
+            }
+            $this->savePivot($pivotEntity, $lowEntity, $entity, $eId, $rId);
         }
+        else { // OneToOne
+            $this->saveModel($ucEntity, $lowEntity, $eId, $rId);
+        }
+    }
+
+    /**
+     * @param string $pivotEntity
+     * @param string $lowEntity
+     * @param int $eId
+     */
+    private function clearPivotBeforeSave(string $pivotEntity, string $lowEntity, int $eId)
+    {
+        if ($this->relsRemoved === false) {
+            // clean up old links
+            $this->getModelEntities(
+                $pivotEntity,
+                [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
+            )->delete();
+            $this->relsRemoved = true;
+        }
+    }
+
+    /**
+     * @param string $pivotEntity
+     * @param string $lowEntity
+     * @param string $entity
+     * @param int $eId
+     * @param int $rId
+     */
+    private function savePivot(string $pivotEntity, string $lowEntity, string $entity, int $eId, int $rId)
+    {
+        $pivot = new $pivotEntity();
+        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $pivot->save();
+    }
+
+    /**
+     * @param string $ucEntity
+     * @param string $lowEntity
+     * @param int $eId
+     * @param int $rId
+     */
+    private function saveModel(string $ucEntity, string $lowEntity, int $eId, int $rId)
+    {
+        $relEntity = Classes::getModelEntity($ucEntity);
+        $refModel = new $relEntity();
+        $model = $this->getModelEntity($refModel, $rId);
+        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $model->save();
     }
 }
