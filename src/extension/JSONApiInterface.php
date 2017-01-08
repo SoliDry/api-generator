@@ -39,5 +39,6 @@ interface JSONApiInterface
     const EXIT_STATUS_SUCCESS = 0;
     const EXIT_STATUS_ERROR   = 1;
 
-    const ERROR_TITLE = 'title';
+    const ERROR_TITLE  = 'title';
+    const ERROR_DETAIL = 'detail';
 }

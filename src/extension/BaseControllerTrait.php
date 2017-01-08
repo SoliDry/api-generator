@@ -2,6 +2,7 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
@@ -22,8 +23,34 @@ trait BaseControllerTrait
     private $middleWare = null;
     private $relsRemoved = false;
 
-    public function __construct()
+    private $jsonApiMethods = [
+        JSONApiInterface::URI_METHOD_INDEX,
+        JSONApiInterface::URI_METHOD_VIEW,
+        JSONApiInterface::URI_METHOD_CREATE,
+        JSONApiInterface::URI_METHOD_UPDATE,
+        JSONApiInterface::URI_METHOD_DELETE,
+        JSONApiInterface::URI_METHOD_RELATIONS,
+    ];
+
+    public function __construct(Route $route)
     {
+        // add relations to json api methods array
+        $ucRelations = ucfirst(JSONApiInterface::URI_METHOD_RELATIONS);
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
+        $actionName = $route->getActionName();
+        $calledMethod = substr($actionName, strpos($actionName, PhpEntitiesInterface::AT) + 1);
+        if ($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods))
+        {
+            Json::outputErrors([
+                [
+                    JSONApiInterface::ERROR_TITLE => 'JSON API support disabled',
+                    JSONApiInterface::ERROR_DETAIL => 'JSON API method ' . $calledMethod
+                        . ' was called. You can`t call this method while JSON API support is disabled.'
+                ],
+            ]);
+        }
         $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
         $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
             PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
@@ -334,7 +361,7 @@ trait BaseControllerTrait
         $filePivotInverse = FileManager::getPivotFile($ucEntity, $this->entity);
         $pivotExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivot);
         $pivotInverseExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivotInverse);
-        if ($pivotExists || $pivotInverseExists) { // ManyToMany rel
+        if ($pivotExists === true || $pivotInverseExists === true) { // ManyToMany rel
             $pivotEntity = null;
 
             if ($pivotExists) {
@@ -342,7 +369,7 @@ trait BaseControllerTrait
             } else if ($pivotInverseExists) {
                 $pivotEntity = Classes::getModelEntity($ucEntity . $this->entity);
             }
-            if ($isRemovable && $this->relsRemoved === false) {
+            if ($isRemovable === true && $this->relsRemoved === false) {
                 // clean up old links
                 $this->getModelEntities(
                     $pivotEntity,

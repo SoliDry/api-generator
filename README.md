@@ -27,7 +27,7 @@ php artisan raml:generate raml/articles.raml --migrations
 ```
 
 This command creates the whole environment for You to proceed building complex API based on RAML/Laravel/JSON API, 
-in particular it creates: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
+in particular: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
 Routes (JSON API compatible) and even migrations to help You create RDBMS structure.
  
 ```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
