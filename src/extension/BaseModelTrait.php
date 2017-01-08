@@ -53,15 +53,15 @@ trait BaseModelTrait
     }
 
     /**
-     * @param int $count
      * @param int $page
      *
+     * @param int $limit
      * @return mixed
      */
-    private function getAllEntities(int $count = ModelsInterface::DEFAULT_LIMIT, int $page = ModelsInterface::DEFAULT_PAGE)
+    private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT)
     {
-        $from = ($count * $page) - $count;
-        $to = $count * $page;
+        $from = ($limit * $page) - $limit;
+        $to = $limit * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,

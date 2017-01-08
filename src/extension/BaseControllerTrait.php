@@ -6,7 +6,6 @@ use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
-use rjapi\blocks\EntitiesTrait;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
@@ -17,7 +16,7 @@ use rjapi\helpers\Json;
 
 trait BaseControllerTrait
 {
-    use BaseModelTrait, EntitiesTrait;
+    use BaseModelTrait;
 
     private $props = [];
     private $entity = null;
@@ -54,7 +53,13 @@ trait BaseControllerTrait
             ]);
         }
         $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity = $this->getMiddleware(Config::getModuleName(), $this->entity);
+        // TODO: confilcting with Illuminate../Controller getMiddleware
+        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
+            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
+            PhpEntitiesInterface::BACKSLASH .
+            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
+            $this->entity .
+            DefaultInterface::MIDDLEWARE_POSTFIX;
         $this->middleWare = new $middlewareEntity();
         $this->props = get_object_vars($this->middleWare);
 
