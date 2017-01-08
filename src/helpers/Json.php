@@ -21,7 +21,7 @@ class Json
      *
      * @return array
      */
-    public static function parse(string $json): array
+    public static function parse($json): array
     {
         return json_decode($json, true);
     }
