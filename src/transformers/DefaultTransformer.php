@@ -3,9 +3,7 @@ namespace rjapi\transformers;
 
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
-use rjapi\blocks\DefaultInterface;
-use rjapi\blocks\DirsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\blocks\EntitiesTrait;
 use rjapi\exception\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
@@ -13,6 +11,8 @@ use rjapi\helpers\Config;
 
 class DefaultTransformer extends TransformerAbstract
 {
+    use EntitiesTrait;
+
     const INCLUDE_PREFIX = 'include';
 
     private $middleWare = null;
@@ -68,13 +68,7 @@ class DefaultTransformer extends TransformerAbstract
     {
         // getting entity relation name, ex.: includeAuthor - author
         $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
-
-        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $entityName .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddleware(Config::getModuleName(), $entityName);
         $middleWare = new $middlewareEntity();
         $entityNameLow = strtolower($entityName);
         // getting object, ex.: Book
