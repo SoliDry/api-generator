@@ -75,6 +75,22 @@ Modules/V1/Entities/Tag.php created
 Modules/V1/Database/Migrations/03_01_2017_132895_create_tag_table.php created
 ...
 ```
+Routes will be created in ```Http/routes.php``` file, for every entity defined in raml:
+```php
+Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers'], function()
+{
+    Route::get('/article', 'ArticleController@index');
+    Route::get('/article/{id}', 'ArticleController@view');
+    Route::post('/article', 'ArticleController@create');
+    Route::patch('/article/{id}', 'ArticleController@update');
+    Route::delete('/article/{id}', 'ArticleController@delete');
+    // relation routes
+    Route::get('/article/{id}/relationships/{relations}', 'ArticleController@relations');
+    Route::post('/article/{id}/relationships/{relations}', 'ArticleController@createRelations');
+    Route::patch('/article/{id}/relationships/{relations}', 'ArticleController@updateRelations');
+    Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
+});
+```
 
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
