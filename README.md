@@ -92,6 +92,12 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers']
 });
 ```
 
+You may want to use additional query parameters to fetch includes 
+and/or pagination, for instance:
+```php
+http://example.com/v1/article?include=tag&page=2&limit=10
+```
+
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
 if You, by strange circumstances, want to use one of the previous modules, 
