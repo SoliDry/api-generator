@@ -18,11 +18,13 @@ class Migrations extends MigrationsAbstract
     protected $sourceCode = '';
 
     private $className = '';
+    private $tableName = '';
 
     public function __construct($generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
+        $this->tableName = MigrationsHelper::getTableName($this->generator->objectName);
     }
 
     public function setCodeState($generator)
@@ -43,23 +45,20 @@ class Migrations extends MigrationsAbstract
             ucfirst(ModelsInterface::MIGRATION_CREATE) . $this->className
             . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
-        $table = MigrationsHelper::getTableName($this->generator->objectName);
-
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->openSchema($table);
+        $this->openSchema($this->tableName);
         $this->setRows();
         $this->closeSchema();
         $this->endMethod();
         // migrate down
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $table);
+        $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $this->tableName);
         $this->endMethod();
         $this->endClass();
 
         $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
-
         $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE .
-                         strtolower($this->generator->objectName) .
+                         $this->tableName .
                          PhpEntitiesInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
         if(FileManager::migrationNotExists($this->generator, $migrationName))
         {
@@ -126,10 +125,10 @@ class Migrations extends MigrationsAbstract
                     $this->endClass();
 
                     $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
-
                     $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE
-                                     . strtolower($this->generator->objectName)
-                                     . PhpEntitiesInterface::UNDERSCORE . $relationEntity .
+                                     . $this->tableName
+                                     . PhpEntitiesInterface::UNDERSCORE .
+                                     MigrationsHelper::getTableName($relationEntity) .
                                      PhpEntitiesInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
 
                     if(FileManager::migrationNotExists($this->generator, $migrationName))
