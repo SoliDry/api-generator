@@ -7,6 +7,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
 
 class Migrations extends MigrationsAbstract
@@ -28,7 +29,6 @@ class Migrations extends MigrationsAbstract
 
     public function create()
     {
-        $table = '';
         $this->setTag();
 
         $this->setUse(Schema::class);
@@ -38,28 +38,12 @@ class Migrations extends MigrationsAbstract
         // migrate up
         $this->startClass(
             ucfirst(ModelsInterface::MIGRATION_CREATE) .
-            str_replace(
-                [
-                    PhpEntitiesInterface::DASH,
-                    PhpEntitiesInterface::UNDERSCORE
-                ], '', ucwords(
-                    $this->generator->objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE
-                )
-            )
+            Classes::getClassName($this->generator->objectName)
             . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
+        $table = MigrationsHelper::getTableName($this->generator->objectName);
+
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        // make entity lc + underscore
-        $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($this->generator->objectName));
-        foreach($words as $key => $word)
-        {
-            $table .= $word;
-            if(empty($words[$key + 1]) === false)
-            {
-                $table .= PhpEntitiesInterface::UNDERSCORE;
-            }
-        }
-        $table = strtolower($table);
         $this->openSchema($table);
         $this->setRows();
         $this->closeSchema();
@@ -110,8 +94,6 @@ class Migrations extends MigrationsAbstract
 
                 if(file_exists($entityFile))
                 {
-                    $table        = '';
-                    $relatedTable = '';
                     $this->setTag();
 
                     $this->setUse(Schema::class);
@@ -121,51 +103,16 @@ class Migrations extends MigrationsAbstract
                     // migrate up
                     $this->startClass(
                         ucfirst(ModelsInterface::MIGRATION_CREATE) .
-                        str_replace(
-                            [
-                                PhpEntitiesInterface::DASH,
-                                PhpEntitiesInterface::UNDERSCORE
-                            ], '', ucwords(
-                                $this->generator->objectName, PhpEntitiesInterface::DASH .
-                                                              PhpEntitiesInterface::UNDERSCORE
-                            )
-                        ) .
-                        str_replace(
-                            [
-                                PhpEntitiesInterface::DASH,
-                                PhpEntitiesInterface::UNDERSCORE
-                            ], '', ucwords(
-                                $relationEntity, PhpEntitiesInterface::DASH .
-                                                 PhpEntitiesInterface::UNDERSCORE
-                            )
-                        ) .
+                        Classes::getClassName($this->generator->objectName) .
+                        Classes::getClassName($relationEntity) .
                         ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
                     );
                     $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
                     // make first entity lc + underscore
-                    $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($this->generator->objectName));
-                    foreach($words as $key => $word)
-                    {
-                        $table .= $word;
-                        if(empty($words[$key + 1]) === false)
-                        {
-                            $table .= PhpEntitiesInterface::UNDERSCORE;
-                        }
-                    }
+                    $table = MigrationsHelper::getTableName($this->generator->objectName);
                     // make 2nd entity lc + underscore
-                    $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($relationEntity));
-                    foreach($words as $key => $word)
-                    {
-                        $relatedTable .= $word;
-                        if(empty($words[$key + 1]) === false)
-                        {
-                            $relatedTable .= PhpEntitiesInterface::UNDERSCORE;
-                        }
-                    }
-                    $table          = strtolower($table);
-                    $relatedTable   = strtolower($relatedTable);
+                    $relatedTable = MigrationsHelper::getTableName($relationEntity);
                     $combinedTables = $table . PhpEntitiesInterface::UNDERSCORE . $relatedTable;
-
                     $this->openSchema($combinedTables);
                     $this->setPivotRows($relationEntity);
                     $this->closeSchema();

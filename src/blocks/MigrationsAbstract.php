@@ -11,7 +11,6 @@ use rjapi\RJApiGenerator;
 abstract class MigrationsAbstract
 {
     const PATTERN_TIME     = 'd_m_Y_Hi';
-    const PATTERN_SPLIT_UC = '/(?=[A-Z])/';
 
     protected function setRows()
     {

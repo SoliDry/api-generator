@@ -25,6 +25,11 @@ class Classes
         return (string) $ref->getShortName();
     }
 
+    /**
+     * @param $object
+     *
+     * @return string
+     */
     public static function getObjectName($object): string
     {
         $ref = new \ReflectionClass($object);
@@ -32,6 +37,12 @@ class Classes
         return (string) $ref->getShortName();
     }
 
+    /**
+     * @param string $str
+     * @param string $postfix
+     *
+     * @return mixed
+     */
     public static function cutEntity(string $str, string $postfix)
     {
         return substr($str, 0, strpos($str, $postfix));
@@ -46,5 +57,23 @@ class Classes
         return DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
         PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR .
         PhpEntitiesInterface::BACKSLASH . $entity;
+    }
+
+    /**
+     * Gets class name ucwording 1st and replacing -_ in composite names
+     * @param string $objectName
+     *
+     * @return mixed
+     */
+    public static function getClassName(string $objectName)
+    {
+        return str_replace(
+            [
+                PhpEntitiesInterface::DASH,
+                PhpEntitiesInterface::UNDERSCORE
+            ], '', ucwords(
+                $objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE
+            )
+        );
     }
 }
