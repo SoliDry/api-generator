@@ -63,9 +63,9 @@ class Classes
      * Gets class name ucwording 1st and replacing -_ in composite names
      * @param string $objectName
      *
-     * @return mixed
+     * @return string
      */
-    public static function getClassName(string $objectName)
+    public static function getClassName(string $objectName): string
     {
         return str_replace(
             [

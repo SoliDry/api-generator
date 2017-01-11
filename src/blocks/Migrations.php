@@ -17,9 +17,12 @@ class Migrations extends MigrationsAbstract
     protected $generator  = null;
     protected $sourceCode = '';
 
+    private $className = '';
+
     public function __construct($generator)
     {
         $this->generator = $generator;
+        $this->className = Classes::getClassName($this->generator->objectName);
     }
 
     public function setCodeState($generator)
@@ -37,8 +40,7 @@ class Migrations extends MigrationsAbstract
         $this->setUse($migrationClass, false, true);
         // migrate up
         $this->startClass(
-            ucfirst(ModelsInterface::MIGRATION_CREATE) .
-            Classes::getClassName($this->generator->objectName)
+            ucfirst(ModelsInterface::MIGRATION_CREATE) . $this->className
             . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
         $table = MigrationsHelper::getTableName($this->generator->objectName);
@@ -77,7 +79,7 @@ class Migrations extends MigrationsAbstract
      */
     public function createPivot()
     {
-        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->generator->objectName);
+        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->className);
         $middleWare       = new $middlewareEntity();
 
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
@@ -111,7 +113,7 @@ class Migrations extends MigrationsAbstract
                     // make first entity lc + underscore
                     $table = MigrationsHelper::getTableName($this->generator->objectName);
                     // make 2nd entity lc + underscore
-                    $relatedTable = MigrationsHelper::getTableName($relationEntity);
+                    $relatedTable   = MigrationsHelper::getTableName($relationEntity);
                     $combinedTables = $table . PhpEntitiesInterface::UNDERSCORE . $relatedTable;
                     $this->openSchema($combinedTables);
                     $this->setPivotRows($relationEntity);

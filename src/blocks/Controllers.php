@@ -12,16 +12,19 @@ class Controllers implements ControllersInterface
     use ContentManager;
 
     /** @var RJApiGenerator generator */
-    private $generator  = null;
+    private $generator = null;
     private $sourceCode = '';
+    private $className = '';
 
     /**
      * Controllers constructor.
+     *
      * @param RJApiGenerator $generator
      */
     public function __construct($generator)
     {
         $this->generator = $generator;
+        $this->className = Classes::getClassName($this->generator->objectName);
     }
 
     /**
@@ -44,7 +47,9 @@ class Controllers implements ControllersInterface
                           . PhpEntitiesInterface::PHP_EXT;
 
         $this->setTag();
-        $this->setNamespace($this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir);
+        $this->setNamespace(
+            $this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir
+        );
         $baseFullMapper = BaseController::class;
         $baseMapperName = Classes::getName($baseFullMapper);
 
@@ -61,19 +66,23 @@ class Controllers implements ControllersInterface
     public function create()
     {
         $this->setTag();
-        $this->setNamespace($this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir);
+        $this->setNamespace(
+            $this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir
+        );
         $this->startClass(
-            $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX,
+            $this->className . DefaultInterface::CONTROLLER_POSTFIX,
             $this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX
         );
         $this->endClass();
         $fileController = $this->generator->formatControllersPath()
                           . PhpEntitiesInterface::SLASH
-                          . $this->generator->objectName
+                          . $this->className
                           . DefaultInterface::CONTROLLER_POSTFIX
                           . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($fileController, $this->sourceCode,
-            FileManager::isRegenerated($this->generator->options));
+        $isCreated      = FileManager::createFile(
+            $fileController, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options)
+        );
         if($isCreated)
         {
             Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
