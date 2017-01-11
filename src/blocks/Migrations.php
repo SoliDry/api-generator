@@ -13,7 +13,7 @@ class Migrations extends MigrationsAbstract
 {
     use ContentManager, MigrationsTrait, EntitiesTrait;
     /** @var RJApiGenerator $generator */
-    protected $generator = null;
+    protected $generator  = null;
     protected $sourceCode = '';
 
     public function __construct($generator)
@@ -28,6 +28,7 @@ class Migrations extends MigrationsAbstract
 
     public function create()
     {
+        $table = '';
         $this->setTag();
 
         $this->setUse(Schema::class);
@@ -41,22 +42,35 @@ class Migrations extends MigrationsAbstract
                 [
                     PhpEntitiesInterface::DASH,
                     PhpEntitiesInterface::UNDERSCORE
-                ], '', ucwords($this->generator->objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE)
+                ], '', ucwords(
+                    $this->generator->objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE
+                )
             )
             . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->openSchema($this->generator->objectName);
+        // make entity lc + underscore
+        $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($this->generator->objectName));
+        foreach($words as $key => $word)
+        {
+            $table .= $word;
+            if(empty($words[$key + 1]) === false)
+            {
+                $table .= PhpEntitiesInterface::UNDERSCORE;
+            }
+        }
+        $table = strtolower($table);
+        $this->openSchema($table);
         $this->setRows();
         $this->closeSchema();
         $this->endMethod();
         // migrate down
         $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-        $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, strtolower($this->generator->objectName));
+        $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $table);
         $this->endMethod();
         $this->endClass();
 
-        $migrationMask = date('d_m_Y_Hi', time()) . mt_rand(10, 99);
+        $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
 
         $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE .
                          strtolower($this->generator->objectName) .
@@ -90,17 +104,14 @@ class Migrations extends MigrationsAbstract
             {
                 $entityFile = $this->generator->formatEntitiesPath()
                               . PhpEntitiesInterface::SLASH .
-                              str_replace(
-                                  [
-                                      PhpEntitiesInterface::DASH,
-                                      PhpEntitiesInterface::UNDERSCORE
-                                  ], '', ucwords($this->generator->objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE)
-                              ) .
+                              $this->generator->objectName .
                               ucfirst($relationEntity) .
                               PhpEntitiesInterface::PHP_EXT;
 
                 if(file_exists($entityFile))
                 {
+                    $table        = '';
+                    $relatedTable = '';
                     $this->setTag();
 
                     $this->setUse(Schema::class);
@@ -109,25 +120,63 @@ class Migrations extends MigrationsAbstract
                     $this->setUse($migrationClass, false, true);
                     // migrate up
                     $this->startClass(
-                        ucfirst(ModelsInterface::MIGRATION_CREATE) . $this->generator->objectName
-                        . ucfirst($relationEntity) .
+                        ucfirst(ModelsInterface::MIGRATION_CREATE) .
+                        str_replace(
+                            [
+                                PhpEntitiesInterface::DASH,
+                                PhpEntitiesInterface::UNDERSCORE
+                            ], '', ucwords(
+                                $this->generator->objectName, PhpEntitiesInterface::DASH .
+                                                              PhpEntitiesInterface::UNDERSCORE
+                            )
+                        ) .
+                        str_replace(
+                            [
+                                PhpEntitiesInterface::DASH,
+                                PhpEntitiesInterface::UNDERSCORE
+                            ], '', ucwords(
+                                $relationEntity, PhpEntitiesInterface::DASH .
+                                                 PhpEntitiesInterface::UNDERSCORE
+                            )
+                        ) .
                         ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
                     );
                     $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-                    $this->openSchema(
-                        $this->generator->objectName
-                        . PhpEntitiesInterface::UNDERSCORE . $relationEntity
-                    );
+                    // make first entity lc + underscore
+                    $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($this->generator->objectName));
+                    foreach($words as $key => $word)
+                    {
+                        $table .= $word;
+                        if(empty($words[$key + 1]) === false)
+                        {
+                            $table .= PhpEntitiesInterface::UNDERSCORE;
+                        }
+                    }
+                    // make 2nd entity lc + underscore
+                    $words = preg_split(self::PATTERN_SPLIT_UC, lcfirst($relationEntity));
+                    foreach($words as $key => $word)
+                    {
+                        $relatedTable .= $word;
+                        if(empty($words[$key + 1]) === false)
+                        {
+                            $relatedTable .= PhpEntitiesInterface::UNDERSCORE;
+                        }
+                    }
+                    $table          = strtolower($table);
+                    $relatedTable   = strtolower($relatedTable);
+                    $combinedTables = $table . PhpEntitiesInterface::UNDERSCORE . $relatedTable;
+
+                    $this->openSchema($combinedTables);
                     $this->setPivotRows($relationEntity);
                     $this->closeSchema();
                     $this->endMethod();
                     // migrate down
                     $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
-                    $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, strtolower($this->generator->objectName));
+                    $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $combinedTables);
                     $this->endMethod();
                     $this->endClass();
 
-                    $migrationMask = date('d_m_Y_Hi', time()) . mt_rand(10, 99);
+                    $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
 
                     $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE
                                      . strtolower($this->generator->objectName)
