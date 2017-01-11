@@ -8,6 +8,7 @@ use rjapi\exception\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Config;
+use rjapi\helpers\MigrationsHelper;
 
 class DefaultTransformer extends TransformerAbstract
 {
@@ -70,7 +71,7 @@ class DefaultTransformer extends TransformerAbstract
         $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
         $middlewareEntity = $this->getMiddleware(Config::getModuleName(), $entityName);
         $middleWare = new $middlewareEntity();
-        $entityNameLow = strtolower($entityName);
+        $entityNameLow = MigrationsHelper::getTableName($entityName);
         // getting object, ex.: Book
         $obj = $arguments[0];
         $entity = $obj->$entityNameLow;

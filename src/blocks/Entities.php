@@ -5,6 +5,7 @@ namespace rjapi\blocks;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
 
 class Entities extends FormRequestModel
@@ -56,7 +57,7 @@ class Entities extends FormRequestModel
         $this->endClass();
 
         $file      = $this->generator->formatEntitiesPath() . PhpEntitiesInterface::SLASH . $this->className .
-                     PhpEntitiesInterface::PHP_EXT;
+            PhpEntitiesInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
@@ -83,7 +84,7 @@ class Entities extends FormRequestModel
                 $related   = '';
                 // determine if ManyToMany, OneToMany, OneToOne rels
                 if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
                 )
                 {
                     $current = trim(
@@ -92,7 +93,7 @@ class Entities extends FormRequestModel
                     );
                 }
                 if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                         [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
                 )
                 {
                     $related = trim(
@@ -144,9 +145,9 @@ class Entities extends FormRequestModel
                         {// ManyToMany
                             // check inversion of a pivot
                             $entityFile = $this->generator->formatEntitiesPath()
-                                          . PhpEntitiesInterface::SLASH . $this->generator->objectName .
-                                          ucfirst($relationEntity) .
-                                          PhpEntitiesInterface::PHP_EXT;
+                                . PhpEntitiesInterface::SLASH . $this->generator->objectName .
+                                ucfirst($relationEntity) .
+                                PhpEntitiesInterface::PHP_EXT;
                             $relEntity  = $relationEntity;
                             $objName    = $this->generator->objectName;
                             if(file_exists($entityFile) === false)
@@ -156,7 +157,7 @@ class Entities extends FormRequestModel
                             }
                             $this->setRelation(
                                 $relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
-                                strtolower($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity)
+                                MigrationsHelper::getTableName($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity)
                             );
                         }
                     }
@@ -196,8 +197,8 @@ class Entities extends FormRequestModel
         $this->endClass();
 
         $file      = $this->generator->formatEntitiesPath() .
-                     PhpEntitiesInterface::SLASH .
-                     $this->className . Classes::getClassName($ucEntity) . PhpEntitiesInterface::PHP_EXT;
+            PhpEntitiesInterface::SLASH .
+            $this->className . Classes::getClassName($ucEntity) . PhpEntitiesInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
@@ -221,8 +222,8 @@ class Entities extends FormRequestModel
             {
                 $ucEntitty = ucfirst($relationEntity);
                 $file      = $this->generator->formatEntitiesPath()
-                             . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
-                             PhpEntitiesInterface::PHP_EXT;
+                    . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
+                    PhpEntitiesInterface::PHP_EXT;
                 // check if inverse Entity pivot exists
                 if(file_exists($file) === false)
                 {
@@ -230,7 +231,7 @@ class Entities extends FormRequestModel
                     $related = '';
                     // determine if ManyToMany, OneToMany, OneToOne rels
                     if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                             [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
                     )
                     {
                         $current = trim(
@@ -239,7 +240,7 @@ class Entities extends FormRequestModel
                         );
                     }
                     if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                             [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
                     )
                     {
                         $related = trim(
@@ -295,17 +296,17 @@ class Entities extends FormRequestModel
     {
         $this->startMethod($entity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
         $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
-                    . PhpEntitiesInterface::ARROW . $method
-                    . PhpEntitiesInterface::OPEN_PARENTHESES . ucfirst($entity)
-                    . PhpEntitiesInterface::DOUBLE_COLON . PhpEntitiesInterface::PHP_CLASS;
+            . PhpEntitiesInterface::ARROW . $method
+            . PhpEntitiesInterface::OPEN_PARENTHESES . Classes::getClassName($entity)
+            . PhpEntitiesInterface::DOUBLE_COLON . PhpEntitiesInterface::PHP_CLASS;
 
         if(empty($args) === false)
         {
             foreach($args as $val)
             {
                 $toReturn .= PhpEntitiesInterface::COMMA
-                             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES . $val .
-                             PhpEntitiesInterface::QUOTES;
+                    . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES . $val .
+                    PhpEntitiesInterface::QUOTES;
             }
         }
         $toReturn .= PhpEntitiesInterface::CLOSE_PARENTHESES;

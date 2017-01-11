@@ -13,13 +13,19 @@ use rjapi\blocks\RamlInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
+use rjapi\helpers\MigrationsHelper;
 
+/**
+ * Class BaseControllerTrait
+ * @package rjapi\extension
+ */
 trait BaseControllerTrait
 {
     use BaseModelTrait;
 
     private $props = [];
     private $entity = null;
+    /** @var BaseModel model */
     private $model = null;
     private $modelEntity = null;
     private $middleWare = null;
@@ -294,8 +300,8 @@ trait BaseControllerTrait
      */
     private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
     {
-        $ucEntity = ucfirst($entity);
-        $lowEntity = strtolower($this->entity);
+        $ucEntity = Classes::getClassName($entity);
+        $lowEntity = MigrationsHelper::getTableName($this->entity);
         // if pivot file exists then save
         $filePivot = FileManager::getPivotFile($this->entity, $ucEntity);
         $filePivotInverse = FileManager::getPivotFile($ucEntity, $this->entity);
@@ -362,8 +368,7 @@ trait BaseControllerTrait
     private function saveModel(string $ucEntity, string $lowEntity, int $eId, int $rId)
     {
         $relEntity = Classes::getModelEntity($ucEntity);
-        $refModel = new $relEntity();
-        $model = $this->getModelEntity($refModel, $rId);
+        $model = $this->getModelEntity($relEntity, $rId);
         $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $model->save();
     }
