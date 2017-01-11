@@ -137,6 +137,10 @@ Note that all migrations for specific module will be placed in ``` Modules/{Modu
 
 To execute them all - run: ``` php artisan module:migrate ```
 
+Also worth to mention - Laravel uses table_id convention to link tables by foreign key.
+So U can either follow the default - add to RAML an id that matches to the table name (just like in example: topic_id -> topic table name) 
+or make Your own foreign key, but then add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
+
 ### RAML Types and Declarations
 
 The ```version``` root property !required
