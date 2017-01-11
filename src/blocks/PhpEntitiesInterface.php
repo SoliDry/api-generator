@@ -42,6 +42,7 @@ interface PhpEntitiesInterface
     const DOUBLE_ARROW  = '=>';
     const PIPE          = '|';
     const AT            = '@';
+    const DASH          = '-';
     const UNDERSCORE    = '_';
     const ASTERISK      = '*';
 

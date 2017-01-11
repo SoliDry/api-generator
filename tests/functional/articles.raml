@@ -119,6 +119,36 @@ types:
       attributes: TopicAttributes
       relationships:
         type: ArticleRelationships[]
+  Category_templateRelationships:
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+
+  Category_templateAttributes:
+    description: TemplatesCategories attributes description
+    type: object
+    properties:
+      title:
+        description: TemplatesCategories title
+        required: true
+        type: string
+        maxLength: 50
+      description:
+        description: TemplatesCategories Description
+        required: true
+        type: string
+
+  Category_template:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: Category_templateAttributes
+      relationships:
+        type: TemplateRelationships[]
   FilterID:
     type: string
     pattern: '/^[,\ \d]*$/'
