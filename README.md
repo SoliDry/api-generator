@@ -161,6 +161,8 @@ Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
   ID:
     type: integer
     required: true
+    # it will be BIGINT UNSIGNED in migration Schema if maximum > 10
+    maximum: 20
   Type:
     type: string
     required: true
@@ -244,7 +246,7 @@ Complete composite Object looks like this:
         type: TagRelationships[] | TopicRelationships
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
-where may any business logic be applied
+where may any business logic be applied.
 
 Complete directory structure after generator will end up it`s work will be like:
 ```php
