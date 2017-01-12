@@ -10,19 +10,25 @@ use rjapi\RJApiGenerator;
  */
 abstract class MigrationsAbstract
 {
-    const PATTERN_TIME     = 'd_m_Y_Hi';
+    const PATTERN_TIME = 'd_m_Y_Hi';
 
     protected function setRows()
     {
-        // always create an auto_increment primary key - id
-        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
-        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-        [RamlInterface::RAML_PROPS] as $attrKey => $attrVal)
+//        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
+        // todo: fix array_unshift
+        $attrs = $this->getEntityAttributes();
+        foreach($attrs as $attrKey => $attrVal)
         {
             if(is_array($attrVal) && empty($attrVal[RamlInterface::RAML_TYPE]) === false)
             {
                 $this->setDescription($attrVal);
                 $type = $attrVal[RamlInterface::RAML_TYPE];
+                if($attrKey === RamlInterface::RAML_ID)
+                {
+                    // create an auto_increment primary key - id
+                    $this->setId($attrVal, $attrKey, $type);
+                    continue;
+                }
                 switch ($type)
                 {
                     case RamlInterface::RAML_TYPE_STRING:
@@ -50,6 +56,7 @@ abstract class MigrationsAbstract
 
     protected function setPivotRows($relationEntity)
     {
+        // P = 2T/2
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, strtolower($this->generator->objectName)
@@ -60,5 +67,28 @@ abstract class MigrationsAbstract
                                                        . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
+    }
+
+    private function getEntityAttributes()
+    {
+        $attrsArray  =
+            $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+        $attrsArray[RamlInterface::RAML_ID] = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]];
+        return $attrsArray;
+    }
+
+    private function setId($attrVal, $attrKey, $type)
+    {
+        // set incremented id int
+        if($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false)
+        {
+            if($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS)
+            {
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_BIG_INCREMENTS, $attrKey);
+
+                return;
+            }
+        }
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, $attrKey);
     }
 }

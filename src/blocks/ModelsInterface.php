@@ -24,15 +24,15 @@ interface ModelsInterface
     const LARAVEL_FILTER_MAX      = 'max';
 
     // Methods
-    const MODEL_METHOD_ALL             = 'all';
-    const MODEL_METHOD_WHERE           = 'where';
-    const MODEL_METHOD_ORDER_BY        = 'orderBy';
+    const MODEL_METHOD_ALL      = 'all';
+    const MODEL_METHOD_WHERE    = 'where';
+    const MODEL_METHOD_ORDER_BY = 'orderBy';
     // ONE TO ONE
-    const MODEL_METHOD_HAS_ONE         = 'hasOne';
+    const MODEL_METHOD_HAS_ONE = 'hasOne';
     // ONE TO MANY
-    const MODEL_METHOD_HAS_MANY        = 'hasMany';
+    const MODEL_METHOD_HAS_MANY = 'hasMany';
     // MANY TO ONE INVERSE
-    conSt MODEL_METHOD_BELONGS_TO      = 'belongsTo';
+    conSt MODEL_METHOD_BELONGS_TO = 'belongsTo';
     // MANY TO MANY TWO WAY
     const MODEL_METHOD_BELONGS_TO_MANY = 'belongsToMany';
     const MODEL_METHOD_RELATIONS       = 'relations';
@@ -47,19 +47,22 @@ interface ModelsInterface
     const MIGRATION_TABLE  = 'table';
 
     // Migration methods
-    const MIGRATION_METHOD_INCREMENTS = 'increments';
-    const MIGRATION_METHOD_STRING     = 'string';
-    const MIGRATION_METHOD_INTEGER    = 'integer';
-    const MIGRATION_METHOD_TINYINT    = 'unsignedTinyInteger';
-    const MIGRATION_METHOD_TIMESTAMPS = 'timestamps';
-    const MIGRATION_METHOD_DATETIME   = 'dateTime';
-    const MIGRATION_METHOD_ENUM       = 'enum';
-    const MIGRATION_METHOD_DROP       = 'dropIfExists';
-    const MIGRATION_METHOD_UP         = 'up';
-    const MIGRATION_METHOD_DOWN       = 'down';
+    const MIGRATION_METHOD_INCREMENTS     = 'increments';
+    const MIGRATION_METHOD_BIG_INCREMENTS = 'bigIncrements';
+    const MIGRATION_METHOD_STRING         = 'string';
+    const MIGRATION_METHOD_INTEGER        = 'integer';
+    const MIGRATION_METHOD_TINYINT        = 'unsignedTinyInteger';
+    const MIGRATION_METHOD_TIMESTAMPS     = 'timestamps';
+    const MIGRATION_METHOD_DATETIME       = 'dateTime';
+    const MIGRATION_METHOD_ENUM           = 'enum';
+    const MIGRATION_METHOD_DROP           = 'dropIfExists';
+    const MIGRATION_METHOD_UP             = 'up';
+    const MIGRATION_METHOD_DOWN           = 'down';
 
     // base properties
-    const PROPERTY_TABLE = 'table';
+    const PROPERTY_TABLE       = 'table';
     const PROPERTY_PRIMARY_KEY = 'primaryKey';
-    const PROPERTY_TIMESTAMPS = 'timestamps';
+    const PROPERTY_TIMESTAMPS  = 'timestamps';
+
+    const ID_MAX_INCREMENTS = 10;
 }
