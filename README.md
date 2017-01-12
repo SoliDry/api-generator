@@ -137,9 +137,10 @@ Note that all migrations for specific module will be placed in ``` Modules/{Modu
 
 To execute them all - run: ``` php artisan module:migrate ```
 
-Also worth to mention - Laravel uses table_id convention to link tables by foreign key.
-So U can either follow the default - add to RAML an id that matches to the table name (just like in example: topic_id -> topic table name) 
-or make Your own foreign key, but then add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
+Also worth to mention - Laravel uses table_id convention to link tables via foreign key.
+So U can either follow the default - add to RAML an id that matches to the table name 
+(just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` bellow) 
+or make Your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
 
 ### RAML Types and Declarations
 
@@ -205,6 +206,12 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]
+      topic_id:
+        description: ManyToOne Topic relationship
+        required: true
+        type: integer
+        minimum: 1
+        maximum: 9        
 ```
 
 Relationships custom type definition semantics ```*Relationships```
