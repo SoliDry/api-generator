@@ -29,6 +29,7 @@ abstract class MigrationsAbstract
                     $this->setId($attrVal, $attrKey, $type);
                     continue;
                 }
+                // create migration fields depending on types
                 switch ($type)
                 {
                     case RamlInterface::RAML_TYPE_STRING:
