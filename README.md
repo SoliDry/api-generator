@@ -60,19 +60,25 @@ many thx to nWidart https://github.com/nWidart/laravel-modules
 
 And RAML-types based generated files:
 ```sh
-================ Article Entities
-Modules/V1/Http/Controllers/DefaultController.php created
-Modules/V1/Http/Controllers/ArticleController.php created
-Modules/V1/Http/Middleware/ArticleMiddleware.php created
-Modules/V1/Entities/ArticleTag.php created
-Modules/V1/Entities/Article.php created
-Modules/V1/Database/Migrations/03_01_2017_132841_create_article_table.php created
-Modules/V1/Database/Migrations/03_01_2017_132857_create_article_tag_table.php created
 ================ Tag Entities
+Modules/V1/Http/Controllers/DefaultController.php created
 Modules/V1/Http/Controllers/TagController.php created
 Modules/V1/Http/Middleware/TagMiddleware.php created
+Modules/V1/Entities/TagArticle.php created
 Modules/V1/Entities/Tag.php created
-Modules/V1/Database/Migrations/03_01_2017_132895_create_tag_table.php created
+Modules/V1/Http/routes.php created
+Modules/V1/Database/Migrations/11_01_2017_145028_create_tag_table.php created
+Modules/V1/Database/Migrations/11_01_2017_145011_create_tag_article_table.php created
+================ Article Entities
+Modules/V1/Http/Controllers/ArticleController.php created
+Modules/V1/Http/Middleware/ArticleMiddleware.php created
+Modules/V1/Entities/Article.php created
+Modules/V1/Database/Migrations/11_01_2017_145023_create_article_table.php created
+================ Topic Entities
+Modules/V1/Http/Controllers/TopicController.php created
+Modules/V1/Http/Middleware/TopicMiddleware.php created
+Modules/V1/Entities/Topic.php created
+Modules/V1/Database/Migrations/11_01_2017_145036_create_topic_table.php created
 ...
 ```
 Routes will be created in ```Http/routes.php``` file, for every entity defined in raml:
