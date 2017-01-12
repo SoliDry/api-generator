@@ -8,6 +8,8 @@
 
 namespace rjapi\blocks;
 
+use rjapi\helpers\Classes;
+
 trait RoutesTrait
 {
     public function openGroup(string $version)
@@ -63,7 +65,7 @@ trait RoutesTrait
                              . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA .
                              PhpEntitiesInterface::SPACE
                              . PhpEntitiesInterface::QUOTES .
-                             $objectName . DefaultInterface::CONTROLLER_POSTFIX
+                             Classes::getClassName($objectName) . DefaultInterface::CONTROLLER_POSTFIX
                              . PhpEntitiesInterface::AT . $uri
                              . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::CLOSE_PARENTHESES .
                              PhpEntitiesInterface::SEMICOLON . PHP_EOL;
