@@ -71,8 +71,8 @@ abstract class MigrationsAbstract
 
     private function getEntityAttributes()
     {
-        $attrsArray[RamlInterface::RAML_ID] = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]];
-        array_push($attrsArray, $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
+        $attrsArray = [RamlInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]]] +
+            $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
         return $attrsArray;
     }
 
