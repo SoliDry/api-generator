@@ -3,8 +3,8 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
-![alt RAML logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/5579724.png)
-![alt Laravel logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/index.png)
+![alt RAML logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/raml_logo.png)
+![alt Laravel logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/laravel-logo-white.png)
 ![alt JSON API logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/jsonapi.png)
 
 RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, with complete support of JSON-API data format 
