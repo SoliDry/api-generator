@@ -8,7 +8,6 @@
 
 namespace rjapi\blocks;
 
-
 interface ConsoleInterface
 {
     // console command options

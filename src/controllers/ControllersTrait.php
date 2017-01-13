@@ -12,6 +12,7 @@ use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\Migrations;
+use rjapi\blocks\Module;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use rjapi\blocks\Routes;
@@ -90,7 +91,9 @@ trait ControllersTrait
                 ConsoleInterface::OPTION_MIGRATIONS => 1,
                 ConsoleInterface::OPTION_REGENERATE => 1
             ];
-        } else {
+        }
+        else
+        {
             $this->options = $this->options();
         }
         $this->runGenerator();
@@ -131,13 +134,8 @@ trait ControllersTrait
 
     private function generateModule()
     {
-        $output = [];
-        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->version, $output);
-        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->version, $output);
-        foreach($output as $str)
-        {
-            Console::out($str, Console::COLOR_GREEN);
-        }
+        $module = new Module($this);
+        $module->create();
     }
 
     public function createDirs()
@@ -219,7 +217,8 @@ trait ControllersTrait
         $this->routes = new Routes($this);
         $this->routes->create();
 
-        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
+        if(empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false)
+        {
             // create Migrations
             $this->migrations = new Migrations($this);
             $this->migrations->create();

@@ -8,10 +8,10 @@
 
 namespace rjapi\blocks;
 
-
 interface DirsInterface
 {
     // Laravel dirs
+    const CONFIG_DIR      = 'config';
     const APPLICATION_DIR = 'App';
     const MODULES_DIR     = 'Modules';
     const HTTP_DIR        = 'Http';
