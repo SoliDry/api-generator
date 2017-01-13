@@ -15,7 +15,6 @@ abstract class MigrationsAbstract
     protected function setRows()
     {
 //        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
-        // todo: fix array_unshift
         $attrs = $this->getEntityAttributes();
         foreach($attrs as $attrKey => $attrVal)
         {
@@ -72,9 +71,8 @@ abstract class MigrationsAbstract
 
     private function getEntityAttributes()
     {
-        $attrsArray  =
-            $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
         $attrsArray[RamlInterface::RAML_ID] = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]];
+        array_push($attrsArray, $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
         return $attrsArray;
     }
 
