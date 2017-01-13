@@ -152,6 +152,16 @@ as the last element of the array in ```config/module.php``` file,
 if You, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
 
+An example of ```config/module.php```:
+```php
+<?php
+return [
+    'modules'=> [
+        'v1',
+    ]
+];
+```
+
 Generated migrations will look like standard migrations in Laravel:
 ```php
 <?php
