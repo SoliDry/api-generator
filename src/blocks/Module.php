@@ -43,12 +43,13 @@ class Module
     private function createModuleContent()
     {
         $this->sourceCode .= PhpEntitiesInterface::PHP_RETURN . PhpEntitiesInterface::SPACE
-                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::QUOTES
-                             . ModulesInterface::KEY_MODULES . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::TAB_PSR4
+                             . PhpEntitiesInterface::QUOTES . ModulesInterface::KEY_MODULES . PhpEntitiesInterface::QUOTES
                              . PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE
-                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::QUOTES
+                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::TAB_PSR4
+                             . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::QUOTES
                              . $this->generator->version . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA
-                             . PHP_EOL . PhpEntitiesInterface::CLOSE_BRACKET . PHP_EOL
+                             . PHP_EOL . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::CLOSE_BRACKET . PHP_EOL
                              . PhpEntitiesInterface::CLOSE_BRACKET . PhpEntitiesInterface::SEMICOLON;
     }
 }

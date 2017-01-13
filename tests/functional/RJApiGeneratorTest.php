@@ -2,6 +2,8 @@
 namespace rjapitest;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Routing\Route;
+use Modules\V1\Http\Controllers\ArticleController;
 use Modules\V1\Http\Controllers\DefaultController;
 use rjapi\RJApiGenerator;
 
@@ -57,7 +59,8 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
      */
     public function testControllers()
     {
-        $rubrics = new \Modules\V1\Http\Controllers\ArticleController();
+        $route = new Route(['foo'], '/v1/bar', ['index']);
+        $rubrics = new ArticleController($route);
         $this->assertInstanceOf(DefaultController::class, $rubrics);
     }
 

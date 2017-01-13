@@ -5,3 +5,4 @@ bootstrap/
 app/
 Modules/
 artisan
+config/

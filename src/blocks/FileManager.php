@@ -77,7 +77,7 @@ class FileManager implements DirsInterface
     public static function createModuleConfig(string $sourceCode)
     {
         self::createFile(
-            DirsInterface::CONFIG_DIR . ModulesInterface::KEY_MODULE . PhpEntitiesInterface::PHP_EXT, $sourceCode
+            DirsInterface::CONFIG_DIR . PhpEntitiesInterface::SLASH . ModulesInterface::KEY_MODULE . PhpEntitiesInterface::PHP_EXT, $sourceCode
         );
     }
 
