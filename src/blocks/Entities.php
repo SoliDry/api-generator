@@ -157,7 +157,7 @@ class Entities extends FormRequestModel
                             }
                             $this->setRelation(
                                 $relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO_MANY,
-                                MigrationsHelper::getTableName($objName . PhpEntitiesInterface::UNDERSCORE . $relEntity)
+                                MigrationsHelper::getTableName($objName . ucfirst($relEntity))
                             );
                         }
                     }
