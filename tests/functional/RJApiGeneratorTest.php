@@ -51,7 +51,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
 
     public function testRaml()
     {
-        $this->gen->actionIndex('./tests/functional/articles.raml');
+        $this->gen->actionIndex('raml/articles.raml');
     }
 
     /**

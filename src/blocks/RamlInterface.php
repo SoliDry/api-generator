@@ -30,6 +30,8 @@ interface RamlInterface
     const RAML_KEY_REQUIRED      = 'required';
     const RAML_KEY_DESCRIPTION   = 'description';
     const RAML_KEY_DEFAULT       = 'default';
+    const RAML_KEY_TYPES         = 'types';
+    const RAML_KEY_USES          = 'uses';
 
     // RAML filters
     const RAML_STRING_MIN  = 'minLength';

@@ -3,10 +3,8 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\ConsoleInterface;
-use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
-use rjapi\blocks\CommandsInterface;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
@@ -59,10 +57,10 @@ trait ControllersTrait
     private $migrations   = null;
 
     private $excludedSubtypes = [
-        self::CUSTOM_TYPES_ATTRIBUTES,
-        self::CUSTOM_TYPES_RELATIONSHIPS,
-        self::CUSTOM_TYPES_QUERY_SEARCH,
-        self::CUSTOM_TYPES_FILTER,
+        CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
+        CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
+        CustomsInterface::CUSTOM_TYPES_QUERY_SEARCH,
+        CustomsInterface::CUSTOM_TYPES_FILTER,
     ];
 
     public $options = [];
@@ -73,17 +71,16 @@ trait ControllersTrait
     public function actionIndex(string $ramlFile)
     {
         $data = Yaml::parse(file_get_contents($ramlFile));
-
         $this->version        = str_replace('/', '', $data['version']);
-        $this->appDir         = self::APPLICATION_DIR;
-        $this->controllersDir = self::CONTROLLERS_DIR;
-        $this->entitiesDir    = self::ENTITIES_DIR;
-        $this->modulesDir     = self::MODULES_DIR;
-        $this->httpDir        = self::HTTP_DIR;
-        $this->middlewareDir  = self::MIDDLEWARE_DIR;
-        $this->migrationsDir  = self::MIGRATIONS_DIR;
+        $this->appDir         = DirsInterface::APPLICATION_DIR;
+        $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
+        $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
+        $this->modulesDir     = DirsInterface::MODULES_DIR;
+        $this->httpDir        = DirsInterface::HTTP_DIR;
+        $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
+        $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-        $this->types = $data['types'];
+        $this->setIncludedTypes($data);
         if((bool) env('PHP_DEV') === true)
         {
             $this->createDirs();
@@ -121,7 +118,7 @@ trait ControllersTrait
                 }
                 foreach($objData as $k => $v)
                 {
-                    if($k === self::RAML_PROPS)
+                    if($k === RamlInterface::RAML_PROPS)
                     { // process props
                         $this->setObjectName($objName);
                         $this->setObjectProps($v);
@@ -172,8 +169,8 @@ trait ControllersTrait
 
     public function formatMigrationsPath() : string
     {
-        /** @var ControllersTrait $this */
-        return FileManager::getModulePath($this) . self::DATABASE_DIR . PhpEntitiesInterface::SLASH
+        /** @var Command $this */
+        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
                . $this->migrationsDir . PhpEntitiesInterface::SLASH;
     }
 
@@ -223,6 +220,24 @@ trait ControllersTrait
             $this->migrations = new Migrations($this);
             $this->migrations->create();
             $this->migrations->createPivot();
+        }
+    }
+
+    /**
+     * Collect types = main + included files
+     * @param array $data
+     */
+    private function setIncludedTypes(array $data)
+    {
+        $this->types = $data[RamlInterface::RAML_KEY_TYPES];
+        if(empty($data[RamlInterface::RAML_KEY_USES]) === false)
+        {
+            $files = $data[RamlInterface::RAML_KEY_USES];
+            foreach($files as $file)
+            {
+                $fileData = Yaml::parse(file_get_contents($file));
+                $this->types += $fileData[RamlInterface::RAML_KEY_TYPES];
+            }
         }
     }
 }
