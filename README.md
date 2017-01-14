@@ -301,6 +301,18 @@ Complete composite Object looks like this:
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
 
+To use multiple files code-generator processing add as the root element:
+```RAML
+uses:
+  topics: raml/topic.raml
+  otherfile: raml/otherFile.raml
+  yetanother: raml/yetanother.raml
+```
+all files will be generated as if they were one composite object.
+The thing to note here, is that RAML-spec requires to include all header info 
+and dependent types into those included. You can see warning details in Atom IDE with Workbench API plugin, 
+or any other RAML analysing tools. 
+
 Complete directory structure after generator will end up it`s work will be like:
 ```php
 Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
