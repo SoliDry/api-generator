@@ -28,6 +28,9 @@ class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInt
      */
     protected $description = 'RAML-JSON-API PHP-code generator (based on RAML-types), with complete support of JSON-API data format';
 
+    /**
+     *  Laravel handler for console commands
+     */
     public function handle()
     {
         $ramlFile = $this->argument('ramlFile');

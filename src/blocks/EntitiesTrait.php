@@ -11,7 +11,7 @@ namespace rjapi\blocks;
 
 trait EntitiesTrait
 {
-    public function getMiddleware(string $version, string $object)
+    public function getMiddlewareEntity(string $version, string $object)
     {
         return DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($version) .
         PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .

@@ -3,6 +3,7 @@
 namespace rjapi\blocks;
 
 use rjapi\extension\JSONApiInterface;
+use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 
@@ -13,9 +14,12 @@ class Routes
     private   $generator  = null;
     protected $sourceCode = '';
 
+    private $className = '';
+
     public function __construct($generator)
     {
         $this->generator = $generator;
+        $this->className = Classes::getClassName($this->generator->objectName);
     }
 
     public function setCodeState($generator)
@@ -48,6 +52,7 @@ class Routes
     private function setRoutes()
     {
         $this->setTag();
+        $this->setComment($this->className . ' routes');
         $this->openGroup($this->generator->version);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_INDEX);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_VIEW, true);

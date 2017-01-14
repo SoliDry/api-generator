@@ -6,6 +6,7 @@ use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\DefaultInterface;
 use rjapi\blocks\DirsInterface;
+use rjapi\blocks\EntitiesTrait;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
@@ -21,7 +22,7 @@ use rjapi\helpers\MigrationsHelper;
  */
 trait BaseControllerTrait
 {
-    use BaseModelTrait;
+    use BaseModelTrait, EntitiesTrait;
 
     private $props = [];
     private $entity = null;
@@ -40,13 +41,14 @@ trait BaseControllerTrait
         JSONApiInterface::URI_METHOD_RELATIONS,
     ];
 
+    /**
+     * BaseControllerTrait constructor.
+     * @param Route $route
+     */
     public function __construct(Route $route)
     {
         // add relations to json api methods array
-        $ucRelations = ucfirst(JSONApiInterface::URI_METHOD_RELATIONS);
-        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
-        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
-        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
+        $this->addRelationMethods();
         $actionName = $route->getActionName();
         $calledMethod = substr($actionName, strpos($actionName, PhpEntitiesInterface::AT) + 1);
         if ($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods)) {
@@ -59,16 +61,9 @@ trait BaseControllerTrait
             ]);
         }
         $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        // TODO: confilcting with Illuminate../Controller getMiddleware
-        $middlewareEntity = DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
-            PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-            PhpEntitiesInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
-            $this->entity .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+        $middlewareEntity = $this->getMiddlewareEntity(Config::getModuleName(), $this->entity);
         $this->middleWare = new $middlewareEntity();
         $this->props = get_object_vars($this->middleWare);
-
         $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model = new $this->modelEntity();
     }
@@ -371,5 +366,16 @@ trait BaseControllerTrait
         $model = $this->getModelEntity($relEntity, $rId);
         $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $model->save();
+    }
+
+    /**
+     *  Adds {HTTPMethod}Relations to array of route methods
+     */
+    private function addRelationMethods()
+    {
+        $ucRelations = ucfirst(JSONApiInterface::URI_METHOD_RELATIONS);
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
+        $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
     }
 }

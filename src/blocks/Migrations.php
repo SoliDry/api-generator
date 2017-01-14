@@ -57,7 +57,7 @@ class Migrations extends MigrationsAbstract
      */
     public function createPivot()
     {
-        $middlewareEntity = $this->getMiddleware($this->generator->version, $this->className);
+        $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
         $middleWare       = new $middlewareEntity();
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {

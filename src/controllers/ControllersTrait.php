@@ -225,20 +225,4 @@ trait ControllersTrait
             $this->migrations->createPivot();
         }
     }
-
-    /**
-     * @return array
-     */
-    public function getGeneratedFiles(): array
-    {
-        return $this->generatedFiles;
-    }
-
-    /**
-     * @param string $path
-     */
-    public function setGeneratedFiles(string $path)
-    {
-        $this->generatedFiles[] = $path;
-    }
 }

@@ -69,7 +69,7 @@ class DefaultTransformer extends TransformerAbstract
     {
         // getting entity relation name, ex.: includeAuthor - author
         $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
-        $middlewareEntity = $this->getMiddleware(Config::getModuleName(), $entityName);
+        $middlewareEntity = $this->getMiddlewareEntity(Config::getModuleName(), $entityName);
         $middleWare = new $middlewareEntity();
         $entityNameLow = MigrationsHelper::getTableName($entityName);
         // getting object, ex.: Book
