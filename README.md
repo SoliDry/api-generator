@@ -301,7 +301,7 @@ Complete composite Object looks like this:
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
 
-To use multiple files code-generator processing add as the root element:
+To use multiple files processing add (as root element):
 ```RAML
 uses:
   topics: raml/topic.raml
