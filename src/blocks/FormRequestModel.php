@@ -56,19 +56,6 @@ abstract class FormRequestModel
 
     /**
      * @param array $attrVal
-     */
-    private function setDescription(array $attrVal)
-    {
-        foreach ($attrVal as $k => $v) {
-            if ($k === RamlInterface::RAML_KEY_DESCRIPTION) {
-                $this->setTabs(3);
-                $this->setComment($v);
-            }
-        }
-    }
-
-    /**
-     * @param array $attrVal
      * @param int $cnt
      */
     private function setFilters(array $attrVal, int $cnt)

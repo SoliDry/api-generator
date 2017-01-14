@@ -31,31 +31,7 @@ class Entities extends FormRequestModel
 
     public function create()
     {
-        $this->setTag();
-        $this->setNamespace(
-            $this->generator->entitiesDir
-        );
-        $baseMapper     = BaseModel::class;
-        $baseMapperName = Classes::getName($baseMapper);
-
-        $this->setUse($baseMapper, false, true);
-        $this->startClass($this->className, $baseMapperName);
-
-        $this->createProperty(
-            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
-        );
-        $this->createProperty(
-            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
-            strtolower($this->generator->objectName), true
-        );
-        $this->createProperty(
-            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
-            PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE
-        );
-        $this->setRelations();
-        $this->endClass();
-
+        $this->setContent();
         $file      = $this->generator->formatEntitiesPath() . PhpEntitiesInterface::SLASH . $this->className .
             PhpEntitiesInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
@@ -72,7 +48,6 @@ class Entities extends FormRequestModel
     {
         $middlewareEntity = $this->getMiddleware($this->generator->version, $this->className);
         $middleWare       = new $middlewareEntity();
-
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
             $relations = $middleWare->relations();
@@ -171,31 +146,7 @@ class Entities extends FormRequestModel
      */
     public function setPivot(string $ucEntity)
     {
-        $this->setTag();
-        $this->setNamespace(
-            $this->generator->entitiesDir
-        );
-        $baseMapper     = BaseModel::class;
-        $baseMapperName = Classes::getName($baseMapper);
-
-        $this->setUse($baseMapper, false, true);
-        $this->startClass($this->className . Classes::getClassName($ucEntity), $baseMapperName);
-
-        $this->createProperty(
-            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
-        );
-        $this->createProperty(
-            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
-            strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
-        );
-        $this->createProperty(
-            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
-            PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE
-        );
-
-        $this->endClass();
-
+        $this->setPivotContent($ucEntity);
         $file      = $this->generator->formatEntitiesPath() .
             PhpEntitiesInterface::SLASH .
             $this->className . Classes::getClassName($ucEntity) . PhpEntitiesInterface::PHP_EXT;
@@ -312,5 +263,67 @@ class Entities extends FormRequestModel
         $toReturn .= PhpEntitiesInterface::CLOSE_PARENTHESES;
         $this->methodReturn($toReturn);
         $this->endMethod();
+    }
+
+    /**
+     * Sets entity content to $sourceCode
+     */
+    private function setContent()
+    {
+        $this->setTag();
+        $this->setNamespace(
+            $this->generator->entitiesDir
+        );
+        $baseMapper     = BaseModel::class;
+        $baseMapperName = Classes::getName($baseMapper);
+
+        $this->setUse($baseMapper, false, true);
+        $this->startClass($this->className, $baseMapperName);
+
+        $this->createProperty(
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            RamlInterface::RAML_ID, true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName), true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
+            PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE
+        );
+        $this->setRelations();
+        $this->endClass();
+    }
+
+    /**
+     *  Sets pivot entity content to $sourceCode
+     * @param string $ucEntity  an entity upper case first name
+     */
+    private function setPivotContent(string $ucEntity)
+    {
+        $this->setTag();
+        $this->setNamespace(
+            $this->generator->entitiesDir
+        );
+        $baseMapper     = BaseModel::class;
+        $baseMapperName = Classes::getName($baseMapper);
+
+        $this->setUse($baseMapper, false, true);
+        $this->startClass($this->className . Classes::getClassName($ucEntity), $baseMapperName);
+
+        $this->createProperty(
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            RamlInterface::RAML_ID, true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
+            PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE
+        );
+        $this->endClass();
     }
 }

@@ -33,41 +33,7 @@ class Middleware extends FormRequestModel
 
     public function create()
     {
-        $this->setTag();
-        $this->setNamespace(
-            $this->generator->httpDir .
-            PhpEntitiesInterface::BACKSLASH .
-            $this->generator->middlewareDir
-        );
-
-        $baseFullForm = BaseFormRequest::class;
-        $baseFormName = Classes::getName($baseFullForm);
-        $this->setUse($baseFullForm, false, true);
-        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
-
-        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
-           &&
-           !empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]])
-        )
-        {
-            $this->setProps(
-                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
-                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
-            );
-        }
-        else
-        {
-            $this->setProps();
-        }
-
-        $this->constructRules();
-        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]))
-        {
-            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]);
-        }
-        // create closing brace
-        $this->endClass();
-
+        $this->setContent();
         $fileForm  = $this->generator->formatMiddlewarePath()
                      . PhpEntitiesInterface::SLASH
                      . $this->className
@@ -167,5 +133,46 @@ class Middleware extends FormRequestModel
                              . PhpEntitiesInterface::DOUBLE_QUOTES . $relationTypes .
                              PhpEntitiesInterface::DOUBLE_QUOTES
                              . PhpEntitiesInterface::COMMA;
+    }
+
+    /**
+     *  Sets content of *Middleware
+     */
+    private function setContent()
+    {
+        $this->setTag();
+        $this->setNamespace(
+            $this->generator->httpDir .
+            PhpEntitiesInterface::BACKSLASH .
+            $this->generator->middlewareDir
+        );
+
+        $baseFullForm = BaseFormRequest::class;
+        $baseFormName = Classes::getName($baseFullForm);
+        $this->setUse($baseFullForm, false, true);
+        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
+
+        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
+            &&
+            !empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]])
+        )
+        {
+            $this->setProps(
+                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
+                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
+            );
+        }
+        else
+        {
+            $this->setProps();
+        }
+
+        $this->constructRules();
+        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]))
+        {
+            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]);
+        }
+        // create closing brace
+        $this->endClass();
     }
 }
