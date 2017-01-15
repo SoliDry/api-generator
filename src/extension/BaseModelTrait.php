@@ -1,6 +1,7 @@
 <?php
 namespace rjapi\extension;
 
+use Illuminate\Database\Eloquent\Model;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
