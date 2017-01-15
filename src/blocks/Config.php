@@ -27,15 +27,18 @@ class Config implements ConfigInterface
 
     public function create()
     {
-        $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
-        $this->setContent($queryParams);
-        // create config file
-        $file = $this->generator->formatConfigPath() .
-            ModulesInterface::CONFIG_FILENAME . PhpEntitiesInterface::PHP_EXT;
-        $isCreated = FileManager::createFile($file, $this->sourceCode);
-        if($isCreated)
+        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS]) === false)
         {
-            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
+            $this->setContent($queryParams);
+            // create config file
+            $file = $this->generator->formatConfigPath() .
+                ModulesInterface::CONFIG_FILENAME . PhpEntitiesInterface::PHP_EXT;
+            $isCreated = FileManager::createFile($file, $this->sourceCode, true);
+            if ($isCreated)
+            {
+                Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            }
         }
     }
 
@@ -47,7 +50,7 @@ class Config implements ConfigInterface
         $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 .
             PhpEntitiesInterface::QUOTES . ModulesInterface::KEY_NAME
             . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::QUOTES .
-            $name . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA . PHP_EOL;
+            ucfirst($name) . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA . PHP_EOL;
     }
 
     /**
