@@ -2,6 +2,7 @@
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
+use rjapi\blocks\Config;
 use rjapi\blocks\ConsoleInterface;
 use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
@@ -10,7 +11,9 @@ use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\Migrations;
+use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\Module;
+use rjapi\blocks\ModulesInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
 use rjapi\blocks\Routes;
@@ -39,8 +42,6 @@ trait ControllersTrait
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
-        CustomsInterface::CUSTOM_TYPES_SINGLE_DATA_RELATIONSHIPS,
-        CustomsInterface::CUSTOM_TYPES_MULTIPLE_DATA_RELATIONSHIPS,
     ];
     public $types             = [];
     public $frameWork         = '';
@@ -59,7 +60,7 @@ trait ControllersTrait
     private $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
-        CustomsInterface::CUSTOM_TYPES_QUERY_SEARCH,
+        CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS,
         CustomsInterface::CUSTOM_TYPES_FILTER,
     ];
 
@@ -80,7 +81,6 @@ trait ControllersTrait
         $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-        $this->setIncludedTypes($data);
         if((bool) env('PHP_DEV') === true)
         {
             $this->createDirs();
@@ -93,12 +93,17 @@ trait ControllersTrait
         {
             $this->options = $this->options();
         }
+        $this->setIncludedTypes($data);
         $this->runGenerator();
     }
 
+    /**
+     *  Main generator method - the sequence of methods execution is crucial
+     */
     private function runGenerator()
     {
         $this->generateModule();
+        $this->generateConfig();
         foreach($this->types as $objName => $objData)
         {
             if(in_array($objName, $this->customTypes) === false)
@@ -134,11 +139,19 @@ trait ControllersTrait
         $module = new Module($this);
         $module->create();
     }
+    
+    private function generateConfig()
+    {
+        $module = new Config($this);
+        $module->create();        
+    }
 
     public function createDirs()
     {
         // create modules dir
         FileManager::createPath(FileManager::getModulePath($this));
+        // create config dir
+        FileManager::createPath($this->formatConfigPath());
         // create controllers dir
         FileManager::createPath($this->formatControllersPath());
         // create forms dir
@@ -172,6 +185,11 @@ trait ControllersTrait
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
                . $this->migrationsDir . PhpEntitiesInterface::SLASH;
+    }
+
+    public function formatConfigPath()
+    {
+        return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpEntitiesInterface::SLASH;
     }
 
     /**

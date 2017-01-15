@@ -18,6 +18,7 @@ interface ModelsInterface
     const DEFAULT_PAGE            = 1;
     const PARAM_PAGE              = 'page';
     const PARAM_LIMIT             = 'limit';
+    const PARAM_SORT              = 'sort';
     const LARAVEL_FILTER_ENUM     = 'in';
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';
