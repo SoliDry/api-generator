@@ -53,19 +53,21 @@ trait BaseModelTrait
     }
 
     /**
+     * 
      * @param int $page
-     *
      * @param int $limit
+     * @param string $sort
      * @return mixed
      */
-    private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT)
+    private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT,
+        string $sort = ModelsInterface::DEFAULT_SORT)
     {
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,
-            [RamlInterface::RAML_ID, ModelsInterface::SQL_DESC]
+            [RamlInterface::RAML_ID, $sort]
         );
 
         return $obj->take($to)->skip($from)->get();

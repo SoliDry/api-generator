@@ -31,6 +31,10 @@ trait BaseControllerTrait
     private $modelEntity = null;
     private $middleWare = null;
     private $relsRemoved = false;
+    // default query params value
+    private $defaultPage = 0;
+    private $defaultLimit = 0;
+    private $defaultSort = '';
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -66,6 +70,7 @@ trait BaseControllerTrait
         $this->props = get_object_vars($this->middleWare);
         $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model = new $this->modelEntity();
+        $this->setDefaults();
     }
 
     /**
@@ -74,9 +79,10 @@ trait BaseControllerTrait
      */
     public function index(Request $request)
     {
-        $page = ($request->input('page') === null) ? ModelsInterface::DEFAULT_PAGE : $request->input('page');
-        $limit = ($request->input('limit') === null) ? ModelsInterface::DEFAULT_LIMIT : $request->input('limit');
-        $items = $this->getAllEntities($page, $limit);
+        $page = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage : $request->input(ModelsInterface::PARAM_PAGE);
+        $limit = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit : $request->input(ModelsInterface::PARAM_LIMIT);
+        $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort : $request->input(ModelsInterface::PARAM_SORT);
+        $items = $this->getAllEntities($page, $limit, $sort);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource);
     }
@@ -377,5 +383,12 @@ trait BaseControllerTrait
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
+    }
+
+    private function setDefaults()
+    {
+        $this->defaultPage = Config::getQueryParam(ModelsInterface::PARAM_PAGE);
+        $this->defaultLimit = Config::getQueryParam(ModelsInterface::PARAM_LIMIT);
+        $this->defaultSort = Config::getQueryParam(ModelsInterface::PARAM_SORT);
     }
 }
