@@ -313,6 +313,30 @@ The thing to note here, is that RAML-spec requires to include all header info
 and dependent types into those included. You can see warning details in Atom IDE with Workbench API plugin, 
 or any other RAML analysing tools. 
 
+To set default values for GET query parameters - set QueryParams like this:
+```RAML
+  QueryParams:
+    type: object
+    properties:
+      page:
+        type: integer
+        required: false
+        default: 10
+        description: page number
+      limit:
+        type: integer
+        required: false
+        default: 15
+        description: elements per page
+      sort:
+        type: string
+        required: false
+        pattern: "asc|desc"
+        default: "desc"
+```
+it will be used on requests similar to: ```http://example.com/v1/article?include=tag``` 
+where no params were passed.  
+
 Complete directory structure after generator will end up it`s work will be like:
 ```php
 Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
