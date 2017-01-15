@@ -16,8 +16,10 @@ interface ModelsInterface
     const LARAVEL_PROPERTY_TABLE  = 'table';
     const DEFAULT_LIMIT           = 20;
     const DEFAULT_PAGE            = 1;
+    const DEFAULT_SORT            = self::SQL_DESC;
     const PARAM_PAGE              = 'page';
     const PARAM_LIMIT             = 'limit';
+    const PARAM_SORT              = 'sort';
     const LARAVEL_FILTER_ENUM     = 'in';
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';

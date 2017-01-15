@@ -4,8 +4,6 @@ namespace rjapi\blocks;
 interface DefaultInterface
 {
     const CONTROLLER_POSTFIX = 'Controller';
-    const CONTAINER_POSTFIX = 'Container';
-    const QUERY_SEARCH_POSTFIX = 'QuerySearch';
     const MIDDLEWARE_POSTFIX = 'Middleware';
 
     const PREFIX_KEY = 'prefix';
