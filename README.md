@@ -144,8 +144,14 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers']
 You may want to use additional query parameters to fetch includes 
 and/or pagination, for instance:
 ```php
-http://example.com/v1/article?include=tag&page=2&limit=10
+http://example.com/v1/article?include=tag&page=2&limit=10&sort=asc
 ```
+
+You may not wish to drag all the attributes/fields: 
+```php
+http://example.com/v1/article/1?include=tag&data=["title", "description"]
+```
+Note: data array items MUST be set in double quotes.
 
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
