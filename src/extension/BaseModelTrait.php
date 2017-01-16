@@ -8,7 +8,7 @@ use rjapi\blocks\RamlInterface;
 trait BaseModelTrait
 {
     /**
-     * @param int   $id
+     * @param int $id
      * @param array $data
      *
      * @return mixed
@@ -55,15 +55,15 @@ trait BaseModelTrait
 
     /**
      * Get rows from particular Entity
-     * @param int    $page
-     * @param int    $limit
+     * @param int $page
+     * @param int $limit
      * @param string $sort
-     * @param array  $data
+     * @param array $data
      *
      * @return mixed
      */
     private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT,
-        string $sort = ModelsInterface::DEFAULT_SORT, array $data = ModelsInterface::DEFAULT_DATA)
+                                    string $sort = ModelsInterface::DEFAULT_SORT, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
