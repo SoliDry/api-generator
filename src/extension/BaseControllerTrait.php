@@ -82,7 +82,9 @@ trait BaseControllerTrait
         $page = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage : $request->input(ModelsInterface::PARAM_PAGE);
         $limit = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit : $request->input(ModelsInterface::PARAM_LIMIT);
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort : $request->input(ModelsInterface::PARAM_SORT);
-        $items = $this->getAllEntities($page, $limit, $sort);
+        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+            : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
+        $items = $this->getAllEntities($page, $limit, $sort, $data);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource);
     }
@@ -90,11 +92,14 @@ trait BaseControllerTrait
     /**
      * GET Output one entry determined by unique id as uri param
      *
-     * @param int $id
+     * @param Request $request
+     * @param int     $id
      */
-    public function view(int $id)
+    public function view(Request $request, int $id)
     {
-        $item = $this->getEntity($id);
+        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+            : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
+        $item = $this->getEntity($id, $data);
         $resource = Json::getResource($this->middleWare, $item, $this->entity);
         Json::outputSerializedData($resource);
     }
