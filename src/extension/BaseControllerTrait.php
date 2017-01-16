@@ -86,7 +86,7 @@ trait BaseControllerTrait
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
         $items = $this->getAllEntities($page, $limit, $sort, $data);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
-        Json::outputSerializedData($resource);
+        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
 
     /**
@@ -101,7 +101,7 @@ trait BaseControllerTrait
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
         $item = $this->getEntity($id, $data);
         $resource = Json::getResource($this->middleWare, $item, $this->entity);
-        Json::outputSerializedData($resource);
+        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
 
     /**
