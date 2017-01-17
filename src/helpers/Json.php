@@ -19,16 +19,6 @@ use rjapi\transformers\DefaultTransformer;
 class Json
 {
     /**
-     * @param string $json
-     *
-     * @return array
-     */
-    public static function parse($json): array
-    {
-        return json_decode($json, true);
-    }
-
-    /**
      * @param array $jsonApiArr
      *
      * @return array

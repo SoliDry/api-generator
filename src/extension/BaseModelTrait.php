@@ -67,8 +67,8 @@ trait BaseModelTrait
         $page = $sqlOptions->getData();
         $sort = $sqlOptions->getSort();
         $data = $sqlOptions->getData();
-//        $orderBy = $sqlOptions->getOrderBy();
-        
+        $orderBy = $sqlOptions->getOrderBy();
+
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
