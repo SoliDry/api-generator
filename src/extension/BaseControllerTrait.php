@@ -15,6 +15,7 @@ use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
+use rjapi\helpers\SqlOptions;
 
 /**
  * Class BaseControllerTrait
@@ -79,12 +80,17 @@ trait BaseControllerTrait
      */
     public function index(Request $request)
     {
+        $sqlOptions = new SqlOptions();
         $page = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage : $request->input(ModelsInterface::PARAM_PAGE);
         $limit = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit : $request->input(ModelsInterface::PARAM_LIMIT);
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort : $request->input(ModelsInterface::PARAM_SORT);
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
-        $items = $this->getAllEntities($page, $limit, $sort, $data);
+        $sqlOptions->setLimit($limit);
+        $sqlOptions->setPage($page);
+        $sqlOptions->setSort($sort);
+        $sqlOptions->setData($data);
+        $items = $this->getAllEntities($sqlOptions);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }

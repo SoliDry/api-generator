@@ -4,6 +4,7 @@ namespace rjapi\extension;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
+use rjapi\helpers\SqlOptions;
 
 trait BaseModelTrait
 {
@@ -55,16 +56,19 @@ trait BaseModelTrait
 
     /**
      * Get rows from particular Entity
-     * @param int $page
-     * @param int $limit
-     * @param string $sort
-     * @param array $data
+     *
+     * @param SqlOptions $sqlOptions
      *
      * @return mixed
      */
-    private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT,
-                                    string $sort = ModelsInterface::DEFAULT_SORT, array $data = ModelsInterface::DEFAULT_DATA)
+    private function getAllEntities(SqlOptions $sqlOptions)
     {
+        $limit = $sqlOptions->getLimit();
+        $page = $sqlOptions->getData();
+        $sort = $sqlOptions->getSort();
+        $data = $sqlOptions->getData();
+//        $orderBy = $sqlOptions->getOrderBy();
+        
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
