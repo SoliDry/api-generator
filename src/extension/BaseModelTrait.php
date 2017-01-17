@@ -10,17 +10,18 @@ trait BaseModelTrait
 {
     /**
      * @param int $id
+     * @param array $data
      *
      * @return mixed
      */
-    private function getEntity(int $id)
+    private function getEntity(int $id, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
 
-        return $obj->first();
+        return $obj->first($data);
     }
 
     /**
@@ -54,14 +55,16 @@ trait BaseModelTrait
     }
 
     /**
-     * 
+     * Get rows from particular Entity
      * @param int $page
      * @param int $limit
      * @param string $sort
+     * @param array $data
+     *
      * @return mixed
      */
     private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT,
-        string $sort = ModelsInterface::DEFAULT_SORT)
+                                    string $sort = ModelsInterface::DEFAULT_SORT, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
@@ -71,6 +74,6 @@ trait BaseModelTrait
             [RamlInterface::RAML_ID, $sort]
         );
 
-        return $obj->take($to)->skip($from)->get();
+        return $obj->take($to)->skip($from)->get($data);
     }
 }

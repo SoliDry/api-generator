@@ -10,7 +10,7 @@ namespace rjapi\extension;
 
 interface JSONApiInterface
 {
-    const HEADER_CONTENT_TYPE = 'Content-Type: ';
+    const HEADER_CONTENT_TYPE       = 'Content-Type: ';
     const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json';
 
     const URI_METHOD_INDEX     = 'index';
@@ -28,13 +28,14 @@ interface JSONApiInterface
     const HTTP_RESPONSE_CODE_NO_CONTENT = 204;
     const HTTP_RESPONSE_CODE_NOT_FOUND  = 404;
 
-    const CONTENT_LINKS   = 'links';
-    const CONTENT_SELF    = 'self';
-    const CONTENT_RELATED = 'related';
-    const CONTENT_DATA    = 'data';
-    const CONTENT_TYPE    = 'type';
-    const CONTENT_ID      = 'id';
-    const CONTENT_ERRORS  = 'errors';
+    const CONTENT_LINKS      = 'links';
+    const CONTENT_SELF       = 'self';
+    const CONTENT_RELATED    = 'related';
+    const CONTENT_DATA       = 'data';
+    const CONTENT_TYPE       = 'type';
+    const CONTENT_ID         = 'id';
+    const CONTENT_ERRORS     = 'errors';
+    const CONTENT_ATTRIBUTES = 'attributes';
 
     const EXIT_STATUS_SUCCESS = 0;
     const EXIT_STATUS_ERROR   = 1;
