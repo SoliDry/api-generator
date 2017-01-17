@@ -89,7 +89,8 @@ class SqlOptions
      */
     public function setData($data)
     {
-        $this->data = $data;
+        // id must be there anyway
+        $this->data = [ModelsInterface::ID] + $data;
     }
 
 }
