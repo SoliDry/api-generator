@@ -15,6 +15,7 @@ use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
+use rjapi\helpers\SqlOptions;
 
 /**
  * Class BaseControllerTrait
@@ -35,6 +36,7 @@ trait BaseControllerTrait
     private $defaultPage = 0;
     private $defaultLimit = 0;
     private $defaultSort = '';
+    private $defaultOrderBy = [];
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -79,12 +81,20 @@ trait BaseControllerTrait
      */
     public function index(Request $request)
     {
+        $sqlOptions = new SqlOptions();
         $page = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage : $request->input(ModelsInterface::PARAM_PAGE);
         $limit = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit : $request->input(ModelsInterface::PARAM_LIMIT);
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort : $request->input(ModelsInterface::PARAM_SORT);
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
-            : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
-        $items = $this->getAllEntities($page, $limit, $sort, $data);
+            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
+        $orderBy = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [RamlInterface::RAML_ID => $sort]
+            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_ORDER_BY)));
+        $sqlOptions->setLimit($limit);
+        $sqlOptions->setPage($page);
+        $sqlOptions->setData($data);
+        $sqlOptions->setOrderBy($orderBy);
+
+        $items = $this->getAllEntities($sqlOptions);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
@@ -111,7 +121,7 @@ trait BaseControllerTrait
      */
     public function create(Request $request)
     {
-        $json = Json::parse($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
@@ -135,7 +145,7 @@ trait BaseControllerTrait
     public function update(Request $request, int $id)
     {
         // get json raw input and parse attrs
-        $json = Json::parse($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         foreach ($this->props as $k => $v) {
@@ -193,7 +203,7 @@ trait BaseControllerTrait
      */
     public function createRelations(Request $request, int $id, string $relation)
     {
-        $json = Json::parse($request->getContent());
+        $json = Json::decode($request->getContent());
         $this->setRelationships($json, $id);
 
         $_GET['include'] = $relation;
@@ -216,7 +226,7 @@ trait BaseControllerTrait
      */
     public function updateRelations(Request $request, int $id, string $relation)
     {
-        $json = Json::parse($request->getContent());
+        $json = Json::decode($request->getContent());
         $this->setRelationships($json, $id, true);
         // set include for relations
         $_GET['include'] = $relation;
@@ -240,7 +250,7 @@ trait BaseControllerTrait
      */
     public function deleteRelations(Request $request, int $id, string $relation)
     {
-        $json = Json::parse($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiRels = Json::getData($json);
         if (empty($jsonApiRels) === false) {
             $lowEntity = strtolower($this->entity);

@@ -4,6 +4,7 @@ namespace rjapi\extension;
 use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\PhpEntitiesInterface;
 use rjapi\blocks\RamlInterface;
+use rjapi\helpers\SqlOptions;
 
 trait BaseModelTrait
 {
@@ -55,23 +56,42 @@ trait BaseModelTrait
 
     /**
      * Get rows from particular Entity
-     * @param int $page
-     * @param int $limit
-     * @param string $sort
-     * @param array $data
+     *
+     * @param SqlOptions $sqlOptions
      *
      * @return mixed
      */
-    private function getAllEntities(int $page = ModelsInterface::DEFAULT_PAGE, int $limit = ModelsInterface::DEFAULT_LIMIT,
-                                    string $sort = ModelsInterface::DEFAULT_SORT, array $data = ModelsInterface::DEFAULT_DATA)
+    private function getAllEntities(SqlOptions $sqlOptions)
     {
+        $limit = $sqlOptions->getLimit();
+        $page = $sqlOptions->getPage();
+        $data = $sqlOptions->getData();
+        $orderBy = $sqlOptions->getOrderBy();
+        $defaultOrder = [];
+        $order = [];
+        $first = true;
+        foreach($orderBy as $column => $value)
+        {
+            if($first === true)
+            {
+                $defaultOrder = [$column, $value];
+            }
+            else
+            {
+                $order[] = [ModelsInterface::COLUMN    => $column,
+                            ModelsInterface::DIRECTION => $value];
+            }
+            $first = false;
+        }
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,
-            [RamlInterface::RAML_ID, $sort]
+            $defaultOrder
         );
+        // it can be empty if nothing more then 1st passed
+        $obj->order = $order;
 
         return $obj->take($to)->skip($from)->get($data);
     }
