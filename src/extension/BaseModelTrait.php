@@ -64,18 +64,34 @@ trait BaseModelTrait
     private function getAllEntities(SqlOptions $sqlOptions)
     {
         $limit = $sqlOptions->getLimit();
-        $page = $sqlOptions->getData();
-        $sort = $sqlOptions->getSort();
+        $page = $sqlOptions->getPage();
         $data = $sqlOptions->getData();
         $orderBy = $sqlOptions->getOrderBy();
-
+        $defaultOrder = [];
+        $order = [];
+        $first = true;
+        foreach($orderBy as $column => $value)
+        {
+            if($first === true)
+            {
+                $defaultOrder = [$column, $value];
+            }
+            else
+            {
+                $order[] = [ModelsInterface::COLUMN    => $column,
+                            ModelsInterface::DIRECTION => $value];
+            }
+            $first = false;
+        }
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
             PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,
-            [RamlInterface::RAML_ID, $sort]
+            $defaultOrder
         );
+        // it can be empty if nothing more then 1st passed
+        $obj->order = $order;
 
         return $obj->take($to)->skip($from)->get($data);
     }

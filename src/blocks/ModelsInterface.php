@@ -27,6 +27,8 @@ interface ModelsInterface
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';
     const LARAVEL_FILTER_MAX      = 'max';
+    const COLUMN                  = 'column';
+    const DIRECTION               = 'direction';
 
     // Methods
     const MODEL_METHOD_ALL      = 'all';

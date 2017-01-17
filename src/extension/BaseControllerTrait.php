@@ -91,7 +91,6 @@ trait BaseControllerTrait
             : Json::decode(urldecode($request->input(ModelsInterface::PARAM_ORDER_BY)));
         $sqlOptions->setLimit($limit);
         $sqlOptions->setPage($page);
-        $sqlOptions->setSort($sort);
         $sqlOptions->setData($data);
         $sqlOptions->setOrderBy($orderBy);
 
