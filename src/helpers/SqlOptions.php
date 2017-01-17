@@ -89,7 +89,12 @@ class SqlOptions
      */
     public function setData($data)
     {
+        // id must be there anyway
         $this->data = $data;
+        if(in_array(ModelsInterface::ID, $this->data) === false)
+        {
+            $this->data[] = ModelsInterface::ID;
+        }
     }
 
 }

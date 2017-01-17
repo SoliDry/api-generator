@@ -10,6 +10,7 @@ namespace rjapi\blocks;
 
 interface ModelsInterface
 {
+    const ID = 'id';
     // Laravel
     const LARAVEL_ACTIVE_RECORD   = 'Model';
     const LARAVEL_MIGRATION_CLASS = 'Migration';
