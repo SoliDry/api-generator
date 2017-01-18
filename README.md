@@ -12,6 +12,7 @@ RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, wi
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
 [Installation](#user-content-installation-via-composer)
+    [Configuration](#user-content-laravel-specific-configuration)
     
 ### Installation via composer:
 ``` 
