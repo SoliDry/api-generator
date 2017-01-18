@@ -6,4 +6,4 @@ app/
 Modules/
 artisan
 config/
-raml/
+/raml/

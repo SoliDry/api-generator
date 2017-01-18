@@ -1,0 +1,208 @@
+#%RAML 1.0
+title: My Company API
+baseUri: http://my-company.com/{version}
+version: v1
+mediaType:  application/vnd.api+json
+description: My Company API description RAML templates
+uses:
+  topics: raml/topic.raml
+types:
+  ID:
+    type: integer
+    required: true
+    maximum: 20
+  Type:
+    type: string
+    required: true
+    minLength: 1
+    maxLength: 255
+  DataObject:
+    type: object
+    required: true
+  DataArray:
+    type: array
+    required: true
+  RelationshipsDataItem:
+    type: object
+    properties:
+      id: ID
+      type: Type
+  TagRelationships:
+    description: Tag relationship description
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+  TagAttributes:
+    description: Always set attributes for object
+    type: object
+    properties:
+      title:
+        type: string
+        required: true
+        minLength: 3
+        maxLength: 255
+  Tag:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: TagAttributes
+      relationships:
+        type: ArticleRelationships[]
+  ArticleRelationships:
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+  ArticleAttributes:
+    description: Article attributes description
+    type: object
+    properties:
+      title:
+        required: true
+        type: string
+        minLength: 16
+        maxLength: 256
+      description:
+        required: true
+        type: string
+        minLength: 32
+        maxLength: 1024
+      url:
+        required: false
+        type: string
+        minLength: 16
+        maxLength: 255
+      show_in_top:
+        description: Show at the top of main page
+        required: false
+        type: boolean
+      status:
+        description: The state of an article
+        enum: ["draft", "published", "postponed", "archived"]
+      topic_id:
+        description: ManyToOne Topic relationship
+        required: true
+        type: integer
+        minimum: 1
+        maximum: 9
+  Article:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: ArticleAttributes
+      relationships:
+        type: TagRelationships[] | TopicRelationships
+  TopicRelationships:
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+  FilterID:
+    type: string
+    pattern: '/^[,\ \d]*$/'
+  FilterAttribute:
+    type: object
+    properties:
+      \{attribute\}:
+        type: string
+      attributes: ArticleAttributes
+      relationships: TagRelationships
+  QueryParams:
+    type: object
+    properties:
+      page:
+        type: integer
+        required: false
+        description: page number
+      limit:
+        type: integer
+        required: false
+        default: 15
+        example: 15
+        description: elements per page
+      sort:
+        type: string
+        required: false
+        pattern: "asc|desc"
+        default: "desc"
+/article:
+  get:
+    queryParameters:
+      type: JsonApiQuerySearch
+    responses:
+      200:
+        body:
+          application/json.vnd+json:
+            type: Article[]
+  post:
+    body:
+      application/json.vnd+json:
+        type: Article
+    responses:
+      200:
+        body:
+          application/json.vnd+json:
+            type: Article
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json.vnd+json:
+              type: Article
+    patch:
+      body:
+        application/json.vnd+json:
+          type: Article
+      responses:
+        200:
+          body:
+            application/json.vnd+json:
+              type: Article
+    delete:
+      responses:
+        204:
+    /relationships/tag:
+      get:
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      post:
+        body:
+          application/json.vnd+json:
+            type: TagRelationships
+        responses:
+          201:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      patch:
+        body:
+          application/json.vnd+json:
+            type: TagRelationships
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      delete:
+        responses:
+          204:
+    /tag:
+      get:
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: Tag[]
