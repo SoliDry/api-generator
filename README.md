@@ -15,7 +15,11 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 &nbsp;&nbsp;[Configuration](#user-content-laravel-specific-configuration)
 
+[Query parameters](#user-content-query-parameters)
+
 [RAML Types and Declarations](#user-content-raml-types-and-declarations)
+
+[Generated files content](#user-content-generated-files-content)
 
 [Relationships](#user-content-relationships-particular-qualities)
 
@@ -148,6 +152,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers']
     Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
 });
 ```
+
+### Query parameters
 
 You may want to use additional query parameters to fetch includes 
 and/or pagination, for instance:
@@ -364,6 +370,8 @@ Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (de
 Modules/{ModuleName}/Http/routes.php - contains routings pointing to controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
+
+### Generated files content
 
 DefaultController example:
 ```php
