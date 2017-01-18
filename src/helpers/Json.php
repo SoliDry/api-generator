@@ -169,10 +169,10 @@ class Json
     }
 
     /**
-     * @param string $json
+     * @param string|resource $json
      * @return mixed
      */
-    public static function decode(string $json)
+    public static function decode($json)
     {
         return json_decode($json, true);
     }
