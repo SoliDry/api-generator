@@ -11,6 +11,8 @@ RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, wi
 
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
+[Installation](#user-content-installation-via-composer)
+    
 ### Installation via composer:
 ``` 
 composer require rjapi/raml-json-api 
@@ -152,6 +154,11 @@ You may not wish to drag all the attributes/fields:
 http://example.com/v1/article/1?include=tag&data=["title", "description"]
 ```
 Note: data array items MUST be set in double quotes.
+
+or You may want to ORDER BY several columns in different directions:
+```php
+http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
+```
 
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
