@@ -14,7 +14,11 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 [Installation](#user-content-installation-via-composer)
 
 &nbsp;&nbsp;[Configuration](#user-content-laravel-specific-configuration)
-    
+
+[RAML Types and Declarations](#user-content-raml-types-and-declarations)
+
+[Relationships](#user-content-relationships-particular-qualities)
+
 ### Installation via composer:
 ``` 
 composer require rjapi/raml-json-api 
