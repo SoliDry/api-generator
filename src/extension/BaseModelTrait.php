@@ -67,6 +67,7 @@ trait BaseModelTrait
         $page = $sqlOptions->getPage();
         $data = $sqlOptions->getData();
         $orderBy = $sqlOptions->getOrderBy();
+        $filter = $sqlOptions->getFilter();
         $defaultOrder = [];
         $order = [];
         $first = true;
@@ -93,6 +94,6 @@ trait BaseModelTrait
         // it can be empty if nothing more then 1st passed
         $obj->order = $order;
 
-        return $obj->take($to)->skip($from)->get($data);
+        return $obj->where($filter)->take($to)->skip($from)->get($data);
     }
 }
