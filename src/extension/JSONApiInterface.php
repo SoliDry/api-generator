@@ -13,6 +13,8 @@ interface JSONApiInterface
     const HEADER_CONTENT_TYPE       = 'Content-Type: ';
     const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json';
 
+    const PARAM_ACCESS_TOKEN = 'access_token';
+
     const URI_METHOD_INDEX     = 'index';
     const URI_METHOD_VIEW      = 'view';
     const URI_METHOD_CREATE    = 'create';
@@ -26,6 +28,7 @@ interface JSONApiInterface
     const HTTP_RESPONSE_CODE_ACCEPTED   = 202;
     const HTTP_RESPONSE_CODE_FORBIDDEN  = 203;
     const HTTP_RESPONSE_CODE_NO_CONTENT = 204;
+    const HTTP_RESPONSE_CODE_ACCESS_FORBIDDEN = 403;
     const HTTP_RESPONSE_CODE_NOT_FOUND  = 404;
 
     const CONTENT_LINKS      = 'links';

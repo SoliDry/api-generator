@@ -134,6 +134,12 @@ types:
         required: false
         pattern: "asc|desc"
         default: "desc"
+      access_token:
+        type: string
+        required: true
+        example: db7329d5a3f381875ea6ce7e28fe1ea536d0acaf
+        description: sha1 example
+        default: db7329d5a3f381875ea6ce7e28fe1ea536d0acaf
 /article:
   get:
     queryParameters:

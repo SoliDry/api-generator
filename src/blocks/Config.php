@@ -2,6 +2,7 @@
 namespace rjapi\blocks;
 
 use rjapi\controllers\ControllersTrait;
+use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 
@@ -87,6 +88,14 @@ class Config implements ConfigInterface
             PhpEntitiesInterface::SPACE . $page . PhpEntitiesInterface::COMMA . PHP_EOL;
     }
 
+    private function setAccessToken(string $token)
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpEntitiesInterface::QUOTES . JSONApiInterface::PARAM_ACCESS_TOKEN . PhpEntitiesInterface::QUOTES
+            . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_ARROW .
+            PhpEntitiesInterface::SPACE . $token . PhpEntitiesInterface::COMMA . PHP_EOL;
+    }
+
     private function setContent(array $queryParams)
     {
         $this->setTag();
@@ -104,6 +113,10 @@ class Config implements ConfigInterface
         if(empty($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]) === false)
         {
             $this->setPage($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]);
+        }
+        if(empty($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false)
+        {
+            $this->setAccessToken($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]);
         }
         $this->closeParams();
         $this->closeRoot();
