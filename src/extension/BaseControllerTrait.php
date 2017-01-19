@@ -73,12 +73,7 @@ trait BaseControllerTrait
                 ]
             );
         }
-        $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity  = $this->getMiddlewareEntity(Config::getModuleName(), $this->entity);
-        $this->middleWare  = new $middlewareEntity();
-        $this->props       = get_object_vars($this->middleWare);
-        $this->modelEntity = Classes::getModelEntity($this->entity);
-        $this->model       = new $this->modelEntity();
+        $this->setEntities();
         $this->setDefaults();
     }
 
