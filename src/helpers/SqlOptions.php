@@ -11,6 +11,7 @@ class SqlOptions
     public $page    = null;
     public $orderBy = [];
     public $data    = ModelsInterface::DEFAULT_DATA;
+    public $filter  = [];
 
     /**
      * @param null $sort
@@ -95,6 +96,22 @@ class SqlOptions
         {
             $this->data[] = ModelsInterface::ID;
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilter()
+    {
+        return $this->filter;
+    }
+
+    /**
+     * @param array $filter
+     */
+    public function setFilter($filter)
+    {
+        $this->filter = $filter;
     }
 
 }

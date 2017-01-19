@@ -24,6 +24,7 @@ interface ModelsInterface
     const PARAM_SORT              = 'sort';
     const PARAM_DATA              = 'data';
     const PARAM_ORDER_BY          = 'order_by';
+    const PARAM_FILTER            = 'filter';
     const LARAVEL_FILTER_ENUM     = 'in';
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';

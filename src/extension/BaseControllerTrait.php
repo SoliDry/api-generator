@@ -89,25 +89,10 @@ trait BaseControllerTrait
      */
     public function index(Request $request)
     {
-        $sqlOptions = new SqlOptions();
-        $page       = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage :
-            $request->input(ModelsInterface::PARAM_PAGE);
-        $limit      = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit :
-            $request->input(ModelsInterface::PARAM_LIMIT);
-        $sort       = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort :
-            $request->input(ModelsInterface::PARAM_SORT);
-        $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
-            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
-        $orderBy    = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [RamlInterface::RAML_ID => $sort]
-            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_ORDER_BY)));
-        $sqlOptions->setLimit($limit);
-        $sqlOptions->setPage($page);
-        $sqlOptions->setData($data);
-        $sqlOptions->setOrderBy($orderBy);
-
-        $items    = $this->getAllEntities($sqlOptions);
-        $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
-        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
+        $sqlOptions = $this->setSqlOptions($request);
+        $items      = $this->getAllEntities($sqlOptions);
+        $resource   = Json::getResource($this->middleWare, $items, $this->entity, true);
+        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
 
     /**
@@ -466,5 +451,32 @@ trait BaseControllerTrait
         $this->defaultPage  = Config::getQueryParam(ModelsInterface::PARAM_PAGE);
         $this->defaultLimit = Config::getQueryParam(ModelsInterface::PARAM_LIMIT);
         $this->defaultSort  = Config::getQueryParam(ModelsInterface::PARAM_SORT);
+    }
+
+    /**
+     * Sets SqlOptions params
+     * @param Request $request
+     * @return SqlOptions
+     */
+    private function setSqlOptions(Request $request)
+    {
+        $sqlOptions = new SqlOptions();
+        $page       = ($request->input(ModelsInterface::PARAM_PAGE) === null) ? $this->defaultPage :
+            $request->input(ModelsInterface::PARAM_PAGE);
+        $limit      = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit :
+            $request->input(ModelsInterface::PARAM_LIMIT);
+        $sort       = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort :
+            $request->input(ModelsInterface::PARAM_SORT);
+        $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+            : Json::decode($request->input(ModelsInterface::PARAM_DATA));
+        $orderBy    = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [RamlInterface::RAML_ID => $sort]
+            : Json::decode($request->input(ModelsInterface::PARAM_ORDER_BY));
+        $filter    = ($request->input(ModelsInterface::PARAM_FILTER) === null) ? [] : Json::decode($request->input(ModelsInterface::PARAM_FILTER));
+        $sqlOptions->setLimit($limit);
+        $sqlOptions->setPage($page);
+        $sqlOptions->setData($data);
+        $sqlOptions->setOrderBy($orderBy);
+        $sqlOptions->setFilter($filter);
+        return $sqlOptions;
     }
 }
