@@ -172,6 +172,12 @@ or You may want to ORDER BY several columns in different directions:
 http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
 ```
 
+Also, You have an ability to filter results this way:
+```php
+http://example.com/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
+```
+those arrays will be put to Laravel where clause and accordingly protected by param bindings. 
+
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
 if You, by strange circumstances, want to use one of the previous modules, 
