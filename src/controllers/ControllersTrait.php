@@ -119,15 +119,24 @@ trait ControllersTrait
                 {
                     continue;
                 }
-                foreach($objData as $k => $v)
-                {
-                    if($k === RamlInterface::RAML_PROPS)
-                    { // process props
-                        $this->setObjectName($objName);
-                        $this->setObjectProps($v);
-                        $this->generateResources();
-                    }
-                }
+                $this->processObjectData($objName, $objData);
+            }
+        }
+    }
+
+    /**
+     * @param string $objName
+     * @param array $objData
+     */
+    private function processObjectData(string $objName, array $objData)
+    {
+        foreach($objData as $k => $v)
+        {
+            if($k === RamlInterface::RAML_PROPS)
+            { // process props
+                $this->setObjectName($objName);
+                $this->setObjectProps($v);
+                $this->generateResources();
             }
         }
     }
