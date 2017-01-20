@@ -2,7 +2,7 @@
 
 namespace rjapi\helpers;
 
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 class MigrationsHelper
 {
@@ -18,7 +18,7 @@ class MigrationsHelper
             $table .= $word;
             if(empty($words[$key + 1]) === false)
             {
-                $table .= PhpEntitiesInterface::UNDERSCORE;
+                $table .= PhpInterface::UNDERSCORE;
             }
         }
 

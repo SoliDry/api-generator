@@ -1,0 +1,49 @@
+#%RAML 1.0
+title: My Company API
+baseUri: http://my-company.com/{version}
+version: v1
+mediaType:  application/vnd.api+json
+description: My Company API description RAML templates
+types:
+  ID:
+    type: integer
+    required: true
+  Type:
+    type: string
+    required: true
+    minLength: 1
+    maxLength: 255
+  DataObject:
+    type: object
+    required: true
+  DataArray:
+    type: array
+    required: true
+  RelationshipsDataItem:
+    type: object
+    properties:
+      id: ID
+      type: Type
+  ArticleRelationships:
+    type: object
+    properties:
+      data:
+        type: DataArray
+        items:
+          type: RelationshipsDataItem
+  TopicAttributes:
+    type: object
+    properties:
+      title:
+        required: true
+        type: string
+        minLength: 16
+        maxLength: 256
+  Topic:
+    type: object
+    properties:
+      type: Type
+      id: ID
+      attributes: TopicAttributes
+      relationships:
+        type: ArticleRelationships[]

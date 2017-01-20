@@ -6,7 +6,7 @@
  * Time: 15:38
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 
 interface CommandsInterface

@@ -6,7 +6,7 @@
  * Time: 13:31
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface ConsoleInterface
 {

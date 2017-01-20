@@ -8,8 +8,8 @@
 
 namespace rjapi\helpers;
 
-use rjapi\blocks\DirsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpInterface;
 
 class Classes
 {
@@ -54,9 +54,9 @@ class Classes
      */
     public static function getModelEntity(string $entity): string
     {
-        return DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . Config::getModuleName() .
-        PhpEntitiesInterface::BACKSLASH . DirsInterface::ENTITIES_DIR .
-        PhpEntitiesInterface::BACKSLASH . $entity;
+        return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . Config::getModuleName() .
+        PhpInterface::BACKSLASH . DirsInterface::ENTITIES_DIR .
+        PhpInterface::BACKSLASH . $entity;
     }
 
     /**
@@ -69,10 +69,10 @@ class Classes
     {
         return str_replace(
             [
-                PhpEntitiesInterface::DASH,
-                PhpEntitiesInterface::UNDERSCORE
+                PhpInterface::DASH,
+                PhpInterface::UNDERSCORE
             ], '', ucwords(
-                $objectName, PhpEntitiesInterface::DASH . PhpEntitiesInterface::UNDERSCORE
+                $objectName, PhpInterface::DASH . PhpInterface::UNDERSCORE
             )
         );
     }

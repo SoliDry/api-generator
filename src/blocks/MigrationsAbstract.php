@@ -3,6 +3,9 @@
 namespace rjapi\blocks;
 
 use rjapi\RJApiGenerator;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 
 /**
  * @property RJApiGenerator generator
@@ -14,7 +17,6 @@ abstract class MigrationsAbstract
 
     protected function setRows()
     {
-//        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         $attrs = $this->getEntityAttributes();
         foreach($attrs as $attrKey => $attrVal)
         {
@@ -29,29 +31,35 @@ abstract class MigrationsAbstract
                     continue;
                 }
                 // create migration fields depending on types
-                switch ($type)
-                {
-                    case RamlInterface::RAML_TYPE_STRING:
-                        $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
-                        break;
-                    case RamlInterface::RAML_TYPE_INTEGER:
-                        $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
-                        break;
-                    case RamlInterface::RAML_TYPE_BOOLEAN:
-                        $this->setRow(ModelsInterface::MIGRATION_METHOD_TINYINT, $attrKey);
-                        break;
-                    case RamlInterface::RAML_TYPE_DATETIME:
-                        $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
-                        break;
-                    // TODO: implement ENUM
-//                        case RamlInterface::RAML_ENUM:
-//                            $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey, );
-//                            break;
-                }
+                $this->setRowContent($type, $attrKey);
             }
         }
         // created_at/updated_at created for every table
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
+    }
+
+    private function setRowContent($type, $attrKey)
+    {
+        // create migration fields depending on types
+        switch ($type)
+        {
+            case RamlInterface::RAML_TYPE_STRING:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
+                break;
+            case RamlInterface::RAML_TYPE_INTEGER:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
+                break;
+            case RamlInterface::RAML_TYPE_BOOLEAN:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_TINYINT, $attrKey);
+                break;
+            case RamlInterface::RAML_TYPE_DATETIME:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
+                break;
+            // TODO: implement ENUM
+//                        case RamlInterface::RAML_ENUM:
+//                            $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey, );
+//                            break;
+        }
     }
 
     protected function setPivotRows($relationEntity)
@@ -60,11 +68,11 @@ abstract class MigrationsAbstract
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, strtolower($this->generator->objectName)
-                                                       . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID
+                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
-                                                       . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID
+                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }

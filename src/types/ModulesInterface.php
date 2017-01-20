@@ -6,7 +6,7 @@
  * Time: 22:52
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 
 interface ModulesInterface

@@ -2,8 +2,17 @@
 
 namespace rjapi\blocks;
 
+use rjapi\helpers\MethodOptions;
 use rjapi\RJApiGenerator;
+use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 
+/**
+ * Class ContentManager
+ * @package rjapi\blocks
+ * @property RJApiGenerator generator
+ * @property string sourceCode
+ */
 trait ContentManager
 {
     /**
@@ -11,7 +20,7 @@ trait ContentManager
      */
     protected function setTag()
     {
-        $this->sourceCode = RJApiGenerator::PHP_OPEN_TAG . PHP_EOL;
+        $this->sourceCode = PhpInterface::PHP_OPEN_TAG . PHP_EOL;
     }
 
     /**
@@ -19,9 +28,9 @@ trait ContentManager
      */
     protected function setNamespace(string $postfix)
     {
-        $this->sourceCode .= RJApiGenerator::PHP_NAMESPACE . PhpEntitiesInterface::SPACE .
-            $this->generator->modulesDir . RJApiGenerator::BACKSLASH . strtoupper($this->generator->version) .
-            RJApiGenerator::BACKSLASH . $postfix . RJApiGenerator::SEMICOLON . PHP_EOL . PHP_EOL;
+        $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
+            $this->generator->modulesDir . PhpInterface::BACKSLASH . strtoupper($this->generator->version) .
+            PhpInterface::BACKSLASH . $postfix . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -31,8 +40,8 @@ trait ContentManager
      */
     protected function setUse(string $path, bool $isTrait = false, bool $isLast = false)
     {
-        $this->sourceCode .= (($isTrait === false) ? '' : PhpEntitiesInterface::TAB_PSR4) .
-            RJApiGenerator::PHP_USE . PhpEntitiesInterface::SPACE . $path . RJApiGenerator::SEMICOLON .
+        $this->sourceCode .= (($isTrait === false) ? '' : PhpInterface::TAB_PSR4) .
+            PhpInterface::PHP_USE . PhpInterface::SPACE . $path . PhpInterface::SEMICOLON .
             PHP_EOL . (($isLast === false) ? '' : PHP_EOL);
     }
 
@@ -42,65 +51,66 @@ trait ContentManager
      */
     protected function startClass(string $name, $extends = null)
     {
-        $this->sourceCode .= RJApiGenerator::PHP_CLASS . PhpEntitiesInterface::SPACE . $name
-            . PhpEntitiesInterface::SPACE;
-        if ($extends !== null) {
+        $this->sourceCode .= PhpInterface::PHP_CLASS . PhpInterface::SPACE . $name
+            . PhpInterface::SPACE;
+        if($extends !== null)
+        {
             $this->sourceCode .=
-                RJApiGenerator::PHP_EXTENDS
-                . PhpEntitiesInterface::SPACE . $extends . PhpEntitiesInterface::SPACE;
+                PhpInterface::PHP_EXTENDS
+                . PhpInterface::SPACE . $extends . PhpInterface::SPACE;
         }
-        $this->sourceCode .= PHP_EOL . RJApiGenerator::OPEN_BRACE . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . PhpInterface::OPEN_BRACE . PHP_EOL;
     }
 
     protected function endClass()
     {
-        $this->sourceCode .= RJApiGenerator::CLOSE_BRACE . PHP_EOL;
+        $this->sourceCode .= PhpInterface::CLOSE_BRACE . PHP_EOL;
     }
 
     /**
-     * @param string $name
-     * @param string $modifier
-     * @param null $returnType
-     * @param bool $static
+     * @param MethodOptions $methodOptions
      */
-    protected function startMethod(string $name, string $modifier, $returnType = null, bool $static = false)
+    protected function startMethod(MethodOptions $methodOptions)
     {
-        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE .
-            (($static !== false) ? PhpEntitiesInterface::PHP_STATIC . PhpEntitiesInterface::SPACE : '') .
-            RJApiGenerator::PHP_FUNCTION . PhpEntitiesInterface::SPACE .
-            $name . RJApiGenerator::OPEN_PARENTHESES . RJApiGenerator::CLOSE_PARENTHESES .
-            (($returnType === null) ? '' : RJApiGenerator::COLON . PhpEntitiesInterface::SPACE . $returnType) .
-            PhpEntitiesInterface::SPACE
-            . RJApiGenerator::OPEN_BRACE . PHP_EOL;
+        // get params
+        $params = $this->getMethodParams($methodOptions->getParams());
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . $methodOptions->getModifier() . PhpInterface::SPACE .
+            (($methodOptions->isStatic() !== false) ? PhpInterface::PHP_STATIC . PhpInterface::SPACE : '') .
+            PhpInterface::PHP_FUNCTION . PhpInterface::SPACE .
+            $methodOptions->getName()
+            . PhpInterface::OPEN_PARENTHESES . $params . PhpInterface::CLOSE_PARENTHESES .
+            ((empty($methodOptions->getReturnType())) ? '' : PhpInterface::COLON . PhpInterface::SPACE . $methodOptions->getReturnType()) .
+            PhpInterface::SPACE . PHP_EOL . PhpInterface::TAB_PSR4
+            . PhpInterface::OPEN_BRACE . PHP_EOL;
     }
 
     /**
      * @param string $value
      * @param bool $isString
      */
-    protected function methodReturn(string $value, $isString = false)
+    protected function setMethodReturn(string $value, $isString = false)
     {
-        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
-            PhpEntitiesInterface::PHP_RETURN . PhpEntitiesInterface::SPACE . (($isString === false) ? $value :
-                PhpEntitiesInterface::DOUBLE_QUOTES . $value . PhpEntitiesInterface::DOUBLE_QUOTES) . PhpEntitiesInterface::SEMICOLON . PHP_EOL;
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE . (($isString === false) ? $value :
+                PhpInterface::DOUBLE_QUOTES . $value . PhpInterface::DOUBLE_QUOTES) . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     protected function endMethod()
     {
-        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::CLOSE_BRACE . PHP_EOL . PHP_EOL;
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE . PHP_EOL . PHP_EOL;
     }
 
     protected function startArray()
     {
-        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 .
-            RJApiGenerator::PHP_RETURN . PhpEntitiesInterface::SPACE .
-            RJApiGenerator::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE .
+            PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
     protected function endArray()
     {
-        $this->sourceCode .= PHP_EOL . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4
-            . RJApiGenerator::CLOSE_BRACKET . RJApiGenerator::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= PHP_EOL . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
+            . PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     /**
@@ -111,10 +121,10 @@ trait ContentManager
      */
     protected function createProperty(string $prop, string $modifier, $value = RJApiGenerator::PHP_TYPES_NULL, bool $isString = false)
     {
-        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . $modifier . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOLLAR_SIGN . $prop
-            . PhpEntitiesInterface::SPACE . RJApiGenerator::EQUALS . PhpEntitiesInterface::SPACE
-            . (($isString === false) ? $value : PhpEntitiesInterface::DOUBLE_QUOTES . $value . PhpEntitiesInterface::DOUBLE_QUOTES)
-            . PhpEntitiesInterface::SEMICOLON . PHP_EOL;
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . $prop
+            . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE
+            . (($isString === false) ? $value : PhpInterface::DOUBLE_QUOTES . $value . PhpInterface::DOUBLE_QUOTES)
+            . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     /**
@@ -122,8 +132,8 @@ trait ContentManager
      */
     protected function setComment(string $comment)
     {
-        $this->sourceCode .= PhpEntitiesInterface::COMMENT
-            . PhpEntitiesInterface::SPACE . $comment . PHP_EOL;
+        $this->sourceCode .= PhpInterface::COMMENT
+            . PhpInterface::SPACE . $comment . PHP_EOL;
     }
 
     /**
@@ -131,8 +141,9 @@ trait ContentManager
      */
     protected function setTabs(int $amount = 1)
     {
-        for ($i = $amount; $i > 0; --$i) {
-            $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4;
+        for($i = $amount; $i > 0; --$i)
+        {
+            $this->sourceCode .= PhpInterface::TAB_PSR4;
         }
     }
 
@@ -141,11 +152,50 @@ trait ContentManager
      */
     public function setDescription(array $attrVal)
     {
-        foreach ($attrVal as $k => $v) {
-            if ($k === RamlInterface::RAML_KEY_DESCRIPTION) {
+        foreach($attrVal as $k => $v)
+        {
+            if($k === RamlInterface::RAML_KEY_DESCRIPTION)
+            {
                 $this->setTabs(3);
                 $this->setComment($v);
             }
         }
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     */
+    private function getMethodParams(array $params)
+    {
+        $paramsStr = '';
+        $cnt = count($params);
+        foreach($params as $type => $name)
+        {
+            --$cnt;
+            if(is_int($type))
+            {// not typed
+                $paramsStr .= PhpInterface::DOLLAR_SIGN . $name;
+            }
+            else
+            {// typed
+                $paramsStr .= $type . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . $name;
+            }
+            if($cnt > 0)
+            {
+                $paramsStr .= PhpInterface::COMMA . PhpInterface::SPACE;
+            }
+        }
+
+        return $paramsStr;
+    }
+
+    /**
+     * @param string $str
+     */
+    public function setEchoString(string $str)
+    {
+        $this->sourceCode .= PhpInterface::ECHO . PhpInterface::SPACE . PhpInterface::QUOTES
+            . $str . PhpInterface::QUOTES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 }

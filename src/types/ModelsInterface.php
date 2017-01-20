@@ -6,10 +6,11 @@
  * Time: 11:45
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface ModelsInterface
 {
+    const ID = 'id';
     // Laravel
     const LARAVEL_ACTIVE_RECORD   = 'Model';
     const LARAVEL_MIGRATION_CLASS = 'Migration';
@@ -22,10 +23,14 @@ interface ModelsInterface
     const PARAM_LIMIT             = 'limit';
     const PARAM_SORT              = 'sort';
     const PARAM_DATA              = 'data';
+    const PARAM_ORDER_BY          = 'order_by';
+    const PARAM_FILTER            = 'filter';
     const LARAVEL_FILTER_ENUM     = 'in';
     const LARAVEL_FILTER_REGEX    = 'regex';
     const LARAVEL_FILTER_MIN      = 'min';
     const LARAVEL_FILTER_MAX      = 'max';
+    const COLUMN                  = 'column';
+    const DIRECTION               = 'direction';
 
     // Methods
     const MODEL_METHOD_ALL      = 'all';

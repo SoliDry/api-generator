@@ -6,7 +6,7 @@
  * Time: 18:07
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface RoutesInterface
 {

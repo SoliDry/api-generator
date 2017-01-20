@@ -6,7 +6,7 @@
  * Time: 18:08
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface RamlInterface
 {

@@ -3,6 +3,9 @@
 namespace rjapi\blocks;
 
 use rjapi\RJApiGenerator;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 
 /**
  * @property RJApiGenerator generator
@@ -35,18 +38,18 @@ abstract class FormRequestModel
             // determine attr
             if (is_array($attrVal)) {
                 $this->setDescription($attrVal);
-                $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::TAB_PSR4 .
-                    PhpEntitiesInterface::TAB_PSR4
-                    . PhpEntitiesInterface::DOUBLE_QUOTES . $attrKey . PhpEntitiesInterface::DOUBLE_QUOTES
-                    . PhpEntitiesInterface::SPACE
-                    . PhpEntitiesInterface::DOUBLE_ARROW .
-                    PhpEntitiesInterface::SPACE;
+                $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 .
+                    PhpInterface::TAB_PSR4
+                    . PhpInterface::DOUBLE_QUOTES . $attrKey . PhpInterface::DOUBLE_QUOTES
+                    . PhpInterface::SPACE
+                    . PhpInterface::DOUBLE_ARROW .
+                    PhpInterface::SPACE;
 
-                $this->sourceCode .= PhpEntitiesInterface::DOUBLE_QUOTES;
+                $this->sourceCode .= PhpInterface::DOUBLE_QUOTES;
                 $cnt = count($attrVal);
                 $this->setFilters($attrVal, $cnt);
 
-                $this->sourceCode .= PhpEntitiesInterface::DOUBLE_QUOTES . PhpEntitiesInterface::COMMA;
+                $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
                 if ($attrCnt > 0) {
                     $this->sourceCode .= PHP_EOL;
                 }
@@ -72,24 +75,19 @@ abstract class FormRequestModel
                 $this->sourceCode .= $v;
             }
             if ($k === RamlInterface::RAML_ENUM) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpEntitiesInterface::COLON . implode(',', $v);
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpInterface::COLON . implode(',', $v);
             }
             if ($k === RamlInterface::RAML_PATTERN) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpEntitiesInterface::COLON . $v;
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpInterface::COLON . $v;
             }
             if ($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpEntitiesInterface::COLON . $v;
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpInterface::COLON . $v;
             }
             if ($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpEntitiesInterface::COLON . $v;
+                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpInterface::COLON . $v;
             }
-            // TODO: make prepared errors, probably not here
-//            if(isset($attrVal['errorMessage']))
-//            {
-//                $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';
-//            }
             if ($cnt > 0 && in_array($k, $this->excludedKeys) === false) {
-                $this->sourceCode .= PhpEntitiesInterface::PIPE;
+                $this->sourceCode .= PhpInterface::PIPE;
             }
         }
     }

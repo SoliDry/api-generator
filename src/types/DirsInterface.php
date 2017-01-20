@@ -6,7 +6,7 @@
  * Time: 22:37
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface DirsInterface
 {

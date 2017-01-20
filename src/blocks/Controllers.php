@@ -6,6 +6,9 @@ use rjapi\extension\BaseController;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
+use rjapi\types\ControllersInterface;
+use rjapi\types\DefaultInterface;
+use rjapi\types\PhpInterface;
 
 class Controllers implements ControllersInterface
 {
@@ -42,14 +45,14 @@ class Controllers implements ControllersInterface
     {
         $this->setDefaultContent();
         $fileController = $this->generator->formatControllersPath()
-            . PhpEntitiesInterface::SLASH
+            . PhpInterface::SLASH
             . $this->generator->defaultController
             . DefaultInterface::CONTROLLER_POSTFIX
-            . PhpEntitiesInterface::PHP_EXT;
+            . PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile($fileController, $this->sourceCode);
         if($isCreated)
         {
-            Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            Console::out($fileController . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
 
@@ -60,17 +63,17 @@ class Controllers implements ControllersInterface
     {
         $this->setContent();
         $fileController = $this->generator->formatControllersPath()
-                          . PhpEntitiesInterface::SLASH
+                          . PhpInterface::SLASH
                           . $this->className
                           . DefaultInterface::CONTROLLER_POSTFIX
-                          . PhpEntitiesInterface::PHP_EXT;
+                          . PhpInterface::PHP_EXT;
         $isCreated      = FileManager::createFile(
             $fileController, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
         );
         if($isCreated)
         {
-            Console::out($fileController . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            Console::out($fileController . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
 
@@ -81,7 +84,7 @@ class Controllers implements ControllersInterface
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir
+            $this->generator->httpDir . PhpInterface::BACKSLASH . $this->generator->controllersDir
         );
         $this->startClass(
             $this->className . DefaultInterface::CONTROLLER_POSTFIX,
@@ -97,7 +100,7 @@ class Controllers implements ControllersInterface
     {
         $this->setTag();
         $this->setNamespace(
-            $this->generator->httpDir . PhpEntitiesInterface::BACKSLASH . $this->generator->controllersDir
+            $this->generator->httpDir . PhpInterface::BACKSLASH . $this->generator->controllersDir
         );
         $baseFullMapper = BaseController::class;
         $baseMapperName = Classes::getName($baseFullMapper);

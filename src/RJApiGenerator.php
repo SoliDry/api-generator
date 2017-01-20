@@ -1,15 +1,15 @@
 <?php
 namespace rjapi;
 
-use rjapi\blocks\CustomsInterface;
-use rjapi\blocks\DefaultInterface;
-use rjapi\blocks\DirsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\blocks\RamlInterface;
+use rjapi\types\CustomsInterface;
+use rjapi\types\DefaultInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 use Illuminate\Console\Command;
 use rjapi\controllers\ControllersTrait;
 
-class RJApiGenerator extends Command implements DefaultInterface, PhpEntitiesInterface, RamlInterface,
+class RJApiGenerator extends Command implements DefaultInterface, PhpInterface, RamlInterface,
     CustomsInterface, DirsInterface
 {
     use ControllersTrait;

@@ -6,10 +6,12 @@
  * Time: 18:06
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface HTTPMethodsInterface
 {
+    const HTTP_11 = 'HTTP/1.1';
+
     const HTTP_METHOD_GET     = 'GET';
     const HTTP_METHOD_POST    = 'POST';
     const HTTP_METHOD_DELETE  = 'DELETE';

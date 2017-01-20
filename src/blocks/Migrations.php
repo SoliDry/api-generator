@@ -7,8 +7,11 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpInterface;
 
 class Migrations extends MigrationsAbstract
 {
@@ -36,18 +39,18 @@ class Migrations extends MigrationsAbstract
     {
         $this->setContent();
         $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
-        $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE .
+        $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE .
                          $this->tableName .
-                         PhpEntitiesInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
+                         PhpInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
         if(FileManager::migrationNotExists($this->generator, $migrationName))
         {
-            $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpEntitiesInterface::UNDERSCORE .
-                    $migrationName . PhpEntitiesInterface::PHP_EXT;
+            $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
+                    $migrationName . PhpInterface::PHP_EXT;
             // if migration file with the same name ocasionally exists we do not override it
             $isCreated = FileManager::createFile($file, $this->sourceCode);
             if($isCreated)
             {
-                Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+                Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
         }
     }
@@ -65,28 +68,28 @@ class Migrations extends MigrationsAbstract
             foreach($relations as $relationEntity)
             {
                 $entityFile = $this->generator->formatEntitiesPath()
-                              . PhpEntitiesInterface::SLASH .
+                              . PhpInterface::SLASH .
                               $this->generator->objectName .
                               ucfirst($relationEntity) .
-                              PhpEntitiesInterface::PHP_EXT;
+                              PhpInterface::PHP_EXT;
                 if(file_exists($entityFile))
                 {
                     $this->setPivotContent($relationEntity);
                     $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
-                    $migrationName = ModelsInterface::MIGRATION_CREATE . PhpEntitiesInterface::UNDERSCORE
+                    $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE
                                      . $this->tableName
-                                     . PhpEntitiesInterface::UNDERSCORE .
+                                     . PhpInterface::UNDERSCORE .
                                      MigrationsHelper::getTableName($relationEntity) .
-                                     PhpEntitiesInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
+                                     PhpInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
                     if(FileManager::migrationNotExists($this->generator, $migrationName))
                     {
                         $file = $this->generator->formatMigrationsPath() . $migrationMask
-                                . PhpEntitiesInterface::UNDERSCORE . $migrationName . PhpEntitiesInterface::PHP_EXT;
+                                . PhpInterface::UNDERSCORE . $migrationName . PhpInterface::PHP_EXT;
                         // if migration file with the same name ocasionally exists we do not override it
                         $isCreated = FileManager::createFile($file, $this->sourceCode);
                         if($isCreated)
                         {
-                            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+                            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
                         }
                     }
                 }
@@ -110,13 +113,16 @@ class Migrations extends MigrationsAbstract
             ucfirst(ModelsInterface::MIGRATION_CREATE) . $this->className
             . ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
-        $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_UP);
+        $this->startMethod($methodOptions);
         $this->openSchema($this->tableName);
         $this->setRows();
         $this->closeSchema();
         $this->endMethod();
         // migrate down
-        $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_DOWN);
+        $this->startMethod($methodOptions);
         $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $this->tableName);
         $this->endMethod();
         $this->endClass();
@@ -141,19 +147,22 @@ class Migrations extends MigrationsAbstract
             Classes::getClassName($relationEntity) .
             ucfirst(ModelsInterface::MIGRATION_TABLE), Classes::getName($migrationClass)
         );
-        $this->startMethod(ModelsInterface::MIGRATION_METHOD_UP, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_UP);
+        $this->startMethod($methodOptions);
         // make first entity lc + underscore
         $table = MigrationsHelper::getTableName($this->generator->objectName);
         // make 2nd entity lc + underscore
         $relatedTable   = MigrationsHelper::getTableName($relationEntity);
-        $combinedTables = $table . PhpEntitiesInterface::UNDERSCORE . $relatedTable;
+        $combinedTables = $table . PhpInterface::UNDERSCORE . $relatedTable;
         // migrate up
         $this->openSchema($combinedTables);
         $this->setPivotRows($relationEntity);
         $this->closeSchema();
         $this->endMethod();
         // migrate down
-        $this->startMethod(ModelsInterface::MIGRATION_METHOD_DOWN, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_DOWN);
+        $this->startMethod($methodOptions);
         $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $combinedTables);
         $this->endMethod();
         $this->endClass();

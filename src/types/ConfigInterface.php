@@ -6,7 +6,7 @@
  * Time: 12:52
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 
 interface ConfigInterface

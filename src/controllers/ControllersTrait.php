@@ -3,21 +3,19 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\Config;
-use rjapi\blocks\ConsoleInterface;
-use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Controllers;
-use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\Migrations;
-use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\Module;
-use rjapi\blocks\ModulesInterface;
-use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\blocks\RamlInterface;
 use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
+use rjapi\types\ConsoleInterface;
+use rjapi\types\CustomsInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait
@@ -121,15 +119,24 @@ trait ControllersTrait
                 {
                     continue;
                 }
-                foreach($objData as $k => $v)
-                {
-                    if($k === RamlInterface::RAML_PROPS)
-                    { // process props
-                        $this->setObjectName($objName);
-                        $this->setObjectProps($v);
-                        $this->generateResources();
-                    }
-                }
+                $this->processObjectData($objName, $objData);
+            }
+        }
+    }
+
+    /**
+     * @param string $objName
+     * @param array $objData
+     */
+    private function processObjectData(string $objName, array $objData)
+    {
+        foreach($objData as $k => $v)
+        {
+            if($k === RamlInterface::RAML_PROPS)
+            { // process props
+                $this->setObjectName($objName);
+                $this->setObjectProps($v);
+                $this->generateResources();
             }
         }
     }
@@ -183,13 +190,13 @@ trait ControllersTrait
     public function formatMigrationsPath() : string
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
-               . $this->migrationsDir . PhpEntitiesInterface::SLASH;
+        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
+               . $this->migrationsDir . PhpInterface::SLASH;
     }
 
     public function formatConfigPath()
     {
-        return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpEntitiesInterface::SLASH;
+        return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
     }
 
     /**
@@ -211,8 +218,8 @@ trait ControllersTrait
     private function generateResources()
     {
         Console::out(
-            '================' . PhpEntitiesInterface::SPACE . $this->objectName
-            . PhpEntitiesInterface::SPACE . DirsInterface::ENTITIES_DIR
+            '================' . PhpInterface::SPACE . $this->objectName
+            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
         );
         // create controller
         $this->controllers = new Controllers($this);
@@ -222,6 +229,7 @@ trait ControllersTrait
         // create middleware
         $this->forms = new Middleware($this);
         $this->forms->create();
+        $this->forms->createAccessToken();
 
         // create entities/models
         $this->mappers = new Entities($this);
