@@ -8,13 +8,16 @@
         "alecsammon/php-raml-parser": "^2.1",
         "laravel/framework": "^5.3",
         "nwidart/laravel-modules": "^1.14",
-        "league/fractal": "^0.14.0",
-        "mockery/mockery": "^0.9.7"
+        "league/fractal": "^0.14.0"
     },
     "autoload": {
         "psr-4": {
             "rjapi\\": "src",
-            "rjapitest\\": "tests"
+            "rjapitest\\": "tests",
+            "Modules\\":"Modules/"
         }
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.7"
     }
 }

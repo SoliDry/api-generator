@@ -23,11 +23,11 @@ modules:
             configFile: './tests/_data/config.php'
 coverage:
     enabled: true
-    whitelist:
-        include:
-            - src/*
-        exclude:
-            - tests/*
+#    whitelist:
+#        include:
+#            - src/*
+#        exclude:
+#            - tests/*
 #    blacklist:
 #        include:
 #            - tests/*

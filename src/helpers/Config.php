@@ -24,6 +24,10 @@ class Config
 
     public static function getModuleName(): string
     {
+        if(env('APP_ENV') === 'testing')
+        {
+            return 'V1';
+        }
         return config(self::getConfigKey() . PhpInterface::DOT . ModulesInterface::KEY_NAME);
     }
 

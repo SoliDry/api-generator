@@ -8,6 +8,8 @@ spl_autoload_register(
     function($class)
     {
         if($class !== 'config')
-        require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
+        {
+            require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
+        }
     }
 );

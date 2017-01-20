@@ -18,7 +18,6 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
 //        require_once __DIR__ . '/../../vendor/laravel/framework/src/Illuminate/Foundation/helpers.php';
         $app = require __DIR__ . '/../../bootstrap/app.php';
-//        config(['app.timezone' => 'Europe/Moscow']);
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
         return $app;
     }
