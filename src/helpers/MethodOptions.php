@@ -9,7 +9,7 @@
 namespace rjapi\helpers;
 
 
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 class MethodOptions
 {

@@ -3,6 +3,9 @@
 namespace rjapi\blocks;
 
 use rjapi\RJApiGenerator;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 
 /**
  * @property RJApiGenerator generator

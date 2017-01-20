@@ -2,10 +2,10 @@
 namespace rjapi\helpers;
 
 
-use rjapi\blocks\ConfigInterface;
-use rjapi\blocks\ModelsInterface;
-use rjapi\blocks\ModulesInterface;
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\types\ConfigInterface;
+use rjapi\types\ModelsInterface;
+use rjapi\types\ModulesInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 class Config
 {

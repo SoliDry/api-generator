@@ -1,5 +1,7 @@
 <?php
 namespace rjapi\blocks;
+use rjapi\types\ConfigInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 /**
  * Class ConfigTrait
@@ -20,7 +22,7 @@ trait ConfigTrait
 
     private function openParams()
     {
-        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::QUOTES . Config::QUERY_PARAMS
+        $this->sourceCode .= PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::QUOTES . ConfigInterface::QUERY_PARAMS
             . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE
             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL;
     }

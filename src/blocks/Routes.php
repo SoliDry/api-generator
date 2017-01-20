@@ -6,6 +6,8 @@ use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RoutesInterface;
 
 class Routes
 {

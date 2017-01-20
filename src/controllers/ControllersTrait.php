@@ -3,21 +3,19 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\Config;
-use rjapi\blocks\ConsoleInterface;
-use rjapi\blocks\DirsInterface;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Controllers;
-use rjapi\blocks\CustomsInterface;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Entities;
 use rjapi\blocks\Migrations;
-use rjapi\blocks\ModelsInterface;
 use rjapi\blocks\Module;
-use rjapi\blocks\ModulesInterface;
-use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\blocks\RamlInterface;
 use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
+use rjapi\types\ConsoleInterface;
+use rjapi\types\CustomsInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
 trait ControllersTrait

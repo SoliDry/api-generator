@@ -2,7 +2,7 @@
 
 namespace rjapi\helpers;
 
-use rjapi\blocks\ModelsInterface;
+use rjapi\types\ModelsInterface;
 
 class SqlOptions
 {

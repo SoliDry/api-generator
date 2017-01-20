@@ -7,6 +7,7 @@ use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
+use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\MethodsInterface;
@@ -128,13 +129,13 @@ class Middleware extends FormRequestModel
         $this->startMethod($methodOptions);
         // attrs validation
         $this->startArray();
-        $rel = empty($relationTypes[RJApiGenerator::RAML_TYPE]) ? $relationTypes :
-            $relationTypes[RJApiGenerator::RAML_TYPE];
+        $rel = empty($relationTypes[RamlInterface::RAML_TYPE]) ? $relationTypes :
+            $relationTypes[RamlInterface::RAML_TYPE];
 
         $rels = explode(PhpEntitiesInterface::PIPE, str_replace('[]', '', $rel));
         foreach($rels as $k => $rel)
         {
-            $this->setRelations(strtolower(trim(str_replace(RJApiGenerator::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
+            $this->setRelations(strtolower(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
             if(empty($rels[$k + 1]) === false)
             {
                 $this->sourceCode .= PHP_EOL;

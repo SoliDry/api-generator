@@ -4,6 +4,9 @@ namespace rjapi\blocks;
 
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config as conf;
+use rjapi\types\DefaultInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 trait EntitiesTrait
 {

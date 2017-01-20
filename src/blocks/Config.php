@@ -5,6 +5,12 @@ use rjapi\controllers\ControllersTrait;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\types\ConfigInterface;
+use rjapi\types\CustomsInterface;
+use rjapi\types\ModelsInterface;
+use rjapi\types\ModulesInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 
 class Config implements ConfigInterface
 {

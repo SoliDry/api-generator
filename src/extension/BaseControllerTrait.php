@@ -4,18 +4,17 @@ namespace rjapi\extension;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
-use rjapi\blocks\DefaultInterface;
-use rjapi\blocks\DirsInterface;
+use rjapi\types\DirsInterface;
 use rjapi\blocks\EntitiesTrait;
 use rjapi\blocks\FileManager;
-use rjapi\blocks\ModelsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\blocks\RamlInterface;
+use rjapi\types\ModelsInterface;
+use rjapi\types\RamlInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\helpers\SqlOptions;
+use rjapi\types\PhpEntitiesInterface;
 
 /**
  * Class BaseControllerTrait

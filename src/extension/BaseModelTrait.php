@@ -1,9 +1,9 @@
 <?php
 namespace rjapi\extension;
 
-use rjapi\blocks\ModelsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
-use rjapi\blocks\RamlInterface;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 use rjapi\helpers\SqlOptions;
 
 trait BaseModelTrait

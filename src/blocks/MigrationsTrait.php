@@ -5,6 +5,8 @@ namespace rjapi\blocks;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use rjapi\helpers\Classes;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 trait MigrationsTrait
 {

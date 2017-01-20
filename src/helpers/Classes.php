@@ -8,8 +8,8 @@
 
 namespace rjapi\helpers;
 
-use rjapi\blocks\DirsInterface;
-use rjapi\blocks\PhpEntitiesInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 class Classes
 {

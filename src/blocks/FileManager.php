@@ -6,6 +6,10 @@ use Illuminate\Console\Command;
 use rjapi\exception\DirectoryException;
 use rjapi\helpers\Config;
 use rjapi\RJApiGenerator;
+use rjapi\types\ConsoleInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\ModulesInterface;
+use rjapi\types\PhpEntitiesInterface;
 
 class FileManager implements DirsInterface
 {

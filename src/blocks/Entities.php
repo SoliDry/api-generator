@@ -8,6 +8,9 @@ use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 
 class Entities extends FormRequestModel
 {

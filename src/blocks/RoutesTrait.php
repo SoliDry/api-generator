@@ -9,6 +9,12 @@
 namespace rjapi\blocks;
 
 use rjapi\helpers\Classes;
+use rjapi\types\DefaultInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\ModelsInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
+use rjapi\types\RoutesInterface;
 
 trait RoutesTrait
 {
