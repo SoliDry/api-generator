@@ -9,7 +9,7 @@ use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\ModulesInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 class FileManager implements DirsInterface
 {
@@ -69,10 +69,10 @@ class FileManager implements DirsInterface
     {
         /** @var RJApiGenerator $obj */
         $path =
-            $obj->modulesDir . PhpEntitiesInterface::SLASH . strtoupper($obj->version) . PhpEntitiesInterface::SLASH;
+            $obj->modulesDir . PhpInterface::SLASH . strtoupper($obj->version) . PhpInterface::SLASH;
         if($http === true)
         {
-            $path .= $obj->httpDir . PhpEntitiesInterface::SLASH;
+            $path .= $obj->httpDir . PhpInterface::SLASH;
         }
 
         return $path;
@@ -81,7 +81,7 @@ class FileManager implements DirsInterface
     public static function createModuleConfig(string $sourceCode)
     {
         self::createFile(
-            DirsInterface::CONFIG_DIR . PhpEntitiesInterface::SLASH . ModulesInterface::KEY_MODULE . PhpEntitiesInterface::PHP_EXT, $sourceCode
+            DirsInterface::CONFIG_DIR . PhpInterface::SLASH . ModulesInterface::KEY_MODULE . PhpInterface::PHP_EXT, $sourceCode
         );
     }
 
@@ -103,10 +103,10 @@ class FileManager implements DirsInterface
      */
     public static function migrationNotExists(Command $obj, string $migrationName)
     {
-        $path  = FileManager::getModulePath($obj) . self::DATABASE_DIR . PhpEntitiesInterface::SLASH
-                 . $obj->migrationsDir . PhpEntitiesInterface::SLASH;
-        $file  = $path . PhpEntitiesInterface::ASTERISK . $migrationName
-                 . PhpEntitiesInterface::PHP_EXT;
+        $path  = FileManager::getModulePath($obj) . self::DATABASE_DIR . PhpInterface::SLASH
+                 . $obj->migrationsDir . PhpInterface::SLASH;
+        $file  = $path . PhpInterface::ASTERISK . $migrationName
+                 . PhpInterface::PHP_EXT;
         $files = glob($file);
 
         return (empty($files)) ? true : false;
@@ -122,9 +122,9 @@ class FileManager implements DirsInterface
      */
     public static function getPivotFile(string $firstEntity, string $secondEntity)
     {
-        return DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
-               . Config::getModuleName() . PhpEntitiesInterface::SLASH .
-               DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
-               $firstEntity . $secondEntity . PhpEntitiesInterface::PHP_EXT;
+        return DirsInterface::MODULES_DIR . PhpInterface::SLASH
+               . Config::getModuleName() . PhpInterface::SLASH .
+               DirsInterface::ENTITIES_DIR . PhpInterface::SLASH .
+               $firstEntity . $secondEntity . PhpInterface::PHP_EXT;
     }
 }

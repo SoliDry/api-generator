@@ -9,7 +9,7 @@ use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
 use rjapi\types\ModelsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
 class Entities extends FormRequestModel
@@ -36,15 +36,15 @@ class Entities extends FormRequestModel
     public function create()
     {
         $this->setContent();
-        $file      = $this->generator->formatEntitiesPath() . PhpEntitiesInterface::SLASH . $this->className .
-            PhpEntitiesInterface::PHP_EXT;
+        $file      = $this->generator->formatEntitiesPath() . PhpInterface::SLASH . $this->className .
+            PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
         );
         if($isCreated)
         {
-            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
 
@@ -96,8 +96,8 @@ class Entities extends FormRequestModel
     private function createRelationMethod(string $current, string $related, string $relationEntity)
     {
         $ucEntitty   = ucfirst($relationEntity);
-        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
-        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+        $currentRels = explode(PhpInterface::PIPE, $current);
+        $relatedRels = explode(PhpInterface::PIPE, $related);
         foreach($relatedRels as $related)
         {
             if(strpos($related, $this->generator->objectName) !== false)
@@ -124,9 +124,9 @@ class Entities extends FormRequestModel
                         {// ManyToMany
                             // check inversion of a pivot
                             $entityFile = $this->generator->formatEntitiesPath()
-                                . PhpEntitiesInterface::SLASH . $this->generator->objectName .
+                                . PhpInterface::SLASH . $this->generator->objectName .
                                 ucfirst($relationEntity) .
-                                PhpEntitiesInterface::PHP_EXT;
+                                PhpInterface::PHP_EXT;
                             $relEntity  = $relationEntity;
                             $objName    = $this->generator->objectName;
                             if(file_exists($entityFile) === false)
@@ -152,15 +152,15 @@ class Entities extends FormRequestModel
     {
         $this->setPivotContent($ucEntity);
         $file      = $this->generator->formatEntitiesPath() .
-            PhpEntitiesInterface::SLASH .
-            $this->className . Classes::getClassName($ucEntity) . PhpEntitiesInterface::PHP_EXT;
+            PhpInterface::SLASH .
+            $this->className . Classes::getClassName($ucEntity) . PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
         );
         if($isCreated)
         {
-            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
 
@@ -177,8 +177,8 @@ class Entities extends FormRequestModel
             {
                 $ucEntitty = ucfirst($relationEntity);
                 $file      = $this->generator->formatEntitiesPath()
-                    . PhpEntitiesInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
-                    PhpEntitiesInterface::PHP_EXT;
+                    . PhpInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
+                    PhpInterface::PHP_EXT;
                 // check if inverse Entity pivot exists
                 if(file_exists($file) === false)
                 {
@@ -220,8 +220,8 @@ class Entities extends FormRequestModel
     private function createPivotClass(string $current, string $related, string $relationEntity)
     {
         $ucEntitty   = ucfirst($relationEntity);
-        $currentRels = explode(PhpEntitiesInterface::PIPE, $current);
-        $relatedRels = explode(PhpEntitiesInterface::PIPE, $related);
+        $currentRels = explode(PhpInterface::PIPE, $current);
+        $relatedRels = explode(PhpInterface::PIPE, $related);
         foreach($relatedRels as $related)
         {
             if(strpos($related, $this->generator->objectName) !== false)
@@ -263,23 +263,23 @@ class Entities extends FormRequestModel
      * @param \string[] ...$args
      * @return string
      */
-    private function getRelationReturn(string $entity, string $method, string ...$args)
+    private function getRelationReturn(string $entity, string $method, array $args)
     {
-        $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
-            . PhpEntitiesInterface::ARROW . $method
-            . PhpEntitiesInterface::OPEN_PARENTHESES . Classes::getClassName($entity)
-            . PhpEntitiesInterface::DOUBLE_COLON . PhpEntitiesInterface::PHP_CLASS;
+        $toReturn = PhpInterface::DOLLAR_SIGN . PhpInterface::PHP_THIS
+            . PhpInterface::ARROW . $method
+            . PhpInterface::OPEN_PARENTHESES . Classes::getClassName($entity)
+            . PhpInterface::DOUBLE_COLON . PhpInterface::PHP_CLASS;
 
         if(empty($args) === false)
         {
             foreach($args as $val)
             {
-                $toReturn .= PhpEntitiesInterface::COMMA
-                    . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES . $val .
-                    PhpEntitiesInterface::QUOTES;
+                $toReturn .= PhpInterface::COMMA
+                    . PhpInterface::SPACE . PhpInterface::QUOTES . $val .
+                    PhpInterface::QUOTES;
             }
         }
-        $toReturn .= PhpEntitiesInterface::CLOSE_PARENTHESES;
+        $toReturn .= PhpInterface::CLOSE_PARENTHESES;
         return $toReturn;
     }
 
@@ -299,16 +299,16 @@ class Entities extends FormRequestModel
         $this->startClass($this->className, $baseMapperName);
 
         $this->createProperty(
-            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
         );
         $this->createProperty(
-            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
             strtolower($this->generator->objectName), true
         );
         $this->createProperty(
-            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
-            PhpEntitiesInterface::PHP_TYPES_BOOL_FALSE
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
+            PhpInterface::PHP_TYPES_BOOL_FALSE
         );
         $this->setRelations();
         $this->endClass();
@@ -331,16 +331,16 @@ class Entities extends FormRequestModel
         $this->startClass($this->className . Classes::getClassName($ucEntity), $baseMapperName);
 
         $this->createProperty(
-            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
         );
         $this->createProperty(
-            ModelsInterface::PROPERTY_TABLE, PhpEntitiesInterface::PHP_MODIFIER_PROTECTED,
-            strtolower($this->generator->objectName . PhpEntitiesInterface::UNDERSCORE . $ucEntity), true
+            ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName . PhpInterface::UNDERSCORE . $ucEntity), true
         );
         $this->createProperty(
-            ModelsInterface::PROPERTY_TIMESTAMPS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC,
-            PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
+            PhpInterface::PHP_TYPES_BOOL_TRUE
         );
         $this->endClass();
     }

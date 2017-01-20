@@ -32,6 +32,8 @@ interface JSONApiInterface
     const HTTP_RESPONSE_CODE_ACCESS_FORBIDDEN = 403;
     const HTTP_RESPONSE_CODE_NOT_FOUND  = 404;
 
+    const FORBIDDEN = 'Forbidden';
+
     const CONTENT_LINKS      = 'links';
     const CONTENT_SELF       = 'self';
     const CONTENT_RELATED    = 'related';

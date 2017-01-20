@@ -14,7 +14,7 @@ use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
 use rjapi\types\DirsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
@@ -181,13 +181,13 @@ trait ControllersTrait
     public function formatMigrationsPath() : string
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpEntitiesInterface::SLASH
-               . $this->migrationsDir . PhpEntitiesInterface::SLASH;
+        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
+               . $this->migrationsDir . PhpInterface::SLASH;
     }
 
     public function formatConfigPath()
     {
-        return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpEntitiesInterface::SLASH;
+        return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
     }
 
     /**
@@ -209,8 +209,8 @@ trait ControllersTrait
     private function generateResources()
     {
         Console::out(
-            '================' . PhpEntitiesInterface::SPACE . $this->objectName
-            . PhpEntitiesInterface::SPACE . DirsInterface::ENTITIES_DIR
+            '================' . PhpInterface::SPACE . $this->objectName
+            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
         );
         // create controller
         $this->controllers = new Controllers($this);
@@ -220,6 +220,7 @@ trait ControllersTrait
         // create middleware
         $this->forms = new Middleware($this);
         $this->forms->create();
+        $this->forms->createAccessToken();
 
         // create entities/models
         $this->mappers = new Entities($this);

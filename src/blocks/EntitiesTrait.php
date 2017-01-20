@@ -6,16 +6,16 @@ use rjapi\helpers\Classes;
 use rjapi\helpers\Config as conf;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 trait EntitiesTrait
 {
     public function getMiddlewareEntity(string $version, string $object)
     {
-        return DirsInterface::MODULES_DIR . PhpEntitiesInterface::BACKSLASH . strtoupper($version) .
-        PhpEntitiesInterface::BACKSLASH . DirsInterface::HTTP_DIR .
-        PhpEntitiesInterface::BACKSLASH .
-        DirsInterface::MIDDLEWARE_DIR . PhpEntitiesInterface::BACKSLASH .
+        return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
+        PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
+        PhpInterface::BACKSLASH .
+        DirsInterface::MIDDLEWARE_DIR . PhpInterface::BACKSLASH .
         $object .
         DefaultInterface::MIDDLEWARE_POSTFIX;
     }

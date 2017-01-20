@@ -6,7 +6,7 @@ use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RoutesInterface;
 
 class Routes
@@ -34,7 +34,7 @@ class Routes
         $this->setRoutes();
         $isCreated = false;
         $file      = FileManager::getModulePath($this->generator, true) .
-                     RoutesInterface::ROUTES_FILE_NAME . PhpEntitiesInterface::PHP_EXT;
+                     RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
         // TODO: fix this behaviour - collect data 1-st for ex.
         if(file_exists($file) === false)
         {
@@ -42,12 +42,12 @@ class Routes
         }
         else
         {
-            $this->sourceCode = str_replace(PhpEntitiesInterface::PHP_OPEN_TAG, '', $this->sourceCode);
+            $this->sourceCode = str_replace(PhpInterface::PHP_OPEN_TAG, '', $this->sourceCode);
             file_put_contents($file, $this->sourceCode, FILE_APPEND);
         }
         if($isCreated)
         {
-            Console::out($file . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
 

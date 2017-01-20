@@ -2,7 +2,7 @@
 
 namespace rjapi\types;
 
-interface PhpEntitiesInterface
+interface PhpInterface
 {
     const PHP_OPEN_TAG  = '<?php';
     const PHP_EXT       = '.php';
@@ -45,6 +45,7 @@ interface PhpEntitiesInterface
     const DASH          = '-';
     const UNDERSCORE    = '_';
     const ASTERISK      = '*';
+    const EXCLAMATION   = '!';
 
     const PHP_TYPES_ARRAY      = 'array';
     const PHP_TYPES_NULL       = 'null';
@@ -64,4 +65,11 @@ interface PhpEntitiesInterface
     const PHP_AUTHORIZE = 'authorize';
 
     const CLASS_CLOSURE = 'Closure';
+
+    // php flow structs
+    const IF = 'if';
+
+    // key-words
+    const ECHO = 'echo';
+    const DIE  = 'die';
 }

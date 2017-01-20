@@ -7,7 +7,7 @@ use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 use rjapi\types\CommandsInterface;
 use rjapi\types\ModulesInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 class Module
 {
@@ -32,8 +32,8 @@ class Module
     public function create()
     {
         $output = [];
-        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpEntitiesInterface::SPACE . $this->generator->version, $output);
-        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpEntitiesInterface::SPACE . $this->generator->version, $output);
+        exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpInterface::SPACE . $this->generator->version, $output);
+        exec(CommandsInterface::LARAVEL_MODULE_USE . PhpInterface::SPACE . $this->generator->version, $output);
         foreach($output as $str)
         {
             Console::out($str, Console::COLOR_GREEN);
@@ -45,14 +45,14 @@ class Module
 
     private function createModuleContent()
     {
-        $this->sourceCode .= PhpEntitiesInterface::PHP_RETURN . PhpEntitiesInterface::SPACE
-                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::TAB_PSR4
-                             . PhpEntitiesInterface::QUOTES . ModulesInterface::KEY_MODULES . PhpEntitiesInterface::QUOTES
-                             . PhpEntitiesInterface::DOUBLE_ARROW . PhpEntitiesInterface::SPACE
-                             . PhpEntitiesInterface::OPEN_BRACKET . PHP_EOL . PhpEntitiesInterface::TAB_PSR4
-                             . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::QUOTES
-                             . $this->generator->version . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA
-                             . PHP_EOL . PhpEntitiesInterface::TAB_PSR4 . PhpEntitiesInterface::CLOSE_BRACKET . PHP_EOL
-                             . PhpEntitiesInterface::CLOSE_BRACKET . PhpEntitiesInterface::SEMICOLON;
+        $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE
+                             . PhpInterface::OPEN_BRACKET . PHP_EOL . PhpInterface::TAB_PSR4
+                             . PhpInterface::QUOTES . ModulesInterface::KEY_MODULES . PhpInterface::QUOTES
+                             . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+                             . PhpInterface::OPEN_BRACKET . PHP_EOL . PhpInterface::TAB_PSR4
+                             . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES
+                             . $this->generator->version . PhpInterface::QUOTES . PhpInterface::COMMA
+                             . PHP_EOL . PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PHP_EOL
+                             . PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON;
     }
 }

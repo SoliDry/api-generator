@@ -4,7 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\RJApiGenerator;
 use rjapi\types\ModelsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
 /**
@@ -63,11 +63,11 @@ abstract class MigrationsAbstract
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, strtolower($this->generator->objectName)
-                                                       . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID
+                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
-                                                       . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID
+                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }

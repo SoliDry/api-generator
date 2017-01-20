@@ -5,7 +5,7 @@ namespace rjapi\helpers;
 use rjapi\types\ConfigInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\ModulesInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 class Config
 {
@@ -24,14 +24,14 @@ class Config
 
     public static function getModuleName(): string
     {
-        return config(self::getConfigKey() . PhpEntitiesInterface::DOT . ModulesInterface::KEY_NAME);
+        return config(self::getConfigKey() . PhpInterface::DOT . ModulesInterface::KEY_NAME);
     }
 
     public static function getQueryParam(string $param)
     {
         if (array_key_exists($param, self::$availableQueryParams))
         {
-            $params = config(self::getConfigKey() . PhpEntitiesInterface::DOT . ConfigInterface::QUERY_PARAMS);
+            $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::QUERY_PARAMS);
             return (empty($params[$param])) ? self::$availableQueryParams[$param] : $params[$param];
         }
         return null;

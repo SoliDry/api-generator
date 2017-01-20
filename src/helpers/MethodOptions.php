@@ -9,11 +9,11 @@
 namespace rjapi\helpers;
 
 
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 class MethodOptions
 {
-    private $modifier = PhpEntitiesInterface::PHP_MODIFIER_PUBLIC;
+    private $modifier = PhpInterface::PHP_MODIFIER_PUBLIC;
     private $name = '';
     private $returnType = '';
     private $isStatic = false;

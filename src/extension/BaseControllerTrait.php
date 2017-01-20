@@ -14,7 +14,7 @@ use rjapi\helpers\Config;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\helpers\SqlOptions;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 
 /**
  * Class BaseControllerTrait
@@ -57,7 +57,7 @@ trait BaseControllerTrait
         // add relations to json api methods array
         $this->addRelationMethods();
         $actionName   = $route->getActionName();
-        $calledMethod = substr($actionName, strpos($actionName, PhpEntitiesInterface::AT) + 1);
+        $calledMethod = substr($actionName, strpos($actionName, PhpInterface::AT) + 1);
         /** @var BaseController jsonApi */
         if($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods))
         {
@@ -273,11 +273,11 @@ trait BaseControllerTrait
                 $rId = $val[RamlInterface::RAML_ID];
                 // if pivot file exists then save
                 $ucEntity = ucfirst($relation);
-                $file     = DirsInterface::MODULES_DIR . PhpEntitiesInterface::SLASH
-                            . Config::getModuleName() . PhpEntitiesInterface::SLASH .
-                            DirsInterface::ENTITIES_DIR . PhpEntitiesInterface::SLASH .
-                            $this->entity . $ucEntity . PhpEntitiesInterface::PHP_EXT;
-                if(file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $file))
+                $file     = DirsInterface::MODULES_DIR . PhpInterface::SLASH
+                            . Config::getModuleName() . PhpInterface::SLASH .
+                            DirsInterface::ENTITIES_DIR . PhpInterface::SLASH .
+                            $this->entity . $ucEntity . PhpInterface::PHP_EXT;
+                if(file_exists(PhpInterface::SYSTEM_UPDIR . $file))
                 { // ManyToMany rel
                     $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
                     // clean up old links
@@ -285,8 +285,8 @@ trait BaseControllerTrait
                         $pivotEntity,
                         [
                             [
-                                $lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => $id,
-                                $relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID  => $rId
+                                $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $id,
+                                $relation . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID  => $rId
                             ]
                         ]
                     )->delete();
@@ -296,10 +296,10 @@ trait BaseControllerTrait
                     $relEntity = Classes::getModelEntity($ucEntity);
                     $model     = $this->getModelEntities(
                         $relEntity, [
-                        $lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $id
+                        $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID, $id
                     ]
                     );
-                    $model->update([$relation . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
+                    $model->update([$relation . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
                 }
             }
             Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
@@ -350,8 +350,8 @@ trait BaseControllerTrait
         // if pivot file exists then save
         $filePivot          = FileManager::getPivotFile($this->entity, $ucEntity);
         $filePivotInverse   = FileManager::getPivotFile($ucEntity, $this->entity);
-        $pivotExists        = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivot);
-        $pivotInverseExists = file_exists(PhpEntitiesInterface::SYSTEM_UPDIR . $filePivotInverse);
+        $pivotExists        = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivot);
+        $pivotInverseExists = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivotInverse);
         if($pivotExists === true || $pivotInverseExists === true)
         { // ManyToMany rel
             $pivotEntity = null;
@@ -392,7 +392,7 @@ trait BaseControllerTrait
             // clean up old links
             $this->getModelEntities(
                 $pivotEntity,
-                [$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
+                [$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
             )->delete();
             $this->relsRemoved = true;
         }
@@ -408,8 +408,8 @@ trait BaseControllerTrait
     private function savePivot(string $pivotEntity, string $lowEntity, string $entity, int $eId, int $rId)
     {
         $pivot                                                                           = new $pivotEntity();
-        $pivot->{$entity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID}    = $rId;
-        $pivot->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $pivot->{$entity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID}    = $rId;
+        $pivot->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $pivot->save();
     }
 
@@ -425,7 +425,7 @@ trait BaseControllerTrait
             Classes::getModelEntity($ucEntity);
         $model                                                                           =
             $this->getModelEntity($relEntity, $rId);
-        $model->{$lowEntity . PhpEntitiesInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $model->save();
     }
 

@@ -10,7 +10,7 @@ use League\Fractal\Resource\Item;
 use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\Serializer\JsonApiSerializer;
 use rjapi\types\ModelsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\JSONApiInterface;
@@ -184,7 +184,7 @@ class Json
      */
     private static function getSelectedData(string $json, array $data): string
     {
-        if(current($data) === PhpEntitiesInterface::ASTERISK)
+        if(current($data) === PhpInterface::ASTERISK)
         {// do nothing - grab all fields
             return $json;
         }

@@ -2,7 +2,7 @@
 namespace rjapi\extension;
 
 use rjapi\types\ModelsInterface;
-use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use rjapi\helpers\SqlOptions;
 
@@ -17,7 +17,7 @@ trait BaseModelTrait
     private function getEntity(int $id, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
 
@@ -33,7 +33,7 @@ trait BaseModelTrait
     private function getModelEntity($modelEntity, int $id)
     {
         $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
 
@@ -49,7 +49,7 @@ trait BaseModelTrait
     private function getModelEntities($modelEntity, array $params)
     {
         return call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $modelEntity . PhpEntitiesInterface::DOUBLE_COLON
+            PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, $params
         );
     }
@@ -87,7 +87,7 @@ trait BaseModelTrait
         $from = ($limit * $page) - $limit;
         $to = $limit * $page;
         $obj = call_user_func_array(
-            PhpEntitiesInterface::BACKSLASH . $this->modelEntity . PhpEntitiesInterface::DOUBLE_COLON .
+            PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,
             $defaultOrder
         );
