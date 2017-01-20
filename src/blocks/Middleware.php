@@ -246,7 +246,7 @@ class Middleware extends FormRequestModel
         $this->sourceCode .= PhpInterface::IF . PhpInterface::SPACE . PhpInterface::OPEN_PARENTHESES
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::PHP_TYPES_STRING . PhpInterface::CLOSE_PARENTHESES
             . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . MiddlewareInterface::METHOD_PARAM_REQUEST
-            . PhpInterface::ARROW . JSONApiInterface::CLASS_API_ACCESS_TOKEN . PhpInterface::SPACE . PhpInterface::EXCLAMATION
+            . PhpInterface::ARROW . JSONApiInterface::PARAM_ACCESS_TOKEN . PhpInterface::SPACE . PhpInterface::EXCLAMATION
             . PhpInterface::EQUALS . PhpInterface::EQUALS . PhpInterface::SPACE
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::PHP_TYPES_STRING . PhpInterface::CLOSE_PARENTHESES
             . PhpInterface::SPACE . MethodsInterface::CONFIG . PhpInterface::OPEN_PARENTHESES . PhpInterface::QUOTES
