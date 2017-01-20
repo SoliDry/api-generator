@@ -17,12 +17,16 @@ use rjapi\types\MiddlewareInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
+/**
+ * Class Middleware
+ * @package rjapi\blocks
+ * @property RJApiGenerator generator
+ */
 class Middleware extends FormRequestModel
 {
     use ContentManager;
 
     protected $sourceCode = '';
-    /** @var RJApiGenerator generator */
     protected $generator       = null;
     private   $additionalProps = [
         'id' => [

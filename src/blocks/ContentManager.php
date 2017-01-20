@@ -7,6 +7,11 @@ use rjapi\RJApiGenerator;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
+/**
+ * Class ContentManager
+ * @package rjapi\blocks
+ * @property RJApiGenerator generator
+ */
 trait ContentManager
 {
     /**

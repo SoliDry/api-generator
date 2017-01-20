@@ -12,6 +12,11 @@ use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
+/**
+ * Class Middleware
+ * @package rjapi\blocks
+ * @property RJApiGenerator generator
+ */
 class Entities extends FormRequestModel
 {
     use ContentManager, EntitiesTrait;

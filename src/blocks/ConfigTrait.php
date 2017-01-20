@@ -6,6 +6,7 @@ use rjapi\types\PhpInterface;
 /**
  * Class ConfigTrait
  * @package rjapi\blocks
+ * @property string sourceCode
  */
 trait ConfigTrait
 {
