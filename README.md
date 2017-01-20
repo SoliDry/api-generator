@@ -183,6 +183,42 @@ as the last element of the array in ```config/module.php``` file,
 if You, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
 
+To get configuration parameters at runtime generator will create content 
+in ```Modules/{ModuleName}/Config/config.php``` file:
+```php
+<?php
+return [
+    'name'=>'V1',
+    'query_params'=> [
+        // default settings
+        'limit' => 15,
+        'sort' => 'desc',
+        // access token to check via global middleware
+        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
+    ],
+];
+```
+
+### Security
+In ```QueryParams``` RAML types You can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
+Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware. 
+To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
+```php
+class Kernel extends HttpKernel
+{
+    /**
+     * The application's global HTTP middleware stack.
+     *
+     * These middleware are run during every request to your application.
+     *
+     * @var array
+     */
+    protected $middleware = [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\ApiAccessToken::class,
+    ];
+```
+
 An example of auto-generated ```config/module.php```:
 ```php
 <?php
@@ -192,45 +228,6 @@ return [
     ]
 ];
 ```
-
-Generated migrations will look like standard migrations in Laravel:
-```php
-<?php
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
-
-class CreateArticleTable extends Migration 
-{
-    public function up() {
-        Schema::create('article', function(Blueprint $table) {
-            $table->increments('id');
-            $table->string('title');
-            $table->string('description');
-            $table->string('url');
-            // Show at the top of main page
-            $table->unsignedTinyInteger('show_in_top');
-            // ManyToOne Topic relationship
-            $table->integer('topic_id');
-            $table->timestamps();
-        });
-    }
-
-    public function down() {
-        Schema::dropIfExists('article');
-    }
-
-}
-```
-
-Note that all migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
-
-To execute them all - run: ``` php artisan module:migrate ```
-
-Also worth to mention - Laravel uses table_id convention to link tables via foreign key.
-So U can either follow the default - add to RAML an id that matches to the table name 
-(just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` bellow) 
-or make Your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
 
 ### RAML Types and Declarations
 
@@ -364,6 +361,12 @@ To set default values for GET query parameters - set QueryParams like this:
         required: false
         pattern: "asc|desc"
         default: "desc"
+      access_token:
+        type: string
+        required: true
+        example: db7329d5a3f381875ea6ce7e28fe1ea536d0acaf
+        description: sha1 example
+        default: db7329d5a3f381875ea6ce7e28fe1ea536d0acaf        
 ```
 it will be used on requests similar to: ```http://example.com/v1/article?include=tag``` 
 where no params were passed.  
@@ -461,6 +464,45 @@ class Article extends BaseModel
 
 }
 ```
+
+Generated migrations will look like standard migrations in Laravel:
+```php
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateArticleTable extends Migration 
+{
+    public function up() {
+        Schema::create('article', function(Blueprint $table) {
+            $table->increments('id');
+            $table->string('title');
+            $table->string('description');
+            $table->string('url');
+            // Show at the top of main page
+            $table->unsignedTinyInteger('show_in_top');
+            // ManyToOne Topic relationship
+            $table->integer('topic_id');
+            $table->timestamps();
+        });
+    }
+
+    public function down() {
+        Schema::dropIfExists('article');
+    }
+
+}
+```
+
+Note that all migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
+
+To execute them all - run: ``` php artisan module:migrate ```
+
+Also worth to mention - Laravel uses table_id convention to link tables via foreign key.
+So U can either follow the default - add to RAML an id that matches to the table name 
+(just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` in RAML Types and Declarations) 
+or make Your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
 
 ### Relationships particular qualities
 To let generator know about what a particular relationship to apply (ex.: ManyToMany, OneToMany, OneToOne) 
