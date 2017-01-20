@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface PhpEntitiesInterface
 {
@@ -62,4 +62,6 @@ interface PhpEntitiesInterface
     const PHP_RULES     = 'rules';
     const PHP_RELATIONS = 'relations';
     const PHP_AUTHORIZE = 'authorize';
+
+    const CLASS_CLOSURE = 'Closure';
 }

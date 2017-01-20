@@ -6,7 +6,7 @@
  * Time: 18:06
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface HTTPMethodsInterface
 {

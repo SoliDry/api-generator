@@ -1,5 +1,5 @@
 <?php
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface DefaultInterface
 {

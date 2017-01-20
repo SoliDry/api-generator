@@ -2,9 +2,17 @@
 namespace rjapi\blocks;
 
 use rjapi\extension\BaseFormRequest;
+use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Console;
+use rjapi\helpers\MethodOptions;
 use rjapi\RJApiGenerator;
 use rjapi\helpers\Classes;
+use rjapi\types\DefaultInterface;
+use rjapi\types\DirsInterface;
+use rjapi\types\MethodsInterface;
+use rjapi\types\MiddlewareInterface;
+use rjapi\types\PhpEntitiesInterface;
+use rjapi\types\RamlInterface;
 
 class Middleware extends FormRequestModel
 {
@@ -92,12 +100,18 @@ class Middleware extends FormRequestModel
     private function constructRules()
     {
         // Authorize method - defaults to false
-        $this->startMethod(PhpEntitiesInterface::PHP_AUTHORIZE, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_BOOL);
-        $this->methodReturn(PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE);
+//        $this->startMethod(PhpEntitiesInterface::PHP_AUTHORIZE, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_BOOL);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(PhpEntitiesInterface::PHP_AUTHORIZE);
+        $methodOptions->setReturnType(PhpEntitiesInterface::PHP_TYPES_BOOL);
+        $this->startMethod($methodOptions);
+        $this->setMethodReturn(PhpEntitiesInterface::PHP_TYPES_BOOL_TRUE);
         $this->endMethod();
 
         // Rules method
-        $this->startMethod(PhpEntitiesInterface::PHP_RULES, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $methodOptions->setName(PhpEntitiesInterface::PHP_RULES);
+        $methodOptions->setReturnType(PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $this->startMethod($methodOptions);
         // attrs validation
         $this->startArray();
         // gather types and constraints
@@ -108,7 +122,10 @@ class Middleware extends FormRequestModel
 
     private function constructRelations($relationTypes)
     {
-        $this->startMethod(RJApiGenerator::PHP_RELATIONS, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(MethodsInterface::RELATIONS);
+        $methodOptions->setReturnType(PhpEntitiesInterface::PHP_TYPES_ARRAY);
+        $this->startMethod($methodOptions);
         // attrs validation
         $this->startArray();
         $rel = empty($relationTypes[RJApiGenerator::RAML_TYPE]) ? $relationTypes :
@@ -129,8 +146,8 @@ class Middleware extends FormRequestModel
 
     private function setRelations($relationTypes)
     {
-        $this->sourceCode .= RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4 . RJApiGenerator::TAB_PSR4
-                             . PhpEntitiesInterface::DOUBLE_QUOTES . $relationTypes .
+        $this->setTabs(3);
+        $this->sourceCode .= PhpEntitiesInterface::DOUBLE_QUOTES . $relationTypes .
                              PhpEntitiesInterface::DOUBLE_QUOTES
                              . PhpEntitiesInterface::COMMA;
     }
@@ -173,6 +190,46 @@ class Middleware extends FormRequestModel
             $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]);
         }
         // create closing brace
+        $this->endClass();
+    }
+
+    public function createAccessToken()
+    {
+        $this->setAccessTokenContent();
+        $fileForm  = strtolower(DirsInterface::APPLICATION_DIR)
+            . PhpEntitiesInterface::SLASH
+            . JSONApiInterface::CLASS_API_ACCESS_TOKEN
+            . PhpEntitiesInterface::PHP_EXT;
+        $isCreated = FileManager::createFile(
+            $fileForm, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options)
+        );
+        if($isCreated)
+        {
+            Console::out($fileForm . PhpEntitiesInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }        
+    }
+
+    private function setAccessTokenContent()
+    {
+        $this->setTag();
+        $this->sourceCode .= PhpEntitiesInterface::PHP_NAMESPACE . PhpEntitiesInterface::SPACE .
+            DirsInterface::APPLICATION_DIR . PhpEntitiesInterface::BACKSLASH . $this->generator->httpDir .
+            PhpEntitiesInterface::BACKSLASH . $this->generator->middlewareDir
+            . PhpEntitiesInterface::SEMICOLON . PHP_EOL . PHP_EOL;
+
+        $baseFullForm = BaseFormRequest::class;
+        $baseFormName = Classes::getName($baseFullForm);
+        $this->setUse($baseFullForm, false, true);
+        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(MiddlewareInterface::METHOD_HANDLE);
+        $methodOptions->setParams([
+            MiddlewareInterface::METHOD_PARAM_REQUEST,
+            PhpEntitiesInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT
+        ]);
+        
+        $this->startMethod($methodOptions);
         $this->endClass();
     }
 }

@@ -5,6 +5,7 @@ namespace rjapi\blocks;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
 
@@ -245,7 +246,22 @@ class Entities extends FormRequestModel
      */
     private function setRelation(string $entity, string $method, string ...$args)
     {
-        $this->startMethod($entity, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC);
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName($entity);
+        $this->startMethod($methodOptions);
+        $toReturn = $this->getRelationReturn($entity, $method, $args);
+        $this->setMethodReturn($toReturn);
+        $this->endMethod();
+    }
+
+    /**
+     * @param string $entity
+     * @param string $method
+     * @param \string[] ...$args
+     * @return string
+     */
+    private function getRelationReturn(string $entity, string $method, string ...$args)
+    {
         $toReturn = PhpEntitiesInterface::DOLLAR_SIGN . PhpEntitiesInterface::PHP_THIS
             . PhpEntitiesInterface::ARROW . $method
             . PhpEntitiesInterface::OPEN_PARENTHESES . Classes::getClassName($entity)
@@ -261,8 +277,7 @@ class Entities extends FormRequestModel
             }
         }
         $toReturn .= PhpEntitiesInterface::CLOSE_PARENTHESES;
-        $this->methodReturn($toReturn);
-        $this->endMethod();
+        return $toReturn;
     }
 
     /**

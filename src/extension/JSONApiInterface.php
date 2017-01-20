@@ -14,6 +14,7 @@ interface JSONApiInterface
     const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json';
 
     const PARAM_ACCESS_TOKEN = 'access_token';
+    const CLASS_API_ACCESS_TOKEN   = 'ApiAccessToken';
 
     const URI_METHOD_INDEX     = 'index';
     const URI_METHOD_VIEW      = 'view';

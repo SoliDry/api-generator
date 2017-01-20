@@ -3,7 +3,7 @@ namespace rjapi\blocks;
 
 
 use rjapi\helpers\Classes;
-use rjapi\helpers\Config;
+use rjapi\helpers\Config as conf;
 
 trait EntitiesTrait
 {
@@ -20,7 +20,7 @@ trait EntitiesTrait
     protected function setEntities()
     {
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity  = $this->getMiddlewareEntity(Config::getModuleName(), $this->entity);
+        $middlewareEntity  = $this->getMiddlewareEntity(conf::getModuleName(), $this->entity);
         $this->middleWare  = new $middlewareEntity();
         $this->props       = get_object_vars($this->middleWare);
         $this->modelEntity = Classes::getModelEntity($this->entity);

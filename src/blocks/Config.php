@@ -93,7 +93,7 @@ class Config implements ConfigInterface
         $this->setTabs(2);
         $this->sourceCode .= PhpEntitiesInterface::QUOTES . JSONApiInterface::PARAM_ACCESS_TOKEN . PhpEntitiesInterface::QUOTES
             . PhpEntitiesInterface::SPACE . PhpEntitiesInterface::DOUBLE_ARROW .
-            PhpEntitiesInterface::SPACE . $token . PhpEntitiesInterface::COMMA . PHP_EOL;
+            PhpEntitiesInterface::SPACE . PhpEntitiesInterface::QUOTES . $token . PhpEntitiesInterface::QUOTES . PhpEntitiesInterface::COMMA . PHP_EOL;
     }
 
     private function setContent(array $queryParams)

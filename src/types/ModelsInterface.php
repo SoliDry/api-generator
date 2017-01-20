@@ -6,7 +6,7 @@
  * Time: 11:45
  */
 
-namespace rjapi\blocks;
+namespace rjapi\types;
 
 interface ModelsInterface
 {
