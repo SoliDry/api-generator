@@ -192,31 +192,50 @@ class Json
         $current = current($jsonArr[RamlInterface::RAML_DATA]);
         if(empty($current[JSONApiInterface::CONTENT_ATTRIBUTES]) === false)
         {// this is an array of values
-            foreach($jsonArr as &$jsonObject)
+            self::unsetArray($jsonArr, $data);
+        }
+        else
+        {// this is just one element
+            self::unsetObject($jsonArr, $data);
+        }
+
+        return self::encode($jsonArr);
+    }
+
+    /**
+     *
+     * @param array &$json
+     * @param array $data
+     */
+    private function unsetArray(array &$json, array $data)
+    {
+        foreach($json as &$jsonObject)
+        {
+            foreach($jsonObject as &$v)
             {
-                foreach($jsonObject as &$v)
+                foreach($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr)
                 {
-                    foreach($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr)
+                    if(in_array($key, $data) === false)
                     {
-                        if(in_array($key, $data) === false)
-                        {
-                            unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
-                        }
+                        unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
                     }
                 }
             }
         }
-        else
-        {// this is just one element
-            foreach($jsonArr[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v)
+    }
+
+    /**
+     * @param array $json
+     * @param array $data
+     */
+    private function unsetObject(array &$json, array $data)
+    {
+        foreach($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v)
+        {
+            if(in_array($k, $data) === false)
             {
-                if(in_array($k, $data) === false)
-                {
-                    unset($jsonArr[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
-                }
+                unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
             }
         }
-
-        return self::encode($jsonArr);
     }
 }
