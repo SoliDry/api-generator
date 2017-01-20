@@ -86,11 +86,6 @@ abstract class FormRequestModel
             if ($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX) {
                 $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpInterface::COLON . $v;
             }
-            // TODO: make prepared errors, probably not here
-//            if(isset($attrVal['errorMessage']))
-//            {
-//                $this->sourceCode .= ', "message" => "' . $attrVal['errorMessage'] . '"';
-//            }
             if ($cnt > 0 && in_array($k, $this->excludedKeys) === false) {
                 $this->sourceCode .= PhpInterface::PIPE;
             }

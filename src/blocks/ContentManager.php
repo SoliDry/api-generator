@@ -11,6 +11,7 @@ use rjapi\types\RamlInterface;
  * Class ContentManager
  * @package rjapi\blocks
  * @property RJApiGenerator generator
+ * @property string sourceCode
  */
 trait ContentManager
 {

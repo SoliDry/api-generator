@@ -66,6 +66,15 @@ class Middleware extends FormRequestModel
 
     private function setProps($relationTypes = null)
     {
+        $this->setAdditionalProps();
+        // properties creation
+        $this->setPropsContent();
+        // related props
+        $this->setRelationTypes($relationTypes);
+    }
+
+    private function setAdditionalProps()
+    {
         // additional props
         if(!empty($this->additionalProps))
         {
@@ -74,11 +83,13 @@ class Middleware extends FormRequestModel
                 $this->createProperty($prop, PhpInterface::PHP_MODIFIER_PUBLIC);
             }
         }
+    }
 
-        // properties creation
+    private function setPropsContent()
+    {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Attributes' . PHP_EOL;
         foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-        [RamlInterface::RAML_PROPS] as $propKey => $propVal)
+                [RamlInterface::RAML_PROPS] as $propKey => $propVal)
         {
             if(is_array($propVal))
             {
@@ -86,12 +97,15 @@ class Middleware extends FormRequestModel
             }
         }
         $this->sourceCode .= PHP_EOL;
+    }
 
+    private function setRelationTypes($relationTypes)
+    {
         // related props
         if($relationTypes !== null)
         {
             $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Relations' .
-                                 PHP_EOL;
+                PHP_EOL;
             foreach($relationTypes as $attrKey => $attrVal)
             {
                 // determine attr
@@ -262,7 +276,7 @@ class Middleware extends FormRequestModel
         // response body
         $this->setTabs(3);
         $this->sourceCode .= MethodsInterface::HEADER . PhpInterface::OPEN_PARENTHESES . PhpInterface::QUOTES
-            . HTTPMethodsInterface::HTTP_11 . PhpInterface::SPACE . JSONApiInterface::HTTP_RESPONSE_CODE_ACCESS_FORBIDDEN 
+            . HTTPMethodsInterface::HTTP_11 . PhpInterface::SPACE . JSONApiInterface::HTTP_RESPONSE_CODE_ACCESS_FORBIDDEN
             . PhpInterface::SPACE . JSONApiInterface::FORBIDDEN
             . PhpInterface::QUOTES . PhpInterface::CLOSE_PARENTHESES
             . PhpInterface::SEMICOLON . PHP_EOL;
