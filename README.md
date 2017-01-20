@@ -17,6 +17,8 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 [Query parameters](#user-content-query-parameters)
 
+[Security](#user-content-security)
+
 [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 
 [Generated files content](#user-content-generated-files-content)
@@ -183,6 +185,16 @@ as the last element of the array in ```config/module.php``` file,
 if You, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
 
+An example of auto-generated ```config/module.php```:
+```php
+<?php
+return [
+    'modules'=> [
+        'v1',
+    ]
+];
+```
+
 To get configuration parameters at runtime generator will create content 
 in ```Modules/{ModuleName}/Config/config.php``` file:
 ```php
@@ -217,16 +229,6 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \App\Http\Middleware\ApiAccessToken::class,
     ];
-```
-
-An example of auto-generated ```config/module.php```:
-```php
-<?php
-return [
-    'modules'=> [
-        'v1',
-    ]
-];
 ```
 
 ### RAML Types and Declarations
