@@ -2,12 +2,22 @@
 namespace rjapi\blocks;
 
 
+use rjapi\extension\BaseControllerTrait;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Config as conf;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
 
+/**
+ * Class EntitiesTrait
+ * @package rjapi\blocks
+ * @property BaseControllerTrait entity
+ * @property BaseControllerTrait middleWare
+ * @property BaseControllerTrait props
+ * @property BaseControllerTrait model
+ * @property BaseControllerTrait modelEntity
+ */
 trait EntitiesTrait
 {
     public function getMiddlewareEntity(string $version, string $object)
