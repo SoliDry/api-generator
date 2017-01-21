@@ -11,6 +11,7 @@ class BaseControllerTest extends TestCase
 {
     private $route = null;
     private $obj = null;
+    private $defaultController = null;
 
     protected function setUp()
     {
@@ -25,5 +26,18 @@ class BaseControllerTest extends TestCase
         $this->assertInstanceOf(BaseController::class, $this->obj);
         $this->assertInstanceOf(Controller::class, $this->obj);
         $this->assertInstanceOf(JSONApiInterface::class, $this->obj);
+    }
+
+    public function testJsonApiIndex()
+    {
+        $request = new \Illuminate\Http\Request();
+        $request->merge([
+            'limit' => 10,
+            'page' => 1,
+            'data' => '["title", "description"]',
+            'order_by' => '{"title":"asc", "created_at":"desc"}',
+            'filter' => '[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]',
+        ]);
+        $this->obj->index($request);
     }
 }
