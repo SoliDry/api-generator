@@ -32,11 +32,13 @@ abstract class FormRequestModel
     {
         $attrCnt =
             count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
-        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-                 [RamlInterface::RAML_PROPS] as $attrKey => $attrVal) {
+        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
+                [RamlInterface::RAML_PROPS] as $attrKey => $attrVal)
+        {
             --$attrCnt;
             // determine attr
-            if (is_array($attrVal)) {
+            if(is_array($attrVal))
+            {
                 $this->setDescription($attrVal);
                 $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 .
                     PhpInterface::TAB_PSR4
@@ -50,7 +52,8 @@ abstract class FormRequestModel
                 $this->setFilters($attrVal, $cnt);
 
                 $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
-                if ($attrCnt > 0) {
+                if($attrCnt > 0)
+                {
                     $this->sourceCode .= PHP_EOL;
                 }
             }
@@ -63,32 +66,66 @@ abstract class FormRequestModel
      */
     private function setFilters(array $attrVal, int $cnt)
     {
-        foreach ($attrVal as $k => $v) {
+        foreach($attrVal as $k => $v)
+        {
             --$cnt;
-            if ($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === false) {
+            if($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === false)
+            {
                 continue;
             }
-            if ($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === true) {
-                $this->sourceCode .= RamlInterface::RAML_KEY_REQUIRED;
-            }
-            if ($k === RamlInterface::RAML_TYPE && in_array($v, $this->legalTypes)) {
-                $this->sourceCode .= $v;
-            }
-            if ($k === RamlInterface::RAML_ENUM) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpInterface::COLON . implode(',', $v);
-            }
-            if ($k === RamlInterface::RAML_PATTERN) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpInterface::COLON . $v;
-            }
-            if ($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpInterface::COLON . $v;
-            }
-            if ($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX) {
-                $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpInterface::COLON . $v;
-            }
-            if ($cnt > 0 && in_array($k, $this->excludedKeys) === false) {
+            $this->setRequired($k, $v);
+            $this->setType($k, $v);
+            $this->setEnum($k, $v);
+            $this->setPattern($k, $v);
+            $this->setMinMax($k, $v);
+            if($cnt > 0 && in_array($k, $this->excludedKeys) === false)
+            {
                 $this->sourceCode .= PhpInterface::PIPE;
             }
+        }
+    }
+
+    private function setRequired(string $k, string $v)
+    {
+        if($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === true)
+        {
+            $this->sourceCode .= RamlInterface::RAML_KEY_REQUIRED;
+        }
+    }
+
+    private function setPattern(string $k, string $v)
+    {
+        if($k === RamlInterface::RAML_PATTERN)
+        {
+            $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpInterface::COLON . $v;
+        }
+    }
+
+    private function setEnum(string $k, string $v)
+    {
+        if($k === RamlInterface::RAML_ENUM)
+        {
+            $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpInterface::COLON . implode(PhpInterface::COMMA, $v);
+        }
+    }
+
+    private function setType(string $k, string $v)
+    {
+        if($k === RamlInterface::RAML_TYPE && in_array($v, $this->legalTypes))
+        {
+            $this->sourceCode .= $v;
+        }
+    }
+
+    private function setMinMax(string $k, string $v)
+    {
+        if($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN)
+        {
+            $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpInterface::COLON . $v;
+        }
+        else if($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX)
+        {
+            $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpInterface::COLON . $v;
         }
     }
 }
