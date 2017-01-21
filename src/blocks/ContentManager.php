@@ -198,4 +198,22 @@ trait ContentManager
         $this->sourceCode .= PhpInterface::ECHO . PhpInterface::SPACE . PhpInterface::QUOTES
             . $str . PhpInterface::QUOTES . PhpInterface::SEMICOLON . PHP_EOL;
     }
+
+    /**
+     * @param string $attribute
+     */
+    public function openRule(string $attribute)
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 .
+            PhpInterface::TAB_PSR4
+            . PhpInterface::DOUBLE_QUOTES . $attribute . PhpInterface::DOUBLE_QUOTES
+            . PhpInterface::SPACE
+            . PhpInterface::DOUBLE_ARROW .
+            PhpInterface::SPACE . PhpInterface::DOUBLE_QUOTES;;
+    }
+
+    public function closeRule()
+    {
+        $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
+    }
 }

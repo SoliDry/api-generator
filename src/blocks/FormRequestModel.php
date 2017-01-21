@@ -13,6 +13,8 @@ use rjapi\types\RamlInterface;
  */
 abstract class FormRequestModel
 {
+    use ContentManager;
+
     const CHECK_MANY_BRACKETS = '[]';
 
     private $legalTypes = [
@@ -40,18 +42,10 @@ abstract class FormRequestModel
             if(is_array($attrVal))
             {
                 $this->setDescription($attrVal);
-                $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 .
-                    PhpInterface::TAB_PSR4
-                    . PhpInterface::DOUBLE_QUOTES . $attrKey . PhpInterface::DOUBLE_QUOTES
-                    . PhpInterface::SPACE
-                    . PhpInterface::DOUBLE_ARROW .
-                    PhpInterface::SPACE;
-
-                $this->sourceCode .= PhpInterface::DOUBLE_QUOTES;
+                $this->openRule($attrKey);
                 $cnt = count($attrVal);
                 $this->setFilters($attrVal, $cnt);
-
-                $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
+                $this->closeRule();
                 if($attrCnt > 0)
                 {
                     $this->sourceCode .= PHP_EOL;
@@ -85,7 +79,11 @@ abstract class FormRequestModel
         }
     }
 
-    private function setRequired(string $k, string $v)
+    /**
+     * @param string $k
+     * @param mixed $v
+     */
+    private function setRequired(string $k, $v)
     {
         if($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === true)
         {
@@ -93,7 +91,11 @@ abstract class FormRequestModel
         }
     }
 
-    private function setPattern(string $k, string $v)
+    /**
+     * @param string $k
+     * @param mixed $v
+     */
+    private function setPattern(string $k, $v)
     {
         if($k === RamlInterface::RAML_PATTERN)
         {
@@ -101,7 +103,11 @@ abstract class FormRequestModel
         }
     }
 
-    private function setEnum(string $k, string $v)
+    /**
+     * @param string $k
+     * @param mixed $v
+     */
+    private function setEnum(string $k, $v)
     {
         if($k === RamlInterface::RAML_ENUM)
         {
@@ -109,7 +115,11 @@ abstract class FormRequestModel
         }
     }
 
-    private function setType(string $k, string $v)
+    /**
+     * @param string $k
+     * @param mixed $v
+     */
+    private function setType(string $k, $v)
     {
         if($k === RamlInterface::RAML_TYPE && in_array($v, $this->legalTypes))
         {
@@ -117,7 +127,11 @@ abstract class FormRequestModel
         }
     }
 
-    private function setMinMax(string $k, string $v)
+    /**
+     * @param string $k
+     * @param mixed $v
+     */
+    private function setMinMax(string $k, $v)
     {
         if($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN)
         {
