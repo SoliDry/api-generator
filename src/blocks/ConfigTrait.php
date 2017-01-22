@@ -32,4 +32,16 @@ trait ConfigTrait
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
     }
+
+    private function openJwt()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::JWT
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }
+
+    private function closeJwt()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
+    }
 }

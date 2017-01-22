@@ -12,4 +12,6 @@ namespace rjapi\types;
 interface ConfigInterface
 {
     const QUERY_PARAMS = 'query_params';
+    const JWT          = 'jwt';
+    const ENABLED      = 'enabled';
 }

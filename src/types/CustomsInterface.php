@@ -9,4 +9,5 @@ interface CustomsInterface
     const CUSTOM_TYPES_QUERY_PARAMS                = 'QueryParams';
     const CUSTOM_TYPES_FILTER                      = 'Filter';
     const CUSTOM_TYPES_ATTRIBUTES                  = 'Attributes';
+    const CUSTOM_PROP_JWT                          = 'jwt';
 }

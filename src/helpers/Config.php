@@ -40,4 +40,10 @@ class Config
         }
         return null;
     }
+
+    public static function getJwtParam(string $param)
+    {
+        $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::JWT);
+        return (empty($params[$param])) ? null : $params[$param];
+    }
 }

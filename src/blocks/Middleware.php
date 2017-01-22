@@ -27,13 +27,13 @@ class Middleware extends FormRequestModel
     use ContentManager;
 
     protected $sourceCode = '';
-    protected $generator       = null;
-    private   $additionalProps = [
+    protected $generator = null;
+    private $additionalProps = [
         'id' => [
             'type' => 'integer',
         ],
     ];
-    private   $className       = '';
+    private $className = '';
 
     public function __construct($generator)
     {
@@ -49,11 +49,11 @@ class Middleware extends FormRequestModel
     public function create()
     {
         $this->setContent();
-        $fileForm  = $this->generator->formatMiddlewarePath()
-                     . PhpInterface::SLASH
-                     . $this->className
-                     . DefaultInterface::MIDDLEWARE_POSTFIX
-                     . PhpInterface::PHP_EXT;
+        $fileForm = $this->generator->formatMiddlewarePath()
+            . PhpInterface::SLASH
+            . $this->className
+            . DefaultInterface::MIDDLEWARE_POSTFIX
+            . PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile(
             $fileForm, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
@@ -169,8 +169,8 @@ class Middleware extends FormRequestModel
     {
         $this->setTabs(3);
         $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . $relationTypes .
-                             PhpInterface::DOUBLE_QUOTES
-                             . PhpInterface::COMMA;
+            PhpInterface::DOUBLE_QUOTES
+            . PhpInterface::COMMA;
     }
 
     /**
@@ -190,9 +190,9 @@ class Middleware extends FormRequestModel
         $this->setUse($baseFullForm, false, true);
         $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
 
-        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
+        if(empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
             &&
-            !empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]])
+            empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false
         )
         {
             $this->setProps(
@@ -217,7 +217,8 @@ class Middleware extends FormRequestModel
     public function createAccessToken()
     {
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]
-            [JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false)
+            [JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false
+        )
         {
             $this->setAccessTokenContent();
             $fileForm = strtolower(DirsInterface::APPLICATION_DIR)
@@ -250,7 +251,7 @@ class Middleware extends FormRequestModel
         $methodOptions->setName(MiddlewareInterface::METHOD_HANDLE);
         $methodOptions->setParams([
             MiddlewareInterface::METHOD_PARAM_REQUEST,
-            PhpInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT
+            PhpInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT,
         ]);
         $this->startMethod($methodOptions);
         $this->setHandleMethodContent();

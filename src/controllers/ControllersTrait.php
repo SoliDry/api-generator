@@ -55,7 +55,7 @@ trait ControllersTrait
     private $routes       = null;
     private $migrations   = null;
 
-    private $excludedSubtypes = [
+    public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS,
@@ -150,7 +150,7 @@ trait ControllersTrait
     private function generateConfig()
     {
         $module = new Config($this);
-        $module->create();        
+        $module->create();
     }
 
     public function createDirs()

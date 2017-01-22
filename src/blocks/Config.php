@@ -5,6 +5,7 @@ use rjapi\controllers\ControllersTrait;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
+use rjapi\helpers\MigrationsHelper;
 use rjapi\types\ConfigInterface;
 use rjapi\types\CustomsInterface;
 use rjapi\types\ModelsInterface;
@@ -42,7 +43,7 @@ class Config implements ConfigInterface
             $file = $this->generator->formatConfigPath() .
                 ModulesInterface::CONFIG_FILENAME . PhpInterface::PHP_EXT;
             $isCreated = FileManager::createFile($file, $this->sourceCode, true);
-            if ($isCreated)
+            if($isCreated)
             {
                 Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
@@ -50,7 +51,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $name  Version name aka: V1, V2 etc
+     * @param string $name Version name aka: V1, V2 etc
      */
     private function setName(string $name)
     {
@@ -94,6 +95,23 @@ class Config implements ConfigInterface
             PhpInterface::SPACE . $page . PhpInterface::COMMA . PHP_EOL;
     }
 
+    private function setTable(string $entity)
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . ModelsInterface::MIGRATION_TABLE . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
+            . PhpInterface::SPACE . PhpInterface::QUOTES . MigrationsHelper::getTableName($entity)
+            . PhpInterface::QUOTES . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    private function setEnabled()
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ENABLED . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
+            PhpInterface::SPACE . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA . PHP_EOL;
+    }
+
     private function setAccessToken(string $token)
     {
         $this->setTabs(2);
@@ -125,6 +143,48 @@ class Config implements ConfigInterface
             $this->setAccessToken($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]);
         }
         $this->closeParams();
+        $this->setJwtContent();
         $this->closeRoot();
+    }
+
+    private function setJwtContent()
+    {
+        foreach($this->generator->types as $objName => $objData)
+        {
+            if(in_array($objName, $this->generator->customTypes) === false)
+            { // if this is not a custom type generate resources
+                $excluded = false;
+                foreach($this->generator->excludedSubtypes as $type)
+                {
+                    if(strpos($objName, $type) !== false)
+                    {
+                        $excluded = true;
+                    }
+                }
+                // if the type is among excluded - continue
+                if($excluded === true)
+                {
+                    continue;
+                }
+                $this->setJwtOptions($objName, $objData);
+            }
+        }
+    }
+
+    private function setJwtOptions($objName, $objData)
+    {
+        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false)
+        {
+            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal)
+            {
+                if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT)
+                {// create jwt config setting
+                    $this->openJwt();
+                    $this->setEnabled();
+                    $this->setTable($objName);
+                    $this->closeJwt();
+                }
+            }
+        }
     }
 }
