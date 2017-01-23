@@ -19,6 +19,10 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 [Security](#user-content-security)
 
+&nbsp;&nbsp;[Static access token](#user-content-static-access-token)
+
+&nbsp;&nbsp;[JWT](#user-content-jwt-json-web-token)
+
 [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 
 [Generated files content](#user-content-generated-files-content)
@@ -256,7 +260,7 @@ customers etc-like table the ```jwt``` RAML property:
 ```
 The maxLength parameter is important, because of varchar-type sql field will be created with length 512.
 
-JWT specific configuration will be placed in ```Modules/{ModuleName}/Config/config.php```:
+JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/config.php```:
 ```php
     'jwt'=> [
         'enabled' => true,
@@ -268,7 +272,9 @@ JWT specific configuration will be placed in ```Modules/{ModuleName}/Config/conf
 
 And just use this middleware in any requests U need defining 
 it in ```Modules/{ModuleName}/Http/routes.php```, ex:
+
 To declare JWT check only for one specific route: ```Route::get('/article', 'ArticleController@index')->middleware('jwt');```
+
 To declare JWT check for routes group: ```Route::group(['middleware' => 'jwt', ```
 
 ### RAML Types and Declarations
