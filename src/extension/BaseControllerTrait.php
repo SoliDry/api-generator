@@ -135,7 +135,6 @@ trait BaseControllerTrait
             $uniqId = uniqid();
             $model = $this->getEntity($this->model->id);
             $model->jwt = Jwt::create($this->model->id, $uniqId);
-            $model->uniqid = $uniqId;
             $model->save();
         }
         $this->setRelationships($json, $this->model->id);
