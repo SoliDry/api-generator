@@ -1,17 +1,30 @@
 <?php
-
 namespace rjapi\extension;
 
-
 use Closure;
-use Illuminate\Foundation\Http\FormRequest;
+use Lcobucci\JWT\Parser;
 use rjapi\helpers\Config;
+use rjapi\helpers\Jwt;
+use rjapi\types\ConfigInterface;
 
-class BaseJwt extends FormRequest
+class BaseJwt
 {
     public function handle($request, Closure $next)
     {
-        if (Config::getConfigKey())    
+        if(Config::getJwtParam(ConfigInterface::ENABLED) === true)
+        {
+            if(empty($request->jwt))
+            {
+                die('JWT token required.');
+            }
+            $token = (new Parser())->parse((string)$request->jwt);
+            if(Jwt::verify($token, $token->getHeader('jti')) === false)
+            {
+                header('HTTP/1.1 403 Forbidden');
+                die('Access forbidden.');
+            }
+        }
+
         return $next($request);
     }
 }

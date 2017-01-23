@@ -149,16 +149,19 @@ class Middleware extends FormRequestModel
         $this->startMethod($methodOptions);
         // attrs validation
         $this->startArray();
-        $rel = empty($relationTypes[RamlInterface::RAML_TYPE]) ? $relationTypes :
-            $relationTypes[RamlInterface::RAML_TYPE];
-
-        $rels = explode(PhpInterface::PIPE, str_replace('[]', '', $rel));
-        foreach($rels as $k => $rel)
+        if(empty($relationTypes) === false)
         {
-            $this->setRelations(strtolower(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
-            if(empty($rels[$k + 1]) === false)
+            $rel = empty($relationTypes[RamlInterface::RAML_TYPE]) ? $relationTypes :
+                $relationTypes[RamlInterface::RAML_TYPE];
+
+            $rels = explode(PhpInterface::PIPE, str_replace('[]', '', $rel));
+            foreach($rels as $k => $rel)
             {
-                $this->sourceCode .= PHP_EOL;
+                $this->setRelations(strtolower(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
+                if(empty($rels[$k + 1]) === false)
+                {
+                    $this->sourceCode .= PHP_EOL;
+                }
             }
         }
         $this->endArray();
@@ -206,10 +209,10 @@ class Middleware extends FormRequestModel
         }
 
         $this->constructRules();
-        if(!empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]))
-        {
-            $this->constructRelations($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]);
-        }
+        $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
+            ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
+        $this->constructRelations($relTypes);
+
         // create closing brace
         $this->endClass();
     }

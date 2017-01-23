@@ -112,6 +112,22 @@ class Config implements ConfigInterface
             PhpInterface::SPACE . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA . PHP_EOL;
     }
 
+    private function setActivate(int $time)
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ACTIVATE . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
+            PhpInterface::SPACE . $time . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    private function setExpires(int $time)
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::EXPIRES . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
+            PhpInterface::SPACE . $time . PhpInterface::COMMA . PHP_EOL;
+    }
+
     private function setAccessToken(string $token)
     {
         $this->setTabs(2);
@@ -182,6 +198,8 @@ class Config implements ConfigInterface
                     $this->openJwt();
                     $this->setEnabled();
                     $this->setTable($objName);
+                    $this->setActivate(ConfigInterface::DEFAULT_ACTIVATE);
+                    $this->setExpires(ConfigInterface::DEFAULT_EXPIRES);
                     $this->closeJwt();
                 }
             }

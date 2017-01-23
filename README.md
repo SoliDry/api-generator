@@ -212,8 +212,11 @@ return [
 ```
 
 ### Security
+
+#### Static access token
 In ```QueryParams``` RAML types You can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
-Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware. 
+Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware.
+ 
 To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
 ```php
 class Kernel extends HttpKernel
@@ -230,6 +233,43 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\ApiAccessToken::class,
     ];
 ```
+Generated configuration part:
+```php
+    'query_params'=> [
+        'limit' => 15,
+        'sort' => 'desc',
+        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
+    ],
+```
+
+#### JWT (Json Web Token)
+
+To add a JWT check You need to add to any users, employees, 
+customers etc-like table the ```jwt``` RAML property:
+```RAML
+  jwt:
+    description: Special field to run JWT Auth via requests
+    required: true
+    type: string
+    minLength: 256
+    maxLength: 512
+```
+The maxLength parameter is important, because of varchar-type sql field will be created with length 512.
+
+JWT specific configuration will be placed in ```Modules/{ModuleName}/Config/config.php```:
+```php
+    'jwt'=> [
+        'enabled' => true,
+        'table' => 'user',
+        'activate' => 30,
+        'expires' => 3600,
+    ],
+```
+
+And just use this middleware in any requests U need defining 
+it in ```Modules/{ModuleName}/Http/routes.php```, ex:
+To declare JWT check only for one specific route: ```Route::get('/article', 'ArticleController@index')->middleware('jwt');```
+To declare JWT check for routes group: ```Route::group(['middleware' => 'jwt', ```
 
 ### RAML Types and Declarations
 

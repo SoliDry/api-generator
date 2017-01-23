@@ -1,13 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 22.01.17
- * Time: 18:07
- */
-
 namespace rjapi\helpers;
-
 
 class ConfigOptions
 {
@@ -19,6 +11,7 @@ class ConfigOptions
     // jwt
     private $jwtIsEnabled;
     private $jwtTable;
+    private $isJwtAction;
 
     /**
      * @return mixed
@@ -114,5 +107,21 @@ class ConfigOptions
     public function setJwtTable($jwtTable)
     {
         $this->jwtTable = $jwtTable;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsJwtAction()
+    {
+        return $this->isJwtAction;
+    }
+
+    /**
+     * @param bool $isJwtAction
+     */
+    public function setIsJwtAction(bool $isJwtAction)
+    {
+        $this->isJwtAction = $isJwtAction;
     }
 }
