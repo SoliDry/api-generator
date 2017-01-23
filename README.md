@@ -259,7 +259,9 @@ customers etc-like table the ```jwt``` RAML property:
     maxLength: 512
     default: ' '
 ```
-The maxLength parameter is important, because of varchar-type sql field will be created with length 512.
+The ```maxLength``` parameter is important, because of varchar-type sql field will be created with length 512.
+
+The ```default``` value should be equal precisely ' ' - empty string with space.  
 
 JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/config.php```:
 ```php
