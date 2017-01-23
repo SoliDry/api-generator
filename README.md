@@ -286,9 +286,15 @@ As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` 
 And just use this middleware in any requests U need defining 
 it in ```Modules/{ModuleName}/Http/routes.php```, ex: 
 
-To declare JWT check only for one specific route: ```Route::get('/article', 'ArticleController@index')->middleware('jwt');```
+To declare JWT check only for one specific route: 
+```php
+Route::get('/article', 'ArticleController@index')->middleware('jwt');
+```
 
-To declare JWT check for routes group: ```Route::group(['middleware' => 'jwt', ```
+To declare JWT check for routes group: 
+```php
+Route::group(['middleware' => 'jwt', 
+```
 
 ### RAML Types and Declarations
 
