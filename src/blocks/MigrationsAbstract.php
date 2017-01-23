@@ -9,7 +9,7 @@ use rjapi\types\RamlInterface;
 
 /**
  * @property RJApiGenerator generator
- * @property string         sourceCode
+ * @property string sourceCode
  */
 abstract class MigrationsAbstract
 {
@@ -31,20 +31,24 @@ abstract class MigrationsAbstract
                     continue;
                 }
                 // create migration fields depending on types
-                $this->setRowContent($type, $attrKey);
+                $this->setRowContent($attrVal, $type, $attrKey);
             }
         }
         // created_at/updated_at created for every table
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }
 
-    private function setRowContent($type, $attrKey)
+    private function setRowContent(array $attrVal, string $type, string $attrKey)
     {
         // create migration fields depending on types
-        switch ($type)
+        switch($type)
         {
             case RamlInterface::RAML_TYPE_STRING:
-                $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey);
+                $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
+                $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null : [RamlInterface::RAML_KEY_DEFAULT
+                                                                                    => PhpInterface::QUOTES
+                    . $attrVal[RamlInterface::RAML_KEY_DEFAULT] . PhpInterface::QUOTES];
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey, $length, $build);
                 break;
             case RamlInterface::RAML_TYPE_INTEGER:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_INTEGER, $attrKey);
@@ -68,11 +72,11 @@ abstract class MigrationsAbstract
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, strtolower($this->generator->objectName)
-                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
+            . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(
             ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
-                                                       . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
+            . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
     }
@@ -81,6 +85,7 @@ abstract class MigrationsAbstract
     {
         $attrsArray = [RamlInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]]] +
             $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+
         return $attrsArray;
     }
 

@@ -35,14 +35,22 @@ trait MigrationsTrait
             . PhpInterface::QUOTES . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
-    public function setRow(string $method, $property = null, $opts = null)
+    public function setRow(string $method, string $property = null, $opts = null, array $build = null)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
             . PhpInterface::DOLLAR_SIGN . ModelsInterface::MIGRATION_TABLE
             . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
             . (($property === null) ? '' : PhpInterface::QUOTES . $property
-                . PhpInterface::QUOTES) . (($opts === null) ? '' : $opts)
-            . PhpInterface::CLOSE_PARENTHESES
-            . PhpInterface::SEMICOLON . PHP_EOL;
+                . PhpInterface::QUOTES) . (($opts === null) ? '' : PhpInterface::COMMA . PhpInterface::SPACE . $opts)
+            . PhpInterface::CLOSE_PARENTHESES;
+        if($build !== null)
+        {
+            foreach($build as $method => $param)
+            {
+                $this->sourceCode .= PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
+                    . $param . PhpInterface::CLOSE_PARENTHESES;
+            }
+        }
+        $this->sourceCode .= PhpInterface::SEMICOLON . PHP_EOL;
     }
 }
