@@ -270,8 +270,21 @@ JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/co
     ],
 ```
 
+As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` :
+```php
+    /**
+     * The application's route middleware.
+     *
+     * These middleware may be assigned to groups or used individually.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
+        'jwt' => \rjapi\extension\BaseJwt::class,    
+```
+
 And just use this middleware in any requests U need defining 
-it in ```Modules/{ModuleName}/Http/routes.php```, ex:
+it in ```Modules/{ModuleName}/Http/routes.php```, ex: 
 
 To declare JWT check only for one specific route: ```Route::get('/article', 'ArticleController@index')->middleware('jwt');```
 
