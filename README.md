@@ -257,6 +257,7 @@ customers etc-like table the ```jwt``` RAML property:
     type: string
     minLength: 256
     maxLength: 512
+    default: ' '
 ```
 The maxLength parameter is important, because of varchar-type sql field will be created with length 512.
 
