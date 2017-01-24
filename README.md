@@ -15,6 +15,14 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 &nbsp;&nbsp;[Configuration](#user-content-laravel-specific-configuration)
 
+&nbsp;&nbsp;[Running generator](#user-content-run-generator)
+
+[RAML Types and Declarations](#user-content-raml-types-and-declarations)
+
+[Generated files content](#user-content-generated-files-content)
+
+[Relationships](#user-content-relationships-particular-qualities)
+
 [Query parameters](#user-content-query-parameters)
 
 [Security](#user-content-security)
@@ -22,12 +30,6 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 &nbsp;&nbsp;[Static access token](#user-content-static-access-token)
 
 &nbsp;&nbsp;[JWT](#user-content-jwt-json-web-token)
-
-[RAML Types and Declarations](#user-content-raml-types-and-declarations)
-
-[Generated files content](#user-content-generated-files-content)
-
-[Relationships](#user-content-relationships-particular-qualities)
 
 ### Installation via composer:
 ``` 
@@ -81,6 +83,8 @@ By default controllers, entities or repositories are not loaded automatically. Y
   }
 }
 ```
+
+#### Running generator
 
 Run in console:
 ```
@@ -142,215 +146,7 @@ Modules/V1/Entities/Topic.php created
 Modules/V1/Database/Migrations/11_01_2017_145036_create_topic_table.php created
 ...
 ```
-Routes will be created in ```Http/routes.php``` file, for every entity defined in raml:
-```php
-Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers'], function()
-{
-    Route::get('/article', 'ArticleController@index');
-    Route::get('/article/{id}', 'ArticleController@view');
-    Route::post('/article', 'ArticleController@create');
-    Route::patch('/article/{id}', 'ArticleController@update');
-    Route::delete('/article/{id}', 'ArticleController@delete');
-    // relation routes
-    Route::get('/article/{id}/relationships/{relations}', 'ArticleController@relations');
-    Route::post('/article/{id}/relationships/{relations}', 'ArticleController@createRelations');
-    Route::patch('/article/{id}/relationships/{relations}', 'ArticleController@updateRelations');
-    Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
-});
-```
 
-### Query parameters
-
-You may want to use additional query parameters to fetch includes 
-and/or pagination, for instance:
-```php
-http://example.com/v1/article?include=tag&page=2&limit=10&sort=asc
-```
-
-You may not wish to drag all the attributes/fields: 
-```php
-http://example.com/v1/article/1?include=tag&data=["title", "description"]
-```
-Note: data array items MUST be set in double quotes.
-
-or You may want to ORDER BY several columns in different directions:
-```php
-http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
-```
-
-Also, You have an ability to filter results this way:
-```php
-http://example.com/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
-```
-those arrays will be put to Laravel where clause and accordingly protected by param bindings. 
-
-The dynamic module name similar to: v1, v2 - will be taken on runtime 
-as the last element of the array in ```config/module.php``` file, 
-if You, by strange circumstances, want to use one of the previous modules, 
-just set one of previously registered modules as the last element of an array.  
-
-An example of auto-generated ```config/module.php```:
-```php
-<?php
-return [
-    'modules'=> [
-        'v1',
-    ]
-];
-```
-
-To get configuration parameters at runtime generator will create content 
-in ```Modules/{ModuleName}/Config/config.php``` file:
-```php
-<?php
-return [
-    'name'=>'V1',
-    'query_params'=> [
-        // default settings
-        'limit' => 15,
-        'sort' => 'desc',
-        // access token to check via global middleware
-        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
-    ],
-];
-```
-
-### Security
-
-#### Static access token
-In ```QueryParams``` RAML types You can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
-Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware.
- 
-To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
-```php
-class Kernel extends HttpKernel
-{
-    /**
-     * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
-     *
-     * @var array
-     */
-    protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Middleware\ApiAccessToken::class,
-    ];
-```
-Generated configuration part:
-```php
-    'query_params'=> [
-        'limit' => 15,
-        'sort' => 'desc',
-        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
-    ],
-```
-
-#### JWT (Json Web Token)
-
-To add a JWT check You need to add to any users, employees, 
-customers etc-like table the ```jwt``` RAML property:
-```RAML
-  jwt:
-    description: Special field to run JWT Auth via requests
-    required: true
-    type: string
-    minLength: 256
-    maxLength: 512
-    default: ' '
-```
-The ```maxLength``` parameter is important, because of varchar-type sql field will be created with length 512.
-
-The ```default``` value should be equal precisely ' ' - empty string with space.  
-
-JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/config.php```:
-```php
-    'jwt'=> [
-        'enabled' => true,
-        'table' => 'user',
-        'activate' => 30,
-        'expires' => 3600,
-    ],
-```
-
-As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` :
-```php
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     *
-     * @var array
-     */
-    protected $routeMiddleware = [
-        'jwt' => \rjapi\extension\BaseJwt::class,    
-```
-
-And just use this middleware in any requests U need defining 
-it in ```Modules/{ModuleName}/Http/routes.php```, ex: 
-
-To declare JWT check only for one specific route: 
-```php
-Route::get('/article', 'ArticleController@index')->middleware('jwt');
-```
-
-To declare JWT check for routes group: 
-```php
-Route::group(['middleware' => 'jwt', 
-```
-JWT will be created on POST and updated on PATCH request to the entity You`ve been created, 
-for instance You send POST request to ```http://example.com/v1/user``` with the following content:
-```json
-{
-  "data": {
-    "type":"user",
-    "attributes": {
-      "first_name":"Alice",
-      "last_name":"Hacker"
-    }
-  }
-} 
-``` 
-
-Response will be similar to: 
-```json
-{
-  "data": {
-    "type": "user",
-    "id": "4",
-    "attributes": {
-      "first_name": "Alice",
-      "last_name": "Hacker",
-      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODZmZmIxNDQxMDcifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NmZmYjE0NDEwNyIsImlhdCI6MTQ4NTI0MjI4OSwibmJmIjoxNDg1MjQyMzE5LCJleHAiOjE0ODUyNDU4ODksInVpZCI6NH0.jJT3fHARHBS13k0h40toGlr1vHMWjMxNJ5fhHRPQ2mk",
-      ...
-```
-
-An example for JWT refresh - ```http://example.com/v1/user/4```:
- 
-```json
-{
-  "data": {
-    "type":"user",
-    "attributes": {
-    
-    }
-  }
-}
-```
-
-Response:
-```json
-{
-  "data": {
-    "type": "user",
-    "id": "4",
-    "attributes": {
-      "first_name": "Alice",
-      "last_name": "Hacker",
-      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODcwNGU1NTRjNzkifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NzA0ZTU1NGM3OSIsImlhdCI6MTQ4NTI0MzYyMSwibmJmIjoxNDg1MjQzNjUxLCJleHAiOjE0ODUyNDcyMjEsInVpZCI6NH0.GD96ewc1dhbpz9grNaE2070Qy30Mqkh3B0VpEb7h3mQ",
-      ...
-```
- 
 ### RAML Types and Declarations
 
 The ```version``` root property !required
@@ -587,6 +383,23 @@ class Article extends BaseModel
 }
 ```
 
+Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in raml:
+```php
+Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers'], function()
+{
+    Route::get('/article', 'ArticleController@index');
+    Route::get('/article/{id}', 'ArticleController@view');
+    Route::post('/article', 'ArticleController@create');
+    Route::patch('/article/{id}', 'ArticleController@update');
+    Route::delete('/article/{id}', 'ArticleController@delete');
+    // relation routes
+    Route::get('/article/{id}/relationships/{relations}', 'ArticleController@relations');
+    Route::post('/article/{id}/relationships/{relations}', 'ArticleController@createRelations');
+    Route::patch('/article/{id}/relationships/{relations}', 'ArticleController@updateRelations');
+    Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
+});
+```
+
 Generated migrations will look like standard migrations in Laravel:
 ```php
 <?php
@@ -657,6 +470,198 @@ relationships:
 ```
 Generator will independently detect all relationships between entities.
 
+### Query parameters
+
+You may want to use additional query parameters to fetch includes 
+and/or pagination, for instance:
+```php
+http://example.com/v1/article?include=tag&page=2&limit=10&sort=asc
+```
+
+You may not wish to drag all the attributes/fields: 
+```php
+http://example.com/v1/article/1?include=tag&data=["title", "description"]
+```
+Note: data array items MUST be set in double quotes.
+
+or You may want to ORDER BY several columns in different directions:
+```php
+http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
+```
+
+Also, You have an ability to filter results this way:
+```php
+http://example.com/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
+```
+those arrays will be put to Laravel where clause and accordingly protected by param bindings. 
+
+The dynamic module name similar to: v1, v2 - will be taken on runtime 
+as the last element of the array in ```config/module.php``` file, 
+if You, by strange circumstances, want to use one of the previous modules, 
+just set one of previously registered modules as the last element of an array.  
+
+An example of auto-generated ```config/module.php```:
+```php
+<?php
+return [
+    'modules'=> [
+        'v1',
+    ]
+];
+```
+
+To get configuration parameters at runtime generator will create content 
+in ```Modules/{ModuleName}/Config/config.php``` file:
+```php
+<?php
+return [
+    'name'=>'V1',
+    'query_params'=> [
+        // default settings
+        'limit' => 15,
+        'sort' => 'desc',
+        // access token to check via global middleware
+        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
+    ],
+];
+```
+
+### Security
+
+#### Static access token
+In ```QueryParams``` RAML types You can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
+Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware.
+ 
+To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
+```php
+class Kernel extends HttpKernel
+{
+    /**
+     * The application's global HTTP middleware stack.
+     *
+     * These middleware are run during every request to your application.
+     *
+     * @var array
+     */
+    protected $middleware = [
+        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
+        \App\Http\Middleware\ApiAccessToken::class,
+    ];
+```
+Generated configuration part:
+```php
+    'query_params'=> [
+        'limit' => 15,
+        'sort' => 'desc',
+        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
+    ],
+```
+
+#### JWT (Json Web Token)
+
+To add a JWT check You need to add to any users, employees, 
+customers etc-like table the ```jwt``` RAML property:
+```RAML
+  jwt:
+    description: Special field to run JWT Auth via requests
+    required: true
+    type: string
+    minLength: 256
+    maxLength: 512
+    default: ' '
+```
+The ```maxLength``` parameter is important, because of varchar-type sql field will be created with length 512.
+
+The ```default``` value should be equal precisely ' ' - empty string with space.  
+
+JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/config.php```:
+```php
+    'jwt'=> [
+        'enabled' => true,
+        'table' => 'user',
+        'activate' => 30,
+        'expires' => 3600,
+    ],
+```
+
+As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` :
+```php
+    /**
+     * The application's route middleware.
+     *
+     * These middleware may be assigned to groups or used individually.
+     *
+     * @var array
+     */
+    protected $routeMiddleware = [
+        'jwt' => \rjapi\extension\BaseJwt::class,    
+```
+
+And just use this middleware in any requests U need defining 
+it in ```Modules/{ModuleName}/Http/routes.php```, ex: 
+
+To declare JWT check only for one specific route: 
+```php
+Route::get('/article', 'ArticleController@index')->middleware('jwt');
+```
+
+To declare JWT check for routes group: 
+```php
+Route::group(['middleware' => 'jwt', 
+```
+JWT will be created on POST and updated on PATCH request to the entity You`ve been created, 
+for instance You send POST request to ```http://example.com/v1/user``` with the following content:
+```json
+{
+  "data": {
+    "type":"user",
+    "attributes": {
+      "first_name":"Alice",
+      "last_name":"Hacker"
+    }
+  }
+} 
+``` 
+
+Response will be similar to: 
+```json
+{
+  "data": {
+    "type": "user",
+    "id": "4",
+    "attributes": {
+      "first_name": "Alice",
+      "last_name": "Hacker",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODZmZmIxNDQxMDcifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NmZmYjE0NDEwNyIsImlhdCI6MTQ4NTI0MjI4OSwibmJmIjoxNDg1MjQyMzE5LCJleHAiOjE0ODUyNDU4ODksInVpZCI6NH0.jJT3fHARHBS13k0h40toGlr1vHMWjMxNJ5fhHRPQ2mk",
+      ...
+```
+
+An example for JWT refresh - ```http://example.com/v1/user/4```:
+ 
+```json
+{
+  "data": {
+    "type":"user",
+    "attributes": {
+    
+    }
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": {
+    "type": "user",
+    "id": "4",
+    "attributes": {
+      "first_name": "Alice",
+      "last_name": "Hacker",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODcwNGU1NTRjNzkifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NzA0ZTU1NGM3OSIsImlhdCI6MTQ4NTI0MzYyMSwibmJmIjoxNDg1MjQzNjUxLCJleHAiOjE0ODUyNDcyMjEsInVpZCI6NH0.GD96ewc1dhbpz9grNaE2070Qy30Mqkh3B0VpEb7h3mQ",
+      ...
+```
+ 
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - You need to generate MVC-structure into laravel-module and make Your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
 ```php
