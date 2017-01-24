@@ -440,7 +440,7 @@ class CreateArticleTable extends Migration
 Note, that U have an ability to make any ranges for varchar, integer, 
 double types through minLength/maxLength and minimum/maximum respectively.
 
-Note that all migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
+All migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
 
 To execute them all - run: ``` php artisan module:migrate ```
 

@@ -39,18 +39,28 @@ abstract class MigrationsAbstract
         $attrs = $this->getEntityAttributes();
         foreach($attrs as $attrKey => $attrVal)
         {
-            if(is_array($attrVal) && empty($attrVal[RamlInterface::RAML_TYPE]) === false)
+            if(is_array($attrVal))
             {
-                $this->setDescription($attrVal);
-                $type = $attrVal[RamlInterface::RAML_TYPE];
-                if($attrKey === RamlInterface::RAML_ID)
+                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false)
                 {
-                    // create an auto_increment primary key - id
-                    $this->setId($attrVal, $attrKey, $type);
-                    continue;
+                    $this->setDescription($attrVal);
+                    $type = $attrVal[RamlInterface::RAML_TYPE];
+                    if($attrKey === RamlInterface::RAML_ID)
+                    {
+                        // create an auto_increment primary key - id
+                        $this->setId($attrVal, $attrKey, $type);
+                        continue;
+                    }
+                    // create migration fields depending on types
+                    $this->setRowContent($attrVal, $type, $attrKey);
                 }
-                // create migration fields depending on types
-                $this->setRowContent($attrVal, $type, $attrKey);
+                else
+                {// non-standard types aka enum
+                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false)
+                    {
+                        $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
+                    }
+                }
             }
         }
         // created_at/updated_at created for every table
@@ -98,10 +108,12 @@ abstract class MigrationsAbstract
                         . PhpInterface::SPACE . $min);
                 }
                 break;
-            // TODO: implement ENUM
-//                        case RamlInterface::RAML_ENUM:
-//                            $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey, );
-//                            break;
+            case RamlInterface::RAML_ENUM:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
+                    PhpInterface::OPEN_BRACKET . PhpInterface::DOUBLE_QUOTES . implode(PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA
+                        . PhpInterface::DOUBLE_QUOTES, $attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]) . PhpInterface::DOUBLE_QUOTES
+                    . PhpInterface::CLOSE_BRACKET);
+                break;
         }
     }
 
