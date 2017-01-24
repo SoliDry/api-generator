@@ -82,7 +82,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
             // The state of an article
             "status" => "in:draft,published,postponed,archived",
             // ManyToOne Topic relationship
-            "topic_id" => "required|integer|min:1|max:9",
+            "topic_id" => "required|integer|min:1|max:6",
         ], $formIn->rules());
         $this->assertNotEmpty($formIn->relations());
         $this->assertArraySubset([
@@ -95,7 +95,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
-            "title" => "string|required|min:3|max:255",
+            "title" => "string|required|min:3",
         ], $formIn->rules());
         $this->assertNotEmpty($formIn->relations());
         $this->assertArraySubset([

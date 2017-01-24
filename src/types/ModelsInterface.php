@@ -59,8 +59,27 @@ interface ModelsInterface
     const MIGRATION_METHOD_INCREMENTS     = 'increments';
     const MIGRATION_METHOD_BIG_INCREMENTS = 'bigIncrements';
     const MIGRATION_METHOD_STRING         = 'string';
+    // integer
+    const MIGRATION_METHOD_TINY_INTEGER   = 'tinyInteger';
+    const MIGRATION_METHOD_SMALL_INTEGER  = 'smallInteger';
+    const MIGRATION_METHOD_MEDIUM_INTEGER = 'mediumInteger';
     const MIGRATION_METHOD_INTEGER        = 'integer';
-    const MIGRATION_METHOD_TINYINT        = 'unsignedTinyInteger';
+    const MIGRATION_METHOD_BIG_INTEGER    = 'bigInteger';
+    const MIGRATION_METHOD_UTINYINT       = 'unsignedTinyInteger';
+    const MIGRATION_METHOD_USMALLINT      = 'unsignedSmallInteger';
+    const MIGRATION_METHOD_UMEDIUMINT     = 'unsignedMediumInteger';
+    const MIGRATION_METHOD_UINT           = 'unsignedInteger';
+    const MIGRATION_METHOD_UBIGINT        = 'unsignedBigInteger';
+
+    const INT_DIGITS_TINY   = 3;
+    const INT_DIGITS_SMALL  = 5;
+    const INT_DIGITS_MEDIUM = 8;
+    const INT_DIGITS_INT    = 10;
+    const INT_DIGITS_BIGINT = 20;
+
+    // double
+    const MIGRATION_METHOD_DOUBLE         = 'double';
+    const MIGRATION_METHOD_FLOAT          = 'float';
     const MIGRATION_METHOD_TIMESTAMPS     = 'timestamps';
     const MIGRATION_METHOD_DATETIME       = 'dateTime';
     const MIGRATION_METHOD_ENUM           = 'enum';

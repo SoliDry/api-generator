@@ -17,6 +17,10 @@ interface RamlInterface
     const RAML_TYPE_BOOLEAN  = 'boolean';
     const RAML_TYPE_STRING   = 'string';
     const RAML_TYPE_INTEGER  = 'integer';
+    const RAML_TYPE_NUMBER   = 'number';
+
+    const RAML_TYPE_FORMAT_FLOAT  = 'float';
+    const RAML_TYPE_FORMAT_DOUBLE = 'double';
 
     const RAML_PROPS         = 'properties';
     const RAML_ATTRS         = 'attributes';
