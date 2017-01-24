@@ -298,7 +298,59 @@ To declare JWT check for routes group:
 ```php
 Route::group(['middleware' => 'jwt', 
 ```
+JWT will be created on POST and updated on PATCH request to the entity You`ve been created, 
+for instance You send POST request to ```http://example.com/v1/user``` with the following content:
+```json
+{
+  "data": {
+    "type":"user",
+    "attributes": {
+      "first_name":"Alice",
+      "last_name":"Hacker"
+    }
+  }
+} 
+``` 
 
+Response will be similar to: 
+```json
+{
+  "data": {
+    "type": "user",
+    "id": "4",
+    "attributes": {
+      "first_name": "Alice",
+      "last_name": "Hacker",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODZmZmIxNDQxMDcifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NmZmYjE0NDEwNyIsImlhdCI6MTQ4NTI0MjI4OSwibmJmIjoxNDg1MjQyMzE5LCJleHAiOjE0ODUyNDU4ODksInVpZCI6NH0.jJT3fHARHBS13k0h40toGlr1vHMWjMxNJ5fhHRPQ2mk",
+      ...
+```
+
+An example for JWT refresh - ```http://example.com/v1/user/4```:
+ 
+```json
+{
+  "data": {
+    "type":"user",
+    "attributes": {
+    
+    }
+  }
+}
+```
+
+Response:
+```json
+{
+  "data": {
+    "type": "user",
+    "id": "4",
+    "attributes": {
+      "first_name": "Alice",
+      "last_name": "Hacker",
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODcwNGU1NTRjNzkifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NzA0ZTU1NGM3OSIsImlhdCI6MTQ4NTI0MzYyMSwibmJmIjoxNDg1MjQzNjUxLCJleHAiOjE0ODUyNDcyMjEsInVpZCI6NH0.GD96ewc1dhbpz9grNaE2070Qy30Mqkh3B0VpEb7h3mQ",
+      ...
+```
+ 
 ### RAML Types and Declarations
 
 The ```version``` root property !required

@@ -136,9 +136,9 @@ trait BaseControllerTrait
             $model = $this->getEntity($this->model->id);
             $model->jwt = Jwt::create($this->model->id, $uniqId);
             $model->save();
+            $this->model = $model;
         }
         $this->setRelationships($json, $this->model->id);
-
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
@@ -163,9 +163,14 @@ trait BaseControllerTrait
                 $model->$k = $jsonApiAttributes[$k];
             }
         }
+        // jwt
+        if($this->configOptions->getIsJwtAction() === true)
+        {
+            $uniqId = uniqid();
+            $model->jwt = Jwt::create($model->id, $uniqId);
+        }
         $model->save();
         $this->setRelationships($json, $model->id, true);
-
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
