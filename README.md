@@ -13,7 +13,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 * [Installation](#user-content-installation-via-composer)
 
-&nbsp;&nbsp;* [Configuration](#user-content-laravel-specific-configuration)
+** [Configuration](#user-content-laravel-specific-configuration)
 
 &nbsp;&nbsp;[Running generator](#user-content-running-generator)
 
