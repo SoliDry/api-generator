@@ -15,7 +15,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 
 &nbsp;&nbsp;[Configuration](#user-content-laravel-specific-configuration)
 
-&nbsp;&nbsp;[Running generator](#user-content-run-generator)
+&nbsp;&nbsp;[Running generator](#user-content-running-generator)
 
 [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 
@@ -84,7 +84,7 @@ By default controllers, entities or repositories are not loaded automatically. Y
 }
 ```
 
-#### Running generator
+### Running generator
 
 Run in console:
 ```
