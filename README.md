@@ -662,6 +662,11 @@ Response:
       "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODcwNGU1NTRjNzkifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NzA0ZTU1NGM3OSIsImlhdCI6MTQ4NTI0MzYyMSwibmJmIjoxNDg1MjQzNjUxLCJleHAiOjE0ODUyNDcyMjEsInVpZCI6NH0.GD96ewc1dhbpz9grNaE2070Qy30Mqkh3B0VpEb7h3mQ",
       ...
 ```
+
+Regular request with JWT will look like:
+```
+http://example.com/v1/article?include=tag&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODVmYmM0NjUyN2MifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NWZiYzQ2NTI3YyIsImlhdCI6MTQ4NTE3NTc0OCwibmJmIjoxNDg1MTc1ODA4LCJleHAiOjE0ODUxNzkzNDgsInVpZCI6M30.js5_Fe5tFDfeK88KJJpSEpVO6rYBOG0UFAaVvlYYxcw
+```
  
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - You need to generate MVC-structure into laravel-module and make Your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
