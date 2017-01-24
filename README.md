@@ -609,8 +609,8 @@ To declare JWT check for routes group:
 ```php
 Route::group(['middleware' => 'jwt', 
 ```
-JWT will be created on POST and updated on PATCH request to the entity You`ve been created, 
-for instance You send POST request to ```http://example.com/v1/user``` with the following content:
+JWT will be created on POST and updated on PATCH request to the entity You've been created, 
+for instance, if You send POST request to ```http://example.com/v1/user``` with the following content:
 ```json
 {
   "data": {
@@ -648,6 +648,7 @@ An example for JWT refresh - ```http://example.com/v1/user/4```:
   }
 }
 ```
+No need to send any content, if the only thing U need is to refresh JWT.
 
 Response:
 ```json
