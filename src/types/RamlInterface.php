@@ -19,6 +19,7 @@ interface RamlInterface
     const RAML_TYPE_INTEGER  = 'integer';
     const RAML_TYPE_NUMBER   = 'number';
 
+    const RAML_TYPE_FORMAT        = 'format';
     const RAML_TYPE_FORMAT_FLOAT  = 'float';
     const RAML_TYPE_FORMAT_DOUBLE = 'double';
 

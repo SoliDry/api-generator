@@ -87,13 +87,15 @@ abstract class MigrationsAbstract
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
                 break;
             case RamlInterface::RAML_TYPE_NUMBER:
-                if($attrVal[RamlInterface::RAML_TYPE_FORMAT_FLOAT])
+                if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
+                    && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
+                        || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
+                )
                 {
-                    $this->setRow(ModelsInterface::MIGRATION_METHOD_FLOAT, $attrKey);
-                }
-                else if($attrVal[RamlInterface::RAML_TYPE_FORMAT_DOUBLE])
-                {
-                    $this->setRow(ModelsInterface::MIGRATION_METHOD_DOUBLE, $attrKey);
+                    $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
+                    $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
+                    $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
+                        . PhpInterface::SPACE . $min);
                 }
                 break;
             // TODO: implement ENUM
