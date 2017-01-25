@@ -414,9 +414,12 @@ class CreateArticleTable extends Migration
             $table->string('url', 255);
             // Show at the top of main page
             $table->unsignedTinyInteger('show_in_top');
+            $table->enum('status', ["draft","published","postponed","archived"]);
             // ManyToOne Topic relationship
             $table->unsignedMediumInteger('topic_id');
             $table->double('rate', 9, 3);
+            $table->date('date_posted');
+            $table->time('time_to_live');
             $table->timestamps();
         });
     }

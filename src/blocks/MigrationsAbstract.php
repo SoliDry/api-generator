@@ -114,6 +114,12 @@ abstract class MigrationsAbstract
                         . PhpInterface::DOUBLE_QUOTES, $attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]) . PhpInterface::DOUBLE_QUOTES
                     . PhpInterface::CLOSE_BRACKET);
                 break;
+            case RamlInterface::RAML_DATE:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_DATE, $attrKey);
+                break;
+            case RamlInterface::RAML_TIME:
+                $this->setRow(ModelsInterface::MIGRATION_METHOD_TIME, $attrKey);
+                break;
         }
     }
 

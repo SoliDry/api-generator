@@ -82,6 +82,8 @@ interface ModelsInterface
     const MIGRATION_METHOD_FLOAT          = 'float';
     const MIGRATION_METHOD_TIMESTAMPS     = 'timestamps';
     const MIGRATION_METHOD_DATETIME       = 'dateTime';
+    const MIGRATION_METHOD_DATE           = 'date';
+    const MIGRATION_METHOD_TIME           = 'time';
     const MIGRATION_METHOD_ENUM           = 'enum';
     const MIGRATION_METHOD_DROP           = 'dropIfExists';
     const MIGRATION_METHOD_UP             = 'up';
