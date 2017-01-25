@@ -45,4 +45,6 @@ interface RamlInterface
     const RAML_INTEGER_MAX = 'maximum';
     const RAML_PATTERN     = 'pattern';
     const RAML_ENUM        = 'enum';
+    const RAML_DATE        = 'date-only';
+    const RAML_TIME        = 'time-only';
 }
