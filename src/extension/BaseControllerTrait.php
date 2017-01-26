@@ -130,11 +130,12 @@ trait BaseControllerTrait
         }
         $this->model->save();
         // jwt
-        if($this->configOptions->getIsJwtAction() === true)
+        if($this->configOptions->getIsJwtAction() === true && empty($this->model->password) === false)
         {
             $uniqId = uniqid();
             $model = $this->getEntity($this->model->id);
             $model->jwt = Jwt::create($this->model->id, $uniqId);
+            $model->password = password_hash($this->model->password, PASSWORD_DEFAULT);
             $model->save();
             $this->model = $model;
         }
@@ -166,8 +167,11 @@ trait BaseControllerTrait
         // jwt
         if($this->configOptions->getIsJwtAction() === true)
         {
-            $uniqId = uniqid();
-            $model->jwt = Jwt::create($model->id, $uniqId);
+            if(password_verify($request->password, $model->password))
+            {
+                $uniqId = uniqid();
+                $model->jwt = Jwt::create($model->id, $uniqId);
+            }
         }
         $model->save();
         $this->setRelationships($json, $model->id, true);
