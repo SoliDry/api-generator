@@ -128,7 +128,7 @@ abstract class MigrationsAbstract
      * @param int $max
      * @param bool $signed
      */
-    private function setIntegerDigit(string $key, int $max, bool $signed = false)
+    private function setIntegerDigit(string $key, int $max = null, bool $signed = false)
     {
         if($signed)
         {

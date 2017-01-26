@@ -130,14 +130,26 @@ trait BaseControllerTrait
         }
         $this->model->save();
         // jwt
-        if($this->configOptions->getIsJwtAction() === true && empty($this->model->password) === false)
+        if($this->configOptions->getIsJwtAction() === true)
         {
+            if(empty($this->model->password))
+            {
+                Json::outputErrors(
+                    [
+                        [
+                            JSONApiInterface::ERROR_TITLE  => 'Password should be provided',
+                            JSONApiInterface::ERROR_DETAIL => 'To get refreshed token in future usage of application - user password should be provided',
+                        ],
+                    ]
+                );
+            }
             $uniqId = uniqid();
             $model = $this->getEntity($this->model->id);
             $model->jwt = Jwt::create($this->model->id, $uniqId);
             $model->password = password_hash($this->model->password, PASSWORD_DEFAULT);
             $model->save();
             $this->model = $model;
+            unset($this->model->password);
         }
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
@@ -156,21 +168,32 @@ trait BaseControllerTrait
         $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
-        foreach($this->props as $k => $v)
-        {
-            // request fields should match Middleware fields
-            if(empty($jsonApiAttributes[$k]) === false)
-            {
-                $model->$k = $jsonApiAttributes[$k];
-            }
-        }
         // jwt
         if($this->configOptions->getIsJwtAction() === true)
         {
-            if(password_verify($request->password, $model->password))
+            if(password_verify($jsonApiAttributes['password'], $model->password) === false)
             {
-                $uniqId = uniqid();
-                $model->jwt = Jwt::create($model->id, $uniqId);
+                Json::outputErrors(
+                    [
+                        [
+                            JSONApiInterface::ERROR_TITLE  => 'Password is invalid.',
+                            JSONApiInterface::ERROR_DETAIL => 'To get refreshed token - pass the correct password',
+                        ],
+                    ]
+                );
+            }
+            $uniqId = uniqid();
+            $model->jwt = Jwt::create($model->id, $uniqId);
+        }
+        else
+        { // standard processing
+            foreach($this->props as $k => $v)
+            {
+                // request fields should match Middleware fields
+                if(empty($jsonApiAttributes[$k]) === false)
+                {
+                    $model->$k = $jsonApiAttributes[$k];
+                }
             }
         }
         $model->save();
