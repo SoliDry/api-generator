@@ -11,6 +11,7 @@ use rjapi\types\ConfigInterface;
 use rjapi\types\DirsInterface;
 use rjapi\blocks\EntitiesTrait;
 use rjapi\blocks\FileManager;
+use rjapi\types\JwtInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\RamlInterface;
 use rjapi\helpers\Classes;
@@ -51,6 +52,11 @@ trait BaseControllerTrait
         JSONApiInterface::URI_METHOD_UPDATE,
         JSONApiInterface::URI_METHOD_DELETE,
         JSONApiInterface::URI_METHOD_RELATIONS,
+    ];
+
+    private $jwtExcluded = [
+        JwtInterface::JWT,
+        JwtInterface::PASSWORD,
     ];
 
     /**
@@ -169,9 +175,9 @@ trait BaseControllerTrait
         $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         // jwt
-        if($this->configOptions->getIsJwtAction() === true)
+        if($this->configOptions->getIsJwtAction() === true && (bool)$request->jwt === true)
         {
-            if(password_verify($jsonApiAttributes['password'], $model->password) === false)
+            if(password_verify($jsonApiAttributes[JwtInterface::PASSWORD], $model->password) === false)
             {
                 Json::outputErrors(
                     [
@@ -184,6 +190,7 @@ trait BaseControllerTrait
             }
             $uniqId = uniqid();
             $model->jwt = Jwt::create($model->id, $uniqId);
+            unset($model->password);
         }
         else
         { // standard processing
