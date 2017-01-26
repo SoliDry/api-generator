@@ -258,22 +258,7 @@ trait BaseControllerTrait
      */
     public function createRelations(Request $request, int $id, string $relation)
     {
-        $json = Json::decode($request->getContent());
-        $this->setRelationships($json, $id);
-
-        $_GET['include'] = $relation;
-        $model = $this->getEntity($id);
-        if(empty($model))
-        {
-            Json::outputErrors(
-                [
-                    [
-                        JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id .
-                            ' - not found.',
-                    ],
-                ]
-            );
-        }
+        $model = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -287,11 +272,24 @@ trait BaseControllerTrait
      */
     public function updateRelations(Request $request, int $id, string $relation)
     {
+        $model = $this->presetRelations($request, $id, $relation, true);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        Json::outputSerializedData($resource);
+    }
+
+    /**
+     * @param Request $request
+     * @param int $id
+     * @param string $relation
+     * @param bool $isRemovable
+     * @return mixed
+     */
+    private function presetRelations(Request $request, int $id, string $relation, bool $isRemovable = false)
+    {
         $json = Json::decode($request->getContent());
         $this->setRelationships($json, $id, true);
         // set include for relations
         $_GET['include'] = $relation;
-
         $model = $this->getEntity($id);
         if(empty($model))
         {
@@ -304,8 +302,8 @@ trait BaseControllerTrait
                 ]
             );
         }
-        $resource = Json::getResource($this->middleWare, $model, $this->entity);
-        Json::outputSerializedData($resource);
+
+        return $model;
     }
 
     /**

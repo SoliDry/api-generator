@@ -169,7 +169,7 @@ class Json
     }
 
     /**
-     * @param string|resource $json
+     * @param mixed $json
      * @return mixed
      */
     public static function decode($json)
