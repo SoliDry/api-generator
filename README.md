@@ -563,9 +563,14 @@ Generated configuration part:
 
 #### JWT (Json Web Token)
 
-To add a JWT check You need to add to any users, employees, 
-customers etc-like table the ```jwt``` RAML property:
+To support a JWT check, You need to add to any users, employees, 
+customers like table the ```jwt``` and ```password``` RAML properties:
 ```RAML
+  password:
+    description: user password to refresh JWT (encrypted with password_hash)
+    required: true
+    type: string
+    maxLength: 255
   jwt:
     description: Special field to run JWT Auth via requests
     required: true
@@ -578,7 +583,7 @@ The ```maxLength``` parameter is important, because of varchar-type sql field wi
 
 The ```default``` value should be equal precisely ' ' - empty string with space.  
 
-JWT specific configuration will be appended in ```Modules/{ModuleName}/Config/config.php```:
+JWT specific configuration will be appended by generator in ```Modules/{ModuleName}/Config/config.php```:
 ```php
     'jwt'=> [
         'enabled' => true,
