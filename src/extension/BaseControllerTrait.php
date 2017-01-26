@@ -175,7 +175,7 @@ trait BaseControllerTrait
         $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         // jwt
-        if($this->configOptions->getIsJwtAction() === true && (bool)$request->jwt === true)
+        if($this->configOptions->getIsJwtAction() === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true)
         {
             if(password_verify($jsonApiAttributes[JwtInterface::PASSWORD], $model->password) === false)
             {

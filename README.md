@@ -639,6 +639,8 @@ Response will be similar to:
       "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODZmZmIxNDQxMDcifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NmZmYjE0NDEwNyIsImlhdCI6MTQ4NTI0MjI4OSwibmJmIjoxNDg1MjQyMzE5LCJleHAiOjE0ODUyNDU4ODksInVpZCI6NH0.jJT3fHARHBS13k0h40toGlr1vHMWjMxNJ5fhHRPQ2mk",
       ...
 ```
+Note if JWT ```enabled=true```, password will be hashed with ```password_hash``` and saved to password field internally.
+You can add additional checks on password or other fields ex.: length, strength etc in Model on befor/afterSave events.
 
 An example for JWT refresh - ```http://example.com/v1/user/4```:
  
@@ -647,12 +649,13 @@ An example for JWT refresh - ```http://example.com/v1/user/4```:
   "data": {
     "type":"user",
     "attributes": {
-    
+    	"password":"myPassword123",
+    	"jwt":true
     }
   }
 }
 ```
-No need to send any content, if the only thing U need is to refresh JWT.
+Note that password and jwt set to true are required. 
 
 Response:
 ```json
