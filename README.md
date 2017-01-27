@@ -626,10 +626,11 @@ for instance, if You send POST request to ```http://example.com/v1/user``` with 
     "type":"user",
     "attributes": {
       "first_name":"Alice",
-      "last_name":"Hacker"
+      "last_name":"Hacker",
+      "password":"my123Password"
     }
   }
-} 
+}
 ``` 
 
 Response will be similar to: 
@@ -637,14 +638,28 @@ Response will be similar to:
 {
   "data": {
     "type": "user",
-    "id": "4",
+    "id": "7",
     "attributes": {
       "first_name": "Alice",
       "last_name": "Hacker",
-      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODZmZmIxNDQxMDcifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NmZmYjE0NDEwNyIsImlhdCI6MTQ4NTI0MjI4OSwibmJmIjoxNDg1MjQyMzE5LCJleHAiOjE0ODUyNDU4ODksInVpZCI6NH0.jJT3fHARHBS13k0h40toGlr1vHMWjMxNJ5fhHRPQ2mk",
-      ...
+      "password": null,
+      "jwt": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODljOGY2NzE3YjIifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4OWM4ZjY3MTdiMiIsImlhdCI6MTQ4NTQyNDg4NiwibmJmIjoxNDg1NDI0OTE2LCJleHAiOjE0ODU0Mjg0ODYsInVpZCI6N30.JnC7OhlUIBoMTlu617q0q2nCQ4SqKh19bXtiHfBeg9o",
+      "attributes": null,
+      "request": null,
+      "query": null,
+      "server": null,
+      "files": null,
+      "cookies": null,
+      "headers": null
+    },
+    "links": {
+      "self": "laravel.loc/user/7"
+    }
+  }
+}
 ```
 Note if JWT ```enabled=true```, password will be hashed with ```password_hash``` and saved to password field internally.
+Do not bother with ```"password": null,``` attribute it is unset before output for safety.
 You can add additional checks on password or other fields ex.: length, strength etc in Model on befor/afterSave events.
 
 An example for JWT refresh - ```http://example.com/v1/user/4```:
