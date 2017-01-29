@@ -138,24 +138,7 @@ trait BaseControllerTrait
         // jwt
         if($this->configOptions->getIsJwtAction() === true)
         {
-            if(empty($this->model->password))
-            {
-                Json::outputErrors(
-                    [
-                        [
-                            JSONApiInterface::ERROR_TITLE  => 'Password should be provided',
-                            JSONApiInterface::ERROR_DETAIL => 'To get refreshed token in future usage of application - user password should be provided',
-                        ],
-                    ]
-                );
-            }
-            $uniqId = uniqid();
-            $model = $this->getEntity($this->model->id);
-            $model->jwt = Jwt::create($this->model->id, $uniqId);
-            $model->password = password_hash($this->model->password, PASSWORD_DEFAULT);
-            $model->save();
-            $this->model = $model;
-            unset($this->model->password);
+            $this->createJwtUser();
         }
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
@@ -175,22 +158,10 @@ trait BaseControllerTrait
         $jsonApiAttributes = Json::getAttributes($json);
         $model = $this->getEntity($id);
         // jwt
-        if($this->configOptions->getIsJwtAction() === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true)
+        $isJwtAction = $this->configOptions->getIsJwtAction();
+        if($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true)
         {
-            if(password_verify($jsonApiAttributes[JwtInterface::PASSWORD], $model->password) === false)
-            {
-                Json::outputErrors(
-                    [
-                        [
-                            JSONApiInterface::ERROR_TITLE  => 'Password is invalid.',
-                            JSONApiInterface::ERROR_DETAIL => 'To get refreshed token - pass the correct password',
-                        ],
-                    ]
-                );
-            }
-            $uniqId = uniqid();
-            $model->jwt = Jwt::create($model->id, $uniqId);
-            unset($model->password);
+            $this->updateJwtUser($model, $jsonApiAttributes);
         }
         else
         { // standard processing
@@ -199,7 +170,14 @@ trait BaseControllerTrait
                 // request fields should match Middleware fields
                 if(empty($jsonApiAttributes[$k]) === false)
                 {
-                    $model->$k = $jsonApiAttributes[$k];
+                    if($isJwtAction === true && $k === JwtInterface::PASSWORD)
+                    {// it is a regular query with password updated and jwt enabled - hash the password
+                        $model->$k = password_hash($jsonApiAttributes[$k], PASSWORD_DEFAULT);
+                    }
+                    else
+                    {
+                        $model->$k = $jsonApiAttributes[$k];
+                    }
                 }
             }
         }
@@ -207,6 +185,53 @@ trait BaseControllerTrait
         $this->setRelationships($json, $model->id, true);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
+    }
+
+    /**
+     *  Creates new user with JWT + password hashed
+     */
+    private function createJwtUser()
+    {
+        if(empty($this->model->password))
+        {
+            Json::outputErrors(
+                [
+                    [
+                        JSONApiInterface::ERROR_TITLE  => 'Password should be provided',
+                        JSONApiInterface::ERROR_DETAIL => 'To get refreshed token in future usage of application - user password should be provided',
+                    ],
+                ]
+            );
+        }
+        $uniqId = uniqid();
+        $model = $this->getEntity($this->model->id);
+        $model->jwt = Jwt::create($this->model->id, $uniqId);
+        $model->password = password_hash($this->model->password, PASSWORD_DEFAULT);
+        $model->save();
+        $this->model = $model;
+        unset($this->model->password);
+    }
+
+    /**
+     * @param $model
+     * @param $jsonApiAttributes
+     */
+    private function updateJwtUser(&$model, $jsonApiAttributes)
+    {
+        if(password_verify($jsonApiAttributes[JwtInterface::PASSWORD], $model->password) === false)
+        {
+            Json::outputErrors(
+                [
+                    [
+                        JSONApiInterface::ERROR_TITLE  => 'Password is invalid.',
+                        JSONApiInterface::ERROR_DETAIL => 'To get refreshed token - pass the correct password',
+                    ],
+                ]
+            );
+        }
+        $uniqId = uniqid();
+        $model->jwt = Jwt::create($model->id, $uniqId);
+        unset($model->password);
     }
 
     /**
