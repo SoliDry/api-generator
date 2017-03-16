@@ -8,7 +8,7 @@
         "alecsammon/php-raml-parser": "^2.1",
         "laravel/framework": "^5.3",
         "nwidart/laravel-modules": "^1.14",
-        "league/fractal": "^0.14.0",
+        "league/fractal": ">=0.14",
         "lcobucci/jwt": "^3.2"
     },
     "autoload": {
