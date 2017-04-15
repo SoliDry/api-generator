@@ -1,11 +1,11 @@
 <?php
 namespace rjapitest\unit\blocks;
 
-use rjapi\blocks\Entities;
 use rjapi\blocks\FormRequestModel;
 use rjapi\RJApiGenerator;
 use rjapi\types\DirsInterface;
 use rjapitest\unit\TestCase;
+use rjapi\blocks\Entities;
 
 /**
  * Class EntitiesTest
