@@ -65,7 +65,7 @@ class FileManager implements DirsInterface
      *
      * @return string
      */
-    public static function getModulePath(Command $obj, $http = false) : string
+    public static function getModulePath(Command $obj, bool $http = false) : string
     {
         /** @var RJApiGenerator $obj */
         $path =
