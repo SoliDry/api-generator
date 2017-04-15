@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 19.01.17
- * Time: 23:22
- */
-
 namespace rjapi\helpers;
 
 

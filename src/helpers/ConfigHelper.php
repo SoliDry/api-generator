@@ -7,7 +7,7 @@ use rjapi\types\ModelsInterface;
 use rjapi\types\ModulesInterface;
 use rjapi\types\PhpInterface;
 
-class Config
+class ConfigHelper
 {
     private static $availableQueryParams = [
         ModelsInterface::PARAM_PAGE  => ModelsInterface::DEFAULT_PAGE,

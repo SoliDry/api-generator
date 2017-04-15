@@ -15,7 +15,7 @@ use rjapi\types\JwtInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\RamlInterface;
 use rjapi\helpers\Classes;
-use rjapi\helpers\Config;
+use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\helpers\SqlOptions;
@@ -262,9 +262,9 @@ trait BaseControllerTrait
 
     private function setDefaults()
     {
-        $this->defaultPage = Config::getQueryParam(ModelsInterface::PARAM_PAGE);
-        $this->defaultLimit = Config::getQueryParam(ModelsInterface::PARAM_LIMIT);
-        $this->defaultSort = Config::getQueryParam(ModelsInterface::PARAM_SORT);
+        $this->defaultPage = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
+        $this->defaultLimit = ConfigHelper::getQueryParam(ModelsInterface::PARAM_LIMIT);
+        $this->defaultSort = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
     }
 
     /**
@@ -298,8 +298,8 @@ trait BaseControllerTrait
     private function setConfigOptions()
     {
         $this->configOptions = new ConfigOptions();
-        $this->configOptions->setJwtIsEnabled(Config::getJwtParam(ConfigInterface::ENABLED));
-        $this->configOptions->setJwtTable(Config::getJwtParam(ModelsInterface::MIGRATION_TABLE));
+        $this->configOptions->setJwtIsEnabled(ConfigHelper::getJwtParam(ConfigInterface::ENABLED));
+        $this->configOptions->setJwtTable(ConfigHelper::getJwtParam(ModelsInterface::MIGRATION_TABLE));
         if($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity))
         {// if jwt enabled=true and tables are equal
             $this->configOptions->setIsJwtAction(true);

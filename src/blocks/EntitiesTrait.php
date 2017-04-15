@@ -4,7 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\extension\BaseControllerTrait;
 use rjapi\helpers\Classes;
-use rjapi\helpers\Config as conf;
+use rjapi\helpers\ConfigHelper as conf;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;

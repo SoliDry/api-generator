@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 20/12/2016
- * Time: 17:03
- */
-
 namespace rjapi\blocks;
 
 use rjapi\helpers\Classes;

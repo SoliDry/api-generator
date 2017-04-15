@@ -3,7 +3,7 @@ namespace rjapi\extension;
 
 use Closure;
 use Lcobucci\JWT\Parser;
-use rjapi\helpers\Config;
+use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\Jwt;
 use rjapi\types\ConfigInterface;
 
@@ -11,7 +11,7 @@ class BaseJwt
 {
     public function handle($request, Closure $next)
     {
-        if(Config::getJwtParam(ConfigInterface::ENABLED) === true)
+        if(ConfigHelper::getJwtParam(ConfigInterface::ENABLED) === true)
         {
             if(empty($request->jwt))
             {

@@ -1,18 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 26.01.17
- * Time: 17:52
- */
-
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\FileManager;
 use rjapi\helpers\Classes;
-use rjapi\helpers\Config;
+use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\DirsInterface;
@@ -124,7 +117,7 @@ trait BaseRelationsTrait
                 // if pivot file exists then save
                 $ucEntity = ucfirst($relation);
                 $file = DirsInterface::MODULES_DIR . PhpInterface::SLASH
-                    . Config::getModuleName() . PhpInterface::SLASH .
+                    . ConfigHelper::getModuleName() . PhpInterface::SLASH .
                     DirsInterface::ENTITIES_DIR . PhpInterface::SLASH .
                     $this->entity . $ucEntity . PhpInterface::PHP_EXT;
                 if(file_exists(PhpInterface::SYSTEM_UPDIR . $file))

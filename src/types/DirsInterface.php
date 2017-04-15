@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 08.12.16
- * Time: 22:37
- */
-
 namespace rjapi\types;
 
 interface DirsInterface

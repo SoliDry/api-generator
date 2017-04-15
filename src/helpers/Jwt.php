@@ -16,8 +16,8 @@ class Jwt
         ->setAudience($_SERVER['HTTP_HOST']) // Configures the audience (aud claim)
         ->setId($generatedId, true) // Configures the id (jti claim), replicating as a header item
         ->setIssuedAt(time()) // Configures the time that the token was issue (iat claim)
-        ->setNotBefore(time() + Config::getJwtParam(ConfigInterface::ACTIVATE)) // Configures the time that the token can be used (nbf claim)
-        ->setExpiration(time() + Config::getJwtParam(ConfigInterface::EXPIRES)) // Configures the expiration time of the token (nbf claim)
+        ->setNotBefore(time() + ConfigHelper::getJwtParam(ConfigInterface::ACTIVATE)) // Configures the time that the token can be used (nbf claim)
+        ->setExpiration(time() + ConfigHelper::getJwtParam(ConfigInterface::EXPIRES)) // Configures the expiration time of the token (nbf claim)
         ->set('uid', $uid) // Configures a new claim, called "uid"
         ->sign($signer, $generatedId . $uid) // glue uniqid + uid
         ->getToken();

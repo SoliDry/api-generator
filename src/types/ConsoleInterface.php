@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 05.01.17
- * Time: 13:31
- */
-
 namespace rjapi\types;
 
 interface ConsoleInterface

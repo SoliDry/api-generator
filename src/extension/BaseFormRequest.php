@@ -1,6 +1,6 @@
 <?php
 /**
- * Created by PhpStorm.
+ * Created by Arthur Kushman
  * User: arthur
  * Date: 14.12.16
  * Time: 22:21

@@ -19,7 +19,6 @@ abstract class TestCase extends TestCaseLaravel
      */
     public function createApplication()
     {
-//        require_once __DIR__ . '/../../vendor/laravel/framework/src/Illuminate/Foundation/helpers.php';
         $app = require __DIR__ . '/../../bootstrap/app.php';
         $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
         $app->make('config');

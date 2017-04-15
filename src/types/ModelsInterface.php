@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 09/12/2016
- * Time: 11:45
- */
-
 namespace rjapi\types;
 
 interface ModelsInterface

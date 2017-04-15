@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 19/12/2016
- * Time: 18:07
- */
-
 namespace rjapi\types;
 
 interface RoutesInterface

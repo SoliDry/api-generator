@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 10.12.16
- * Time: 9:57
- */
-
 namespace rjapi\helpers;
 
 use rjapi\types\DirsInterface;
@@ -54,7 +47,7 @@ class Classes
      */
     public static function getModelEntity(string $entity): string
     {
-        return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . Config::getModuleName() .
+        return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . ConfigHelper::getModuleName() .
         PhpInterface::BACKSLASH . DirsInterface::ENTITIES_DIR .
         PhpInterface::BACKSLASH . $entity;
     }

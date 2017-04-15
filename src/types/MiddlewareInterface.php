@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthur
- * Date: 20.01.17
- * Time: 7:11
- */
-
 namespace rjapi\types;
 
 

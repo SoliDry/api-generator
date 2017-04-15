@@ -31,14 +31,6 @@ class Controllers implements ControllersInterface
     }
 
     /**
-     * @param $generator
-     */
-    public function setCodeState($generator)
-    {
-        $this->generator = $generator;
-    }
-
-    /**
      * Creates the DefaultController and outputs path to the console
      */
     public function createDefault()

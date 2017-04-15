@@ -28,11 +28,6 @@ class Config implements ConfigInterface
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
-    public function setCodeState($generator)
-    {
-        $this->generator = $generator;
-    }
-
     public function create()
     {
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS]) === false)
@@ -182,12 +177,12 @@ class Config implements ConfigInterface
                 {
                     continue;
                 }
-                $this->setJwtOptions($objName, $objData);
+                $this->setJwtOptions($objName);
             }
         }
     }
 
-    private function setJwtOptions($objName, $objData)
+    private function setJwtOptions(string $objName)
     {
         if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false)
         {
