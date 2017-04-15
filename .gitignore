@@ -7,3 +7,4 @@ Modules/
 artisan
 config/
 /raml/
+.env

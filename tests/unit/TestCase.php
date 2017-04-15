@@ -1,6 +1,9 @@
 <?php
+namespace rjapitest\unit;
 
-abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
+use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
+
+abstract class TestCase extends TestCaseLaravel
 {
     /**
      * The base URL to use while testing the application.
@@ -18,7 +21,8 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
     {
 //        require_once __DIR__ . '/../../vendor/laravel/framework/src/Illuminate/Foundation/helpers.php';
         $app = require __DIR__ . '/../../bootstrap/app.php';
-        $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+        $app->make(\Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+        $app->make('config');
         return $app;
     }
 }

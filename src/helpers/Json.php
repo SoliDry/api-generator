@@ -207,7 +207,7 @@ class Json
      * @param array &$json
      * @param array $data
      */
-    private function unsetArray(array &$json, array $data)
+    private static function unsetArray(array &$json, array $data)
     {
         foreach($json as &$jsonObject)
         {
@@ -228,7 +228,7 @@ class Json
      * @param array $json
      * @param array $data
      */
-    private function unsetObject(array &$json, array $data)
+    private static function unsetObject(array &$json, array $data)
     {
         foreach($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v)
         {

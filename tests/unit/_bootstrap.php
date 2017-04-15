@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../vendor/laravel/framework/src/Illuminate/Foundatio
 spl_autoload_register(
     function($class)
     {
-        if($class !== 'config')
+        if(file_exists(str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php'))
         {
             require_once str_replace('\\', '/', str_replace('App\\', '', $class)) . '.php';
         }
