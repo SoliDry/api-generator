@@ -202,7 +202,7 @@ class Config implements ConfigInterface
                 if(is_array($propVal) && empty($this->generator->types[ucfirst($propKey)]) === false) {
                     // ensure that there is a type of propKey ex.: Menu with parent_id field set
                     $this->openTrees();
-                    $this->setParamDefault($propKey, $propVal);
+                    $this->setParamDefault($propKey, $propVal[RamlInterface::RAML_KEY_DEFAULT]);
                     $this->closeTrees();
                 }
             }

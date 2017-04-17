@@ -64,7 +64,8 @@ trait ConfigTrait
      */
     private function setParamDefault(string $param, $defaultValue)
     {
-        $this->sourceCode .= $param . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . $defaultValue . PhpInterface::COMMA . PHP_EOL;
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
     }
 }
