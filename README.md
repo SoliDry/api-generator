@@ -1,6 +1,7 @@
 # raml-json-api
 [![Build Status](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
+[![Code Coverage](https://img.shields.io/badge/coverage-%2076%20%25%20-green.svg)](https://img.shields.io/badge/coverage-%2076%20%25%20-green.svg)
 [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 ![alt RAML logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/raml_logo.png)
@@ -21,6 +22,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
+* [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
 ``` 
@@ -714,6 +716,13 @@ class DefaultController extends BaseController
 ```
 As this class inherited by all Controllers - You don't have to add this property in every Controller class.
 By default JSON API is turned on.
+
+### Conversions to RAML
+
+There are several tools for conversion between different types of documents and RAML, 
+one of the most famous (at this moment) is [APIMATIC](https://apimatic.io/transformer), 
+so there is no problem if You like ex.: Swagger, but want to use raml-json-api to build Your application with RAML.
+
 
 HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/raml-json-api/wiki
 
