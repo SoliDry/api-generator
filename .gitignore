@@ -6,5 +6,7 @@ app/
 Modules/
 artisan
 config/
+routes/
+storage/
 /raml/
 .env

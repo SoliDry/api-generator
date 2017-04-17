@@ -21,6 +21,7 @@ use rjapi\types\PhpInterface;
  * Class BaseControllerTrait
  *
  * @package rjapi\extension
+ * @property bool $jsonApi
  */
 trait BaseControllerTrait
 {
