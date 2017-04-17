@@ -1,11 +1,11 @@
 <?php
 namespace rjapitest\unit;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Routing\Route;
 use Modules\V1\Http\Controllers\ArticleController;
 use Modules\V1\Http\Controllers\DefaultController;
-//use PHPUnit_Framework_TestResult;
 use rjapi\extension\BaseController;
 use \Mockery as m;
 use rjapi\extension\JSONApiInterface;
@@ -22,11 +22,6 @@ class BaseControllerTest extends TestCase
         $this->articleController = new ArticleController($this->route);
     }
 
-//    public function run(PHPUnit_Framework_TestResult $result = null) {
-//        $this->setPreserveGlobalState(false);
-//        parent::run($result);
-//    }
-
     public function testConstruction()
     {
         $this->assertInstanceOf(DefaultController::class, $this->articleController);
@@ -36,6 +31,7 @@ class BaseControllerTest extends TestCase
     }
 
     /**
+     * It should work by phpunit docs - but it isn't in practice
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
