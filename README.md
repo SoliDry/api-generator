@@ -433,8 +433,9 @@ class CreateArticleTable extends Migration
 
 }
 ```
-Note, that U have an ability to make any ranges for varchar, integer, 
-double types through minLength/maxLength and minimum/maximum respectively.
+Note, that U have an ability to make any ranges for varchar, integer types through minLength/maxLength and minimum/maximum respectively. 
+For instance, integer can be set to unsigned smallint with 
+`minimum: 1` (any number > 0) and `maximum: 2` (any number <= 3 to fit smallint db type range).  
 
 All migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
 

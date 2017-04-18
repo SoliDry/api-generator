@@ -46,4 +46,10 @@ class ConfigHelper
         $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::JWT);
         return (empty($params[$param])) ? null : $params[$param];
     }
+
+    public static function getTreeParam(string $param)
+    {
+        $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::TREES);
+        return (empty($params[$param])) ? null : $params[$param];
+    }
 }
