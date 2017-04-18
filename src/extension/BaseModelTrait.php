@@ -108,6 +108,7 @@ trait BaseModelTrait
         foreach($parents as $parent) {
             $this->tree[] = [$parent => $this->buildSubTree($children, $parent->id)];
         }
+        return $this->tree;
     }
 
     public function getTreeParents(SqlOptions $sqlOptions): Collection
