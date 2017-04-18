@@ -97,9 +97,12 @@ trait BaseControllerTrait
         $sqlOptions = $this->setSqlOptions($request);
         if (true === $this->isTree) {
             $items = $this->getAllTreeEntities($sqlOptions);
-        } else {
-            $items = $this->getAllEntities($sqlOptions);
+            $resource = Json::getResource($this->middleWare, $items, $this->entity, true,
+                [JSONApiInterface::META_TREE => $items->toArray()]);
+            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
         }
+
+        $items = $this->getAllEntities($sqlOptions);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
@@ -267,7 +270,7 @@ trait BaseControllerTrait
         $this->defaultPage  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
         $this->defaultLimit = ConfigHelper::getQueryParam(ModelsInterface::PARAM_LIMIT);
         $this->defaultSort  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
-        $this->isTree       = ConfigHelper::getTreeParam(ConfigInterface::TREES);
+        $this->isTree       = ConfigHelper::getTreeParam($this->entity);
     }
 
     /**

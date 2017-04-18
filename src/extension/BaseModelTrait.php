@@ -1,8 +1,9 @@
 <?php
 namespace rjapi\extension;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
-use Illuminate\Support\Collection;
+
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -10,8 +11,6 @@ use rjapi\helpers\SqlOptions;
 
 trait BaseModelTrait
 {
-    private $tree = [];
-
     /**
      * @param int $id
      * @param array $data
@@ -99,16 +98,9 @@ trait BaseModelTrait
         return $obj->where($filter)->take($to)->skip($from)->get($data);
     }
 
-    public function getAllTreeEntities(SqlOptions $sqlOptions)
+    public function getAllTreeEntities(SqlOptions $sqlOptions): Collection
     {
-        // getting parents
-        $parents = $this->getTreeParents($sqlOptions);
-        $children = $this->getTreeChildren($sqlOptions);
-
-        foreach($parents as $parent) {
-            $this->tree[] = [$parent => $this->buildSubTree($children, $parent->id)];
-        }
-        return $this->tree;
+        return Collection::make($this->buildSubTree($this->getAllEntities($sqlOptions)));
     }
 
     public function getTreeParents(SqlOptions $sqlOptions): Collection
@@ -180,18 +172,15 @@ trait BaseModelTrait
         return $obj->where($filter)->get($data);
     }
 
-    private function buildSubTree($childrenData, int $id, int $prevId = 0)
+    private function buildSubTree(Collection $data, int $id = 0)
     {
         $tree = [];
-        foreach($childrenData as $k => $child) {
+        foreach($data as $k => $child) {
             if($child->parent_id === $id) { // child found
-                if($prevId === $id) { // the same level
-                    $tree[$id] = $child;
-                } else { // going deeper
-                    $tree[$id][$child->id] = $child;
-                }
-                $prevId = $id;
-                $this->buildSubTree($childrenData, $child->id, $prevId);
+                // clear found children to free stack
+                unset($data[$k]);
+                $child->children = $this->buildSubTree($data, $child->id);
+                $tree[] = $child;
             }
         }
 
