@@ -98,7 +98,7 @@ trait BaseControllerTrait
         if (true === $this->isTree) {
             $items = $this->getAllTreeEntities($sqlOptions);
             $resource = Json::getResource($this->middleWare, $items, $this->entity, true,
-                [JSONApiInterface::META_TREE => $items->toArray()]);
+                [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $items->toArray()]);
             Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
         }
 
