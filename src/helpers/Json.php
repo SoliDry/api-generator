@@ -56,22 +56,17 @@ class Json
     public static function getRelations($relation, string $entity)
     {
         $jsonArr = [];
-        if($relation instanceof \Illuminate\Database\Eloquent\Collection)
-        {
+        if($relation instanceof \Illuminate\Database\Eloquent\Collection) {
             $cnt = count($relation);
-            if($cnt > 1)
-            {
-                foreach($relation as $v)
-                {
+            if($cnt > 1) {
+                foreach($relation as $v) {
                     $attrs = $v->getAttributes();
                     $jsonArr[] = [RamlInterface::RAML_TYPE => $entity,
                                   RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
                 }
             }
-            else
-            {
-                foreach($relation as $v)
-                {
+            else {
+                foreach($relation as $v) {
                     $attrs = $v->getAttributes();
                     $jsonArr = [RamlInterface::RAML_TYPE => $entity,
                                 RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
@@ -89,8 +84,7 @@ class Json
     public static function outputErrors(array $errors)
     {
         $arr[JSONApiInterface::CONTENT_ERRORS] = [];
-        if(empty($errors) === false)
-        {
+        if(empty($errors) === false) {
             $arr[JSONApiInterface::CONTENT_ERRORS] = $errors;
         }
         echo self::encode($arr);
@@ -122,12 +116,16 @@ class Json
      *
      * @return Collection|Item
      */
-    public static function getResource(BaseFormRequest $middleware, $model, string $entity, $isCollection = false)
+    public static function getResource(BaseFormRequest $middleware, $model, string $entity, bool $isCollection = false, array $meta = [])
     {
         $transformer = new DefaultTransformer($middleware);
-        if($isCollection === true)
-        {
-            return new Collection($model, $transformer, strtolower($entity));
+        if($isCollection === true) {
+            $collection = new Collection($model, $transformer, strtolower($entity));
+            if(empty($meta) === false) {
+                $collection->setMeta($meta);
+            }
+
+            return $collection;
         }
 
         return new Item($model, $transformer, strtolower($entity));
@@ -143,19 +141,27 @@ class Json
     {
         http_response_code($responseCode);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
-        if($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT)
-        {
+        if($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
             exit;
         }
         $host = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
 
-        if(isset($_GET['include']))
-        {
+        if(isset($_GET['include'])) {
             $manager->parseIncludes($_GET['include']);
         }
         $manager->setSerializer(new JsonApiSerializer($host));
         echo self::getSelectedData($manager->createData($resource)->toJson(), $data);
+        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
+    }
+
+    public static function outputJsonData(\Illuminate\Database\Eloquent\Collection $collection,
+                                          int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
+                                          $data = ModelsInterface::DEFAULT_DATA)
+    {
+        http_response_code($responseCode);
+        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
+        echo self::getSelectedData(self::encode([JSONApiInterface::CONTENT_DATA => $collection]), $data);
         exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
     }
 
@@ -184,18 +190,15 @@ class Json
      */
     private static function getSelectedData(string $json, array $data): string
     {
-        if(current($data) === PhpInterface::ASTERISK)
-        {// do nothing - grab all fields
+        if(current($data) === PhpInterface::ASTERISK) {// do nothing - grab all fields
             return $json;
         }
         $jsonArr = self::decode($json);
         $current = current($jsonArr[RamlInterface::RAML_DATA]);
-        if(empty($current[JSONApiInterface::CONTENT_ATTRIBUTES]) === false)
-        {// this is an array of values
+        if(empty($current[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) {// this is an array of values
             self::unsetArray($jsonArr, $data);
         }
-        else
-        {// this is just one element
+        else {// this is just one element
             self::unsetObject($jsonArr, $data);
         }
 
@@ -209,14 +212,10 @@ class Json
      */
     private static function unsetArray(array &$json, array $data)
     {
-        foreach($json as &$jsonObject)
-        {
-            foreach($jsonObject as &$v)
-            {
-                foreach($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr)
-                {
-                    if(in_array($key, $data) === false)
-                    {
+        foreach($json as &$jsonObject) {
+            foreach($jsonObject as &$v) {
+                foreach($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
+                    if(in_array($key, $data) === false) {
                         unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
                     }
                 }
@@ -230,10 +229,8 @@ class Json
      */
     private static function unsetObject(array &$json, array $data)
     {
-        foreach($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v)
-        {
-            if(in_array($k, $data) === false)
-            {
+        foreach($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
+            if(in_array($k, $data) === false) {
                 unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
             }
         }

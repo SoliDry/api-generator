@@ -22,6 +22,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
+* [Tree structures](#user-content-tree-structures)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
@@ -433,8 +434,9 @@ class CreateArticleTable extends Migration
 
 }
 ```
-Note, that U have an ability to make any ranges for varchar, integer, 
-double types through minLength/maxLength and minimum/maximum respectively.
+Note, that U have an ability to make any ranges for varchar, integer types through minLength/maxLength and minimum/maximum respectively. 
+For instance, integer can be set to unsigned smallint with 
+`minimum: 1` (any number > 0) and `maximum: 2` (any number <= 3 to fit smallint db type range).  
 
 All migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
 
@@ -716,6 +718,45 @@ class DefaultController extends BaseController
 ```
 As this class inherited by all Controllers - You don't have to add this property in every Controller class.
 By default JSON API is turned on.
+
+### Tree structures
+
+You can easily build a tree structure by declaring it in RAML as `Trees` custom type:   
+```RAML
+  Trees:
+    type: object
+    properties:
+      menu:
+        type: boolean
+        default: true
+      catalog:
+        type: boolean
+        default: false
+```
+
+and adding `parent_id` to the targeted table, ex.:
+```RAML
+  MenuAttributes:
+    type: object
+    properties:
+      title:
+        required: true
+        type: string
+      rfc:
+        type: string
+        default: /
+      parent_id:
+        description: mandatory field for building trees
+        type: integer
+        minimum: 9
+        maximum: 10
+        default: 0
+```
+the entire tree will be placed in `meta` json-api root element, 
+while all the parent elements (stored as parent_id=0) will reside in data root element.
+This was done to keep steady json-api structure and it's relations.
+
+Children elements stuck in every parent's `children` property array and it is empty if there are none.      
 
 ### Conversions to RAML
 

@@ -30,16 +30,14 @@ class Config implements ConfigInterface
 
     public function create()
     {
-        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS]) === false)
-        {
+        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS]) === false) {
             $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
             $this->setContent($queryParams);
             // create config file
             $file = $this->generator->formatConfigPath() .
                 ModulesInterface::CONFIG_FILENAME . PhpInterface::PHP_EXT;
             $isCreated = FileManager::createFile($file, $this->sourceCode, true);
-            if($isCreated)
-            {
+            if($isCreated) {
                 Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
         }
@@ -137,44 +135,36 @@ class Config implements ConfigInterface
         $this->openRoot();
         $this->setName($this->generator->version);
         $this->openParams();
-        if(empty($queryParams[ModelsInterface::PARAM_LIMIT][RamlInterface::RAML_KEY_DEFAULT]) === false)
-        {
+        if(empty($queryParams[ModelsInterface::PARAM_LIMIT][RamlInterface::RAML_KEY_DEFAULT]) === false) {
             $this->setLimit($queryParams[ModelsInterface::PARAM_LIMIT][RamlInterface::RAML_KEY_DEFAULT]);
         }
-        if(empty($queryParams[ModelsInterface::PARAM_SORT][RamlInterface::RAML_KEY_DEFAULT]) === false)
-        {
+        if(empty($queryParams[ModelsInterface::PARAM_SORT][RamlInterface::RAML_KEY_DEFAULT]) === false) {
             $this->setSort($queryParams[ModelsInterface::PARAM_SORT][RamlInterface::RAML_KEY_DEFAULT]);
         }
-        if(empty($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]) === false)
-        {
+        if(empty($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]) === false) {
             $this->setPage($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]);
         }
-        if(empty($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false)
-        {
+        if(empty($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false) {
             $this->setAccessToken($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]);
         }
         $this->closeParams();
+        $this->setTrees();
         $this->setJwtContent();
         $this->closeRoot();
     }
 
     private function setJwtContent()
     {
-        foreach($this->generator->types as $objName => $objData)
-        {
-            if(in_array($objName, $this->generator->customTypes) === false)
-            { // if this is not a custom type generate resources
+        foreach($this->generator->types as $objName => $objData) {
+            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
-                foreach($this->generator->excludedSubtypes as $type)
-                {
-                    if(strpos($objName, $type) !== false)
-                    {
+                foreach($this->generator->excludedSubtypes as $type) {
+                    if(strpos($objName, $type) !== false) {
                         $excluded = true;
                     }
                 }
                 // if the type is among excluded - continue
-                if($excluded === true)
-                {
+                if($excluded === true) {
                     continue;
                 }
                 $this->setJwtOptions($objName);
@@ -182,20 +172,38 @@ class Config implements ConfigInterface
         }
     }
 
+    /**
+     * Sets jwt config options
+     * @param string $objName
+     */
     private function setJwtOptions(string $objName)
     {
-        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false)
-        {
-            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal)
-            {
-                if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT)
-                {// create jwt config setting
+        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
+            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
                     $this->openJwt();
                     $this->setEnabled();
                     $this->setTable($objName);
                     $this->setActivate(ConfigInterface::DEFAULT_ACTIVATE);
                     $this->setExpires(ConfigInterface::DEFAULT_EXPIRES);
                     $this->closeJwt();
+                }
+            }
+        }
+    }
+
+    /**
+     *  Sets config trees structure
+     */
+    private function setTrees()
+    {
+        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS]) === false) {
+            foreach($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if(is_array($propVal) && empty($this->generator->types[ucfirst($propKey)]) === false) {
+                    // ensure that there is a type of propKey ex.: Menu with parent_id field set
+                    $this->openTrees();
+                    $this->setParamDefault($propKey, $propVal[RamlInterface::RAML_KEY_DEFAULT]);
+                    $this->closeTrees();
                 }
             }
         }

@@ -21,22 +21,24 @@ use rjapi\types\PhpInterface;
  * Class BaseControllerTrait
  *
  * @package rjapi\extension
+ * @property bool $jsonApi
  */
 trait BaseControllerTrait
 {
     use BaseRelationsTrait, EntitiesTrait;
 
-    private $props = [];
+    private $props  = [];
     private $entity = null;
     /** @var BaseModel model */
-    private $model = null;
-    private $modelEntity = null;
-    private $middleWare = null;
-    private $relsRemoved = false;
+    private $model          = null;
+    private $modelEntity    = null;
+    private $middleWare     = null;
+    private $relsRemoved    = false;
     // default query params value
-    private $defaultPage = 0;
-    private $defaultLimit = 0;
-    private $defaultSort = '';
+    private $defaultPage    = 0;
+    private $defaultLimit   = 0;
+    private $defaultSort    = '';
+    private $isTree         = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions configOptions */
     private $configOptions = null;
@@ -93,6 +95,13 @@ trait BaseControllerTrait
     public function index(Request $request)
     {
         $sqlOptions = $this->setSqlOptions($request);
+        if (true === $this->isTree) {
+            $items = $this->getAllTreeEntities($sqlOptions);
+            $resource = Json::getResource($this->middleWare, $items, $this->entity, true,
+                [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $items->toArray()]);
+            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
+        }
+
         $items = $this->getAllEntities($sqlOptions);
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
@@ -258,9 +267,10 @@ trait BaseControllerTrait
 
     private function setDefaults()
     {
-        $this->defaultPage = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
+        $this->defaultPage  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
         $this->defaultLimit = ConfigHelper::getQueryParam(ModelsInterface::PARAM_LIMIT);
-        $this->defaultSort = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
+        $this->defaultSort  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
+        $this->isTree       = ConfigHelper::getTreeParam($this->entity);
     }
 
     /**

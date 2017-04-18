@@ -12,6 +12,7 @@ class SqlOptions
     public $orderBy = [];
     public $data    = ModelsInterface::DEFAULT_DATA;
     public $filter  = [];
+    public $isTree  = false;
 
     /**
      * @param null $sort
@@ -114,4 +115,19 @@ class SqlOptions
         $this->filter = $filter;
     }
 
+    /**
+     * @param bool $isTree
+     */
+    public function setIsTree(bool $isTree)
+    {
+        $this->isTree = $isTree;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsTree(): bool
+    {
+        return $this->isTree;
+    }
 }

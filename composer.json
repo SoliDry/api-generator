@@ -14,7 +14,12 @@
     "autoload": {
         "psr-4": {
             "rjapi\\": "src",
-            "rjapitest\\": "tests",
+            "rjapitest\\": "tests"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\": "app/",
             "Modules\\":"Modules/"
         }
     },

@@ -60,6 +60,7 @@ trait ControllersTrait
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS,
         CustomsInterface::CUSTOM_TYPES_FILTER,
+        CustomsInterface::CUSTOM_TYPES_TREES,
     ];
 
     public $options = [];

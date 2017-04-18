@@ -44,4 +44,28 @@ trait ConfigTrait
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
     }
+    
+    private function openTrees()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::TREES
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;        
+    }
+
+    private function closeTrees()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    /**
+     * Sets the default value of the $param name
+     * @param string $param
+     * @param mixed $defaultValue
+     */
+    private function setParamDefault(string $param, $defaultValue)
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
+    }
 }

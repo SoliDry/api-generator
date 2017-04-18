@@ -24,6 +24,7 @@ interface ModelsInterface
     const LARAVEL_FILTER_MAX      = 'max';
     const COLUMN                  = 'column';
     const DIRECTION               = 'direction';
+    const PARENT_ID               = 'parent_id';
 
     // Methods
     const MODEL_METHOD_ALL      = 'all';
