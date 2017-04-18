@@ -265,6 +265,9 @@ trait BaseControllerTrait
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
     }
 
+    /**
+     *  Sets the default config based parameters
+     */
     private function setDefaults()
     {
         $this->defaultPage  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);

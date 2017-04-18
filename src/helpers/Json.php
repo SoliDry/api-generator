@@ -114,6 +114,7 @@ class Json
      * @param string $entity
      * @param bool $isCollection
      *
+     * @param array $meta
      * @return Collection|Item
      */
     public static function getResource(BaseFormRequest $middleware, $model, string $entity, bool $isCollection = false, array $meta = [])
@@ -152,16 +153,6 @@ class Json
         }
         $manager->setSerializer(new JsonApiSerializer($host));
         echo self::getSelectedData($manager->createData($resource)->toJson(), $data);
-        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
-    }
-
-    public static function outputJsonData(\Illuminate\Database\Eloquent\Collection $collection,
-                                          int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
-                                          $data = ModelsInterface::DEFAULT_DATA)
-    {
-        http_response_code($responseCode);
-        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
-        echo self::getSelectedData(self::encode([JSONApiInterface::CONTENT_DATA => $collection]), $data);
         exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
     }
 
