@@ -128,8 +128,9 @@ class Json
 
             return $collection;
         }
-
-        return new Item($model, $transformer, strtolower($entity));
+        $item = new Item($model, $transformer, strtolower($entity));
+        $item->setMeta($meta);
+        return $item;
     }
 
     /**

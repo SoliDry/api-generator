@@ -94,16 +94,15 @@ trait BaseControllerTrait
      */
     public function index(Request $request)
     {
+        $meta = [];
         $sqlOptions = $this->setSqlOptions($request);
         if (true === $this->isTree) {
-            $items = $this->getAllTreeEntities($sqlOptions);
-            $resource = Json::getResource($this->middleWare, $items, $this->entity, true,
-                [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $items->toArray()]);
-            Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
+            $tree = $this->getAllTreeEntities($sqlOptions);
+            $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree->toArray()];
         }
 
         $items = $this->getAllEntities($sqlOptions);
-        $resource = Json::getResource($this->middleWare, $items, $this->entity, true);
+        $resource = Json::getResource($this->middleWare, $items, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
 
@@ -115,10 +114,16 @@ trait BaseControllerTrait
      */
     public function view(Request $request, int $id)
     {
+        $meta = [];
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
+        if (true === $this->isTree) {
+            $sqlOptions = $this->setSqlOptions($request);
+            $tree = $this->getSubTreeEntities($sqlOptions, $id);
+            $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
+        }
         $item = $this->getEntity($id, $data);
-        $resource = Json::getResource($this->middleWare, $item, $this->entity);
+        $resource = Json::getResource($this->middleWare, $item, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
 

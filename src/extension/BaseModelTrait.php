@@ -9,6 +9,10 @@ use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use rjapi\helpers\SqlOptions;
 
+/**
+ * Class BaseModelTrait
+ * @package rjapi\extension
+ */
 trait BaseModelTrait
 {
     /**
@@ -105,7 +109,7 @@ trait BaseModelTrait
      */
     public function getAllTreeEntities(SqlOptions $sqlOptions): Collection
     {
-        return Collection::make($this->buildSubTree($this->getAllEntities($sqlOptions)));
+        return Collection::make($this->buildTree($this->getAllEntities($sqlOptions)));
     }
 
     /**
@@ -114,18 +118,57 @@ trait BaseModelTrait
      * @param int $id
      * @return array
      */
-    private function buildSubTree(Collection $data, int $id = 0)
+    private function buildTree(Collection $data, int $id = 0)
     {
         $tree = [];
         foreach($data as $k => $child) {
             if($child->parent_id === $id) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
-                $child->children = $this->buildSubTree($data, $child->id);
+                $child->children = $this->buildTree($data, $child->id);
                 $tree[] = $child;
             }
         }
 
+        return $tree;
+    }
+
+    /**
+     * Collects all tree elements
+     * @param SqlOptions $sqlOptions
+     * @param int $id
+     * @return array
+     */
+    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id): array
+    {
+        return $this->buildSubTree($this->getAllEntities($sqlOptions), $id);
+    }
+
+    /**
+     * Builds the sub-tree for top most ancestor
+     * @param Collection $data
+     * @param int $searchId
+     * @param int $id
+     * @param bool $isParentFound
+     * @return array
+     */
+    private function buildSubTree(Collection $data, int $searchId, int $id = 0, bool $isParentFound = false)
+    {
+        $tree = [];
+        foreach($data as $k => $child) {
+            if($searchId === $child->id) {
+                $isParentFound = true;
+            }
+            if($child->parent_id === $id && true === $isParentFound) { // child found
+                // clear found children to free stack
+                unset($data[$k]);
+                $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
+                $tree[] = $child;
+            }
+            if (true === $isParentFound && 0 === $id) {
+                return $tree;
+            }
+        }
         return $tree;
     }
 }
