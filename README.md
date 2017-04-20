@@ -756,7 +756,56 @@ the entire tree will be placed in `meta` json-api root element,
 while all the parent elements (stored as parent_id=0) will reside in data root element.
 This was done to keep steady json-api structure and it's relations.
 
+Meta data response example: 
+```json
+  "meta": {
+    "menu_tree": [
+      {
+        "id": 1,
+        "title": "ttl1",
+        "rfc": "/",
+        "parent_id": 0,
+        "created_at": null,
+        "updated_at": null,
+        "children": [
+          {
+            "id": 3,
+            "title": "ttl21",
+            "rfc": "/",
+            "parent_id": 1,
+            "created_at": null,
+            "updated_at": null,
+            "children": []
+          },
+          {
+            "id": 2,
+            "title": "ttl2",
+            "rfc": "/",
+            "parent_id": 1,
+            "created_at": null,
+            "updated_at": null,
+            "children": [
+              {
+                "id": 4,
+                "title": "ttl3",
+                "rfc": "/",
+                "parent_id": 2,
+                "created_at": null,
+                "updated_at": null,
+                "children": []
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+```
+
 Children elements stuck in every parent's `children` property array and it is empty if there are none.      
+
+To get a sub-trees of a top most parents - simply execute GET request for the item, ex.: `http://example.com/v1/menu/1`.
+See wiki page for real-world examples with Postman.
 
 ### Conversions to RAML
 
@@ -764,6 +813,7 @@ There are several tools for conversion between different types of documents and 
 one of the most famous (at this moment) is [APIMATIC](https://apimatic.io/transformer), 
 so there is no problem if You like ex.: Swagger, but want to use raml-json-api to build Your application with RAML.
 
+======================
 
 HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/raml-json-api/wiki
 
