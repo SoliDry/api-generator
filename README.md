@@ -804,7 +804,7 @@ Meta data response example:
 
 Children elements stuck in every parent's `children` property array and it is empty if there are none.      
 
-To get a sub-trees of a top most parents - simply execute GET request for the item, ex.: `http://example.com/v1/menu/1`.
+To get a sub-trees of a top most ancestors - simply execute GET request for the item, ex.: `http://example.com/v1/menu/1`.
 See wiki page for real-world examples with Postman.
 
 ### Conversions to RAML
