@@ -23,6 +23,7 @@ interface RamlInterface
     const RAML_ID            = 'id';
     const RAML_DATA          = 'data';
     const RAML_ITEMS         = 'items';
+    const RAML_FACETS        = 'facets';
 
     // RAML keys
     const RAML_KEY_REQUIRED      = 'required';

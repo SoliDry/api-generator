@@ -89,4 +89,15 @@ interface ModelsInterface
     const PROPERTY_TIMESTAMPS  = 'timestamps';
 
     const ID_MAX_INCREMENTS = 10;
+
+    // db indexes
+    const INDEX_TYPE_INDEX   = 'index';
+    const INDEX_TYPE_UNIQUE  = 'unique';
+    const INDEX_TYPE_PRIMARY = 'primary';
+    const INDEX_TYPE_FOREIGN = 'foreign';
+    const INDEX_COLUMN       = '_column';
+    const INDEX_REFERENCES   = 'references';
+    const INDEX_ON           = 'on';
+    const INDEX_ON_DELETE    = 'onDelete';
+    const INDEX_ON_UPDATE    = 'onUpdate';
 }
