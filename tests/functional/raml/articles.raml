@@ -68,6 +68,8 @@ types:
         type: string
         minLength: 16
         maxLength: 256
+        facets:
+          idx_title: index
       description:
         required: true
         type: string
@@ -78,6 +80,8 @@ types:
         type: string
         minLength: 16
         maxLength: 255
+        facets:
+          idx_url: unique
       show_in_top:
         description: Show at the top of main page
         required: false
@@ -91,6 +95,12 @@ types:
         type: integer
         minimum: 1
         maximum: 9
+        facets:
+          idx_fk_topic_id: foreign
+          references: id
+          on: topic
+          onDelete: cascade
+          onUpdate: cascade
   Article:
     type: object
     properties:

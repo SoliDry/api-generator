@@ -98,4 +98,6 @@ interface ModelsInterface
     const INDEX_COLUMN       = '_column';
     const INDEX_REFERENCES   = 'references';
     const INDEX_ON           = 'on';
+    const INDEX_ON_DELETE    = 'onDelete';
+    const INDEX_ON_UPDATE    = 'onUpdate';
 }

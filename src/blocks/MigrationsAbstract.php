@@ -119,7 +119,7 @@ abstract class MigrationsAbstract
 
     /**
      *  Sets index for particular column if facets was declared
-     * @param array  $attrVal   
+     * @param array  $attrVal
      * @param string $attrKey
      *
      * @throws AttributesException
@@ -143,10 +143,17 @@ abstract class MigrationsAbstract
                         if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
                             throw new AttributesException('There must be references and on attributes for foreign key construction.');
                         }
-                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, null, [
+                        $build = [
                             ModelsInterface::INDEX_REFERENCES => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_REFERENCES] . PhpInterface::QUOTES,
                             ModelsInterface::INDEX_ON         => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON] . PhpInterface::QUOTES,
-                        ]);
+                        ];
+                        if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
+                            $build[ModelsInterface::INDEX_ON_DELETE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_DELETE] . PhpInterface::QUOTES;
+                        }
+                        if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
+                            $build[ModelsInterface::INDEX_ON_UPDATE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_UPDATE] . PhpInterface::QUOTES;
+                        }
+                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, null, $build);
                         break;
                 }
             }
