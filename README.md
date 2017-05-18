@@ -463,11 +463,7 @@ Additionally, to specify index for particular column You can add a `facets` raml
         
     # unique key    
     facets:
-      idx_url: unique        
-
-    # unique key    
-    facets:
-      idx_id: primary        
+      idx_url: unique             
         
     # foreign key
     facets:
