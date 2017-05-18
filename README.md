@@ -190,6 +190,8 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         type: string
         minLength: 16
         maxLength: 256
+        facets:
+          idx_title: index        
       description:
         required: true
         type: string
@@ -213,6 +215,12 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         type: integer
         minimum: 1
         maximum: 6
+        facets:
+          idx_fk_topic_id: foreign
+          references: id
+          on: topic
+          onDelete: cascade
+          onUpdate: cascade        
       rate:
         type: number
         minimum: 3
@@ -446,6 +454,30 @@ Also worth to mention - Laravel uses table_id convention to link tables via fore
 So U can either follow the default - add to RAML an id that matches to the table name 
 (just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` in RAML Types and Declarations) 
 or make Your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
+
+Additionally, to specify index for particular column You can add a `facets` raml property like this:
+```raml
+    # regular index
+    facets:
+      idx_title: index            
+        
+    # unique key    
+    facets:
+      idx_url: unique        
+
+    # unique key    
+    facets:
+      idx_id: primary        
+        
+    # foreign key
+    facets:
+      idx_fk_topic_id: foreign
+      references: id
+      on: topic
+      onDelete: cascade
+      onUpdate: cascade
+```
+to existing columns.
 
 ### Relationships particular qualities
 To let generator know about what a particular relationship to apply (ex.: ManyToMany, OneToMany, OneToOne) 
