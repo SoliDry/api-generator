@@ -94,13 +94,22 @@ types:
         required: true
         type: integer
         minimum: 1
-        maximum: 9
+        maximum: 6
         facets:
           idx_fk_topic_id: foreign
           references: id
           on: topic
           onDelete: cascade
           onUpdate: cascade
+      rate:
+        type: number
+        minimum: 3
+        maximum: 9
+        format: double
+      date_posted:
+        type: date-only
+      time_to_live:
+        type: time-only
   Article:
     type: object
     properties:
