@@ -153,7 +153,7 @@ abstract class MigrationsAbstract
                         if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
                             $build[ModelsInterface::INDEX_ON_UPDATE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_UPDATE] . PhpInterface::QUOTES;
                         }
-                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, null, $build);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES, $build);
                         break;
                 }
             }
