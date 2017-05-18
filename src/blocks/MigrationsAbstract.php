@@ -2,6 +2,7 @@
 
 namespace rjapi\blocks;
 
+use rjapi\exception\AttributesException;
 use rjapi\RJApiGenerator;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
@@ -55,7 +56,7 @@ abstract class MigrationsAbstract
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
-                $this->setIndex($attrVal);
+                $this->setIndex($attrVal, $attrKey);
             }
         }
         // created_at/updated_at created for every table
@@ -117,9 +118,11 @@ abstract class MigrationsAbstract
     }
 
     /**
-     *
-     * @param array $attrVal
+     *  Sets index for particular column if facets was declared
+     * @param array  $attrVal   
      * @param string $attrKey
+     *
+     * @throws AttributesException
      */
     public function setIndex(array $attrVal, string $attrKey)
     {
@@ -128,48 +131,26 @@ abstract class MigrationsAbstract
             foreach($facets as $k => $v) {
                 switch($v) {
                     case ModelsInterface::INDEX_TYPE_INDEX:
-                        // even if there one column - pass the array
-                        $columns = $this->getIndexColumns($facets);
-                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $columns, $k);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
                         break;
                     case ModelsInterface::INDEX_TYPE_PRIMARY:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $columns, $k);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
                         break;
                     case ModelsInterface::INDEX_TYPE_UNIQUE:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $columns, $k);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
                         break;
                     case ModelsInterface::INDEX_TYPE_FOREIGN:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, $k, [
-                            ModelsInterface::INDEX_REFERENCES => $attrVal[RamlInterface::RAML_FACETS][ModelsInterface::INDEX_REFERENCES],
-                            ModelsInterface::INDEX_ON         => $attrVal[RamlInterface::RAML_FACETS][ModelsInterface::INDEX_ON],
+                        if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
+                            throw new AttributesException('There must be references and on attributes for foreign key construction.');
+                        }
+                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, null, [
+                            ModelsInterface::INDEX_REFERENCES => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_REFERENCES] . PhpInterface::QUOTES,
+                            ModelsInterface::INDEX_ON         => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON] . PhpInterface::QUOTES,
                         ]);
                         break;
                 }
             }
         }
-    }
-
-    /**
-     *
-     * @param array $facets     an array of facets
-     * @return string           string representation of array with index columns
-     */
-    private function getIndexColumns(array $facets)
-    {
-        $columns = '';
-        // even if there one column - pass the array
-        $columns .= PhpInterface::OPEN_BRACKET;
-        foreach($facets as $kColumn => $vColumn) {
-            if(preg_match('/^' . ModelsInterface::INDEX_COLUMN . '$/', $kColumn) === 1) {
-                $columns .= PhpInterface::QUOTES . $vColumn . PhpInterface::QUOTES;
-            }
-        }
-        $lastSymbol = substr($columns, strlen($columns) - 1);
-        if ($lastSymbol === PhpInterface::COMMA) {
-            $columns = substr($columns, 0, strlen($columns) - 1);
-        }
-        $columns .= PhpInterface::CLOSE_BRACKET;
-        return $columns;
     }
 
     /**
