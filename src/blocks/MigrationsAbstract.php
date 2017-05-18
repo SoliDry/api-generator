@@ -37,16 +37,12 @@ abstract class MigrationsAbstract
     protected function setRows()
     {
         $attrs = $this->getEntityAttributes();
-        foreach($attrs as $attrKey => $attrVal)
-        {
-            if(is_array($attrVal))
-            {
-                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false)
-                {
+        foreach($attrs as $attrKey => $attrVal) {
+            if(is_array($attrVal)) {
+                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
                     $type = $attrVal[RamlInterface::RAML_TYPE];
-                    if($attrKey === RamlInterface::RAML_ID)
-                    {
+                    if($attrKey === RamlInterface::RAML_ID) {
                         // create an auto_increment primary key - id
                         $this->setId($attrVal, $attrKey, $type);
                         continue;
@@ -54,13 +50,12 @@ abstract class MigrationsAbstract
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
                 }
-                else
-                {// non-standard types aka enum
-                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false)
-                    {
+                else {// non-standard types aka enum
+                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
+                $this->setIndex($attrVal);
             }
         }
         // created_at/updated_at created for every table
@@ -76,8 +71,7 @@ abstract class MigrationsAbstract
     private function setRowContent(array $attrVal, string $type, string $attrKey)
     {
         // create migration fields depending on types
-        switch($type)
-        {
+        switch($type) {
             case RamlInterface::RAML_TYPE_STRING:
                 $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
                 $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null : [RamlInterface::RAML_KEY_DEFAULT
@@ -100,8 +94,7 @@ abstract class MigrationsAbstract
                 if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
                     && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
                         || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
-                )
-                {
+                ) {
                     $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
                     $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
                     $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
@@ -124,31 +117,81 @@ abstract class MigrationsAbstract
     }
 
     /**
+     *
+     * @param array $attrVal
+     * @param string $attrKey
+     */
+    public function setIndex(array $attrVal, string $attrKey)
+    {
+        if(empty($attrVal[RamlInterface::RAML_FACETS]) === false) {
+            $facets = $attrVal[RamlInterface::RAML_FACETS];
+            foreach($facets as $k => $v) {
+                switch($v) {
+                    case ModelsInterface::INDEX_TYPE_INDEX:
+                        // even if there one column - pass the array
+                        $columns = $this->getIndexColumns($facets);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $columns, $k);
+                        break;
+                    case ModelsInterface::INDEX_TYPE_PRIMARY:
+                        $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $columns, $k);
+                        break;
+                    case ModelsInterface::INDEX_TYPE_UNIQUE:
+                        $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $columns, $k);
+                        break;
+                    case ModelsInterface::INDEX_TYPE_FOREIGN:
+                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, $k, [
+                            ModelsInterface::INDEX_REFERENCES => $attrVal[RamlInterface::RAML_FACETS][ModelsInterface::INDEX_REFERENCES],
+                            ModelsInterface::INDEX_ON         => $attrVal[RamlInterface::RAML_FACETS][ModelsInterface::INDEX_ON],
+                        ]);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     * @param array $facets     an array of facets
+     * @return string           string representation of array with index columns
+     */
+    private function getIndexColumns(array $facets)
+    {
+        $columns = '';
+        // even if there one column - pass the array
+        $columns .= PhpInterface::OPEN_BRACKET;
+        foreach($facets as $kColumn => $vColumn) {
+            if(preg_match('/^' . ModelsInterface::INDEX_COLUMN . '$/', $kColumn) === 1) {
+                $columns .= PhpInterface::QUOTES . $vColumn . PhpInterface::QUOTES;
+            }
+        }
+        $lastSymbol = substr($columns, strlen($columns) - 1);
+        if ($lastSymbol === PhpInterface::COMMA) {
+            $columns = substr($columns, 0, strlen($columns) - 1);
+        }
+        $columns .= PhpInterface::CLOSE_BRACKET;
+        return $columns;
+    }
+
+    /**
      * @param string $key
      * @param int $max
      * @param bool $signed
      */
     private function setIntegerDigit(string $key, int $max = null, bool $signed = false)
     {
-        if($signed)
-        {
-            foreach($this->signedIntergerMap as $digits => $method)
-            {
+        if($signed) {
+            foreach($this->signedIntergerMap as $digits => $method) {
                 $next = next($this->signedIntergerMap);
-                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntergerMap))))
-                {
+                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntergerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
             }
         }
-        else
-        {
-            foreach($this->unsignedIntergerMap as $digits => $method)
-            {
+        else {
+            foreach($this->unsignedIntergerMap as $digits => $method) {
                 $next = next($this->unsignedIntergerMap);
-                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntergerMap))))
-                {
+                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntergerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
@@ -182,10 +225,8 @@ abstract class MigrationsAbstract
     private function setId($attrVal, $attrKey, $type)
     {
         // set incremented id int
-        if($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false)
-        {
-            if($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS)
-            {
+        if($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false) {
+            if($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS) {
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_BIG_INCREMENTS, $attrKey);
 
                 return;
