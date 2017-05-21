@@ -53,8 +53,7 @@ trait ContentManager
     {
         $this->sourceCode .= PhpInterface::PHP_CLASS . PhpInterface::SPACE . $name
             . PhpInterface::SPACE;
-        if($extends !== null)
-        {
+        if($extends !== null) {
             $this->sourceCode .=
                 PhpInterface::PHP_EXTENDS
                 . PhpInterface::SPACE . $extends . PhpInterface::SPACE;
@@ -114,6 +113,20 @@ trait ContentManager
     }
 
     /**
+     * Creates simple key=value map array property
+     * @param $key
+     * @param $value
+     */
+    private function setArrayProperty($key, array $value)
+    {
+        $val = PhpInterface::OPEN_BRACKET;
+        $val .= PhpInterface::QUOTES . implode(PhpInterface::QUOTES . PhpInterface::COMMA . PhpInterface::SPACE . PhpInterface::QUOTES, $value) . PhpInterface::QUOTES;
+        $val .= PhpInterface::CLOSE_BRACKET;
+        $this->sourceCode .= $key . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
+            . PhpInterface::SPACE . $val . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    /**
      * @param string $prop
      * @param string $modifier
      * @param string $value
@@ -141,8 +154,7 @@ trait ContentManager
      */
     protected function setTabs(int $amount = 1)
     {
-        for($i = $amount; $i > 0; --$i)
-        {
+        for($i = $amount; $i > 0; --$i) {
             $this->sourceCode .= PhpInterface::TAB_PSR4;
         }
     }
@@ -152,10 +164,8 @@ trait ContentManager
      */
     public function setDescription(array $attrVal)
     {
-        foreach($attrVal as $k => $v)
-        {
-            if($k === RamlInterface::RAML_KEY_DESCRIPTION)
-            {
+        foreach($attrVal as $k => $v) {
+            if($k === RamlInterface::RAML_KEY_DESCRIPTION) {
                 $this->setTabs(3);
                 $this->setComment($v);
             }
@@ -169,20 +179,16 @@ trait ContentManager
     private function getMethodParams(array $params)
     {
         $paramsStr = '';
-        $cnt = count($params);
-        foreach($params as $type => $name)
-        {
+        $cnt       = count($params);
+        foreach($params as $type => $name) {
             --$cnt;
-            if(is_int($type))
-            {// not typed
+            if(is_int($type)) {// not typed
                 $paramsStr .= PhpInterface::DOLLAR_SIGN . $name;
             }
-            else
-            {// typed
+            else {// typed
                 $paramsStr .= $type . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . $name;
             }
-            if($cnt > 0)
-            {
+            if($cnt > 0) {
                 $paramsStr .= PhpInterface::COMMA . PhpInterface::SPACE;
             }
         }

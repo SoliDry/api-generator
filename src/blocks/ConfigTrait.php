@@ -28,21 +28,11 @@ trait ConfigTrait
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
-    private function closeParams()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
-    }
-
     private function openJwt()
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::JWT
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
-    private function closeJwt()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
     }
     
     private function openTrees()
@@ -50,11 +40,6 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::TREES
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;        
-    }
-
-    private function closeTrees()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
     }
 
     /**
@@ -67,5 +52,50 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    /**
+     * Opens finite state machine
+     * @param string $entity
+     * @param string $field
+     */
+    private function openFsm(string $entity, string $field)
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . strtolower($entity)
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(3);
+        $this->sourceCode .= PhpInterface::QUOTES . strtolower($field)
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(4);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ENABLED
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA
+            . PHP_EOL;
+        $this->setTabs(4);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::STATES
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }
+
+    private function closeFsm()
+    {
+        $this->closeEntity(4);
+        $this->closeEntity(3);
+        $this->closeEntity(2);
+        $this->closeEntity(1);
+    }
+
+    /**
+     * Closes any configuration entity
+     * @param int $tabs
+     */
+    private function closeEntity(int $tabs = 1)
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
     }
 }
