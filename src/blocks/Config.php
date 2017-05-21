@@ -267,20 +267,8 @@ class Config implements ConfigInterface
                         $this->openFsm($objName, $propKey);
                         $initial = null;
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
-                            if($key === ConfigInterface::INITIAL) {
-                                $initial = $val;
-                                continue;
-                            }
                             $this->setTabs(5);
-                            if(is_array($val) === false) { // here value can be only an array, even with one value
-                                throw new AttributesException('FSM attributes value can be only an array.');
-                            }
-                            if($key === $initial) { // key corresponds to initial field
-                                array_push($val, ConfigInterface::INITIAL);
-                                $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, $val);
-                            } else {
-                                $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, $val);
-                            }
+                            $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array) $val);
                         }
                         $this->closeFsm();
                     }

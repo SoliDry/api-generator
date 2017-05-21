@@ -151,7 +151,7 @@ trait BaseControllerTrait
             $stateMachine = new StateMachine($this->entity);
             foreach($jsonApiAttributes as $k => $v) {
                 if($stateMachine->isStatedField($k) === true && $stateMachine->isInitial($v) === false) {
-                    // the field is under state machine rules and it is not transitive in this direction
+                    // the field is under state machine rules and it is not initial state
                     Json::outputErrors(
                         [
                             [

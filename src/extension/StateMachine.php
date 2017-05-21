@@ -47,7 +47,7 @@ class StateMachine
 
     public function isInitial($state): bool
     {
-        return empty($this->states[$state][ConfigInterface::INITIAL]) === false
-            &&  $this->states[$state][ConfigInterface::INITIAL] === true;
+        return empty($this->states[ConfigInterface::INITIAL]) === false
+        && in_array($state, $this->states[ConfigInterface::INITIAL]);
     }
 }
