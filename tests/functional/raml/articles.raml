@@ -89,6 +89,12 @@ types:
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]
+        facets:
+          state_machine:
+            draft: ['published']
+            published: ['draft', 'postponed']
+            postponed: ['published', 'archived']
+            archived: []
       topic_id:
         description: ManyToOne Topic relationship
         required: true

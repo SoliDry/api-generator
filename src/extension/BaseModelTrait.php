@@ -70,14 +70,14 @@ trait BaseModelTrait
      */
     private function getAllEntities(SqlOptions $sqlOptions)
     {
-        $limit = $sqlOptions->getLimit();
-        $page = $sqlOptions->getPage();
-        $data = $sqlOptions->getData();
-        $orderBy = $sqlOptions->getOrderBy();
-        $filter = $sqlOptions->getFilter();
+        $limit        = $sqlOptions->getLimit();
+        $page         = $sqlOptions->getPage();
+        $data         = $sqlOptions->getData();
+        $orderBy      = $sqlOptions->getOrderBy();
+        $filter       = $sqlOptions->getFilter();
         $defaultOrder = [];
-        $order = [];
-        $first = true;
+        $order        = [];
+        $first        = true;
         foreach($orderBy as $column => $value) {
             if($first === true) {
                 $defaultOrder = [$column, $value];
@@ -89,7 +89,7 @@ trait BaseModelTrait
             $first = false;
         }
         $from = ($limit * $page) - $limit;
-        $to = $limit * $page;
+        $to   = $limit * $page;
         /** @var Builder $obj */
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON .
@@ -126,7 +126,7 @@ trait BaseModelTrait
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildTree($data, $child->id);
-                $tree[] = $child;
+                $tree[]          = $child;
             }
         }
 
@@ -163,12 +163,13 @@ trait BaseModelTrait
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
-                $tree[] = $child;
+                $tree[]          = $child;
             }
-            if (true === $isParentFound && 0 === $id) {
+            if(true === $isParentFound && 0 === $id) {
                 return $tree;
             }
         }
+
         return $tree;
     }
 }

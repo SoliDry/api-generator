@@ -19,38 +19,37 @@ class ConfigHelper
     {
         $conf = config();
         $arr = $conf[ModulesInterface::KEY_MODULE][ModulesInterface::KEY_MODULES];
+
         return end($arr);
     }
 
     public static function getModuleName(): string
     {
-        if(env('APP_ENV') === 'testing')
-        {
+        if(env('APP_ENV') === 'testing') {
             return 'V1';
         }
+
         return config(self::getConfigKey() . PhpInterface::DOT . ModulesInterface::KEY_NAME);
     }
 
     public static function getQueryParam(string $param)
     {
-        if (array_key_exists($param, self::$availableQueryParams))
-        {
+        if(array_key_exists($param, self::$availableQueryParams)) {
             $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::QUERY_PARAMS);
+
             return (empty($params[$param])) ? self::$availableQueryParams[$param] : $params[$param];
         }
+
         return null;
     }
 
-    public static function getJwtParam(string $param)
+    public static function getNestedParam(string $entity, string $param, bool $lower = false)
     {
-        $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::JWT);
-        return (empty($params[$param])) ? null : $params[$param];
-    }
+        if(true === $lower) {
+            $param = strtolower($param);
+        }
+        $params = config(self::getConfigKey() . PhpInterface::DOT . $entity);
 
-    public static function getTreeParam(string $param)
-    {
-        $param = strtolower($param);
-        $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::TREES);
         return (empty($params[$param])) ? null : $params[$param];
     }
 }

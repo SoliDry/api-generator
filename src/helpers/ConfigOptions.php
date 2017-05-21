@@ -12,6 +12,8 @@ class ConfigOptions
     private $jwtIsEnabled;
     private $jwtTable;
     private $isJwtAction;
+    // state machine
+    private $isStateMachine = false;
 
     /**
      * @return mixed
@@ -123,5 +125,21 @@ class ConfigOptions
     public function setIsJwtAction(bool $isJwtAction)
     {
         $this->isJwtAction = $isJwtAction;
+    }
+
+    /**
+     * @param bool $isStateMachine
+     */
+    public function setIsStateMachine(bool $isStateMachine)
+    {
+        $this->isStateMachine = $isStateMachine;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getIsStateMachine()
+    {
+        return $this->isStateMachine;
     }
 }

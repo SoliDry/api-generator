@@ -15,6 +15,7 @@ use rjapi\types\RamlInterface;
 trait BaseRelationsTrait
 {
     use BaseModelTrait;
+
     /**
      * GET the relationships of this particular Entity
      *
@@ -25,8 +26,7 @@ trait BaseRelationsTrait
     public function relations(Request $request, int $id, string $relation)
     {
         $model = $this->getEntity($id);
-        if(empty($model))
-        {
+        if(empty($model)) {
             Json::outputErrors(
                 [
                     [
@@ -49,7 +49,7 @@ trait BaseRelationsTrait
      */
     public function createRelations(Request $request, int $id, string $relation)
     {
-        $model = $this->presetRelations($request, $id, $relation);
+        $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -63,7 +63,7 @@ trait BaseRelationsTrait
      */
     public function updateRelations(Request $request, int $id, string $relation)
     {
-        $model = $this->presetRelations($request, $id, $relation, true);
+        $model    = $this->presetRelations($request, $id, $relation, true);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
@@ -81,9 +81,8 @@ trait BaseRelationsTrait
         $this->setRelationships($json, $id, true);
         // set include for relations
         $_GET['include'] = $relation;
-        $model = $this->getEntity($id);
-        if(empty($model))
-        {
+        $model           = $this->getEntity($id);
+        if(empty($model)) {
             Json::outputErrors(
                 [
                     [
@@ -106,22 +105,19 @@ trait BaseRelationsTrait
      */
     public function deleteRelations(Request $request, int $id, string $relation)
     {
-        $json = Json::decode($request->getContent());
+        $json        = Json::decode($request->getContent());
         $jsonApiRels = Json::getData($json);
-        if(empty($jsonApiRels) === false)
-        {
+        if(empty($jsonApiRels) === false) {
             $lowEntity = strtolower($this->entity);
-            foreach($jsonApiRels as $index => $val)
-            {
+            foreach($jsonApiRels as $index => $val) {
                 $rId = $val[RamlInterface::RAML_ID];
                 // if pivot file exists then save
                 $ucEntity = ucfirst($relation);
-                $file = DirsInterface::MODULES_DIR . PhpInterface::SLASH
+                $file     = DirsInterface::MODULES_DIR . PhpInterface::SLASH
                     . ConfigHelper::getModuleName() . PhpInterface::SLASH .
                     DirsInterface::ENTITIES_DIR . PhpInterface::SLASH .
                     $this->entity . $ucEntity . PhpInterface::PHP_EXT;
-                if(file_exists(PhpInterface::SYSTEM_UPDIR . $file))
-                { // ManyToMany rel
+                if(file_exists(PhpInterface::SYSTEM_UPDIR . $file)) { // ManyToMany rel
                     $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
                     // clean up old links
                     $this->getModelEntities(
@@ -134,10 +130,9 @@ trait BaseRelationsTrait
                         ]
                     )->delete();
                 }
-                else
-                { // OneToOne/Many
+                else { // OneToOne/Many
                     $relEntity = Classes::getModelEntity($ucEntity);
-                    $model = $this->getModelEntities(
+                    $model     = $this->getModelEntities(
                         $relEntity, [
                             $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID, $id,
                         ]
@@ -157,21 +152,16 @@ trait BaseRelationsTrait
     private function setRelationships(array $json, int $eId, bool $isRemovable = false)
     {
         $jsonApiRels = Json::getRelationships($json);
-        if(empty($jsonApiRels) === false)
-        {
-            foreach($jsonApiRels as $entity => $value)
-            {
-                if(empty($value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID]) === false)
-                {
+        if(empty($jsonApiRels) === false) {
+            foreach($jsonApiRels as $entity => $value) {
+                if(empty($value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID]) === false) {
                     // if there is only one relationship
                     $rId = $value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID];
                     $this->saveRelationship($entity, $eId, $rId, $isRemovable);
                 }
-                else
-                {
+                else {
                     // if there is an array of relationships
-                    foreach($value[RamlInterface::RAML_DATA] as $index => $val)
-                    {
+                    foreach($value[RamlInterface::RAML_DATA] as $index => $val) {
                         $rId = $val[RamlInterface::RAML_ID];
                         $this->saveRelationship($entity, $eId, $rId, $isRemovable);
                     }
@@ -188,37 +178,31 @@ trait BaseRelationsTrait
      */
     private function saveRelationship($entity, int $eId, int $rId, bool $isRemovable = false)
     {
-        $ucEntity = Classes::getClassName($entity);
+        $ucEntity  = Classes::getClassName($entity);
         $lowEntity = MigrationsHelper::getTableName($this->entity);
         // if pivot file exists then save
-        $filePivot = FileManager::getPivotFile($this->entity, $ucEntity);
-        $filePivotInverse = FileManager::getPivotFile($ucEntity, $this->entity);
-        $pivotExists = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivot);
+        $filePivot          = FileManager::getPivotFile($this->entity, $ucEntity);
+        $filePivotInverse   = FileManager::getPivotFile($ucEntity, $this->entity);
+        $pivotExists        = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivot);
         $pivotInverseExists = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivotInverse);
-        if($pivotExists === true || $pivotInverseExists === true)
-        { // ManyToMany rel
+        if($pivotExists === true || $pivotInverseExists === true) { // ManyToMany rel
             $pivotEntity = null;
 
-            if($pivotExists)
-            {
+            if($pivotExists) {
                 $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
             }
-            else
-            {
-                if($pivotInverseExists)
-                {
+            else {
+                if($pivotInverseExists) {
                     $pivotEntity = Classes::getModelEntity($ucEntity . $this->entity);
                 }
             }
 
-            if($isRemovable === true)
-            {
+            if($isRemovable === true) {
                 $this->clearPivotBeforeSave($pivotEntity, $lowEntity, $eId);
             }
             $this->savePivot($pivotEntity, $lowEntity, $entity, $eId, $rId);
         }
-        else
-        { // OneToOne
+        else { // OneToOne
             $this->saveModel($ucEntity, $lowEntity, $eId, $rId);
         }
     }
@@ -230,8 +214,7 @@ trait BaseRelationsTrait
      */
     private function clearPivotBeforeSave(string $pivotEntity, string $lowEntity, int $eId)
     {
-        if($this->relsRemoved === false)
-        {
+        if($this->relsRemoved === false) {
             // clean up old links
             $this->getModelEntities(
                 $pivotEntity,
@@ -250,8 +233,8 @@ trait BaseRelationsTrait
      */
     private function savePivot(string $pivotEntity, string $lowEntity, string $entity, int $eId, int $rId)
     {
-        $pivot = new $pivotEntity();
-        $pivot->{$entity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+        $pivot                                                                   = new $pivotEntity();
+        $pivot->{$entity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID}    = $rId;
         $pivot->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $pivot->save();
     }
@@ -264,9 +247,9 @@ trait BaseRelationsTrait
      */
     private function saveModel(string $ucEntity, string $lowEntity, int $eId, int $rId)
     {
-        $relEntity =
+        $relEntity                                                               =
             Classes::getModelEntity($ucEntity);
-        $model =
+        $model                                                                   =
             $this->getModelEntity($relEntity, $rId);
         $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $model->save();
