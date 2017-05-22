@@ -135,6 +135,9 @@ trait BaseControllerTrait
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
+        // FSM initial state check
+        $this->checkFsmCreate($jsonApiAttributes);
+        // fill in model
         foreach($this->props as $k => $v) {
             // request fields should match Middleware fields
             if(isset($jsonApiAttributes[$k])) {
@@ -145,23 +148,6 @@ trait BaseControllerTrait
         // jwt
         if($this->configOptions->getIsJwtAction() === true) {
             $this->createJwtUser();
-        }
-        // FSM initial state check
-        if($this->configOptions->getIsStateMachine() === true) {
-            $stateMachine = new StateMachine($this->entity);
-            foreach($jsonApiAttributes as $k => $v) {
-                if($stateMachine->isStatedField($k) === true && $stateMachine->isInitial($v) === false) {
-                    // the field is under state machine rules and it is not initial state
-                    Json::outputErrors(
-                        [
-                            [
-                                JSONApiInterface::ERROR_TITLE  => 'This state is not an initial.',
-                                JSONApiInterface::ERROR_DETAIL => 'The state - ' . $v . ' is not an initial.',
-                            ],
-                        ]
-                    );
-                }
-            }
         }
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
@@ -180,6 +166,8 @@ trait BaseControllerTrait
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         $model             = $this->getEntity($id);
+        // FSM transition check
+        $this->checkFsmUpdate($jsonApiAttributes, $model);
         // jwt
         $isJwtAction = $this->configOptions->getIsJwtAction();
         if($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true) {
@@ -195,23 +183,6 @@ trait BaseControllerTrait
                     else {
                         $model->$k = $jsonApiAttributes[$k];
                     }
-                }
-            }
-        }
-        // FSM transition check
-        if($this->configOptions->getIsStateMachine() === true) {
-            $stateMachine = new StateMachine($this->entity);
-            foreach($jsonApiAttributes as $k => $v) {
-                if($stateMachine->isStatedField($k) === true && $stateMachine->isTransitive($model->$k, $v) === false) {
-                    // the field is under state machine rules and it is not transitive in this direction
-                    Json::outputErrors(
-                        [
-                            [
-                                JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
-                                JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - ' . $k . ' can`t be changed from: ' . $model->$k . ', to: ' . $v,
-                            ],
-                        ]
-                    );
                 }
             }
         }
@@ -289,6 +260,62 @@ trait BaseControllerTrait
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
+    }
+
+    /**
+     * @param array $jsonProps  JSON input properties
+     * @throws \rjapi\exception\AttributesException
+     */
+    private function checkFsmCreate(array &$jsonProps)
+    {
+        if($this->configOptions->getIsStateMachine() === true) {
+            $stateMachine = new StateMachine($this->entity);
+            $stateField = $stateMachine->getField();
+            if(empty($jsonProps[$stateField])) {
+                $stateMachine->setInitial($stateField);
+                $jsonProps[$stateField] = $stateMachine->getInitial();
+            } else {
+                foreach($jsonProps as $k => $v) {
+                    if($stateMachine->isStatedField($k) === true) {
+                        $stateMachine->setStates($k);
+                        if($stateMachine->isInitial($v) === false) {
+                            // the field is under state machine rules and it is not initial state
+                            Json::outputErrors(
+                                [
+                                    [
+                                        JSONApiInterface::ERROR_TITLE  => 'This state is not an initial.',
+                                        JSONApiInterface::ERROR_DETAIL => 'The state - \'' . $v . '\' is not an initial.',
+                                    ],
+                                ]
+                            );
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private function checkFsmUpdate(array $jsonProps, $model)
+    {
+        if($this->configOptions->getIsStateMachine() === true) {
+            $stateMachine = new StateMachine($this->entity);
+            foreach($jsonProps as $k => $v) {
+                if($stateMachine->isStatedField($k) === true) {
+                    $stateMachine->setStates($k);
+                    if($stateMachine->isTransitive($model->$k, $v) === false) {
+                        // the field is under state machine rules and it is not transitive in this direction
+                        Json::outputErrors(
+                            [
+                                [
+                                    JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
+                                    JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - \'' . $k . '\' can`t be changed from: \'' . $model->$k . '\', to: \'' . $v . '\'',
+                                ],
+                            ]
+                        );
+                    }
+                }
+            }
+        }
     }
 
     /**
