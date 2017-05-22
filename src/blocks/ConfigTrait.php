@@ -61,9 +61,6 @@ trait ConfigTrait
      */
     private function openFsm(string $entity, string $field)
     {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
         $this->setTabs(2);
         $this->sourceCode .= PhpInterface::QUOTES . strtolower($entity)
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
@@ -82,12 +79,18 @@ trait ConfigTrait
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
+    private function openStateMachine()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }
+
     private function closeFsm()
     {
         $this->closeEntity(4);
         $this->closeEntity(3);
         $this->closeEntity(2);
-        $this->closeEntity(1);
     }
 
     /**

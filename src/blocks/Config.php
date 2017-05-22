@@ -236,6 +236,7 @@ class Config implements ConfigInterface
      */
     private function setFsmContent()
     {
+        $this->openStateMachine();
         foreach($this->generator->types as $objName => $objData) {
             if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
@@ -251,6 +252,7 @@ class Config implements ConfigInterface
                 $this->setFsmOptions($objName);
             }
         }
+        $this->closeEntity();
     }
 
     /**
