@@ -54,6 +54,13 @@ trait ConfigTrait
             . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
     }
 
+    private function openStateMachine()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }
+
     /**
      * Opens finite state machine
      * @param string $entity
@@ -75,13 +82,6 @@ trait ConfigTrait
             . PHP_EOL;
         $this->setTabs(4);
         $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::STATES
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
-    private function openStateMachine()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }

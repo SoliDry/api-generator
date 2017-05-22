@@ -263,7 +263,7 @@ class Config implements ConfigInterface
     {
         if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
             foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal)) {// create jwt config setting
+                if(is_array($propVal)) {// create fsm
                     if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE]) === false) {
                         // found FSM definition
                         $this->openFsm($objName, $propKey);
