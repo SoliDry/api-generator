@@ -23,6 +23,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
 * [Tree structures](#user-content-tree-structures)
+* [Finite-state machine](#user-content-finite-state-machine)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
@@ -838,6 +839,44 @@ Children elements stuck in every parent's `children` property array and it is em
 
 To get a sub-trees of a top most ancestors - simply execute GET request for the item, ex.: `http://example.com/v1/menu/1`.
 See wiki page for real-world examples with Postman.
+
+### Finite-state machine
+
+To add finite-state machine to a field(column) of an entity(table) - add definition into Your RAML file like this:
+```RAML
+      status:
+        description: The state of an article
+        enum: ["draft", "published", "postponed", "archived"]
+        facets:
+          state_machine:
+            initial: ['draft']
+            draft: ['published']
+            published: ['archived', 'postponed']
+            postponed: ['published', 'archived']
+            archived: []
+```
+The only required particular item in `state_machine` declaration is an `initial` value of state machine.
+
+After generation process will pass, You'll get the following content in `config.php`:
+```php
+    'state_machine'=> [
+        'article'=> [
+            'status'=> [
+                'enabled'=>true,
+                'states'=> [
+                    'initial' => ['draft'],
+                    'draft' => ['published'],
+                    'published' => ['archived', 'postponed'],
+                    'postponed' => ['published', 'archived'],
+                    'archived' => [''],
+                ],
+            ],
+        ],
+    ],
+```
+It will be processed on `POST` and `PATCH` requests respectively. 
+You can easily disable state machine by setting `enabled` to `false`. 
+There is an ability to add state machines in different tables.
 
 ### Conversions to RAML
 
