@@ -153,8 +153,7 @@ class Config implements ConfigInterface
         $this->setName($this->generator->version);
         $this->setQueryParams();
         $this->setTrees();
-        $this->setJwtContent();
-        $this->setFsmContent();
+        $this->setOptionsContent();
         $this->closeRoot();
     }
 
@@ -189,7 +188,7 @@ class Config implements ConfigInterface
      *      'expires'  => 3600,
      *    ],
      */
-    private function setJwtContent()
+    private function setOptionsContent()
     {
         foreach($this->generator->types as $objName => $objData) {
             if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
