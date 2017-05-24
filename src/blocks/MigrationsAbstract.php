@@ -11,6 +11,7 @@ use rjapi\types\RamlInterface;
 /**
  * @property RJApiGenerator generator
  * @property string sourceCode
+ * @method MigrationsTrait setRow
  */
 abstract class MigrationsAbstract
 {

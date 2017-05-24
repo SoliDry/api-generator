@@ -267,7 +267,6 @@ class Config implements ConfigInterface
                     if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE]) === false) {
                         // found FSM definition
                         $this->openFsm($objName, $propKey);
-                        $initial = null;
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
                             $this->setTabs(5);
                             $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array) $val);
