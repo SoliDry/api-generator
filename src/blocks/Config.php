@@ -153,7 +153,8 @@ class Config implements ConfigInterface
         $this->setName($this->generator->version);
         $this->setQueryParams();
         $this->setTrees();
-        $this->setOptionsContent();
+        $this->setJwtContent();
+        $this->setFsmContent();
         $this->closeRoot();
     }
 
@@ -188,7 +189,7 @@ class Config implements ConfigInterface
      *      'expires'  => 3600,
      *    ],
      */
-    private function setOptionsContent()
+    private function setJwtContent()
     {
         foreach($this->generator->types as $objName => $objData) {
             if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
@@ -203,9 +204,55 @@ class Config implements ConfigInterface
                     continue;
                 }
                 $this->setJwtOptions($objName);
+            }
+        }
+    }
+
+    /**
+     *  Sets Finite State Machine config array
+     *  Ex.:
+     * 'state_machine' => [
+     *  'article' => [ // table
+     *      'status' => [ // column
+     *          'enabled' => true,
+     *              'states' => [
+     *                  'draft' => [
+     *                      'initial' => true,
+     *                      'published',
+     *                  ],
+     *                  'published' => [
+     *                      'draft',
+     *                      'postponed',
+     *                  ],
+     *                  'postponed' => [
+     *                      'published',
+     *                      'archived',
+     *                  ],
+     *                  'archived' => [],
+     *              ]
+     *      ]
+     *  ]
+     * ],
+     */
+    private function setFsmContent()
+    {
+        $this->openStateMachine();
+        foreach($this->generator->types as $objName => $objData) {
+            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
+                $excluded = false;
+                foreach($this->generator->excludedSubtypes as $type) {
+                    if(strpos($objName, $type) !== false) {
+                        $excluded = true;
+                    }
+                }
+                // if the type is among excluded - continue
+                if($excluded === true) {
+                    continue;
+                }
                 $this->setFsmOptions($objName);
             }
         }
+        $this->closeEntity();
     }
 
     /**
@@ -220,6 +267,7 @@ class Config implements ConfigInterface
                     if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE]) === false) {
                         // found FSM definition
                         $this->openFsm($objName, $propKey);
+                        $initial = null;
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
                             $this->setTabs(5);
                             $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array) $val);
