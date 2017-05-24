@@ -5,6 +5,7 @@ use rjapi\blocks\Config;
 use rjapi\blocks\ContentManager;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConfigInterface;
+use rjapi\types\DirsInterface;
 use rjapitest\unit\TestCase;
 
 /**
@@ -19,7 +20,10 @@ class ConfigTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->config = new Config(new RJApiGenerator());
+        $gen = new RJApiGenerator();
+        $gen->modulesDir = DirsInterface::MODULES_DIR;
+        $gen->version = 'V1';
+        $this->config = new Config($gen);
     }
 
     public function testSetName()

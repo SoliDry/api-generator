@@ -25,7 +25,7 @@ class MiddlewareTest extends TestCase
         $gen = new RJApiGenerator();
         $gen->actionIndex('./raml/articles.raml');
         $gen->objectName = 'Article';
-        $gen->version = 'v1';
+        $gen->version = 'V1';
         $gen->modulesDir = DirsInterface::MODULES_DIR;
         $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
         $this->middleware = new Middleware($gen);

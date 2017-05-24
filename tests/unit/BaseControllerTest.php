@@ -12,13 +12,13 @@ use rjapi\extension\JSONApiInterface;
 
 class BaseControllerTest extends TestCase
 {
-    private $route = null;
+    private $route             = null;
     private $articleController = null;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->route = new Route(['foo'], '/v1/bar', ['index']);
+        $this->route             = new Route(['foo'], '/v1/bar', ['index']);
         $this->articleController = new ArticleController($this->route);
     }
 
@@ -35,18 +35,54 @@ class BaseControllerTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      */
-//    public function testJsonApiIndex()
-//    {
-//        $_SERVER['HTTP_HOST'] = 'localhost';
-//        $request = new \Illuminate\Http\Request();
-//        $request->merge([
-//            'limit' => 10,
-//            'page' => 1,
-//            'data' => '["title", "description"]',
-//            'order_by' => '{"title":"asc", "created_at":"desc"}',
+    public function testJsonApiIndex()
+    {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+        $request              = new \Illuminate\Http\Request();
+        $this->assertInstanceOf(\Symfony\Component\HttpFoundation\Request::class, $request);
+        $request->merge([
+            'limit'    => 10,
+            'page'     => 1,
+            'data'     => '["title", "description"]',
+            'order_by' => '{"title":"asc", "created_at":"desc"}',
 //            'filter' => '[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]',
-//        ]);
-//        $output = $this->articleController->index($request);
-//        $this->assertNotEmpty($output);
-//    }
+        ]);
+        $this->articleController->index($request);
+        $this->articleController->view($request, 4);
+        $request = $request->create('localhost', 'POST', [], [], [], [], '{
+"data": {
+    "type":"article",
+    "attributes": {
+      "title":"Foo bar Foo bar Foo bar Foo bar 123456789",
+      "description":"description description description description description 123456789",
+      "fake_attr": "attr",
+      "url":"http://example.com/articles_feed"' . uniqid() . ',
+      "show_in_top":"0",
+      "topic_id":1,
+      "rate":5,
+      "date_posted":"2017-12-12",
+      "time_to_live":"10:11:12"
+    },
+    "relationships": {
+      "tag": {
+          "data": { "type": "tag", "id": "1" }
+      }
+    }    
+  }
+}');
+        $this->articleController->create($request);
+        $request = $request->create('localhost', 'PATCH', [], [], [], [], '{
+  "data": {
+    "type":"article",
+    "id":"4",
+    "attributes": {
+      "title":"Foo 6 bar Foo bar Foo bar Foo bar",
+      "description":"description 6 description description description description",
+      "fake_attr": "attr"
+    }
+  }
+}');
+        $this->articleController->update($request, 1);
+        $this->articleController->delete(1);
+    }
 }
