@@ -2,6 +2,7 @@
 
 namespace rjapi\blocks;
 
+use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\RJApiGenerator;
 use rjapi\types\PhpInterface;
@@ -221,5 +222,23 @@ trait ContentManager
     public function closeRule()
     {
         $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
+    }
+
+    public function createEntity(string $basePath, string $postFix = '')
+    {
+        $this->setContent();
+        $file      = $basePath . PhpInterface::SLASH . $this->className;
+        if ($postFix !== '') {
+            $file .= $postFix;
+        }
+        $file .= PhpInterface::PHP_EXT;
+        $isCreated = FileManager::createFile(
+            $file, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options)
+        );
+        if($isCreated)
+        {
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 }

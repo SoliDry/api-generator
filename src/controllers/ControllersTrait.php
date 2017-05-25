@@ -13,6 +13,7 @@ use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
+use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -225,17 +226,17 @@ trait ControllersTrait
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
-        $this->controllers->create();
+        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
 
         // create middleware
         $this->forms = new Middleware($this);
-        $this->forms->create();
+        $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
         $this->forms->createAccessToken();
 
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->createPivot();
-        $this->mappers->create();
+        $this->mappers->createEntity($this->formatEntitiesPath());
 
         // create routes
         $this->routes = new Routes($this);
