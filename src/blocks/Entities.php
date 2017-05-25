@@ -64,27 +64,9 @@ class Entities extends FormRequestModel
             foreach($relations as $relationEntity)
             {
                 $ucEntitty = ucfirst($relationEntity);
-                $current   = '';
-                $related   = '';
                 // determine if ManyToMany, OneToMany, OneToOne rels
-                if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $current = trim(
-                        $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
-                if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $related = trim(
-                        $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
+                $current = $this->getRelationType($this->generator->objectName);
+                $related = $this->getRelationType($ucEntitty);
                 if(empty($current) === false && empty($related) === false)
                 {
                     $this->createRelationMethod($current, $related, $relationEntity);
@@ -187,27 +169,9 @@ class Entities extends FormRequestModel
                 // check if inverse Entity pivot exists
                 if(file_exists($file) === false)
                 {
-                    $current = '';
-                    $related = '';
                     // determine if ManyToMany, OneToMany, OneToOne rels
-                    if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                    )
-                    {
-                        $current = trim(
-                            $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                        );
-                    }
-                    if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                    )
-                    {
-                        $related = trim(
-                            $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                        );
-                    }
+                    $current = $this->getRelationType($this->generator->objectName);
+                    $related = $this->getRelationType($ucEntitty);
                     if(empty($current) === false && empty($related) === false)
                     {
                         $this->createPivotClass($current, $related, $relationEntity);
