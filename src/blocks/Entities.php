@@ -38,21 +38,6 @@ class Entities extends FormRequestModel
         $this->generator = $generator;
     }
 
-    public function create()
-    {
-        $this->setContent();
-        $file      = $this->generator->formatEntitiesPath() . PhpInterface::SLASH . $this->className .
-            PhpInterface::PHP_EXT;
-        $isCreated = FileManager::createFile(
-            $file, $this->sourceCode,
-            FileManager::isRegenerated($this->generator->options)
-        );
-        if($isCreated)
-        {
-            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
-        }
-    }
-
     private function setRelations()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);

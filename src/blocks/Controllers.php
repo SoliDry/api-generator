@@ -49,27 +49,6 @@ class Controllers implements ControllersInterface
     }
 
     /**
-     * Creates *Controller and outputs path to the console
-     */
-    public function create()
-    {
-        $this->setContent();
-        $fileController = $this->generator->formatControllersPath()
-                          . PhpInterface::SLASH
-                          . $this->className
-                          . DefaultInterface::CONTROLLER_POSTFIX
-                          . PhpInterface::PHP_EXT;
-        $isCreated      = FileManager::createFile(
-            $fileController, $this->sourceCode,
-            FileManager::isRegenerated($this->generator->options)
-        );
-        if($isCreated)
-        {
-            Console::out($fileController . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
-        }
-    }
-
-    /**
      *  Sets *Controller content
      */
     private function setContent()
