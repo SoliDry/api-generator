@@ -155,6 +155,7 @@ class Config implements ConfigInterface
         $this->setTrees();
         $this->setJwtContent();
         $this->setFsmContent();
+        $this->setSpellCheck();
         $this->closeRoot();
     }
 
@@ -255,6 +256,43 @@ class Config implements ConfigInterface
         $this->closeEntity();
     }
 
+    private function setSpellCheck()
+    {
+        $this->openSpellCheck();
+        foreach($this->generator->types as $objName => $objData) {
+            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
+                $excluded = false;
+                foreach($this->generator->excludedSubtypes as $type) {
+                    if(strpos($objName, $type) !== false) {
+                        $excluded = true;
+                    }
+                }
+                // if the type is among excluded - continue
+                if($excluded === true) {
+                    continue;
+                }
+                $this->setSpellOptions($objName);
+            }
+        }
+        $this->closeEntity();
+    }
+
+    private function setSpellOptions(string $objName)
+    {
+        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
+            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if(is_array($propVal) && empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_CHECK]) === false) {
+                    // found FSM definition
+                    $this->openSc($objName, $propKey);
+                    $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
+                        ? PhpInterface::QUOTES . ConfigInterface::DEFAULT_LANGUAGE . PhpInterface::QUOTES
+                        : PhpInterface::QUOTES . $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE] . PhpInterface::QUOTES, 4);
+                    $this->closeSc();
+                }
+            }
+        }
+    }
+
     /**
      * @param string $objName
      * @throws AttributesException
@@ -269,7 +307,7 @@ class Config implements ConfigInterface
                         $this->openFsm($objName, $propKey);
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
                             $this->setTabs(5);
-                            $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array) $val);
+                            $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array)$val);
                         }
                         $this->closeFsm();
                     }

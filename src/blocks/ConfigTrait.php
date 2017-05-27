@@ -53,6 +53,13 @@ trait ConfigTrait
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
     }
+    
+    private function setParam(string $param, string $value, int $tabs = 1)
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . $value . PhpInterface::COMMA . PHP_EOL;
+    }
 
     private function openStateMachine()
     {
@@ -61,6 +68,13 @@ trait ConfigTrait
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
+    private function openSpellCheck()
+    {
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::SPELL_CHECK
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }    
+    
     /**
      * Opens finite state machine
      * @param string $entity
@@ -84,6 +98,33 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::STATES
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
+    }
+
+    /**
+     * Opens finite state machine
+     * @param string $entity
+     * @param string $field
+     */
+    private function openSc(string $entity, string $field)
+    {
+        $this->setTabs(2);
+        $this->sourceCode .= PhpInterface::QUOTES . strtolower($entity)
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(3);
+        $this->sourceCode .= PhpInterface::QUOTES . strtolower($field)
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        $this->setTabs(4);
+        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ENABLED
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA
+            . PHP_EOL;
+    }
+
+    private function closeSc()
+    {
+        $this->closeEntity(3);
+        $this->closeEntity(2);
     }
 
     private function closeFsm()

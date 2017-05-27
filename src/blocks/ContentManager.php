@@ -215,7 +215,7 @@ trait ContentManager
             . PhpInterface::DOUBLE_QUOTES . $attribute . PhpInterface::DOUBLE_QUOTES
             . PhpInterface::SPACE
             . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . PhpInterface::DOUBLE_QUOTES;;
+            PhpInterface::SPACE . PhpInterface::DOUBLE_QUOTES;
     }
 
     public function closeRule()
