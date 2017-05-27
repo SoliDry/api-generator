@@ -38,21 +38,6 @@ class Entities extends FormRequestModel
         $this->generator = $generator;
     }
 
-    public function create()
-    {
-        $this->setContent();
-        $file      = $this->generator->formatEntitiesPath() . PhpInterface::SLASH . $this->className .
-            PhpInterface::PHP_EXT;
-        $isCreated = FileManager::createFile(
-            $file, $this->sourceCode,
-            FileManager::isRegenerated($this->generator->options)
-        );
-        if($isCreated)
-        {
-            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
-        }
-    }
-
     private function setRelations()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
@@ -64,27 +49,9 @@ class Entities extends FormRequestModel
             foreach($relations as $relationEntity)
             {
                 $ucEntitty = ucfirst($relationEntity);
-                $current   = '';
-                $related   = '';
                 // determine if ManyToMany, OneToMany, OneToOne rels
-                if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $current = trim(
-                        $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
-                if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                    [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                )
-                {
-                    $related = trim(
-                        $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                    );
-                }
+                $current = $this->getRelationType($this->generator->objectName);
+                $related = $this->getRelationType($ucEntitty);
                 if(empty($current) === false && empty($related) === false)
                 {
                     $this->createRelationMethod($current, $related, $relationEntity);
@@ -187,27 +154,9 @@ class Entities extends FormRequestModel
                 // check if inverse Entity pivot exists
                 if(file_exists($file) === false)
                 {
-                    $current = '';
-                    $related = '';
                     // determine if ManyToMany, OneToMany, OneToOne rels
-                    if(empty($this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                    )
-                    {
-                        $current = trim(
-                            $this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS]
-                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                        );
-                    }
-                    if(empty($this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                        [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-                    )
-                    {
-                        $related = trim(
-                            $this->generator->types[$ucEntitty][RamlInterface::RAML_PROPS]
-                            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
-                        );
-                    }
+                    $current = $this->getRelationType($this->generator->objectName);
+                    $related = $this->getRelationType($ucEntitty);
                     if(empty($current) === false && empty($related) === false)
                     {
                         $this->createPivotClass($current, $related, $relationEntity);

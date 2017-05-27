@@ -46,24 +46,6 @@ class Middleware extends FormRequestModel
         $this->generator = $generator;
     }
 
-    public function create()
-    {
-        $this->setContent();
-        $fileForm = $this->generator->formatMiddlewarePath()
-            . PhpInterface::SLASH
-            . $this->className
-            . DefaultInterface::MIDDLEWARE_POSTFIX
-            . PhpInterface::PHP_EXT;
-        $isCreated = FileManager::createFile(
-            $fileForm, $this->sourceCode,
-            FileManager::isRegenerated($this->generator->options)
-        );
-        if($isCreated)
-        {
-            Console::out($fileForm . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
-        }
-    }
-
     private function setProps($relationTypes = null)
     {
         $this->setAdditionalProps();
