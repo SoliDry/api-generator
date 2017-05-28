@@ -44,7 +44,7 @@ class SpellCheck
         foreach($words as $k => $word) {
             $pass = pspell_check($this->speLink, $word);
             if($pass === false) {
-                $failed[$k] = $word;
+                $failed[] = $word;
             }
         }
         return $failed;

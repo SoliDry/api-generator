@@ -339,10 +339,11 @@ trait BaseControllerTrait
     {
         $arr = [];
         $spellCheck = new SpellCheck($this->entity);
+        $field = $spellCheck->getField();
         if($spellCheck->isEnabled() === true) {
-            $arr = $spellCheck->check($jsonProps[$spellCheck->getField()]);
+            $arr = $spellCheck->check($jsonProps[$field]);
         }
-        return [ConfigInterface::SPELL_CHECK => $arr];
+        return [ConfigInterface::SPELL_CHECK => [$field => $arr]];
     }
 
     /**
