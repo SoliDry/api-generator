@@ -24,6 +24,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [JWT](#user-content-jwt-json-web-token)
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
+* [Spell check](spell-check)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
@@ -878,6 +879,79 @@ It will be processed on `POST` and `PATCH` requests respectively.
 You can easily disable state machine by setting `enabled` to `false`. 
 There is an ability to add state machines in different tables.
 
+### Spell check
+
+#### Installation
+The spell checking functionality provided by robust and versatile linux library `GNU aspell` 
+and it's dictionaries as extension for PHP.
+ 
+To install an extension for Linux (ex.: Ubuntu):
+```zsh
+apt-get install php-pspell
+```
+
+To install an additional language db run: 
+```zsh
+apt-get install aspell-fr
+```
+
+#### Usage 
+You may want to set spell check on particular field/column: 
+```RAML
+      description:
+        required: true
+        type: string
+        minLength: 32
+        maxLength: 1024
+        facets:
+          spell_check: true
+          spell_language: en
+```
+
+Generator output in `Modules/{VersionName}/Config/config.php` will look like this:
+```php
+    'spell_check'=> [
+        'article'=> [
+            'description'=> [
+                'enabled'=>true,
+                'language' => 'en',
+            ],
+        ],
+    ],
+```
+As in other settings - spell check can be disabled with `enabled` set to false. 
+If there is no info preset about language - the `en` will be used as default value.
+
+In responses from methods POST/PATCH (create/update) 
+You'll get the `meta` content back with filled array of failed checks in it:
+```json
+{
+  "data": {
+    "type": "article",
+    "id": "21",
+    "attributes": {
+      "title": "Quick brown fox",
+      "description": "The quick brovn fox jumped ower the lazy dogg",
+      "url": "http://example.com/articles/21/tags",
+      "show_in_top": "0",
+      "status": "draft"
+    },
+    "links": {
+      "self": "example.com/article/21"
+    }
+  },
+  "meta": {
+    "spell_check": {
+      "description": [
+        "brovn",
+        "ower",
+        "dogg"
+      ]
+    }
+  }
+}
+```   
+  
 ### Conversions to RAML
 
 There are several tools for conversion between different types of documents and RAML, 
