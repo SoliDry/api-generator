@@ -1,5 +1,6 @@
 <?php
 namespace rjapi\blocks;
+
 use rjapi\types\ConfigInterface;
 use rjapi\types\PhpInterface;
 
@@ -34,12 +35,12 @@ trait ConfigTrait
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
-    
+
     private function openTrees()
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::TREES
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;        
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
     /**
@@ -53,9 +54,14 @@ trait ConfigTrait
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) . PhpInterface::COMMA . PHP_EOL;
     }
-    
+
     private function setParam(string $param, string $value, int $tabs = 1)
     {
+        if(is_numeric($value) === false
+            && is_bool($value) === false
+            && in_array($value, [PhpInterface::PHP_TYPES_BOOL_TRUE, PhpInterface::PHP_TYPES_BOOL_FALSE]) === false) {
+            $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
+        }
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . $value . PhpInterface::COMMA . PHP_EOL;
@@ -73,8 +79,8 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::SPELL_CHECK
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }    
-    
+    }
+
     /**
      * Opens finite state machine
      * @param string $entity

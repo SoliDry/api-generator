@@ -23,6 +23,13 @@ class Config implements ConfigInterface
     protected $generator = null;
     protected $className = null;
 
+    private $queryParams = [
+        ModelsInterface::PARAM_LIMIT,
+        ModelsInterface::PARAM_SORT,
+        ModelsInterface::PARAM_PAGE,
+        JSONApiInterface::PARAM_ACCESS_TOKEN,
+    ];
+
     /**
      * Config constructor.
      * @param $generator
@@ -43,51 +50,6 @@ class Config implements ConfigInterface
         if($isCreated) {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
-    }
-
-    /**
-     * @param string $name Version name aka: V1, V2 etc
-     */
-    private function setName(string $name)
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 .
-            PhpInterface::QUOTES . ModulesInterface::KEY_NAME
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::QUOTES .
-            ucfirst($name) . PhpInterface::QUOTES . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
-     * @param int $limit
-     */
-    private function setLimit(int $limit)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ModelsInterface::PARAM_LIMIT . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . $limit . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
-     * @param string $sort
-     */
-    private function setSort(string $sort)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ModelsInterface::PARAM_SORT . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . PhpInterface::QUOTES . $sort
-            . PhpInterface::QUOTES . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
-     * @param int $page
-     */
-    private function setPage(int $page)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ModelsInterface::PARAM_PAGE . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . $page . PhpInterface::COMMA . PHP_EOL;
     }
 
     /**
@@ -133,24 +95,13 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $token
-     */
-    private function setAccessToken(string $token)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . JSONApiInterface::PARAM_ACCESS_TOKEN . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . PhpInterface::QUOTES . $token . PhpInterface::QUOTES . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
      * Constructs the config structure
      */
     private function setContent()
     {
         $this->setTag();
         $this->openRoot();
-        $this->setName($this->generator->version);
+        $this->setParam(ModulesInterface::KEY_NAME, ucfirst($this->generator->version));
         $this->setQueryParams();
         $this->setTrees();
         $this->setJwtContent();
@@ -164,17 +115,10 @@ class Config implements ConfigInterface
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]) === false) {
             $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
             $this->openParams();
-            if(empty($queryParams[ModelsInterface::PARAM_LIMIT][RamlInterface::RAML_KEY_DEFAULT]) === false) {
-                $this->setLimit($queryParams[ModelsInterface::PARAM_LIMIT][RamlInterface::RAML_KEY_DEFAULT]);
-            }
-            if(empty($queryParams[ModelsInterface::PARAM_SORT][RamlInterface::RAML_KEY_DEFAULT]) === false) {
-                $this->setSort($queryParams[ModelsInterface::PARAM_SORT][RamlInterface::RAML_KEY_DEFAULT]);
-            }
-            if(empty($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]) === false) {
-                $this->setPage($queryParams[ModelsInterface::PARAM_PAGE][RamlInterface::RAML_KEY_DEFAULT]);
-            }
-            if(empty($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false) {
-                $this->setAccessToken($queryParams[JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]);
+            foreach ($this->queryParams as $param) {
+                if(empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
+                    $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
+                }
             }
             $this->closeEntity();
         }
@@ -285,8 +229,8 @@ class Config implements ConfigInterface
                     // found FSM definition
                     $this->openSc($objName, $propKey);
                     $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
-                        ? PhpInterface::QUOTES . ConfigInterface::DEFAULT_LANGUAGE . PhpInterface::QUOTES
-                        : PhpInterface::QUOTES . $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE] . PhpInterface::QUOTES, 4);
+                        ? ConfigInterface::DEFAULT_LANGUAGE
+                        : $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE], 4);
                     $this->closeSc();
                 }
             }
@@ -326,10 +270,10 @@ class Config implements ConfigInterface
             foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
                 if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
                     $this->openJwt();
-                    $this->setEnabled();
-                    $this->setTable($objName);
-                    $this->setActivate(ConfigInterface::DEFAULT_ACTIVATE);
-                    $this->setExpires(ConfigInterface::DEFAULT_EXPIRES);
+                    $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 2);
+                    $this->setParam(ModelsInterface::MIGRATION_TABLE, MigrationsHelper::getTableName($objName), 2);
+                    $this->setParam(ConfigInterface::ACTIVATE, ConfigInterface::DEFAULT_ACTIVATE, 2);
+                    $this->setParam(ConfigInterface::EXPIRES, ConfigInterface::DEFAULT_EXPIRES, 2);
                     $this->closeEntity();
                 }
             }
