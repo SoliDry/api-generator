@@ -182,6 +182,20 @@ trait BaseControllerTrait
         if($this->configOptions->isSpellCheck() === true) {
             $meta = $this->spellCheck($jsonApiAttributes);
         }
+        $this->processUpdate($model, $jsonApiAttributes);
+        $model->save();
+        $this->setRelationships($json, $model->id, true);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
+        Json::outputSerializedData($resource);
+    }
+
+    /**
+     * Process model update
+     * @param $model
+     * @param array $jsonApiAttributes
+     */
+    private function processUpdate($model, array $jsonApiAttributes)
+    {
         // jwt
         $isJwtAction = $this->configOptions->getIsJwtAction();
         if($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true) {
@@ -200,10 +214,6 @@ trait BaseControllerTrait
                 }
             }
         }
-        $model->save();
-        $this->setRelationships($json, $model->id, true);
-        $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
-        Json::outputSerializedData($resource);
     }
 
     /**

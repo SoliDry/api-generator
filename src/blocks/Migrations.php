@@ -15,7 +15,7 @@ use rjapi\types\PhpInterface;
 
 class Migrations extends MigrationsAbstract
 {
-    use ContentManager, MigrationsTrait, EntitiesTrait;
+    use ContentManager, EntitiesTrait;
     /** @var RJApiGenerator $generator */
     protected $generator  = null;
     protected $sourceCode = '';

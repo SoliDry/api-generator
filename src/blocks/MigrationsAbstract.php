@@ -11,10 +11,11 @@ use rjapi\types\RamlInterface;
 /**
  * @property RJApiGenerator generator
  * @property string sourceCode
- * @method MigrationsTrait setRow
  */
 abstract class MigrationsAbstract
 {
+    use MigrationsTrait;
+
     const PATTERN_TIME = 'd_m_Y_Hi';
 
     private $signedIntergerMap = [
@@ -188,6 +189,9 @@ abstract class MigrationsAbstract
         }
     }
 
+    /**
+     * @param $relationEntity
+     */
     protected function setPivotRows($relationEntity)
     {
         // P = 2T/2
@@ -211,6 +215,11 @@ abstract class MigrationsAbstract
         return $attrsArray;
     }
 
+    /**
+     * @param $attrVal
+     * @param $attrKey
+     * @param $type
+     */
     private function setId($attrVal, $attrKey, $type)
     {
         // set incremented id int
