@@ -14,6 +14,8 @@ class ConfigOptions
     private $isJwtAction;
     // state machine
     private $isStateMachine = false;
+    // spell check
+    private $spellCheck = false;
 
     /**
      * @return mixed
@@ -130,7 +132,7 @@ class ConfigOptions
     /**
      * @param bool $isStateMachine
      */
-    public function setIsStateMachine(bool $isStateMachine)
+    public function setStateMachine(bool $isStateMachine)
     {
         $this->isStateMachine = $isStateMachine;
     }
@@ -138,8 +140,24 @@ class ConfigOptions
     /**
      * @return bool
      */
-    public function getIsStateMachine()
+    public function isStateMachine()
     {
         return $this->isStateMachine;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isSpellCheck()
+    {
+        return $this->spellCheck;
+    }
+
+    /**
+     * @param boolean $spellCheck
+     */
+    public function setSpellCheck($spellCheck)
+    {
+        $this->spellCheck = $spellCheck;
     }
 }

@@ -83,7 +83,7 @@ trait BaseControllerTrait
         }
         $this->setEntities();
         $this->setDefaults();
-        $this->setConfigOptions();
+        $this->setConfigOptions($calledMethod);
     }
 
     /**
@@ -133,10 +133,17 @@ trait BaseControllerTrait
      */
     public function create(Request $request)
     {
+        $meta = [];
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         // FSM initial state check
-        $this->checkFsmCreate($jsonApiAttributes);
+        if($this->configOptions->isStateMachine() === true) {
+            $this->checkFsmCreate($jsonApiAttributes);
+        }
+        // spell check
+        if($this->configOptions->isSpellCheck() === true) {
+            $meta = $this->spellCheck($jsonApiAttributes);
+        }
         // fill in model
         foreach($this->props as $k => $v) {
             // request fields should match Middleware fields
@@ -150,7 +157,7 @@ trait BaseControllerTrait
             $this->createJwtUser();
         }
         $this->setRelationships($json, $this->model->id);
-        $resource = Json::getResource($this->middleWare, $this->model, $this->entity);
+        $resource = Json::getResource($this->middleWare, $this->model, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
@@ -162,12 +169,19 @@ trait BaseControllerTrait
      */
     public function update(Request $request, int $id)
     {
+        $meta = [];
         // get json raw input and parse attrs
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         $model             = $this->getEntity($id);
         // FSM transition check
-        $this->checkFsmUpdate($jsonApiAttributes, $model);
+        if($this->configOptions->isStateMachine() === true) {
+            $this->checkFsmUpdate($jsonApiAttributes, $model);
+        }
+        // spell check
+        if($this->configOptions->isSpellCheck() === true) {
+            $meta = $this->spellCheck($jsonApiAttributes);
+        }
         // jwt
         $isJwtAction = $this->configOptions->getIsJwtAction();
         if($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true) {
@@ -188,7 +202,7 @@ trait BaseControllerTrait
         }
         $model->save();
         $this->setRelationships($json, $model->id, true);
-        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
         Json::outputSerializedData($resource);
     }
 
@@ -263,32 +277,31 @@ trait BaseControllerTrait
     }
 
     /**
-     * @param array $jsonProps  JSON input properties
+     * @param array $jsonProps JSON input properties
      * @throws \rjapi\exception\AttributesException
      */
     private function checkFsmCreate(array &$jsonProps)
     {
-        if($this->configOptions->getIsStateMachine() === true) {
-            $stateMachine = new StateMachine($this->entity);
-            $stateField = $stateMachine->getField();
-            if(empty($jsonProps[$stateField])) {
-                $stateMachine->setInitial($stateField);
-                $jsonProps[$stateField] = $stateMachine->getInitial();
-            } else {
-                foreach($jsonProps as $k => $v) {
-                    if($stateMachine->isStatedField($k) === true) {
-                        $stateMachine->setStates($k);
-                        if($stateMachine->isInitial($v) === false) {
-                            // the field is under state machine rules and it is not initial state
-                            Json::outputErrors(
+        $stateMachine = new StateMachine($this->entity);
+        $stateField   = $stateMachine->getField();
+        if(empty($jsonProps[$stateField])) {
+            $stateMachine->setInitial($stateField);
+            $jsonProps[$stateField] = $stateMachine->getInitial();
+        }
+        else {
+            foreach($jsonProps as $k => $v) {
+                if($stateMachine->isStatedField($k) === true) {
+                    $stateMachine->setStates($k);
+                    if($stateMachine->isInitial($v) === false) {
+                        // the field is under state machine rules and it is not initial state
+                        Json::outputErrors(
+                            [
                                 [
-                                    [
-                                        JSONApiInterface::ERROR_TITLE  => 'This state is not an initial.',
-                                        JSONApiInterface::ERROR_DETAIL => 'The state - \'' . $v . '\' is not an initial.',
-                                    ],
-                                ]
-                            );
-                        }
+                                    JSONApiInterface::ERROR_TITLE  => 'This state is not an initial.',
+                                    JSONApiInterface::ERROR_DETAIL => 'The state - \'' . $v . '\' is not an initial.',
+                                ],
+                            ]
+                        );
                     }
                 }
             }
@@ -297,25 +310,39 @@ trait BaseControllerTrait
 
     private function checkFsmUpdate(array $jsonProps, $model)
     {
-        if($this->configOptions->getIsStateMachine() === true) {
-            $stateMachine = new StateMachine($this->entity);
-            foreach($jsonProps as $k => $v) {
-                if($stateMachine->isStatedField($k) === true) {
-                    $stateMachine->setStates($k);
-                    if($stateMachine->isTransitive($model->$k, $v) === false) {
-                        // the field is under state machine rules and it is not transitive in this direction
-                        Json::outputErrors(
+        $stateMachine = new StateMachine($this->entity);
+        foreach($jsonProps as $k => $v) {
+            if($stateMachine->isStatedField($k) === true) {
+                $stateMachine->setStates($k);
+                if($stateMachine->isTransitive($model->$k, $v) === false) {
+                    // the field is under state machine rules and it is not transitive in this direction
+                    Json::outputErrors(
+                        [
                             [
-                                [
-                                    JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
-                                    JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - \'' . $k . '\' can`t be changed from: \'' . $model->$k . '\', to: \'' . $v . '\'',
-                                ],
-                            ]
-                        );
-                    }
+                                JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
+                                JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - \'' . $k . '\' can`t be changed from: \'' . $model->$k . '\', to: \'' . $v . '\'',
+                            ],
+                        ]
+                    );
                 }
             }
         }
+    }
+
+    /**
+     * Field spell checker
+     * @param array $jsonProps
+     * @internal param $entity
+     * @return array
+     */
+    private function spellCheck(array $jsonProps)
+    {
+        $arr = [];
+        $spellCheck = new SpellCheck($this->entity);
+        if($spellCheck->isEnabled() === true) {
+            $arr = $spellCheck->check($jsonProps[$spellCheck->getField()]);
+        }
+        return [ConfigInterface::SPELL_CHECK => $arr];
     }
 
     /**
@@ -357,7 +384,11 @@ trait BaseControllerTrait
         return $sqlOptions;
     }
 
-    private function setConfigOptions()
+    /**
+     *
+     * @param string $calledMethod
+     */
+    private function setConfigOptions(string $calledMethod)
     {
         $this->configOptions = new ConfigOptions();
         $this->configOptions->setJwtIsEnabled(ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ENABLED));
@@ -365,10 +396,18 @@ trait BaseControllerTrait
         if($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity)) {// if jwt enabled=true and tables are equal
             $this->configOptions->setIsJwtAction(true);
         }
-        // state machine for concrete entity == table
-        $stateMachine = ConfigHelper::getNestedParam(ConfigInterface::STATE_MACHINE, MigrationsHelper::getTableName($this->entity));
-        if($stateMachine !== null) {
-            $this->configOptions->setIsStateMachine(true);
+        // set those only for create/update
+        if(in_array($calledMethod, [JSONApiInterface::URI_METHOD_CREATE, JSONApiInterface::URI_METHOD_UPDATE]) === true) {
+            // state machine for concrete entity == table
+            $stateMachine = ConfigHelper::getNestedParam(ConfigInterface::STATE_MACHINE, MigrationsHelper::getTableName($this->entity));
+            if($stateMachine !== null) {
+                $this->configOptions->setStateMachine(true);
+            }
+            // spell check if enabled
+            $spellCheck = ConfigHelper::getNestedParam(ConfigInterface::SPELL_CHECK, MigrationsHelper::getTableName($this->entity));
+            if($spellCheck !== null) {
+                $this->configOptions->setSpellCheck(true);
+            }
         }
     }
 }
