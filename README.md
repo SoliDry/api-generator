@@ -24,7 +24,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [JWT](#user-content-jwt-json-web-token)
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
-* [Spell check](spell-check)
+* [Spell check](#user-content-spell-check)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
