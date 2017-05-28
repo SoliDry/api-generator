@@ -82,6 +82,12 @@ trait ConfigTrait
     }
 
     /**
+     * @param int $amount
+     * @return mixed
+     */
+    protected abstract function setTabs(int $amount = 1);
+
+    /**
      * Opens finite state machine
      * @param string $entity
      * @param string $field

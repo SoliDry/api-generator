@@ -53,48 +53,6 @@ class Config implements ConfigInterface
     }
 
     /**
-     * @param string $entity
-     */
-    private function setTable(string $entity)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ModelsInterface::MIGRATION_TABLE . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
-            . PhpInterface::SPACE . PhpInterface::QUOTES . MigrationsHelper::getTableName($entity)
-            . PhpInterface::QUOTES . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    private function setEnabled()
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ENABLED . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
-     * @param int $time
-     */
-    private function setActivate(int $time)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ACTIVATE . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . $time . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
-     * @param int $time
-     */
-    private function setExpires(int $time)
-    {
-        $this->setTabs(2);
-        $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::EXPIRES . PhpInterface::QUOTES
-            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
-            PhpInterface::SPACE . $time . PhpInterface::COMMA . PHP_EOL;
-    }
-
-    /**
      * Constructs the config structure
      */
     private function setContent()
@@ -221,6 +179,9 @@ class Config implements ConfigInterface
         $this->closeEntity();
     }
 
+    /**
+     * @param string $objName
+     */
     private function setSpellOptions(string $objName)
     {
         if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
