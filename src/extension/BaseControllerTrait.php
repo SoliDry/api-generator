@@ -321,21 +321,21 @@ trait BaseControllerTrait
     private function checkFsmUpdate(array $jsonProps, $model)
     {
         $stateMachine = new StateMachine($this->entity);
-        foreach($jsonProps as $k => $v) {
-            if($stateMachine->isStatedField($k) === true) {
-                $stateMachine->setStates($k);
-                if($stateMachine->isTransitive($model->$k, $v) === false) {
-                    // the field is under state machine rules and it is not transitive in this direction
-                    Json::outputErrors(
-                        [
-                            [
-                                JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
-                                JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - \'' . $k . '\' can`t be changed from: \'' . $model->$k . '\', to: \'' . $v . '\'',
-                            ],
-                        ]
-                    );
-                }
-            }
+        $field        = $stateMachine->getField();
+        $stateMachine->setStates($field);
+        if(empty($jsonProps[$field]) === false
+            && $stateMachine->isStatedField($field) === true
+            && $stateMachine->isTransitive($model->$field, $jsonProps[$field]) === false
+        ) {
+            // the field is under state machine rules and it is not transitive in this direction
+            Json::outputErrors(
+                [
+                    [
+                        JSONApiInterface::ERROR_TITLE  => 'State can`t be changed through this way.',
+                        JSONApiInterface::ERROR_DETAIL => 'The state of a field/column - \'' . $field . '\' can`t be changed from: \'' . $model->$field . '\', to: \'' . $jsonProps[$field] . '\'',
+                    ],
+                ]
+            );
         }
     }
 
