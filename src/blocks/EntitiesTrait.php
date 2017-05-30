@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\blocks;
 
-use rjapi\extension\BaseControllerTrait;
+use rjapi\extension\ApiController;
 use rjapi\helpers\Classes;
 use rjapi\helpers\ConfigHelper as conf;
 use rjapi\types\DefaultInterface;
@@ -13,11 +13,11 @@ use rjapi\types\RamlInterface;
  * Class EntitiesTrait
  *
  * @package rjapi\blocks
- * @property BaseControllerTrait entity
- * @property BaseControllerTrait middleWare
- * @property BaseControllerTrait props
- * @property BaseControllerTrait model
- * @property BaseControllerTrait modelEntity
+ * @property ApiController entity
+ * @property ApiController middleWare
+ * @property ApiController props
+ * @property ApiController model
+ * @property ApiController modelEntity
  */
 trait EntitiesTrait
 {
