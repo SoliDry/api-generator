@@ -5,6 +5,13 @@ use rjapi\helpers\Json;
 use rjapi\helpers\Jwt;
 use rjapi\types\JwtInterface;
 
+/**
+ * Class JWTTrait
+ *
+ * @package rjapi\extension
+ *
+ * @property ApiController model
+ */
 trait JWTTrait
 {
     /**

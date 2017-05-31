@@ -3,6 +3,13 @@ namespace rjapi\extension;
 
 use rjapi\types\ConfigInterface;
 
+/**
+ * Class SpellCheckTrait
+ *
+ * @package rjapi\extension
+ *
+ * @property ApiController entity
+ */
 trait SpellCheckTrait
 {
     /**

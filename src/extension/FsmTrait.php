@@ -4,6 +4,13 @@ namespace rjapi\extension;
 
 use rjapi\helpers\Json;
 
+/**
+ * Class FsmTrait
+ *
+ * @package rjapi\extension
+ *
+ * @property ApiController entity
+ */
 trait FsmTrait
 {
     /**
