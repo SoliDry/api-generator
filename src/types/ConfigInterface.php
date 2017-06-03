@@ -16,6 +16,9 @@ interface ConfigInterface
     const DEFAULT_LANGUAGE = 'en';
     const STATES           = 'states';
     const INITIAL          = 'initial';
+    const CUSTOM_SQL       = 'custom_sql';
+    const QUERY            = 'query';
+    const BINDINGS         = 'bindings';
 
     const DEFAULT_ACTIVATE = 30;
     const DEFAULT_EXPIRES  = 3600;

@@ -44,6 +44,8 @@ class ApiController extends Controller
     private $defaultOrderBy = [];
     /** @var ConfigOptions configOptions */
     private $configOptions = null;
+    /** @var CustomSql customSql */
+    private $customSql = null;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -95,8 +97,12 @@ class ApiController extends Controller
             $tree = $this->getAllTreeEntities($sqlOptions);
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree->toArray()];
         }
-
-        $items    = $this->getAllEntities($sqlOptions);
+        if($this->customSql->isEnabled()) {
+            $items = $this->getCustomSqlEntities($this->customSql);
+        }
+        else {
+            $items = $this->getAllEntities($sqlOptions);
+        }
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
@@ -300,6 +306,10 @@ class ApiController extends Controller
             if($spellCheck !== null) {
                 $this->configOptions->setSpellCheck(true);
             }
+        }
+        // set those only for index
+        if($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
+            $this->customSql = new CustomSql($this->entity);
         }
     }
 }

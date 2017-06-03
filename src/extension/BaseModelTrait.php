@@ -3,7 +3,7 @@ namespace rjapi\extension;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
-
+use Illuminate\Support\Facades\DB;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -100,6 +100,12 @@ trait BaseModelTrait
         $obj->order = $order;
 
         return $obj->where($filter)->take($to)->skip($from)->get($data);
+    }
+
+    private function getCustomSqlEntities(CustomSql $customSql)
+    {
+        $result = DB::select($customSql->getQuery(), $customSql->getBindings());
+        return collect($result);
     }
 
     /**
