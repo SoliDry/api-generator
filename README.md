@@ -28,6 +28,12 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
+First of all - create Laravel project if You didn't do that yet:
+```
+composer create-project --prefer-dist laravel/laravel your_app
+```
+
+then in Your project directory run:
 ``` 
 composer require rjapi/raml-json-api 
 ```
@@ -78,6 +84,11 @@ By default controllers, entities or repositories are not loaded automatically. Y
     }
   }
 }
+```
+
+refresh changes by running: 
+```
+composer dump-autoload
 ```
 
 ### Running generator
