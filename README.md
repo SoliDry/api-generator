@@ -25,6 +25,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
 * [Spell check](#user-content-spell-check)
+* [Custom SQL](#user-content-custom-sql)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
@@ -962,6 +963,26 @@ You'll get the `meta` content back with filled array of failed checks in it:
   }
 }
 ```   
+
+### Custom SQL
+If by any reason You need to use custom sql query - just define it in `Modules/V1/Config/config.php`:
+```php
+    'custom_sql'    => [
+        'article' => [
+            'enabled' => true,
+            'query'   => 'SELECT title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
+                          WHERE ta.tag_id IN (
+                          SELECT id FROM tag WHERE CHAR_LENGTH(title) > :tag_len
+                          ) ORDER BY a.id DESC',
+            'bindings' => [
+                'tag_len' => 5,
+            ]
+        ],
+    ],  
+```  
+as U can see there are `query`, `bindings` (where has been passed a secured param-bound values) and `enabled` parameters for desired entity.
+Custom sql query will be executed only for `index` API method, 
+so if U need ex. `delete` or `update` specific extra rows - call those methods with previously selected ids.  
   
 ### Conversions to RAML
 
