@@ -985,7 +985,7 @@ Custom sql query will be executed only for `index` API method,
 so if U need ex. `delete` or `update` specific extra rows - call those methods with previously selected ids.  
   
 Don't forget to add Laravel specific `$fillable` or `$guarded` array to let fill-in the object ([mass-assignment rule](https://laravel.com/docs/5.4/eloquent#mass-assignment)) ex.::
-```
+```php
     protected $fillable = [
         'id',
         'title'
