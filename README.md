@@ -970,7 +970,7 @@ If by any reason You need to use custom sql query - just define it in `Modules/V
     'custom_sql'    => [
         'article' => [
             'enabled' => true,
-            'query'   => 'SELECT title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
+            'query'   => 'SELECT id, title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
                           WHERE ta.tag_id IN (
                           SELECT id FROM tag WHERE CHAR_LENGTH(title) > :tag_len
                           ) ORDER BY a.id DESC',
@@ -983,6 +983,15 @@ If by any reason You need to use custom sql query - just define it in `Modules/V
 as U can see there are `query`, `bindings` (where has been passed a secured param-bound values) and `enabled` parameters for desired entity.
 Custom sql query will be executed only for `index` API method, 
 so if U need ex. `delete` or `update` specific extra rows - call those methods with previously selected ids.  
+  
+Don't forget to add Laravel specific `$fillable` or `$guarded` array to let fill-in the object ([mass-assignment rule](https://laravel.com/docs/5.4/eloquent#mass-assignment)) ex.::
+```
+    protected $fillable = [
+        'id',
+        'title'
+    ];
+```
+Note: You need an `id` field to be present, because of json-api serializer.
   
 ### Conversions to RAML
 
