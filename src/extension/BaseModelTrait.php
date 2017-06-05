@@ -12,6 +12,8 @@ use rjapi\helpers\SqlOptions;
 /**
  * Class BaseModelTrait
  * @package rjapi\extension
+ *
+ * @property ApiController modelEntity
  */
 trait BaseModelTrait
 {
@@ -105,7 +107,12 @@ trait BaseModelTrait
     private function getCustomSqlEntities(CustomSql $customSql)
     {
         $result = DB::select($customSql->getQuery(), $customSql->getBindings());
-        return collect($result);
+        $collection = [];
+        foreach ($result as $item) {
+            $class = PhpInterface::BACKSLASH . $this->modelEntity;
+            $collection[] = (new $class())->fill((array) $item);
+        }
+        return collect($collection);
     }
 
     /**
