@@ -104,7 +104,7 @@ in particular: directories for modular app, Controllers/Middlewares/Models+Pivot
 Routes (JSON API compatible) and even migrations to help You create RDBMS structure.
  
 ```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
-which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/tests/articles.raml```
+which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/raml/articles.raml```
 
 Options:
 
