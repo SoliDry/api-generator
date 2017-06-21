@@ -72,4 +72,6 @@ interface PhpInterface
     // key-words
     const ECHO = 'echo';
     const DIE  = 'die';
+
+    const PHP_EXTENSION_PSPELL = 'pspell';
 }
