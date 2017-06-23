@@ -22,27 +22,6 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON;
     }
 
-    private function openParams()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::QUERY_PARAMS
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
-    private function openJwt()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::JWT
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
-    private function openTrees()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::TREES
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
     /**
      * Sets the default value of the $param name
      * @param string $param
@@ -59,7 +38,8 @@ trait ConfigTrait
     {
         if(is_numeric($value) === false
             && is_bool($value) === false
-            && in_array($value, [PhpInterface::PHP_TYPES_BOOL_TRUE, PhpInterface::PHP_TYPES_BOOL_FALSE]) === false) {
+            && in_array($value, [PhpInterface::PHP_TYPES_BOOL_TRUE, PhpInterface::PHP_TYPES_BOOL_FALSE]) === false
+        ) {
             $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
         }
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
@@ -144,6 +124,13 @@ trait ConfigTrait
         $this->closeEntity(4);
         $this->closeEntity(3);
         $this->closeEntity(2);
+    }
+
+    private function openEntity(string $entity, int $tabs = 1)
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $entity
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
     /**

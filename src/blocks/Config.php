@@ -72,7 +72,7 @@ class Config implements ConfigInterface
     {
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]) === false) {
             $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
-            $this->openParams();
+            $this->openEntity(ConfigInterface::QUERY_PARAMS);
             foreach ($this->queryParams as $param) {
                 if(empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
                     $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
@@ -230,7 +230,7 @@ class Config implements ConfigInterface
         if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
             foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
                 if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
-                    $this->openJwt();
+                    $this->openEntity(ConfigInterface::JWT);
                     $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 2);
                     $this->setParam(ModelsInterface::MIGRATION_TABLE, MigrationsHelper::getTableName($objName), 2);
                     $this->setParam(ConfigInterface::ACTIVATE, ConfigInterface::DEFAULT_ACTIVATE, 2);
@@ -250,7 +250,7 @@ class Config implements ConfigInterface
             foreach($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
                 if(is_array($propVal) && empty($this->generator->types[ucfirst($propKey)]) === false) {
                     // ensure that there is a type of propKey ex.: Menu with parent_id field set
-                    $this->openTrees();
+                    $this->openEntity(ConfigInterface::TREES);
                     $this->setParamDefault($propKey, $propVal[RamlInterface::RAML_KEY_DEFAULT]);
                     $this->closeEntity();
                 }
