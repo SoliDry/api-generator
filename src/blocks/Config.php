@@ -30,6 +30,12 @@ class Config implements ConfigInterface
         JSONApiInterface::PARAM_ACCESS_TOKEN,
     ];
 
+    private $entityMethods = [
+        ConfigInterface::STATE_MACHINE => ConfigInterface::STATE_MACHINE_METHOD,
+        ConfigInterface::SPELL_CHECK   => ConfigInterface::SPELL_CHECK_METHOD,
+        ConfigInterface::BIT_MASK      => ConfigInterface::BIT_MASK_METHOD,
+    ];
+
     /**
      * Config constructor.
      * @param $generator
@@ -63,8 +69,9 @@ class Config implements ConfigInterface
         $this->setQueryParams();
         $this->setTrees();
         $this->setJwtContent();
-        $this->setFsmContent();
-        $this->setSpellCheck();
+//        $this->setFsmContent();
+//        $this->setSpellCheck();
+        $this->setConfigEntities();
         $this->closeRoot();
     }
 
@@ -73,7 +80,7 @@ class Config implements ConfigInterface
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]) === false) {
             $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
             $this->openEntity(ConfigInterface::QUERY_PARAMS);
-            foreach ($this->queryParams as $param) {
+            foreach($this->queryParams as $param) {
                 if(empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
                     $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
                 }
@@ -139,7 +146,7 @@ class Config implements ConfigInterface
      */
     private function setFsmContent()
     {
-        $this->openStateMachine();
+        $this->openEntity(ConfigInterface::STATE_MACHINE);
         foreach($this->generator->types as $objName => $objData) {
             if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
@@ -160,7 +167,7 @@ class Config implements ConfigInterface
 
     private function setSpellCheck()
     {
-        $this->openSpellCheck();
+        $this->openEntity(ConfigInterface::SPELL_CHECK);
         foreach($this->generator->types as $objName => $objData) {
             if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
@@ -177,6 +184,29 @@ class Config implements ConfigInterface
             }
         }
         $this->closeEntity();
+    }
+
+    private function setConfigEntities()
+    {
+        foreach($this->entityMethods as $entity => $method) {
+            $this->openEntity($entity);
+            foreach($this->generator->types as $objName => $objData) {
+                if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
+                    $excluded = false;
+                    foreach($this->generator->excludedSubtypes as $type) {
+                        if(strpos($objName, $type) !== false) {
+                            $excluded = true;
+                        }
+                    }
+                    // if the type is among excluded - continue
+                    if($excluded === true) {
+                        continue;
+                    }
+                    $this->$method($objName);
+                }
+            }
+            $this->closeEntity();
+        }
     }
 
     /**
@@ -215,6 +245,24 @@ class Config implements ConfigInterface
                             $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array)$val);
                         }
                         $this->closeFsm();
+                    }
+                }
+            }
+        }
+    }
+
+    private function setBitMaskOptions(string $objName)
+    {
+        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
+            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if(is_array($propVal)) {
+                    if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                        // found FSM definition
+                        $this->openBitMask($objName, $propKey);
+                        foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
+                            $this->setParam($key, (int)$val, 4);
+                        }
+                        $this->closeBitMask();
                     }
                 }
             }

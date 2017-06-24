@@ -47,20 +47,6 @@ trait ConfigTrait
             . $value . PhpInterface::COMMA . PHP_EOL;
     }
 
-    private function openStateMachine()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::STATE_MACHINE
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
-    private function openSpellCheck()
-    {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . ConfigInterface::SPELL_CHECK
-            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-            . PhpInterface::OPEN_BRACKET . PHP_EOL;
-    }
-
     /**
      * @param int $amount
      * @return mixed
@@ -111,6 +97,20 @@ trait ConfigTrait
         $this->sourceCode .= PhpInterface::QUOTES . ConfigInterface::ENABLED
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::PHP_TYPES_BOOL_TRUE . PhpInterface::COMMA
             . PHP_EOL;
+    }
+    
+    private function openBitMask(string $entity, string $field)
+    {
+        $this->openEntity(strtolower($entity), 2);
+        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
+        $this->setParam(ConfigInterface::HIDE_MASK, PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
+        $this->openEntity(strtolower($field), 3);
+    }
+
+    private function closeBitMask()
+    {
+        $this->closeEntity(3);
+        $this->closeEntity(2);
     }
 
     private function closeSc()

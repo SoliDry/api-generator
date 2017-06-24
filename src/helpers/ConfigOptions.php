@@ -16,6 +16,9 @@ class ConfigOptions
     private $isStateMachine = false;
     // spell check
     private $spellCheck = false;
+    // bit mask
+    private $isBitWise = false;
+    private $hiddenBitMask = false;
 
     /**
      * @return mixed
@@ -159,5 +162,25 @@ class ConfigOptions
     public function setSpellCheck($spellCheck)
     {
         $this->spellCheck = $spellCheck;
+    }
+
+    public function setBitMask($isBitwise)
+    {
+        $this->isBitWise = $isBitwise;
+    }
+
+    public function isBitMask()
+    {
+        return $this->isBitWise;
+    }
+
+    public function isBitMaskHidden()
+    {
+        return $this->hiddenBitMask;
+    }
+
+    public function setBitMaskHidden($isHidden)
+    {
+        $this->hiddenBitMask = $isHidden;
     }
 }
