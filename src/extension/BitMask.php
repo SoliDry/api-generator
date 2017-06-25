@@ -1,17 +1,7 @@
 <?php
-/**
- * Created by Arthur Kushman.
- * User: arthur
- * Date: 24.06.17
- * Time: 17:30
- */
-
 namespace rjapi\extension;
 
-
 use rjapi\exception\AttributesException;
-use rjapi\helpers\ConfigHelper;
-use rjapi\helpers\MigrationsHelper;
 use rjapi\types\ConfigInterface;
 
 class BitMask
@@ -29,7 +19,7 @@ class BitMask
     {
         $this->entity    = $params;
         $this->field     = key($this->entity);
-        $this->isEnabled = empty($this->entity[ConfigInterface::ENABLED]) ? false : true;
+        $this->isEnabled = empty($this->entity[$this->field][ConfigInterface::ENABLED]) ? false : true;
     }
 
     /**

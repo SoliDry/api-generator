@@ -12,12 +12,13 @@ trait BitMaskTrait
 {
     /**
      * @param Collection $data
+     * @return Collection
      * @throws \rjapi\exception\AttributesException
      */
-    protected function setFlagsIndex(Collection &$data)
+    protected function setFlagsIndex(Collection $data)
     {
-        $field = $this->bitMask->getField();
-        foreach($data as &$v) {
+        $data->map(function($v) {
+            $field = $this->bitMask->getField();
             if(isset($v[$field])) {
                 $flags = $this->bitMask->getFlags();
                 $mask  = $v[$field];
@@ -25,14 +26,17 @@ trait BitMaskTrait
                     $v[$flag] = ($fVal & $mask) ? true : false;
                 }
             }
-        }
+            return $v;
+        });
+        return $data;
     }
 
     /**
-     * @param array $data
+     * @param BaseModel $data
+     * @return BaseModel
      * @throws \rjapi\exception\AttributesException
      */
-    protected function setFlagsView(array &$data)
+    protected function setFlagsView(BaseModel $data)
     {
         $field = $this->bitMask->getField();
         if(isset($data[$field])) {
@@ -42,6 +46,7 @@ trait BitMaskTrait
                 $data[$flag] = ($fVal & $mask) ? true : false;
             }
         }
+        return $data;
     }
 
     /**
