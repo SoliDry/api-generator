@@ -1,0 +1,118 @@
+<?php
+namespace rjapi\extension;
+
+use Illuminate\Database\Eloquent\Collection;
+
+/**
+ * Class BitMaskTrait
+ * @package rjapi\extension
+ * @property BitMask bitMask
+ */
+trait BitMaskTrait
+{
+    /**
+     * @param Collection $data
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setFlagsIndex(Collection &$data)
+    {
+        $field = $this->bitMask->getField();
+        foreach($data as &$v) {
+            if(isset($v[$field])) {
+                $flags = $this->bitMask->getFlags();
+                $mask  = $v[$field];
+                foreach($flags as $flag => $fVal) {
+                    $v[$flag] = ($fVal & $mask) ? true : false;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $data
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setFlagsView(array &$data)
+    {
+        $field = $this->bitMask->getField();
+        if(isset($data[$field])) {
+            $flags = $this->bitMask->getFlags();
+            $mask  = $data[$field];
+            foreach($flags as $flag => $fVal) {
+                $data[$flag] = ($fVal & $mask) ? true : false;
+            }
+        }
+    }
+
+    /**
+     * Creates bit mask based on bit flags and unset those flags to save via model
+     * @param array $jsonProps
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setMaskCreate(array $jsonProps)
+    {
+        $field = $this->bitMask->getField();
+        $flags = $this->bitMask->getFlags();
+        foreach($flags as $flag => $fVal) {
+            if (isset($jsonProps[$flag])) {
+                if (true === (bool) $jsonProps[$flag]) {
+                    $this->model->$field |= $fVal;
+                } else if (false === (bool) $jsonProps[$flag]) {
+                    $this->model->$field &= ~$fVal;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets flags on model to pass them through json api processing
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setFlagsCreate()
+    {
+        $field = $this->bitMask->getField();
+        if(isset($this->model[$field])) {
+            $flags = $this->bitMask->getFlags();
+            $mask  = $this->model[$field];
+            foreach($flags as $flag => $fVal) {
+                $this->model[$flag] = ($fVal & $mask) ? true : false;
+            }
+        }
+    }
+
+    /**
+     * Updates bit mask based on bit flags and unset those flags to save via model
+     * @param array $jsonProps
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setMaskUpdate(array $jsonProps)
+    {
+        $field = $this->bitMask->getField();
+        $flags = $this->bitMask->getFlags();
+        foreach($flags as $flag => $fVal) {
+            if (isset($jsonProps[$flag])) {
+                if (true === (bool) $jsonProps[$flag]) {
+                    $this->model->$field |= $fVal;
+                } else if (false === (bool) $jsonProps[$flag]) {
+                    $this->model->$field &= ~$fVal;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets flags on model to pass them through json api processing
+     * @throws \rjapi\exception\AttributesException
+     */
+    protected function setFlagsUpdate()
+    {
+        $field = $this->bitMask->getField();
+        if(isset($this->model[$field])) {
+            $flags = $this->bitMask->getFlags();
+            $mask  = $this->model[$field];
+            foreach($flags as $flag => $fVal) {
+                $this->model[$flag] = ($fVal & $mask) ? true : false;
+            }
+        }
+    }
+}

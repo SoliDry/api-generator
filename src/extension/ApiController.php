@@ -23,7 +23,8 @@ class ApiController extends Controller
         EntitiesTrait,
         JWTTrait,
         FsmTrait,
-        SpellCheckTrait;
+        SpellCheckTrait,
+        BitMaskTrait;
 
     // JSON API support enabled by default
     protected $jsonApi = true;
@@ -46,6 +47,8 @@ class ApiController extends Controller
     private $configOptions = null;
     /** @var CustomSql customSql */
     private $customSql = null;
+    /** @var BitMask bitMask */
+    private $bitMask   = null;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -103,6 +106,9 @@ class ApiController extends Controller
         else {
             $items = $this->getAllEntities($sqlOptions);
         }
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setFlagsIndex($items);
+        }
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
@@ -124,6 +130,9 @@ class ApiController extends Controller
             $meta       = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
         $item     = $this->getEntity($id, $data);
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setFlagsView($item);
+        }
         $resource = Json::getResource($this->middleWare, $item, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
@@ -153,7 +162,15 @@ class ApiController extends Controller
                 $this->model->$k = $jsonApiAttributes[$k];
             }
         }
+        // set bit mask
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setMaskCreate($jsonApiAttributes);
+        }
         $this->model->save();
+        // set bit mask from model -> response
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setFlagsCreate();
+        }
         // jwt
         if($this->configOptions->getIsJwtAction() === true) {
             $this->createJwtUser();
@@ -187,6 +204,10 @@ class ApiController extends Controller
         $this->processUpdate($model, $jsonApiAttributes);
         $model->save();
         $this->setRelationships($json, $model->id, true);
+        // set bit mask
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setFlagsUpdate();
+        }
         $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
         Json::outputSerializedData($resource);
     }
@@ -214,6 +235,10 @@ class ApiController extends Controller
                         $model->$k = $jsonApiAttributes[$k];
                     }
                 }
+                // set bit mask
+                if(true === $this->configOptions->isBitMask()) {
+                    $this->setMaskUpdate();
+                }                
             }
         }
     }
@@ -293,6 +318,13 @@ class ApiController extends Controller
         $this->configOptions->setJwtTable(ConfigHelper::getNestedParam(ConfigInterface::JWT, ModelsInterface::MIGRATION_TABLE));
         if($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity)) {// if jwt enabled=true and tables are equal
             $this->configOptions->setIsJwtAction(true);
+        }
+        if($calledMethod !== JSONApiInterface::URI_METHOD_DELETE) {
+            $bitMaskParams = ConfigHelper::getNestedParam(ConfigInterface::BIT_MASK, MigrationsHelper::getTableName($this->entity));
+            if ($bitMaskParams !== null) {
+                $this->configOptions->setBitMask(true);
+                $this->bitMask = new BitMask($this->entity, $bitMaskParams);
+            }
         }
         // set those only for create/update
         if(in_array($calledMethod, [JSONApiInterface::URI_METHOD_CREATE, JSONApiInterface::URI_METHOD_UPDATE]) === true) {
