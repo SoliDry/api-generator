@@ -14,6 +14,11 @@ use rjapi\types\ModulesInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
+/**
+ * Class Config
+ *
+ * @package rjapi\blocks
+ */
 class Config implements ConfigInterface
 {
     use ContentManager, ConfigTrait;
@@ -69,8 +74,6 @@ class Config implements ConfigInterface
         $this->setQueryParams();
         $this->setTrees();
         $this->setJwtContent();
-//        $this->setFsmContent();
-//        $this->setSpellCheck();
         $this->setConfigEntities();
         $this->closeRoot();
     }
@@ -116,74 +119,6 @@ class Config implements ConfigInterface
                 $this->setJwtOptions($objName);
             }
         }
-    }
-
-    /**
-     *  Sets Finite State Machine config array
-     *  Ex.:
-     * 'state_machine' => [
-     *  'article' => [ // table
-     *      'status' => [ // column
-     *          'enabled' => true,
-     *              'states' => [
-     *                  'draft' => [
-     *                      'initial' => true,
-     *                      'published',
-     *                  ],
-     *                  'published' => [
-     *                      'draft',
-     *                      'postponed',
-     *                  ],
-     *                  'postponed' => [
-     *                      'published',
-     *                      'archived',
-     *                  ],
-     *                  'archived' => [],
-     *              ]
-     *      ]
-     *  ]
-     * ],
-     */
-    private function setFsmContent()
-    {
-        $this->openEntity(ConfigInterface::STATE_MACHINE);
-        foreach($this->generator->types as $objName => $objData) {
-            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
-                $excluded = false;
-                foreach($this->generator->excludedSubtypes as $type) {
-                    if(strpos($objName, $type) !== false) {
-                        $excluded = true;
-                    }
-                }
-                // if the type is among excluded - continue
-                if($excluded === true) {
-                    continue;
-                }
-                $this->setFsmOptions($objName);
-            }
-        }
-        $this->closeEntity();
-    }
-
-    private function setSpellCheck()
-    {
-        $this->openEntity(ConfigInterface::SPELL_CHECK);
-        foreach($this->generator->types as $objName => $objData) {
-            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
-                $excluded = false;
-                foreach($this->generator->excludedSubtypes as $type) {
-                    if(strpos($objName, $type) !== false) {
-                        $excluded = true;
-                    }
-                }
-                // if the type is among excluded - continue
-                if($excluded === true) {
-                    continue;
-                }
-                $this->setSpellOptions($objName);
-            }
-        }
-        $this->closeEntity();
     }
 
     private function setConfigEntities()
@@ -251,6 +186,9 @@ class Config implements ConfigInterface
         }
     }
 
+    /**
+     * @param string $objName
+     */
     private function setBitMaskOptions(string $objName)
     {
         if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
@@ -260,7 +198,7 @@ class Config implements ConfigInterface
                         // found FSM definition
                         $this->openBitMask($objName, $propKey);
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
-                            $this->setParam($key, (int)$val, 4);
+                            $this->setParam($key, (int)$val, 5);
                         }
                         $this->closeBitMask();
                     }
