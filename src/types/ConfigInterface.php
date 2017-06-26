@@ -8,6 +8,7 @@ interface ConfigInterface
     const JWT              = 'jwt';
     const ENABLED          = 'enabled';
     const HIDE_MASK        = 'hide_mask';
+    const FLAGS            = 'flags';
     const ACTIVATE         = 'activate';
     const EXPIRES          = 'expires';
     const STATE_MACHINE    = 'state_machine';
