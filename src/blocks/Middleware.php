@@ -76,6 +76,11 @@ class Middleware extends FormRequestModel
             if(is_array($propVal))
             {
                 $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC);
+                if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                    foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
+                        $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
+                    }
+                }
             }
         }
         $this->sourceCode .= PHP_EOL;
