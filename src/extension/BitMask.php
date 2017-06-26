@@ -40,13 +40,13 @@ class BitMask
 
     public function getFlags()
     {
-        if(empty($this->entity[$this->field])) {
+        if(empty($this->entity[$this->field][ConfigInterface::FLAGS])) {
             throw new AttributesException('Flags should be preset for bit mask.');
         }
-        return $this->entity[$this->field];
+        return $this->entity[$this->field][ConfigInterface::FLAGS];
     }
 
     public function isHidden() {
-        return empty($this->entity[ConfigInterface::HIDE_MASK]) ? false : true;
+        return empty($this->entity[$this->field][ConfigInterface::HIDE_MASK]) ? false : true;
     }
 }
