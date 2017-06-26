@@ -66,6 +66,7 @@ trait BitMaskTrait
                     $this->model->$field &= ~$fVal;
                 }
             }
+            unset($this->model->$flag);
         }
     }
 
@@ -76,47 +77,52 @@ trait BitMaskTrait
     protected function setFlagsCreate()
     {
         $field = $this->bitMask->getField();
-        if(isset($this->model[$field])) {
+        if(isset($this->model->$field)) {
             $flags = $this->bitMask->getFlags();
-            $mask  = $this->model[$field];
+            $mask  = $this->model->$field;
             foreach($flags as $flag => $fVal) {
-                $this->model[$flag] = ($fVal & $mask) ? true : false;
+                $this->model->$flag = ($fVal & $mask) ? true : false;
             }
         }
+        return $this->model;
     }
 
     /**
      * Updates bit mask based on bit flags and unset those flags to save via model
+     * @param $model
      * @param array $jsonProps
+     * @return mixed
      * @throws \rjapi\exception\AttributesException
      */
-    protected function setMaskUpdate(array $jsonProps)
+    protected function setMaskUpdate(&$model, array $jsonProps)
     {
         $field = $this->bitMask->getField();
         $flags = $this->bitMask->getFlags();
         foreach($flags as $flag => $fVal) {
             if (isset($jsonProps[$flag])) {
                 if (true === (bool) $jsonProps[$flag]) {
-                    $this->model->$field |= $fVal;
+                    $model->$field |= $fVal;
                 } else if (false === (bool) $jsonProps[$flag]) {
-                    $this->model->$field &= ~$fVal;
+                    $model->$field &= ~$fVal;
                 }
             }
         }
+        return $model;
     }
 
     /**
      * Sets flags on model to pass them through json api processing
+     * @param $model
      * @throws \rjapi\exception\AttributesException
      */
-    protected function setFlagsUpdate()
+    protected function setFlagsUpdate(&$model)
     {
         $field = $this->bitMask->getField();
-        if(isset($this->model[$field])) {
+        if(isset($model[$field])) {
             $flags = $this->bitMask->getFlags();
-            $mask  = $this->model[$field];
+            $mask  = $model[$field];
             foreach($flags as $flag => $fVal) {
-                $this->model[$flag] = ($fVal & $mask) ? true : false;
+                $model[$flag] = ($fVal & $mask) ? true : false;
             }
         }
     }

@@ -167,13 +167,13 @@ class ApiController extends Controller
             $this->setMaskCreate($jsonApiAttributes);
         }
         $this->model->save();
-        // set bit mask from model -> response
-        if(true === $this->configOptions->isBitMask()) {
-            $this->setFlagsCreate();
-        }
         // jwt
         if($this->configOptions->getIsJwtAction() === true) {
-            $this->createJwtUser();
+            $this->createJwtUser(); // !!! model is overridden
+        }
+        // set bit mask from model -> response
+        if(true === $this->configOptions->isBitMask()) {
+            $this->model = $this->setFlagsCreate();
         }
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->middleWare, $this->model, $this->entity, false, $meta);
@@ -206,7 +206,7 @@ class ApiController extends Controller
         $this->setRelationships($json, $model->id, true);
         // set bit mask
         if(true === $this->configOptions->isBitMask()) {
-            $this->setFlagsUpdate();
+            $this->setFlagsUpdate($model);
         }
         $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
         Json::outputSerializedData($resource);
@@ -235,11 +235,11 @@ class ApiController extends Controller
                         $model->$k = $jsonApiAttributes[$k];
                     }
                 }
-                // set bit mask
-                if(true === $this->configOptions->isBitMask()) {
-                    $this->setMaskUpdate();
-                }                
             }
+        }
+        // set bit mask
+        if(true === $this->configOptions->isBitMask()) {
+            $this->setMaskUpdate($model, $jsonApiAttributes);
         }
     }
 
