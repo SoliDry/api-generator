@@ -143,10 +143,11 @@ trait ContentManager
 
     /**
      * @param string $comment
+     * @param int    $tabs
      */
-    protected function setComment(string $comment)
+    protected function setComment(string $comment, int $tabs = 1)
     {
-        $this->sourceCode .= PhpInterface::COMMENT
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::COMMENT
             . PhpInterface::SPACE . $comment . PHP_EOL;
     }
 

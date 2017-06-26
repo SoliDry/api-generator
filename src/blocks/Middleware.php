@@ -69,7 +69,7 @@ class Middleware extends FormRequestModel
 
     private function setPropsContent()
     {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Attributes' . PHP_EOL;
+        $this->setComment(CustomsInterface::CUSTOM_TYPES_ATTRIBUTES);
         foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
                 [RamlInterface::RAML_PROPS] as $propKey => $propVal)
         {
@@ -77,8 +77,9 @@ class Middleware extends FormRequestModel
             {
                 $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC);
                 if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                    $this->setComment(ConfigInterface::BIT_MASK);
                     foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
-                        $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
+                        $this->createProperty($flag, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
                     }
                 }
             }
