@@ -94,7 +94,6 @@ trait ConfigTrait
         $this->openEntity(strtolower($entity), 2);
         $this->openEntity(strtolower($field), 3);
         $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
-        $this->setParam(ConfigInterface::HIDE_MASK, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
         $this->openEntity(ConfigInterface::FLAGS, 4);
     }
 

@@ -25,6 +25,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
 * [Spell check](#user-content-spell-check)
+* [Bit mask](#user-content-bit-mask)
 * [Custom SQL](#user-content-custom-sql)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
@@ -963,6 +964,75 @@ You'll get the `meta` content back with filled array of failed checks in it:
   }
 }
 ```   
+
+### Bit Mask
+To use bit mask with automatic flags fragmentation/defragmentation 
+You can define additional facets to an integer field like this:
+```RAML
+  permissions:
+    type: integer
+    required: false
+    maximum: 20
+    facets:
+      bit_mask:
+        publisher: 1
+        editor: 2
+        manager: 4
+        photo_reporter: 8
+        admin: 16
+```
+thus the config entity `bit_mask` will be generated and used on runtime within requests to process data.
+
+Generated config snippet: 
+```php
+'bit_mask'=> [
+    'user'=> [
+        'permissions'=> [
+            'enabled' => true,
+            'flags'=> [
+                'publisher' => 1,
+                'editor' => 2,
+                'manager' => 4,
+                'photo_reporter' => 8,
+                'admin' => 16,
+            ],
+        ],
+    ],
+],
+```
+
+And the request/response will be:
+```json
+{
+  "data": {
+    "type":"user",
+    "attributes": {
+        "publisher": false,
+        "editor": true,
+        "manager": false,
+        "photo_reporter": true,
+        "admin": true    	
+    }
+  }
+}
+```
+
+```json
+{
+  "data": {
+    "type": "user",
+    "id": "1",
+    "attributes": {
+        "first_name": "Alice",
+        "last_name": "Hacker",
+        "permissions": 26,
+        "publisher": false,
+        "editor": true,
+        "manager": false,
+        "photo_reporter": true,
+        "admin": true,
+```
+Recall that U can always hide ex.: `permissions` field in index/view GET requests if U'd like.
 
 ### Custom SQL
 If by any reason You need to use custom sql query - just define it in `Modules/V1/Config/config.php`:
