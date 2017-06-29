@@ -2,7 +2,7 @@
 namespace rjapi\types;
 
 
-class MiddlewareInterface
+interface MiddlewareInterface
 {
     const METHOD_HANDLE = 'handle';
     const METHOD_PARAM_REQUEST = 'request';

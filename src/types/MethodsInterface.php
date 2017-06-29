@@ -2,7 +2,7 @@
 namespace rjapi\types;
 
 
-class MethodsInterface
+interface MethodsInterface
 {
     // Laravel`s methods
     const RULES     = 'rules';
