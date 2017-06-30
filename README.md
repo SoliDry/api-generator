@@ -17,6 +17,12 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Running generator](#user-content-running-generator)
 * [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 * [Generated files content](#user-content-generated-files-content)
+    * [Module Config](#user-content-module-config)
+    * [Controllers](#user-content-controllers)
+    * [Middlewares](#user-content-middlewares)
+    * [Models](#user-content-models)
+    * [Routes](#user-content-routes)
+    * [Migrations](#user-content-migrations)
 * [Relationships](#user-content-relationships-particular-qualities)
 * [Query parameters](#user-content-query-parameters)
 * [Security](#user-content-security)
@@ -322,6 +328,66 @@ Modules/{ModuleName}/Database/Migrations/ - contains migrations created with opt
 
 ### Generated files content
 
+#### Module Config
+```php
+<?php
+return [
+    'name' => 'V1',
+    'query_params'=> [
+        'limit' => 15,
+        'sort' => 'desc',
+        'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
+    ],
+    'trees'=> [
+        'menu' => true,
+    ],
+    'jwt'=> [
+        'enabled' => true,
+        'table' => 'user',
+        'activate' => 30,
+        'expires' => 3600,
+    ],
+    'state_machine'=> [
+        'article'=> [
+            'status'=> [
+                'enabled' => true,
+                'states'=> [
+                    'initial' => ['draft'],
+                    'draft' => ['published'],
+                    'published' => ['archived', 'postponed'],
+                    'postponed' => ['published', 'archived'],
+                    'archived' => [''],
+                ],
+            ],
+        ],
+    ],
+    'spell_check'=> [
+        'article'=> [
+            'description'=> [
+                'enabled' => true,
+                'language' => 'en',
+            ],
+        ],
+    ],
+    'bit_mask'=> [
+        'user'=> [
+            'permissions'=> [
+                'enabled' => true,
+                'hide_mask' => true,
+                'flags'=> [
+                'publisher' => 1,
+                'editor' => 2,
+                'manager' => 4,
+                'photo_reporter' => 8,
+                'admin' => 16,
+                ],
+            ],
+        ],
+    ],
+];
+```
+
+#### Controllers
 DefaultController example:
 ```php
 <?php
@@ -329,12 +395,23 @@ namespace Modules\V1\Http\Controllers;
 
 class ArticleController extends DefaultController 
 {
-
 }
 ```
 By default every controller works with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
 So You don't need to implement anything special here.
 
+
+```php
+<?php
+namespace Modules\V1\Http\Controllers;
+
+class ArticleController extends DefaultController 
+{
+}
+```
+So one can implement certain logic for particular controller or for all.
+
+#### Middlewares
 Validation BaseFormRequest example:
 ```php
 <?php
@@ -380,6 +457,7 @@ class ArticleMiddleware extends BaseFormRequest
 
 }
 ```
+#### Models
 
 BaseModel example:
 ```php
@@ -405,6 +483,8 @@ class Article extends BaseModel
 }
 ```
 
+#### Routes
+
 Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in raml:
 ```php
 Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers'], function()
@@ -421,6 +501,8 @@ Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers']
     Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
 });
 ```
+
+#### Migrations
 
 Generated migrations will look like standard migrations in Laravel:
 ```php
