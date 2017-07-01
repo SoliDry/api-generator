@@ -10,6 +10,9 @@ use rjapi\types\PhpInterface;
 
 trait MigrationsTrait
 {
+    /**
+     * @param string $entity
+     */
     public function openSchema(string $entity)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . ModelsInterface::MIGRATION_SCHEMA
@@ -28,6 +31,10 @@ trait MigrationsTrait
             . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
+    /**
+     * @param string $method
+     * @param string $entity
+     */
     public function createSchema(string $method, string $entity)
     {
         $this->sourceCode .= $this->setTabs(2) . Classes::getName(Schema::class) . PhpInterface::DOUBLE_COLON
@@ -35,14 +42,25 @@ trait MigrationsTrait
             . PhpInterface::QUOTES . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
-    public function setRow(string $method, string $property = null, $opts = null, array $build = null)
+    /**
+     * @param string      $method
+     * @param string|null $property
+     * @param null        $opts
+     * @param array|null  $build
+     * @param bool        $quoteProperty
+     */
+    public function setRow(string $method, string $property = '', $opts = null, array $build = null, $quoteProperty = true)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
             . PhpInterface::DOLLAR_SIGN . ModelsInterface::MIGRATION_TABLE
-            . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
-            . (($property === null) ? '' : PhpInterface::QUOTES . $property
-                . PhpInterface::QUOTES) . (($opts === null) ? '' : PhpInterface::COMMA . PhpInterface::SPACE . $opts)
-            . PhpInterface::CLOSE_PARENTHESES;
+            . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES;
+        if (true === $quoteProperty) {
+            $this->sourceCode .= PhpInterface::QUOTES . $property . PhpInterface::QUOTES;
+        } else { // smth like array
+            $this->sourceCode .= $property;
+        }
+        $this->sourceCode .= (($opts === null) ? '' : PhpInterface::COMMA . PhpInterface::SPACE . $opts)
+        . PhpInterface::CLOSE_PARENTHESES;
         if($build !== null)
         {
             foreach($build as $method => $param)

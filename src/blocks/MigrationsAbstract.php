@@ -14,7 +14,7 @@ use rjapi\types\RamlInterface;
  */
 abstract class MigrationsAbstract
 {
-    use MigrationsTrait;
+    use ContentManager, MigrationsTrait;
 
     const PATTERN_TIME = 'd_m_Y_Hi';
 
@@ -59,6 +59,7 @@ abstract class MigrationsAbstract
                     }
                 }
                 $this->setIndex($attrVal, $attrKey);
+                $this->setCompositeIndex($attrVal);
             }
         }
         // created_at/updated_at created for every table
@@ -106,8 +107,8 @@ abstract class MigrationsAbstract
                 break;
             case RamlInterface::RAML_ENUM:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
-                    PhpInterface::OPEN_BRACKET . PhpInterface::DOUBLE_QUOTES . implode(PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA
-                        . PhpInterface::DOUBLE_QUOTES, $attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]) . PhpInterface::DOUBLE_QUOTES
+                    PhpInterface::OPEN_BRACKET . PhpInterface::QUOTES . implode(PhpInterface::QUOTES . PhpInterface::COMMA
+                        . PhpInterface::QUOTES, $attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]) . PhpInterface::QUOTES
                     . PhpInterface::CLOSE_BRACKET);
                 break;
             case RamlInterface::RAML_DATE:
@@ -158,6 +159,16 @@ abstract class MigrationsAbstract
                         $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES, $build);
                         break;
                 }
+            }
+        }
+    }
+
+    public function setCompositeIndex(array $attrVal)
+    {
+        if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
+            $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
+            foreach($facets as $k => $v) {
+                $this->setRow($k, $this->getArrayParam($v), null, null, false);
             }
         }
     }

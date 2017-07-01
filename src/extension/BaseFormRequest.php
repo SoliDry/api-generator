@@ -18,4 +18,14 @@ class BaseFormRequest extends FormRequest
     {
         return $next($request);
     }
+
+    public function rules(): array
+    {
+        return [];
+    }
+
+    public function relations(): array
+    {
+        return [];
+    }
 }

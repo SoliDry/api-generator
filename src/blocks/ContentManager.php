@@ -242,4 +242,12 @@ trait ContentManager
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
+
+    private function getArrayParam(array $param)
+    {
+        return PhpInterface::OPEN_BRACKET . PhpInterface::QUOTES
+            . implode(PhpInterface::QUOTES . PhpInterface::COMMA . PhpInterface::QUOTES, $param)
+            . PhpInterface::QUOTES
+            . PhpInterface::CLOSE_BRACKET;
+    }
 }

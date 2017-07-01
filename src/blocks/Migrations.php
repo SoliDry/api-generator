@@ -5,6 +5,7 @@ namespace rjapi\blocks;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use rjapi\extension\BaseFormRequest;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
@@ -15,7 +16,7 @@ use rjapi\types\PhpInterface;
 
 class Migrations extends MigrationsAbstract
 {
-    use ContentManager, EntitiesTrait;
+    use EntitiesTrait;
     /** @var RJApiGenerator $generator */
     protected $generator  = null;
     protected $sourceCode = '';
@@ -61,6 +62,7 @@ class Migrations extends MigrationsAbstract
     public function createPivot()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $middleWare **/
         $middleWare       = new $middlewareEntity();
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
@@ -103,7 +105,6 @@ class Migrations extends MigrationsAbstract
     private function setContent()
     {
         $this->setTag();
-
         $this->setUse(Schema::class);
         $this->setUse(Blueprint::class);
         $migrationClass = Migration::class;

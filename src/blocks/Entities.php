@@ -2,6 +2,7 @@
 
 namespace rjapi\blocks;
 
+use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
@@ -41,6 +42,7 @@ class Entities extends FormRequestModel
     private function setRelations()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $middleWare **/
         $middleWare       = new $middlewareEntity();
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
@@ -139,8 +141,8 @@ class Entities extends FormRequestModel
     public function createPivot()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $middleWare **/
         $middleWare       = new $middlewareEntity();
-
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
             $relations = $middleWare->relations();
