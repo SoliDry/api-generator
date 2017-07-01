@@ -16,14 +16,16 @@ interface RamlInterface
     const RAML_TYPE_FORMAT_FLOAT  = 'float';
     const RAML_TYPE_FORMAT_DOUBLE = 'double';
 
-    const RAML_PROPS         = 'properties';
-    const RAML_ATTRS         = 'attributes';
-    const RAML_RELATIONSHIPS = 'relationships';
-    const RAML_TYPE          = 'type';
-    const RAML_ID            = 'id';
-    const RAML_DATA          = 'data';
-    const RAML_ITEMS         = 'items';
-    const RAML_FACETS        = 'facets';
+    const RAML_PROPS           = 'properties';
+    const RAML_ATTRS           = 'attributes';
+    const RAML_RELATIONSHIPS   = 'relationships';
+    const RAML_TYPE            = 'type';
+    const RAML_ID              = 'id';
+    const RAML_DATA            = 'data';
+    const RAML_ITEMS           = 'items';
+    const RAML_FACETS          = 'facets';
+    const RAML_INDEX           = 'index';
+    const RAML_COMPOSITE_INDEX = 'composite_index';
 
     // RAML keys
     const RAML_KEY_REQUIRED      = 'required';

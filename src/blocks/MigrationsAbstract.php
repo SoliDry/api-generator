@@ -128,8 +128,8 @@ abstract class MigrationsAbstract
      */
     public function setIndex(array $attrVal, string $attrKey)
     {
-        if(empty($attrVal[RamlInterface::RAML_FACETS]) === false) {
-            $facets = $attrVal[RamlInterface::RAML_FACETS];
+        if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX]) === false) {
+            $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX];
             foreach($facets as $k => $v) {
                 switch($v) {
                     case ModelsInterface::INDEX_TYPE_INDEX:
