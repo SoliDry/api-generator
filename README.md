@@ -580,6 +580,28 @@ Additionally, to specify index for particular column You can add a `facets` raml
 ```
 to existing columns.
 
+However, there are situations where You have to create composite indices:
+```raml
+      last_name:
+        required: false
+        type: string
+        minLength: 16
+        maxLength: 256
+        facets:
+          composite_index:
+            index: ['first_name', 'last_name'] # can be unique, primary
+```
+an example for foreign key would be like: 
+```raml
+    facets:
+      composite_index:
+        foreign: ['first_column', 'second_column'] 
+        references: ['first_column', 'second_column']
+        on: first_second
+        onDelete: cascade
+        onUpdate: cascade        
+``` 
+
 ### Relationships particular qualities
 To let generator know about what a particular relationship to apply (ex.: ManyToMany, OneToMany, OneToOne) 
 set the ```relationships``` property in an Entity like so - for ex. let's see how to set ManyToOne relationship between Article and Tag entities.

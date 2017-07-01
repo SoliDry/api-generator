@@ -23,6 +23,8 @@ interface RamlInterface
     const RAML_ID              = 'id';
     const RAML_DATA            = 'data';
     const RAML_ITEMS           = 'items';
+
+    // facets
     const RAML_FACETS          = 'facets';
     const RAML_INDEX           = 'index';
     const RAML_COMPOSITE_INDEX = 'composite_index';

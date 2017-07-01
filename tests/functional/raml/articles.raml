@@ -68,7 +68,8 @@ types:
         minLength: 16
         maxLength: 256
         facets:
-          idx_title: index
+          index:
+            idx_title: index
       description:
         required: true
         type: string
@@ -83,7 +84,8 @@ types:
         minLength: 16
         maxLength: 255
         facets:
-          idx_url: unique
+          index:
+            idx_url: unique
       show_in_top:
         description: Show at the top of main page
         required: false
@@ -105,11 +107,12 @@ types:
         minimum: 1
         maximum: 6
         facets:
-          idx_fk_topic_id: foreign
-          references: id
-          on: topic
-          onDelete: cascade
-          onUpdate: cascade
+          index:
+            idx_fk_topic_id: foreign
+            references: id
+            on: topic
+            onDelete: cascade
+            onUpdate: cascade
       rate:
         type: number
         minimum: 3
@@ -171,6 +174,9 @@ types:
         type: string
         minLength: 16
         maxLength: 256
+        facets:
+          composite_index:
+            index: ['first_name', 'last_name'] # can be unique, primary
       password:
         description: user password to refresh JWT (encrypted with password_hash)
         required: true

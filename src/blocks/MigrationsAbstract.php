@@ -162,14 +162,33 @@ abstract class MigrationsAbstract
     }
 
     /**
+     * Creates composite index via facets
      * @param array $attrVal
+     * @throws AttributesException
      */
     public function setCompositeIndex(array $attrVal)
     {
         if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
             $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
-            foreach($facets as $k => $v) {
-                $this->setRow($k, $this->getArrayParam($v), null, null, false);
+            if (empty($facets[ModelsInterface::INDEX_TYPE_FOREIGN]) === false) {
+                if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
+                    throw new AttributesException('There must be references and on attributes for foreign key construction.');
+                }
+                $build = [
+                    ModelsInterface::INDEX_REFERENCES => $this->getArrayParam($facets[ModelsInterface::INDEX_REFERENCES]),
+                    ModelsInterface::INDEX_ON         => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON] . PhpInterface::QUOTES,
+                ];
+                if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
+                    $build[ModelsInterface::INDEX_ON_DELETE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_DELETE] . PhpInterface::QUOTES;
+                }
+                if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
+                    $build[ModelsInterface::INDEX_ON_UPDATE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_UPDATE] . PhpInterface::QUOTES;
+                }
+                $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $this->getArrayParam($facets[ModelsInterface::INDEX_TYPE_FOREIGN]), null, $build, false);
+            } else {
+                foreach ($facets as $k => $v) {
+                    $this->setRow($k, $this->getArrayParam($v), null, null, false);
+                }
             }
         }
     }

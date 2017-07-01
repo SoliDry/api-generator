@@ -260,4 +260,13 @@ trait ContentManager
             . PhpInterface::QUOTES
             . PhpInterface::CLOSE_BRACKET;
     }
+
+    /**
+     * @param string $param
+     * @return string
+     */
+    public function quoteParam(string $param)
+    {
+        return PhpInterface::QUOTES . $param . PhpInterface::QUOTES;
+    }
 }

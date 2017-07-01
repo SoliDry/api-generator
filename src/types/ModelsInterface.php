@@ -90,7 +90,7 @@ interface ModelsInterface
 
     const ID_MAX_INCREMENTS = 10;
 
-    // db indexes
+    // db indices
     const INDEX_TYPE_INDEX   = 'index';
     const INDEX_TYPE_UNIQUE  = 'unique';
     const INDEX_TYPE_PRIMARY = 'primary';
