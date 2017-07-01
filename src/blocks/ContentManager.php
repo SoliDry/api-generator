@@ -225,6 +225,11 @@ trait ContentManager
         $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . PhpInterface::COMMA;
     }
 
+    /**
+     * Creates entities like *Controller, *Middleware, BaseModel entities etc
+     * @param string $basePath
+     * @param string $postFix
+     */
     public function createEntity(string $basePath, string $postFix = '')
     {
         $this->setContent();
@@ -243,6 +248,11 @@ trait ContentManager
         }
     }
 
+    /**
+     * Gets array param as string to place in generated methods
+     * @param array $param
+     * @return string
+     */
     private function getArrayParam(array $param)
     {
         return PhpInterface::OPEN_BRACKET . PhpInterface::QUOTES
