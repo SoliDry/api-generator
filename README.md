@@ -212,7 +212,8 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         minLength: 16
         maxLength: 256
         facets:
-          idx_title: index        
+          index:
+            idx_title: index
       description:
         required: true
         type: string
@@ -223,6 +224,9 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         type: string
         minLength: 16
         maxLength: 255
+        facets:
+          index:
+            idx_url: unique        
       show_in_top:
         description: Show at the top of main page
         required: false
@@ -237,11 +241,12 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         minimum: 1
         maximum: 6
         facets:
-          idx_fk_topic_id: foreign
-          references: id
-          on: topic
-          onDelete: cascade
-          onUpdate: cascade        
+          index:
+            idx_fk_topic_id: foreign
+            references: id
+            on: topic
+            onDelete: cascade
+            onUpdate: cascade        
       rate:
         type: number
         minimum: 3
@@ -556,19 +561,22 @@ Additionally, to specify index for particular column You can add a `facets` raml
 ```raml
     # regular index
     facets:
-      idx_title: index            
+      index:
+        idx_title: index            
         
     # unique key    
     facets:
-      idx_url: unique             
+      index:
+        idx_url: unique             
         
     # foreign key
     facets:
-      idx_fk_topic_id: foreign
-      references: id
-      on: topic
-      onDelete: cascade
-      onUpdate: cascade
+      index:
+        idx_fk_topic_id: foreign
+        references: id
+        on: topic
+        onDelete: cascade
+        onUpdate: cascade
 ```
 to existing columns.
 
