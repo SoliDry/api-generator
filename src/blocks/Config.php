@@ -88,7 +88,7 @@ class Config implements ConfigInterface
                     $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
                 }
             }
-            $this->closeEntity();
+            $this->closeEntities();
         }
     }
 
@@ -140,7 +140,7 @@ class Config implements ConfigInterface
                     $this->$method($objName);
                 }
             }
-            $this->closeEntity();
+            $this->closeEntities();
         }
     }
 
@@ -157,7 +157,7 @@ class Config implements ConfigInterface
                     $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
                         ? ConfigInterface::DEFAULT_LANGUAGE
                         : $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE], 4);
-                    $this->closeSc();
+                    $this->closeEntities();
                 }
             }
         }
@@ -179,7 +179,7 @@ class Config implements ConfigInterface
                             $this->setTabs(5);
                             $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array)$val);
                         }
-                        $this->closeFsm();
+                        $this->closeEntities();
                     }
                 }
             }
@@ -200,7 +200,7 @@ class Config implements ConfigInterface
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
                             $this->setParam($key, (int)$val, 5);
                         }
-                        $this->closeBitMask();
+                        $this->closeEntities();
                     }
                 }
             }
@@ -221,7 +221,7 @@ class Config implements ConfigInterface
                     $this->setParam(ModelsInterface::MIGRATION_TABLE, MigrationsHelper::getTableName($objName), 2);
                     $this->setParam(ConfigInterface::ACTIVATE, ConfigInterface::DEFAULT_ACTIVATE, 2);
                     $this->setParam(ConfigInterface::EXPIRES, ConfigInterface::DEFAULT_EXPIRES, 2);
-                    $this->closeEntity();
+                    $this->closeEntities();
                 }
             }
         }
@@ -238,7 +238,7 @@ class Config implements ConfigInterface
                     // ensure that there is a type of propKey ex.: Menu with parent_id field set
                     $this->openEntity(ConfigInterface::TREES);
                     $this->setParamDefault($propKey, $propVal[RamlInterface::RAML_KEY_DEFAULT]);
-                    $this->closeEntity();
+                    $this->closeEntities();
                 }
             }
         }

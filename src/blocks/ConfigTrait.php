@@ -12,12 +12,20 @@ use rjapi\types\PhpInterface;
  */
 trait ConfigTrait
 {
+    public $openedBrackets = [];
+
+    /**
+     *  Opens config's root element
+     */
     private function openRoot()
     {
         $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE
                              . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
+    /**
+     *  Closes config's root element
+     */
     private function closeRoot()
     {
         $this->sourceCode .= PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON;
@@ -38,6 +46,12 @@ trait ConfigTrait
                              PhpInterface::COMMA . PHP_EOL;
     }
 
+    /**
+     * Sets any config related param
+     * @param string $param
+     * @param string $value
+     * @param int $tabs
+     */
     private function setParam(string $param, string $value, int $tabs = 1)
     {
         if (is_numeric($value) === false
@@ -97,32 +111,17 @@ trait ConfigTrait
         $this->openEntity(ConfigInterface::FLAGS, 4);
     }
 
-    // todo: program closeEntities after openEntities array filling
-    private function closeBitMask()
-    {
-        $this->closeEntity(4);
-        $this->closeEntity(3);
-        $this->closeEntity(2);
-    }
-
-    private function closeSc()
-    {
-        $this->closeEntity(3);
-        $this->closeEntity(2);
-    }
-
-    private function closeFsm()
-    {
-        $this->closeEntity(4);
-        $this->closeEntity(3);
-        $this->closeEntity(2);
-    }
-
+    /**
+     * Opens config file entity
+     * @param string $entity
+     * @param int $tabs
+     */
     private function openEntity(string $entity, int $tabs = 1)
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $entity
                              . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
                              . PhpInterface::OPEN_BRACKET . PHP_EOL;
+        array_push($this->openedBrackets, $tabs);
     }
 
     /**
@@ -133,5 +132,17 @@ trait ConfigTrait
     private function closeEntity(int $tabs = 1)
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
+    }
+
+    /**
+     *  Closes entities by reversing array of prev opened
+     */
+    private function closeEntities()
+    {
+        $this->openedBrackets = array_reverse($this->openedBrackets);
+        foreach ($this->openedBrackets as $k => $tabs) {
+            $this->closeEntity($tabs);
+            unset($this->openedBrackets[$k]);
+        }
     }
 }
