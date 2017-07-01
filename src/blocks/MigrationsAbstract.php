@@ -107,9 +107,7 @@ abstract class MigrationsAbstract
                 break;
             case RamlInterface::RAML_ENUM:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
-                    PhpInterface::OPEN_BRACKET . PhpInterface::QUOTES . implode(PhpInterface::QUOTES . PhpInterface::COMMA
-                        . PhpInterface::QUOTES, $attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]) . PhpInterface::QUOTES
-                    . PhpInterface::CLOSE_BRACKET);
+                    $this->getArrayParam($attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]));
                 break;
             case RamlInterface::RAML_DATE:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_DATE, $attrKey);
@@ -163,6 +161,9 @@ abstract class MigrationsAbstract
         }
     }
 
+    /**
+     * @param array $attrVal
+     */
     public function setCompositeIndex(array $attrVal)
     {
         if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
