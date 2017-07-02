@@ -94,15 +94,7 @@ abstract class MigrationsAbstract
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
                 break;
             case RamlInterface::RAML_TYPE_NUMBER:
-                if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
-                    && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
-                        || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
-                ) {
-                    $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-                    $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-                    $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
-                        . PhpInterface::SPACE . $min);
-                }
+                $this->setRowNumber($attrVal, $attrKey);
                 break;
             case RamlInterface::RAML_ENUM:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
@@ -114,6 +106,19 @@ abstract class MigrationsAbstract
             case RamlInterface::RAML_TIME:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_TIME, $attrKey);
                 break;
+        }
+    }
+
+    private function setRowNumber(array $attrVal, string $attrKey)
+    {
+        if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
+            && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
+                || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
+        ) {
+            $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
+            $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
+            $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
+                . PhpInterface::SPACE . $min);
         }
     }
 
