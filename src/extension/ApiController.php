@@ -6,11 +6,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\helpers\ConfigOptions;
-use rjapi\types\ConfigInterface;
 use rjapi\blocks\EntitiesTrait;
 use rjapi\types\JwtInterface;
 use rjapi\types\ModelsInterface;
-use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\Json;
 use rjapi\types\PhpInterface;
 
@@ -35,11 +33,6 @@ class ApiController extends Controller
     private $modelEntity = null;
     private $middleWare  = null;
     private $relsRemoved = false;
-    // default query params value
-    private $defaultPage    = 0;
-    private $defaultLimit   = 0;
-    private $defaultSort    = '';
-    private $isTree         = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions configOptions */
     private $configOptions = null;
@@ -264,16 +257,5 @@ class ApiController extends Controller
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
-    }
-
-    /**
-     *  Sets the default config based parameters
-     */
-    private function setDefaults()
-    {
-        $this->defaultPage  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
-        $this->defaultLimit = ConfigHelper::getQueryParam(ModelsInterface::PARAM_LIMIT);
-        $this->defaultSort  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
-        $this->isTree       = ConfigHelper::getNestedParam(ConfigInterface::TREES, $this->entity, true);
     }
 }

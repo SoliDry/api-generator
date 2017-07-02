@@ -11,8 +11,19 @@ use rjapi\types\ConfigInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\RamlInterface;
 
+/**
+ * Trait OptionsTrait
+ * @package rjapi\extension
+ *
+ * @property ConfigOptions configOptions
+ */
 trait OptionsTrait
 {
+    // default query params value
+    private $defaultPage    = 0;
+    private $defaultLimit   = 0;
+    private $defaultSort    = '';
+    private $isTree         = false;
     /**
      * Sets SqlOptions params
      * @param Request $request
@@ -53,6 +64,17 @@ trait OptionsTrait
         if($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity)) {// if jwt enabled=true and tables are equal
             $this->configOptions->setIsJwtAction(true);
         }
+        $this->setOptionsOnNotDelete($calledMethod);
+        // set those only for create/update
+        $this->setOptionsOnCreateUpdate($calledMethod);
+        // set those only for index
+        if($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
+            $this->customSql = new CustomSql($this->entity);
+        }
+    }
+
+    private function setOptionsOnNotDelete(string $calledMethod)
+    {
         if($calledMethod !== JSONApiInterface::URI_METHOD_DELETE) {
             $bitMaskParams = ConfigHelper::getNestedParam(ConfigInterface::BIT_MASK, MigrationsHelper::getTableName($this->entity));
             if ($bitMaskParams !== null) {
@@ -60,7 +82,10 @@ trait OptionsTrait
                 $this->bitMask = new BitMask($this->entity, $bitMaskParams);
             }
         }
-        // set those only for create/update
+    }
+
+    private function setOptionsOnCreateUpdate(string $calledMethod)
+    {
         if(in_array($calledMethod, [JSONApiInterface::URI_METHOD_CREATE, JSONApiInterface::URI_METHOD_UPDATE]) === true) {
             // state machine for concrete entity == table
             $stateMachine = ConfigHelper::getNestedParam(ConfigInterface::STATE_MACHINE, MigrationsHelper::getTableName($this->entity));
@@ -73,9 +98,16 @@ trait OptionsTrait
                 $this->configOptions->setSpellCheck(true);
             }
         }
-        // set those only for index
-        if($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
-            $this->customSql = new CustomSql($this->entity);
-        }
+    }
+
+    /**
+     *  Sets the default config based parameters
+     */
+    private function setDefaults()
+    {
+        $this->defaultPage  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_PAGE);
+        $this->defaultLimit = ConfigHelper::getQueryParam(ModelsInterface::PARAM_LIMIT);
+        $this->defaultSort  = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
+        $this->isTree       = ConfigHelper::getNestedParam(ConfigInterface::TREES, $this->entity, true);
     }
 }
