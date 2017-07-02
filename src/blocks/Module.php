@@ -47,12 +47,12 @@ class Module
     {
         $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE
                              . PhpInterface::OPEN_BRACKET . PHP_EOL . PhpInterface::TAB_PSR4
-                             . PhpInterface::QUOTES . ModulesInterface::KEY_MODULES . PhpInterface::QUOTES
+                             . $this->quoteParam(ModulesInterface::KEY_MODULES)
                              . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
                              . PhpInterface::OPEN_BRACKET . PHP_EOL . PhpInterface::TAB_PSR4
-                             . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES
-                             . $this->generator->version . PhpInterface::QUOTES . PhpInterface::COMMA
-                             . PHP_EOL . PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACKET . PHP_EOL
+                             . PhpInterface::TAB_PSR4 . $this->quoteParam($this->generator->version)
+                             . PhpInterface::COMMA . PHP_EOL . PhpInterface::TAB_PSR4
+                             . PhpInterface::CLOSE_BRACKET . PHP_EOL
                              . PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON;
     }
 }

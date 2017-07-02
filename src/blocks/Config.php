@@ -177,7 +177,7 @@ class Config implements ConfigInterface
                         $this->openFsm($objName, $propKey);
                         foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
                             $this->setTabs(5);
-                            $this->setArrayProperty(PhpInterface::QUOTES . $key . PhpInterface::QUOTES, (array)$val);
+                            $this->setArrayProperty($key, (array)$val);
                         }
                         $this->closeEntities();
                     }

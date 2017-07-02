@@ -123,7 +123,8 @@ trait ContentManager
         $val = PhpInterface::OPEN_BRACKET;
         $val .= PhpInterface::QUOTES . implode(PhpInterface::QUOTES . PhpInterface::COMMA . PhpInterface::SPACE . PhpInterface::QUOTES, $value) . PhpInterface::QUOTES;
         $val .= PhpInterface::CLOSE_BRACKET;
-        $this->sourceCode .= $key . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
+        $this->sourceCode .= $this->quoteParam($key)
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
             . PhpInterface::SPACE . $val . PhpInterface::COMMA . PHP_EOL;
     }
 

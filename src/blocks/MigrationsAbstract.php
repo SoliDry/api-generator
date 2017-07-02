@@ -78,9 +78,8 @@ abstract class MigrationsAbstract
         switch($type) {
             case RamlInterface::RAML_TYPE_STRING:
                 $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
-                $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null : [RamlInterface::RAML_KEY_DEFAULT
-                                                                                    => PhpInterface::QUOTES
-                    . $attrVal[RamlInterface::RAML_KEY_DEFAULT] . PhpInterface::QUOTES];
+                $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null
+                    : [RamlInterface::RAML_KEY_DEFAULT => $this->quoteParam($attrVal[RamlInterface::RAML_KEY_DEFAULT])];
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey, $length, $build);
                 break;
             case RamlInterface::RAML_TYPE_INTEGER:
@@ -132,29 +131,29 @@ abstract class MigrationsAbstract
             foreach($facets as $k => $v) {
                 switch($v) {
                     case ModelsInterface::INDEX_TYPE_INDEX:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $attrKey,  $this->quoteParam($k));
                         break;
                     case ModelsInterface::INDEX_TYPE_PRIMARY:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $attrKey, $this->quoteParam($k));
                         break;
                     case ModelsInterface::INDEX_TYPE_UNIQUE:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $attrKey, $this->quoteParam($k));
                         break;
                     case ModelsInterface::INDEX_TYPE_FOREIGN:
                         if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
                             throw new AttributesException('There must be references and on attributes for foreign key construction.');
                         }
                         $build = [
-                            ModelsInterface::INDEX_REFERENCES => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_REFERENCES] . PhpInterface::QUOTES,
-                            ModelsInterface::INDEX_ON         => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON] . PhpInterface::QUOTES,
+                            ModelsInterface::INDEX_REFERENCES => $this->quoteParam($facets[ModelsInterface::INDEX_REFERENCES]),
+                            ModelsInterface::INDEX_ON         => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
                         ];
                         if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
-                            $build[ModelsInterface::INDEX_ON_DELETE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_DELETE] . PhpInterface::QUOTES;
+                            $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
                         }
                         if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
-                            $build[ModelsInterface::INDEX_ON_UPDATE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_UPDATE] . PhpInterface::QUOTES;
+                            $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
                         }
-                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, PhpInterface::QUOTES . $k . PhpInterface::QUOTES, $build);
+                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, $this->quoteParam($k), $build);
                         break;
                 }
             }
@@ -176,13 +175,13 @@ abstract class MigrationsAbstract
                 }
                 $build = [
                     ModelsInterface::INDEX_REFERENCES => $this->getArrayParam($facets[ModelsInterface::INDEX_REFERENCES]),
-                    ModelsInterface::INDEX_ON         => PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON] . PhpInterface::QUOTES,
+                    ModelsInterface::INDEX_ON         => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
                 ];
                 if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
-                    $build[ModelsInterface::INDEX_ON_DELETE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_DELETE] . PhpInterface::QUOTES;
+                    $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
                 }
                 if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
-                    $build[ModelsInterface::INDEX_ON_UPDATE] = PhpInterface::QUOTES . $facets[ModelsInterface::INDEX_ON_UPDATE] . PhpInterface::QUOTES;
+                    $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
                 }
                 $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $this->getArrayParam($facets[ModelsInterface::INDEX_TYPE_FOREIGN]), null, $build, false);
             } else {
