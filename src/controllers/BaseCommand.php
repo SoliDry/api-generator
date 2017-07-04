@@ -3,13 +3,9 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\Config;
-use rjapi\blocks\Middleware;
 use rjapi\blocks\Controllers;
 use rjapi\blocks\FileManager;
-use rjapi\blocks\Entities;
-use rjapi\blocks\Migrations;
 use rjapi\blocks\Module;
-use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
@@ -21,6 +17,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class BaseCommand extends Command
 {
+    use GeneratorTrait;
+
     // dirs
     public $rootDir        = '';
     public $appDir         = '';
@@ -49,13 +47,9 @@ class BaseCommand extends Command
     public $relationships     = [];
     private $ramlFiles        = [];
 
-    private $forms        = null;
     private $controllers  = null;
     private $moduleObject = null;
-    private $mappers      = null;
     private $containers   = null;
-    private $routes       = null;
-    private $migrations   = null;
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
@@ -238,26 +232,10 @@ class BaseCommand extends Command
         $this->controllers->createDefault();
         $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
 
-        // create middleware
-        $this->forms = new Middleware($this);
-        $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
-        $this->forms->createAccessToken();
-
-        // create entities/models
-        $this->mappers = new Entities($this);
-        $this->mappers->createPivot();
-        $this->mappers->createEntity($this->formatEntitiesPath());
-
-        // create routes
-        $this->routes = new Routes($this);
-        $this->routes->create();
-
-        if(empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false)
-        {
-            // create Migrations
-            $this->migrations = new Migrations($this);
-            $this->migrations->create();
-            $this->migrations->createPivot();
+        if (empty($this->options[ConsoleInterface::OPTION_APPEND])) { // create new or regenerate
+            $this->createNewComponents();
+        } else { // append to an existing content
+            $this->appendToComponents();
         }
     }
 
