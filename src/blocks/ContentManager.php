@@ -134,7 +134,7 @@ trait ContentManager
      * @param string $value
      * @param bool $isString
      */
-    protected function createProperty(string $prop, string $modifier, $value = RJApiGenerator::PHP_TYPES_NULL, bool $isString = false)
+    protected function createProperty(string $prop, string $modifier, $value = PhpInterface::PHP_TYPES_NULL, bool $isString = false)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . $prop
             . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE

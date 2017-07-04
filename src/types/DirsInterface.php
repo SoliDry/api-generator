@@ -14,4 +14,6 @@ interface DirsInterface
     const ENTITIES_DIR      = 'Entities';
     const DATABASE_DIR      = 'Database';
     const MIGRATIONS_DIR    = 'Migrations';
+    // directory to store raml history
+    const GEN_DIR           = '.gen';
 }

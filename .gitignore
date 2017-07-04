@@ -10,3 +10,4 @@ routes/
 storage/
 /raml/
 .env
+.gen/

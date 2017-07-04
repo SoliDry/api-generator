@@ -19,7 +19,7 @@ use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
-trait ControllersTrait
+class BaseCommand extends Command
 {
     // dirs
     public $rootDir        = '';
@@ -47,6 +47,7 @@ trait ControllersTrait
     public $objectProps       = [];
     public $generatedFiles    = [];
     public $relationships     = [];
+    private $ramlFiles        = [];
 
     private $forms        = null;
     private $controllers  = null;
@@ -68,9 +69,12 @@ trait ControllersTrait
 
     /**
      *  Generates api Controllers + Models to support RAML validation
+     *
+     * @param string $ramlFile  path to raml file
      */
     public function actionIndex(string $ramlFile)
     {
+        $this->ramlFiles[] = $ramlFile;
         $data = Yaml::parse(file_get_contents($ramlFile));
         $this->version        = str_replace('/', '', $data['version']);
         $this->appDir         = DirsInterface::APPLICATION_DIR;
@@ -95,6 +99,7 @@ trait ControllersTrait
         }
         $this->setIncludedTypes($data);
         $this->runGenerator();
+        $this->setGenHistory();
     }
 
     /**
@@ -201,6 +206,11 @@ trait ControllersTrait
         return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
     }
 
+    public function formatGenPath()
+    {
+        return DirsInterface::GEN_DIR . PhpInterface::SLASH . date('Y-m-d') . PhpInterface::SLASH;
+    }
+
     /**
      * @param string $name
      */
@@ -263,9 +273,22 @@ trait ControllersTrait
             $files = $data[RamlInterface::RAML_KEY_USES];
             foreach($files as $file)
             {
+                $this->ramlFiles[] = $file;
                 $fileData = Yaml::parse(file_get_contents($file));
                 $this->types += $fileData[RamlInterface::RAML_KEY_TYPES];
             }
+        }
+    }
+
+    private function setGenHistory()
+    {
+        // create .gen dir to store raml history
+        FileManager::createPath($this->formatGenPath());
+        foreach ($this->ramlFiles as $file) {
+            $pathInfo = pathinfo($file);
+            $dest = $this->formatGenPath() . $pathInfo['filename'] . PhpInterface::UNDERSCORE
+                    . date('His') . PhpInterface::DOT . $pathInfo['extension'];
+            copy($file, $dest);
         }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\blocks;
 
-use rjapi\controllers\ControllersTrait;
+use rjapi\controllers\BaseCommand;
 use rjapi\exception\AttributesException;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
@@ -24,7 +24,7 @@ class Config implements ConfigInterface
     use ContentManager, ConfigTrait;
 
     protected $sourceCode = '';
-    /** @var ControllersTrait generator */
+    /** @var BaseCommand generator */
     protected $generator = null;
     protected $className = null;
 
