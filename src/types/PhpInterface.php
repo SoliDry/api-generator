@@ -67,11 +67,12 @@ interface PhpInterface
     const CLASS_CLOSURE = 'Closure';
 
     // php flow structs
-    const IF = 'if';
+    const IF            = 'if';
 
     // key-words
-    const ECHO = 'echo';
-    const DIE  = 'die';
+    const ECHO          = 'echo';
+    const DIE           = 'die';
 
     const PHP_EXTENSION_PSPELL = 'pspell';
+    const ENCODING_UTF8        = 'utf-8';
 }

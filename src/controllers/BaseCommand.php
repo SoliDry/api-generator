@@ -101,12 +101,12 @@ class BaseCommand extends Command
      */
     private function runGenerator()
     {
-        $this->generateModule();
-        $this->generateConfig();
-        if (empty($this->options[ConsoleInterface::OPTION_APPEND]) !== false) { // create new or regenerate
+        if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false) { // create new or regenerate
             $this->setMergedTypes();
             $this->isMerge = true;
         }
+        $this->generateModule();
+        $this->generateConfig();
         $this->generate();
     }
 
@@ -251,8 +251,8 @@ class BaseCommand extends Command
         FileManager::createPath($this->formatGenPath());
         foreach ($this->ramlFiles as $file) {
             $pathInfo = pathinfo($file);
-            $dest     = $this->formatGenPath() . $pathInfo['filename'] . PhpInterface::UNDERSCORE
-                        . date('His') . PhpInterface::DOT . $pathInfo['extension'];
+            $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
+                        . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
             copy($file, $dest);
         }
     }
