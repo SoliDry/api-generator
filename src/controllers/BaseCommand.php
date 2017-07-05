@@ -4,13 +4,10 @@ namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\Config;
-use rjapi\blocks\Controllers;
 use rjapi\blocks\FileManager;
 use rjapi\blocks\Module;
-use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
-use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -48,10 +45,7 @@ class BaseCommand extends Command
     public  $generatedFiles    = [];
     public  $relationships     = [];
     private $ramlFiles         = [];
-
-    private $controllers  = null;
-    private $moduleObject = null;
-    private $containers   = null;
+    private $controllers       = null;
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
