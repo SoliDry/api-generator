@@ -250,6 +250,29 @@ trait ContentManager
     }
 
     /**
+     * Creates entities like *Controller, *Middleware, BaseModel entities etc
+     * @param string $basePath
+     * @param string $postFix
+     */
+    public function recreateEntity(string $basePath, string $postFix = '')
+    {
+        $this->resetContent();
+        $file      = $basePath . PhpInterface::SLASH . $this->className;
+        if ($postFix !== '') {
+            $file .= $postFix;
+        }
+        $file .= PhpInterface::PHP_EXT;
+        $isCreated = FileManager::createFile(
+            $file, $this->sourceCode,
+            FileManager::isRegenerated($this->generator->options)
+        );
+        if($isCreated)
+        {
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
+    }
+
+    /**
      * Gets array param as string to place in generated methods
      * @param array $param
      * @return string

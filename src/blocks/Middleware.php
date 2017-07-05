@@ -205,6 +205,46 @@ class Middleware extends FormRequestModel
         $this->endClass();
     }
 
+    /**
+     *  Sets content of *Middleware
+     */
+    private function resetContent()
+    {
+        $this->setTag();
+        $this->setNamespace(
+            $this->generator->httpDir .
+            PhpInterface::BACKSLASH .
+            $this->generator->middlewareDir
+        );
+        $baseFullForm = BaseFormRequest::class;
+        $baseFormName = Classes::getName($baseFullForm);
+        $this->setUse($baseFullForm, false, true);
+        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
+
+        if(empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+           &&
+           empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false
+        )
+        {
+            $this->setProps(
+                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
+                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
+            );
+        }
+        else
+        {
+            $this->setProps();
+        }
+
+        $this->constructRules();
+        $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
+            ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
+        $this->constructRelations($relTypes);
+
+        // create closing brace
+        $this->endClass();
+    }
+
     public function createAccessToken()
     {
         if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]

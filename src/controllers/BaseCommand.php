@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
@@ -29,23 +30,24 @@ class BaseCommand extends Command
     public $entitiesDir    = '';
     public $migrationsDir  = '';
 
-    public $version;
-    public $objectName        = '';
-    public $defaultController = 'Default';
-    public $uriNamedParams    = null;
-    public $ramlFile          = '';
-    public $force             = null;
-    public $customTypes       = [
+    public  $version;
+    public  $objectName        = '';
+    public  $defaultController = 'Default';
+    public  $uriNamedParams    = null;
+    public  $ramlFile          = '';
+    public  $force             = null;
+    public  $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
     ];
-    public $types             = [];
-    public $frameWork         = '';
-    public $objectProps       = [];
-    public $generatedFiles    = [];
-    public $relationships     = [];
-    private $ramlFiles        = [];
+    public  $types             = [];
+    public  $mergedTypes       = [];
+    public  $frameWork         = '';
+    public  $objectProps       = [];
+    public  $generatedFiles    = [];
+    public  $relationships     = [];
+    private $ramlFiles         = [];
 
     private $controllers  = null;
     private $moduleObject = null;
@@ -59,17 +61,18 @@ class BaseCommand extends Command
         CustomsInterface::CUSTOM_TYPES_TREES,
     ];
 
-    public $options = [];
+    public  $options = [];
+    private $isMerge = false;
 
     /**
      *  Generates api Controllers + Models to support RAML validation
      *
-     * @param string $ramlFile  path to raml file
+     * @param string $ramlFile path to raml file
      */
     public function actionIndex(string $ramlFile)
     {
-        $this->ramlFiles[] = $ramlFile;
-        $data = Yaml::parse(file_get_contents($ramlFile));
+        $this->ramlFiles[]    = $ramlFile;
+        $data                 = Yaml::parse(file_get_contents($ramlFile));
         $this->version        = str_replace('/', '', $data['version']);
         $this->appDir         = DirsInterface::APPLICATION_DIR;
         $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
@@ -79,16 +82,13 @@ class BaseCommand extends Command
         $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-        if((bool) env('PHP_DEV') === true)
-        {
+        if ((bool) env('PHP_DEV') === true) {
             $this->createDirs();
             $this->options = [
                 ConsoleInterface::OPTION_MIGRATIONS => 1,
                 ConsoleInterface::OPTION_REGENERATE => 1
             ];
-        }
-        else
-        {
+        } else {
             $this->options = $this->options();
         }
         $this->setIncludedTypes($data);
@@ -103,21 +103,28 @@ class BaseCommand extends Command
     {
         $this->generateModule();
         $this->generateConfig();
-        foreach($this->types as $objName => $objData)
-        {
-            if(in_array($objName, $this->customTypes) === false)
-            { // if this is not a custom type generate resources
+        if (empty($this->options[ConsoleInterface::OPTION_APPEND]) !== false) { // create new or regenerate
+            $this->setMergedTypes();
+            $this->isMerge = true;
+        }
+        $this->generate();
+    }
+
+    /**
+     *  Generates new code or regenerate older with new content
+     */
+    private function generate()
+    {
+        foreach ($this->types as $objName => $objData) {
+            if (in_array($objName, $this->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
-                foreach($this->excludedSubtypes as $type)
-                {
-                    if(strpos($objName, $type) !== false)
-                    {
+                foreach ($this->excludedSubtypes as $type) {
+                    if (strpos($objName, $type) !== false) {
                         $excluded = true;
                     }
                 }
                 // if the type is among excluded - continue
-                if($excluded === true)
-                {
+                if ($excluded === true) {
                     continue;
                 }
                 $this->processObjectData($objName, $objData);
@@ -127,17 +134,19 @@ class BaseCommand extends Command
 
     /**
      * @param string $objName
-     * @param array $objData
+     * @param array  $objData
      */
     private function processObjectData(string $objName, array $objData)
     {
-        foreach($objData as $k => $v)
-        {
-            if($k === RamlInterface::RAML_PROPS)
-            { // process props
+        foreach ($objData as $k => $v) {
+            if ($k === RamlInterface::RAML_PROPS) { // process props
                 $this->setObjectName($objName);
                 $this->setObjectProps($v);
-                $this->generateResources();
+                if (true === $this->isMerge) {
+                    $this->mergeResources();
+                } else {
+                    $this->generateResources();
+                }
             }
         }
     }
@@ -147,7 +156,7 @@ class BaseCommand extends Command
         $module = new Module($this);
         $module->create();
     }
-    
+
     private function generateConfig()
     {
         $module = new Config($this);
@@ -182,13 +191,13 @@ class BaseCommand extends Command
         return FileManager::getModulePath($this, true) . $this->middlewareDir;
     }
 
-    public function formatEntitiesPath() : string
+    public function formatEntitiesPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
-    public function formatMigrationsPath() : string
+    public function formatMigrationsPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
@@ -219,41 +228,19 @@ class BaseCommand extends Command
     }
 
     /**
-     * The creation sequence of every entity element is crucial
-     */
-    private function generateResources()
-    {
-        Console::out(
-            '================' . PhpInterface::SPACE . $this->objectName
-            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
-        );
-        // create controller
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
-
-        if (empty($this->options[ConsoleInterface::OPTION_APPEND])) { // create new or regenerate
-            $this->createNewComponents();
-        } else { // append to an existing content
-            $this->appendToComponents();
-        }
-    }
-
-    /**
      * Collect types = main + included files
+     *
      * @param array $data
      */
     private function setIncludedTypes(array $data)
     {
         $this->types = $data[RamlInterface::RAML_KEY_TYPES];
-        if(empty($data[RamlInterface::RAML_KEY_USES]) === false)
-        {
+        if (empty($data[RamlInterface::RAML_KEY_USES]) === false) {
             $files = $data[RamlInterface::RAML_KEY_USES];
-            foreach($files as $file)
-            {
+            foreach ($files as $file) {
                 $this->ramlFiles[] = $file;
-                $fileData = Yaml::parse(file_get_contents($file));
-                $this->types += $fileData[RamlInterface::RAML_KEY_TYPES];
+                $fileData          = Yaml::parse(file_get_contents($file));
+                $this->types       += $fileData[RamlInterface::RAML_KEY_TYPES];
             }
         }
     }
@@ -264,8 +251,8 @@ class BaseCommand extends Command
         FileManager::createPath($this->formatGenPath());
         foreach ($this->ramlFiles as $file) {
             $pathInfo = pathinfo($file);
-            $dest = $this->formatGenPath() . $pathInfo['filename'] . PhpInterface::UNDERSCORE
-                    . date('His') . PhpInterface::DOT . $pathInfo['extension'];
+            $dest     = $this->formatGenPath() . $pathInfo['filename'] . PhpInterface::UNDERSCORE
+                        . date('His') . PhpInterface::DOT . $pathInfo['extension'];
             copy($file, $dest);
         }
     }

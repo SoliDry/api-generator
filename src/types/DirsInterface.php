@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\types;
 
 interface DirsInterface
@@ -15,5 +16,6 @@ interface DirsInterface
     const DATABASE_DIR      = 'Database';
     const MIGRATIONS_DIR    = 'Migrations';
     // directory to store raml history
-    const GEN_DIR           = '.gen';
+    const GEN_DIR       = '.gen';
+    const EXCLUDED_DIRS = ['.', '..'];
 }
