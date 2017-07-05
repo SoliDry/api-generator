@@ -4,6 +4,7 @@ namespace rjapi\controllers;
 
 use rjapi\blocks\Controllers;
 use rjapi\blocks\Entities;
+use rjapi\blocks\FileManager;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
@@ -68,7 +69,11 @@ trait GeneratorTrait
 
         // create middleware
         $this->forms = new Middleware($this);
-        $this->forms->recreateEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        if (true === file_exists($this->forms->getEntityFile($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX))) {
+            $this->forms->recreateEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        } else {
+            $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        }
     }
 
     private function setMergedTypes()
