@@ -10,7 +10,7 @@ class RJApiGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=}';
+    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history}';
 
     /**
      * The console command description.

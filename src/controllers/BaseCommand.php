@@ -247,13 +247,15 @@ class BaseCommand extends Command
 
     private function setGenHistory()
     {
-        // create .gen dir to store raml history
-        FileManager::createPath($this->formatGenPath());
-        foreach ($this->ramlFiles as $file) {
-            $pathInfo = pathinfo($file);
-            $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
-                        . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
-            copy($file, $dest);
+        if (empty($this->options[ConsoleInterface::OPTION_NO_HISTORY])) {
+            // create .gen dir to store raml history
+            FileManager::createPath($this->formatGenPath());
+            foreach ($this->ramlFiles as $file) {
+                $pathInfo = pathinfo($file);
+                $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
+                            . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
+                copy($file, $dest);
+            }
         }
     }
 }
