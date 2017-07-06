@@ -83,7 +83,6 @@ class Middleware extends FormRequestModel
                 }
             }
         }
-        $this->sourceCode .= PHP_EOL;
     }
 
     private function setRelationTypes($relationTypes)
@@ -145,7 +144,7 @@ class Middleware extends FormRequestModel
             }
         }
         $this->endArray();
-        $this->endMethod();
+        $this->endMethod(1);
     }
 
     private function setRelations($relationTypes)
@@ -184,6 +183,7 @@ class Middleware extends FormRequestModel
             $this->setProps();
         }
         $this->setComment(DefaultInterface::PROPS_END);
+        $this->sourceCode .= PHP_EOL;
         $this->setComment(DefaultInterface::METHOD_START);
         $this->constructRules();
         $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])

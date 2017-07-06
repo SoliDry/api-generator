@@ -100,9 +100,12 @@ trait ContentManager
                 PhpInterface::DOUBLE_QUOTES . $value . PhpInterface::DOUBLE_QUOTES) . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
-    protected function endMethod()
+    protected function endMethod(int $eolCnt = 2)
     {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE . PHP_EOL . PHP_EOL;
+        $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE;
+        for ($i = $eolCnt;$i > 0;--$i) {
+            $this->sourceCode .= PHP_EOL;
+        }
     }
 
     protected function startArray()

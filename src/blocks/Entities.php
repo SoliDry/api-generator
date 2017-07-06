@@ -47,9 +47,9 @@ class Entities extends FormRequestModel
         $middleWare       = new $middlewareEntity();
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
+            $this->sourceCode .= PHP_EOL;
             $this->setComment(DefaultInterface::METHOD_START);
             $relations = $middleWare->relations();
-            $this->sourceCode .= PHP_EOL; // margin top from props
             foreach($relations as $relationEntity)
             {
                 $ucEntitty = ucfirst($relationEntity);
@@ -213,7 +213,7 @@ class Entities extends FormRequestModel
         $this->startMethod($methodOptions);
         $toReturn = $this->getRelationReturn($entity, $method, $args);
         $this->setMethodReturn($toReturn);
-        $this->endMethod();
+        $this->endMethod(1);
     }
 
     /**

@@ -57,7 +57,8 @@ class BaseCommand extends Command
 
     public $options = [];
     public $isMerge = false;
-
+    /** increment created routes to create file first and then append content */
+    public $routesCreated = 0;
     /**
      *  Generates api Controllers + Models to support RAML validation
      *
