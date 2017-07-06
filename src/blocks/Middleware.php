@@ -199,7 +199,8 @@ class Middleware extends FormRequestModel
      */
     private function resetContent()
     {
-        $this->setBeforeProps();
+        $this->setBeforeProps($this->getEntityFile($this->generator->formatMiddlewarePath(),
+            DefaultInterface::MIDDLEWARE_POSTFIX));
         $isObjectProps = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false;
         $isInTypes = empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false;
         if (true === $isObjectProps && true === $isInTypes) {

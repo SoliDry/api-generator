@@ -74,6 +74,16 @@ trait GeneratorTrait
         } else {
             $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
         }
+
+        // create entities/models
+        $this->mappers = new Entities($this);
+        if (true === file_exists($this->forms->getEntityFile($this->formatEntitiesPath()))) {
+            $this->mappers->recreatePivot();
+            $this->mappers->recreateEntity($this->formatEntitiesPath());
+        } else {
+            $this->mappers->createPivot();
+            $this->mappers->createEntity($this->formatEntitiesPath());
+        }
     }
 
     private function setMergedTypes()

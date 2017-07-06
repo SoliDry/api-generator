@@ -300,4 +300,27 @@ class Entities extends FormRequestModel
         );
         $this->endClass();
     }
+
+    /**
+     *  Re-Sets pivot entity content to $sourceCode
+     * @param string $ucEntity  an entity upper case first name
+     */
+    private function resetPivotContent(string $ucEntity)
+    {
+        $this->setBeforeProps($this->getEntityFile($this->generator->formatEntitiesPath()));
+        $this->createProperty(
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
+            RamlInterface::RAML_ID, true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName . PhpInterface::UNDERSCORE . $ucEntity), true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
+            PhpInterface::PHP_TYPES_BOOL_TRUE
+        );
+        $this->setAfterProps();
+        $this->setAfterMethods();
+    }
 }
