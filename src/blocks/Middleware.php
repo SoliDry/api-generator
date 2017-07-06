@@ -173,10 +173,9 @@ class Middleware extends FormRequestModel
         $this->setUse($baseFullForm, false, true);
         $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
 
+        $this->setComment(DefaultInterface::PROPS_START);
         if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-            &&
-            empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false
-        ) {
+            && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
             $this->setProps(
                 $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
                 [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
@@ -184,12 +183,13 @@ class Middleware extends FormRequestModel
         } else {
             $this->setProps();
         }
-
+        $this->setComment(DefaultInterface::PROPS_END);
+        $this->setComment(DefaultInterface::METHOD_START);
         $this->constructRules();
         $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
             ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
         $this->constructRelations($relTypes);
-
+        $this->setComment(DefaultInterface::METHOD_END);
         // create closing brace
         $this->endClass();
     }
@@ -201,9 +201,8 @@ class Middleware extends FormRequestModel
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatMiddlewarePath(),
             DefaultInterface::MIDDLEWARE_POSTFIX));
-        $isObjectProps = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false;
-        $isInTypes = empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false;
-        if (true === $isObjectProps && true === $isInTypes) {
+        if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+            && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
             $this->setProps(
                 $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
                 [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]

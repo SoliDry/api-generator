@@ -9,6 +9,7 @@ use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
+use rjapi\types\DefaultInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -253,7 +254,7 @@ class Entities extends FormRequestModel
 
         $this->setUse($baseMapper, false, true);
         $this->startClass($this->className, $baseMapperName);
-
+        $this->setComment(DefaultInterface::PROPS_START);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
@@ -266,8 +267,34 @@ class Entities extends FormRequestModel
             ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
             PhpInterface::PHP_TYPES_BOOL_FALSE
         );
+        $this->setComment(DefaultInterface::PROPS_END);
+        $this->setComment(DefaultInterface::METHOD_START);
         $this->setRelations();
+        $this->setComment(DefaultInterface::METHOD_END);
         $this->endClass();
+    }
+
+    /**
+     * Sets entity content to $sourceCode
+     */
+    private function resetContent()
+    {
+        $this->setBeforeProps($this->getEntityFile($this->generator->formatEntitiesPath()));
+        $this->createProperty(
+            ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
+            RamlInterface::RAML_ID, true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
+            strtolower($this->generator->objectName), true
+        );
+        $this->createProperty(
+            ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
+            PhpInterface::PHP_TYPES_BOOL_FALSE
+        );
+        $this->setAfterProps();
+        $this->setRelations();
+        $this->setAfterMethods();
     }
 
     /**
@@ -285,7 +312,7 @@ class Entities extends FormRequestModel
 
         $this->setUse($baseMapper, false, true);
         $this->startClass($this->className . Classes::getClassName($ucEntity), $baseMapperName);
-
+        $this->setComment(DefaultInterface::PROPS_START);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
@@ -298,6 +325,7 @@ class Entities extends FormRequestModel
             ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
             PhpInterface::PHP_TYPES_BOOL_TRUE
         );
+        $this->setComment(DefaultInterface::PROPS_END);
         $this->endClass();
     }
 
