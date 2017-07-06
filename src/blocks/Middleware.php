@@ -1,6 +1,8 @@
 <?php
+
 namespace rjapi\blocks;
 
+use rjapi\controllers\BaseCommand;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Console;
@@ -26,8 +28,9 @@ class Middleware extends FormRequestModel
 {
     use ContentManager;
 
-    protected $sourceCode = '';
-    protected $generator = null;
+    protected $sourceCode    = '';
+    protected $resourceCode  = '';
+    protected $generator     = null;
     private $additionalProps = [
         'id' => [
             'type' => 'integer',
@@ -35,7 +38,7 @@ class Middleware extends FormRequestModel
     ];
     private $className = '';
 
-    public function __construct($generator)
+    public function __construct(BaseCommand $generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
@@ -58,10 +61,8 @@ class Middleware extends FormRequestModel
     private function setAdditionalProps()
     {
         // additional props
-        if(!empty($this->additionalProps))
-        {
-            foreach($this->additionalProps as $prop => $propVal)
-            {
+        if (!empty($this->additionalProps)) {
+            foreach ($this->additionalProps as $prop => $propVal) {
                 $this->createProperty($prop, PhpInterface::PHP_MODIFIER_PUBLIC);
             }
         }
@@ -70,13 +71,11 @@ class Middleware extends FormRequestModel
     private function setPropsContent()
     {
         $this->setComment(CustomsInterface::CUSTOM_TYPES_ATTRIBUTES);
-        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-                [RamlInterface::RAML_PROPS] as $propKey => $propVal)
-        {
-            if(is_array($propVal))
-            {
+        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
+                 [RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+            if (is_array($propVal)) {
                 $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC);
-                if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                if (empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
                     $this->setComment(ConfigInterface::BIT_MASK);
                     foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
                         $this->createProperty($flag, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
@@ -90,15 +89,12 @@ class Middleware extends FormRequestModel
     private function setRelationTypes($relationTypes)
     {
         // related props
-        if($relationTypes !== null)
-        {
+        if ($relationTypes !== null) {
             $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Relations' .
                 PHP_EOL;
-            foreach($relationTypes as $attrKey => $attrVal)
-            {
+            foreach ($relationTypes as $attrKey => $attrVal) {
                 // determine attr
-                if($attrKey !== RamlInterface::RAML_ID && $attrKey !== RamlInterface::RAML_TYPE)
-                {
+                if ($attrKey !== RamlInterface::RAML_ID && $attrKey !== RamlInterface::RAML_TYPE) {
                     $this->createProperty($attrKey, PhpInterface::PHP_MODIFIER_PUBLIC);
                 }
             }
@@ -109,7 +105,6 @@ class Middleware extends FormRequestModel
     private function constructRules()
     {
         // Authorize method - defaults to false
-//        $this->startMethod(PhpEntitiesInterface::PHP_AUTHORIZE, PhpEntitiesInterface::PHP_MODIFIER_PUBLIC, PhpEntitiesInterface::PHP_TYPES_BOOL);
         $methodOptions = new MethodOptions();
         $methodOptions->setName(PhpInterface::PHP_AUTHORIZE);
         $methodOptions->setReturnType(PhpInterface::PHP_TYPES_BOOL);
@@ -137,17 +132,14 @@ class Middleware extends FormRequestModel
         $this->startMethod($methodOptions);
         // attrs validation
         $this->startArray();
-        if(empty($relationTypes) === false)
-        {
+        if (empty($relationTypes) === false) {
             $rel = empty($relationTypes[RamlInterface::RAML_TYPE]) ? $relationTypes :
                 $relationTypes[RamlInterface::RAML_TYPE];
 
             $rels = explode(PhpInterface::PIPE, str_replace('[]', '', $rel));
-            foreach($rels as $k => $rel)
-            {
+            foreach ($rels as $k => $rel) {
                 $this->setRelations(strtolower(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
-                if(empty($rels[$k + 1]) === false)
-                {
+                if (empty($rels[$k + 1]) === false) {
                     $this->sourceCode .= PHP_EOL;
                 }
             }
@@ -181,18 +173,15 @@ class Middleware extends FormRequestModel
         $this->setUse($baseFullForm, false, true);
         $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
 
-        if(empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+        if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
             &&
             empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false
-        )
-        {
+        ) {
             $this->setProps(
                 $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
                 [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
             );
-        }
-        else
-        {
+        } else {
             $this->setProps();
         }
 
@@ -210,49 +199,32 @@ class Middleware extends FormRequestModel
      */
     private function resetContent()
     {
-        $this->setTag();
-        $this->setNamespace(
-            $this->generator->httpDir .
-            PhpInterface::BACKSLASH .
-            $this->generator->middlewareDir
-        );
-        $baseFullForm = BaseFormRequest::class;
-        $baseFormName = Classes::getName($baseFullForm);
-        $this->setUse($baseFullForm, false, true);
-        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
-
-        if(empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-           &&
-           empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false
-        )
-        {
+        $this->setBeforeProps();
+        $isObjectProps = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false;
+        $isInTypes = empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false;
+        if (true === $isObjectProps && true === $isInTypes) {
             $this->setProps(
                 $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
                 [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
             );
-        }
-        else
-        {
+        } else {
             $this->setProps();
         }
-
+        $this->setAfterProps();
         $this->constructRules();
         $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
             ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
         $this->constructRelations($relTypes);
-
-        // create closing brace
-        $this->endClass();
+        $this->setAfterMethods();
     }
 
     public function createAccessToken()
     {
-        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]
-            [JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false
-        )
-        {
+        if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]
+                  [JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false
+        ) {
             $this->setAccessTokenContent();
-            $fileForm = strtolower(DirsInterface::APPLICATION_DIR)
+            $fileForm  = strtolower(DirsInterface::APPLICATION_DIR)
                 . PhpInterface::SLASH . $this->generator->httpDir
                 . PhpInterface::SLASH . $this->generator->middlewareDir
                 . PhpInterface::SLASH . JSONApiInterface::CLASS_API_ACCESS_TOKEN
@@ -261,8 +233,7 @@ class Middleware extends FormRequestModel
                 $fileForm, $this->sourceCode,
                 FileManager::isRegenerated($this->generator->options)
             );
-            if($isCreated)
-            {
+            if ($isCreated) {
                 Console::out($fileForm . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
         }

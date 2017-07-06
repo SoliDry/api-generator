@@ -55,8 +55,8 @@ class BaseCommand extends Command
         CustomsInterface::CUSTOM_TYPES_TREES,
     ];
 
-    public  $options = [];
-    private $isMerge = false;
+    public $options = [];
+    public $isMerge = false;
 
     /**
      *  Generates api Controllers + Models to support RAML validation

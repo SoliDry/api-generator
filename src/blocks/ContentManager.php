@@ -5,6 +5,7 @@ namespace rjapi\blocks;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\RJApiGenerator;
+use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
@@ -308,5 +309,26 @@ trait ContentManager
     public function quoteParam(string $param)
     {
         return PhpInterface::QUOTES . $param . PhpInterface::QUOTES;
+    }
+
+    private function setBeforeProps()
+    {
+        $this->resourceCode = file_get_contents($this->getEntityFile($this->generator->formatMiddlewarePath(),
+            DefaultInterface::MIDDLEWARE_POSTFIX));
+        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8);
+        $this->sourceCode = mb_substr($this->resourceCode, 0, $end, PhpInterface::ENCODING_UTF8);
+    }
+
+    private function setAfterProps()
+    {
+        $start = mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, null, PhpInterface::ENCODING_UTF8);
+        $end = mb_strpos($this->resourceCode, DefaultInterface::METHOD_START, null, PhpInterface::ENCODING_UTF8);
+        $this->sourceCode .= mb_substr($this->resourceCode, $start, $end, PhpInterface::ENCODING_UTF8);
+    }
+
+    private function setAfterMethods()
+    {
+        $start = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, null, PhpInterface::ENCODING_UTF8);
+        $this->sourceCode .= mb_substr($this->resourceCode, $start, null, PhpInterface::ENCODING_UTF8);
     }
 }
