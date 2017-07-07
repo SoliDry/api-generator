@@ -316,13 +316,13 @@ trait ContentManager
     private function setBeforeProps(string $entityFile)
     {
         $this->resourceCode = file_get_contents($entityFile);
-        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8);
+        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8) - 3;
         $this->sourceCode = mb_substr($this->resourceCode, 0, $end, PhpInterface::ENCODING_UTF8);
     }
 
     private function setAfterProps()
     {
-        $start = mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, null, PhpInterface::ENCODING_UTF8);
+        $start = mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, null, PhpInterface::ENCODING_UTF8) - 3;
         $end = mb_strpos($this->resourceCode, DefaultInterface::METHOD_START, null, PhpInterface::ENCODING_UTF8);
         $this->sourceCode .= mb_substr($this->resourceCode, $start, $end, PhpInterface::ENCODING_UTF8);
     }
