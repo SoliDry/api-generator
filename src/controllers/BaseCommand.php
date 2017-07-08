@@ -42,6 +42,7 @@ class BaseCommand extends Command
     public  $currentTypes      = [];
     public  $historyTypes      = [];
     public  $mergedTypes       = [];
+    public  $diffTypes         = [];
     public  $frameWork         = '';
     public  $objectProps       = [];
     public  $generatedFiles    = [];

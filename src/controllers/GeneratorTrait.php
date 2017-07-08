@@ -9,6 +9,7 @@ use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
+use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
@@ -100,6 +101,8 @@ trait GeneratorTrait
         if ($this->options[ConsoleInterface::OPTION_MERGE] === ConsoleInterface::MERGE_DEFAULT_VALUE) {
             $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
             if ($dirs !== false) {
+                $arrayAttrsCurrent = [];
+                $arrayAttrsHistory = [];
                 $rFiles = $this->ramlFiles;
                 $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
                 $dir = $dirs[0]; // desc last date YYYY-mmm-dd
@@ -113,6 +116,23 @@ trait GeneratorTrait
                             $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
                             $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
                             $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
+                            $arrayAttrsCurrent += array_filter($this->currentTypes, function($k) {
+                                return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
+                            }, ARRAY_FILTER_USE_KEY);
+                            $arrayAttrsHistory += array_filter($this->historyTypes, function($k) {
+                                return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
+                            }, ARRAY_FILTER_USE_KEY);
+                        }
+                    }
+                }
+                // make diffs on current raml array to add columns/indices to migrations
+                foreach ($arrayAttrsCurrent as $k => $v) {
+                    if (empty($arrayAttrsHistory[$k][RamlInterface::RAML_PROPS]) === false
+                    && (empty($v[RamlInterface::RAML_PROPS]) === false)) {
+                        foreach ($v[RamlInterface::RAML_PROPS] as $attr => $attrValue) {
+                            if (empty($arrayAttrsHistory[$k][RamlInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
+                                $this->diffTypes[$k][$attr] = $attrValue;
+                            }
                         }
                     }
                 }

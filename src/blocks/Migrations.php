@@ -53,6 +53,8 @@ class Migrations extends MigrationsAbstract
             {
                 Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
+        } else if (true === $this->generator->isMerge) { // file exists and it is merge op - add columns/indices if needed
+
         }
     }
 
