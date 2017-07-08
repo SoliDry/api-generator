@@ -356,6 +356,5 @@ class Entities extends FormRequestModel
             PhpInterface::PHP_TYPES_BOOL_TRUE
         );
         $this->setAfterProps();
-        echo $this->sourceCode;die;
     }
 }
