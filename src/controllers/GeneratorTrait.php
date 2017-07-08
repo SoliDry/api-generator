@@ -4,7 +4,6 @@ namespace rjapi\controllers;
 
 use rjapi\blocks\Controllers;
 use rjapi\blocks\Entities;
-use rjapi\blocks\FileManager;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
@@ -77,12 +76,22 @@ trait GeneratorTrait
 
         // create entities/models
         $this->mappers = new Entities($this);
+        $this->mappers->createPivot();
         if (true === file_exists($this->forms->getEntityFile($this->formatEntitiesPath()))) {
-//            $this->mappers->recreatePivot();
             $this->mappers->recreateEntity($this->formatEntitiesPath());
         } else {
-            $this->mappers->createPivot();
             $this->mappers->createEntity($this->formatEntitiesPath());
+        }
+
+        // create routes
+        $this->routes = new Routes($this);
+        $this->routes->create();
+
+        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
+            // create Migrations
+            $this->migrations = new Migrations($this);
+            $this->migrations->create();
+            $this->migrations->createPivot();
         }
     }
 

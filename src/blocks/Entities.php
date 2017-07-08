@@ -125,10 +125,14 @@ class Entities extends FormRequestModel
      */
     public function setPivot(string $ucEntity)
     {
-        $this->setPivotContent($ucEntity);
         $file      = $this->generator->formatEntitiesPath() .
             PhpInterface::SLASH .
             $this->className . Classes::getClassName($ucEntity) . PhpInterface::PHP_EXT;
+        if (true === $this->generator->isMerge) {
+            $this->resetPivotContent($ucEntity, $file);
+        } else {
+            $this->setPivotContent($ucEntity);
+        }
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
@@ -293,7 +297,7 @@ class Entities extends FormRequestModel
             ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
             PhpInterface::PHP_TYPES_BOOL_FALSE
         );
-        $this->setAfterProps();
+        $this->setAfterProps(DefaultInterface::METHOD_START);
         $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->setRelations();
         $this->setAfterMethods();
@@ -335,9 +339,10 @@ class Entities extends FormRequestModel
      *  Re-Sets pivot entity content to $sourceCode
      * @param string $ucEntity  an entity upper case first name
      */
-    private function resetPivotContent(string $ucEntity)
+    private function resetPivotContent(string $ucEntity, string $file)
     {
-        $this->setBeforeProps($this->getEntityFile($this->generator->formatEntitiesPath()));
+        $this->setBeforeProps($file);
+        $this->setComment(DefaultInterface::PROPS_START, 0);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
@@ -351,6 +356,6 @@ class Entities extends FormRequestModel
             PhpInterface::PHP_TYPES_BOOL_TRUE
         );
         $this->setAfterProps();
-        $this->setAfterMethods();
+        echo $this->sourceCode;die;
     }
 }

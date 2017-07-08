@@ -211,7 +211,7 @@ class Middleware extends FormRequestModel
         } else {
             $this->setProps();
         }
-        $this->setAfterProps();
+        $this->setAfterProps(DefaultInterface::METHOD_START);
         $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->constructRules();
         $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])

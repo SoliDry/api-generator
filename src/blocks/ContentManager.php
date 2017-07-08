@@ -32,9 +32,9 @@ trait ContentManager
     protected function setNamespace(string $postfix)
     {
         $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
-                             $this->generator->modulesDir . PhpInterface::BACKSLASH .
-                             strtoupper($this->generator->version) .
-                             PhpInterface::BACKSLASH . $postfix . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
+            $this->generator->modulesDir . PhpInterface::BACKSLASH .
+            strtoupper($this->generator->version) .
+            PhpInterface::BACKSLASH . $postfix . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -45,8 +45,8 @@ trait ContentManager
     protected function setUse(string $path, bool $isTrait = false, bool $isLast = false)
     {
         $this->sourceCode .= (($isTrait === false) ? '' : PhpInterface::TAB_PSR4) .
-                             PhpInterface::PHP_USE . PhpInterface::SPACE . $path . PhpInterface::SEMICOLON .
-                             PHP_EOL . (($isLast === false) ? '' : PHP_EOL);
+            PhpInterface::PHP_USE . PhpInterface::SPACE . $path . PhpInterface::SEMICOLON .
+            PHP_EOL . (($isLast === false) ? '' : PHP_EOL);
     }
 
     /**
@@ -56,7 +56,7 @@ trait ContentManager
     protected function startClass(string $name, $extends = null)
     {
         $this->sourceCode .= PhpInterface::PHP_CLASS . PhpInterface::SPACE . $name
-                             . PhpInterface::SPACE;
+            . PhpInterface::SPACE;
         if ($extends !== null) {
             $this->sourceCode .=
                 PhpInterface::PHP_EXTENDS
@@ -78,15 +78,15 @@ trait ContentManager
         // get params
         $params           = $this->getMethodParams($methodOptions->getParams());
         $this->sourceCode .= PhpInterface::TAB_PSR4 . $methodOptions->getModifier() . PhpInterface::SPACE .
-                             (($methodOptions->isStatic() !== false) ? PhpInterface::PHP_STATIC . PhpInterface::SPACE :
-                                 '') .
-                             PhpInterface::PHP_FUNCTION . PhpInterface::SPACE .
-                             $methodOptions->getName()
-                             . PhpInterface::OPEN_PARENTHESES . $params . PhpInterface::CLOSE_PARENTHESES .
-                             ((empty($methodOptions->getReturnType())) ? '' :
-                                 PhpInterface::COLON . PhpInterface::SPACE . $methodOptions->getReturnType()) .
-                             PhpInterface::SPACE . PHP_EOL . PhpInterface::TAB_PSR4
-                             . PhpInterface::OPEN_BRACE . PHP_EOL;
+            (($methodOptions->isStatic() !== false) ? PhpInterface::PHP_STATIC . PhpInterface::SPACE :
+                '') .
+            PhpInterface::PHP_FUNCTION . PhpInterface::SPACE .
+            $methodOptions->getName()
+            . PhpInterface::OPEN_PARENTHESES . $params . PhpInterface::CLOSE_PARENTHESES .
+            ((empty($methodOptions->getReturnType())) ? '' :
+                PhpInterface::COLON . PhpInterface::SPACE . $methodOptions->getReturnType()) .
+            PhpInterface::SPACE . PHP_EOL . PhpInterface::TAB_PSR4
+            . PhpInterface::OPEN_BRACE . PHP_EOL;
     }
 
     /**
@@ -103,7 +103,7 @@ trait ContentManager
     protected function endMethod(int $eolCnt = 2)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE;
-        for ($i = $eolCnt;$i > 0;--$i) {
+        for ($i = $eolCnt; $i > 0; --$i) {
             $this->sourceCode .= PHP_EOL;
         }
     }
@@ -112,13 +112,13 @@ trait ContentManager
     {
         $this->setTabs(2);
         $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE .
-                             PhpInterface::OPEN_BRACKET . PHP_EOL;
+            PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
     protected function endArray()
     {
         $this->sourceCode .= PHP_EOL . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
-                             . PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON . PHP_EOL;
+            . PhpInterface::CLOSE_BRACKET . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     /**
@@ -135,8 +135,8 @@ trait ContentManager
             ) . PhpInterface::QUOTES;
         $val              .= PhpInterface::CLOSE_BRACKET;
         $this->sourceCode .= $this->quoteParam($key)
-                             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
-                             . PhpInterface::SPACE . $val . PhpInterface::COMMA . PHP_EOL;
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
+            . PhpInterface::SPACE . $val . PhpInterface::COMMA . PHP_EOL;
     }
 
     /**
@@ -148,11 +148,11 @@ trait ContentManager
     protected function createProperty(string $prop, string $modifier, $value = PhpInterface::PHP_TYPES_NULL, bool $isString = false)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
-                             $prop
-                             . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE
-                             . (($isString === false) ? $value :
+            $prop
+            . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE
+            . (($isString === false) ? $value :
                 PhpInterface::DOUBLE_QUOTES . $value . PhpInterface::DOUBLE_QUOTES)
-                             . PhpInterface::SEMICOLON . PHP_EOL;
+            . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     /**
@@ -162,7 +162,7 @@ trait ContentManager
     protected function setComment(string $comment, int $tabs = 1)
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::COMMENT
-                             . PhpInterface::SPACE . $comment . PHP_EOL;
+            . PhpInterface::SPACE . $comment . PHP_EOL;
     }
 
     /**
@@ -218,7 +218,7 @@ trait ContentManager
     public function setEchoString(string $str)
     {
         $this->sourceCode .= PhpInterface::ECHO . PhpInterface::SPACE . PhpInterface::QUOTES
-                             . $str . PhpInterface::QUOTES . PhpInterface::SEMICOLON . PHP_EOL;
+            . $str . PhpInterface::QUOTES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
     /**
@@ -227,11 +227,11 @@ trait ContentManager
     public function openRule(string $attribute)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 .
-                             PhpInterface::TAB_PSR4
-                             . PhpInterface::DOUBLE_QUOTES . $attribute . PhpInterface::DOUBLE_QUOTES
-                             . PhpInterface::SPACE
-                             . PhpInterface::DOUBLE_ARROW .
-                             PhpInterface::SPACE . PhpInterface::DOUBLE_QUOTES;
+            PhpInterface::TAB_PSR4
+            . PhpInterface::DOUBLE_QUOTES . $attribute . PhpInterface::DOUBLE_QUOTES
+            . PhpInterface::SPACE
+            . PhpInterface::DOUBLE_ARROW .
+            PhpInterface::SPACE . PhpInterface::DOUBLE_QUOTES;
     }
 
     public function closeRule()
@@ -278,7 +278,7 @@ trait ContentManager
     public function recreateEntity(string $basePath, string $postFix = '')
     {
         $this->resetContent();
-        $file = $this->getEntityFile($basePath, $postFix);
+        $file      = $this->getEntityFile($basePath, $postFix);
         $isCreated = FileManager::createFile(
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
@@ -298,9 +298,9 @@ trait ContentManager
     private function getArrayParam(array $param)
     {
         return PhpInterface::OPEN_BRACKET . PhpInterface::QUOTES .
-               implode(PhpInterface::QUOTES . PhpInterface::COMMA . PhpInterface::SPACE . PhpInterface::QUOTES, $param)
-               . PhpInterface::QUOTES
-               . PhpInterface::CLOSE_BRACKET;
+            implode(PhpInterface::QUOTES . PhpInterface::COMMA . PhpInterface::SPACE . PhpInterface::QUOTES, $param)
+            . PhpInterface::QUOTES
+            . PhpInterface::CLOSE_BRACKET;
     }
 
     /**
@@ -313,23 +313,38 @@ trait ContentManager
         return PhpInterface::QUOTES . $param . PhpInterface::QUOTES;
     }
 
+    /**
+     * Sets the source starting code
+     * @param string $entityFile
+     */
     private function setBeforeProps(string $entityFile)
     {
         $this->resourceCode = file_get_contents($entityFile);
-        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8) - 3;
-        $this->sourceCode = mb_substr($this->resourceCode, 0, $end, PhpInterface::ENCODING_UTF8);
+        $end                = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8) - 3;
+        $this->sourceCode   = mb_substr($this->resourceCode, 0, $end, PhpInterface::ENCODING_UTF8);
     }
 
-    private function setAfterProps()
+    /**
+     * Sets the source middle code
+     * @param string $till
+     */
+    private function setAfterProps($till = null)
     {
         $start = $this->setTabs() . mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, null, PhpInterface::ENCODING_UTF8) - 3;
-        $end = mb_strpos($this->resourceCode, DefaultInterface::METHOD_START, null, PhpInterface::ENCODING_UTF8) - 3;
-        $this->sourceCode .= mb_substr($this->resourceCode, $start, $end - $start, PhpInterface::ENCODING_UTF8);
+        if ($till === null) {
+            $this->sourceCode .= mb_substr($this->resourceCode, $start, null, PhpInterface::ENCODING_UTF8);
+        } else {
+            $end              = mb_strpos($this->resourceCode, $till, null, PhpInterface::ENCODING_UTF8) - 3;
+            $this->sourceCode .= mb_substr($this->resourceCode, $start, $end - $start, PhpInterface::ENCODING_UTF8);
+        }
     }
 
+    /**
+     *  Sets the source tail
+     */
     private function setAfterMethods()
     {
-        $start = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, null, PhpInterface::ENCODING_UTF8) - 3;
+        $start            = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, null, PhpInterface::ENCODING_UTF8) - 3;
         $this->sourceCode .= $this->setTabs() . mb_substr($this->resourceCode, $start, null, PhpInterface::ENCODING_UTF8);
     }
 }
