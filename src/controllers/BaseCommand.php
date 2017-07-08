@@ -39,6 +39,8 @@ class BaseCommand extends Command
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
     ];
     public  $types             = [];
+    public  $currentTypes      = [];
+    public  $historyTypes      = [];
     public  $mergedTypes       = [];
     public  $frameWork         = '';
     public  $objectProps       = [];

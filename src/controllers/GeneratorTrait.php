@@ -110,9 +110,9 @@ trait GeneratorTrait
                         if (mb_strpos($file, basename($ramlFile), null, PhpInterface::ENCODING_UTF8) !== false) {
                             $dataCurrent = Yaml::parse(file_get_contents($ramlFile));
                             $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
-                            $typesCurrent = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
-                            $typesHistory = $dataHistory[RamlInterface::RAML_KEY_TYPES];
-                            $this->types += array_merge_recursive($typesHistory, $typesCurrent);
+                            $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
+                            $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
+                            $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
                         }
                     }
                 }

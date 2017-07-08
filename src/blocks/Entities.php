@@ -337,7 +337,8 @@ class Entities extends FormRequestModel
 
     /**
      *  Re-Sets pivot entity content to $sourceCode
-     * @param string $ucEntity  an entity upper case first name
+     * @param string $ucEntity an entity upper case first name
+     * @param string $file
      */
     private function resetPivotContent(string $ucEntity, string $file)
     {
