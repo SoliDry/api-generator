@@ -48,7 +48,6 @@ class Entities extends FormRequestModel
         if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
             $this->sourceCode .= PHP_EOL;
-            $this->setComment(DefaultInterface::METHOD_START);
             $relations = $middleWare->relations();
             foreach($relations as $relationEntity)
             {
@@ -61,7 +60,6 @@ class Entities extends FormRequestModel
                     $this->createRelationMethod($current, $related, $relationEntity);
                 }
             }
-            $this->setComment(DefaultInterface::METHOD_END);
         }
     }
 
@@ -270,7 +268,9 @@ class Entities extends FormRequestModel
             PhpInterface::PHP_TYPES_BOOL_FALSE
         );
         $this->setComment(DefaultInterface::PROPS_END);
+        $this->setComment(DefaultInterface::METHOD_START);
         $this->setRelations();
+        $this->setComment(DefaultInterface::METHOD_END);
         $this->endClass();
     }
 
@@ -280,6 +280,7 @@ class Entities extends FormRequestModel
     private function resetContent()
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatEntitiesPath()));
+        $this->setComment(DefaultInterface::PROPS_START, 0);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true
@@ -293,8 +294,10 @@ class Entities extends FormRequestModel
             PhpInterface::PHP_TYPES_BOOL_FALSE
         );
         $this->setAfterProps();
+        $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->setRelations();
         $this->setAfterMethods();
+        echo $this->sourceCode;die;
     }
 
     /**
