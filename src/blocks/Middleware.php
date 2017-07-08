@@ -201,6 +201,7 @@ class Middleware extends FormRequestModel
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatMiddlewarePath(),
             DefaultInterface::MIDDLEWARE_POSTFIX));
+        $this->setComment(DefaultInterface::PROPS_START, 0);
         if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
             && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
             $this->setProps(
@@ -211,6 +212,7 @@ class Middleware extends FormRequestModel
             $this->setProps();
         }
         $this->setAfterProps();
+        $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->constructRules();
         $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
             ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
