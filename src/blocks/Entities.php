@@ -297,7 +297,6 @@ class Entities extends FormRequestModel
         $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->setRelations();
         $this->setAfterMethods();
-        echo $this->sourceCode;die;
     }
 
     /**
