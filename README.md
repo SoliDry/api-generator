@@ -33,15 +33,16 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Spell check](#user-content-spell-check)
 * [Bit mask](#user-content-bit-mask)
 * [Custom SQL](#user-content-custom-sql)
+* [Regeneration](#user-content-regeneration)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
-First of all - create Laravel project if You didn't do that yet:
+First of all - create Laravel project if you didn't do that yet:
 ```
 composer create-project --prefer-dist laravel/laravel your_app
 ```
 
-then in Your project directory run:
+then in your project directory run:
 ``` 
 composer require rjapi/raml-json-api 
 ```
@@ -106,18 +107,18 @@ Run in console:
 php artisan raml:generate raml/articles.raml --migrations
 ```
 
-This command creates the whole environment for You to proceed building complex API based on RAML/Laravel/JSON API, 
+This command creates the whole environment for you to proceed building complex API based on RAML/Laravel/JSON API, 
 in particular: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
-Routes (JSON API compatible) and even migrations to help You create RDBMS structure.
+Routes (JSON API compatible) and even migrations to help you create RDBMS structure.
  
-```raml/articles.raml``` - raml file in raml directory in the root of Your project, 
-which should be prepared before or You may wish to just try by copying an example from ``` tests/functional/raml/articles.raml```
+```raml/articles.raml``` - raml file in raml directory in the root of your project, 
+which should be prepared before or you may wish to just try by copying an example from ``` tests/functional/raml/articles.raml```
 
 Options:
 
 ```--migrations``` is an option to create migrations (create_entityName_table) for every entity + pivots if there are ManyToMany relationships.
 
-```--regenerate``` use this if You need to rewrite all files generated previously. 
+```--regenerate``` use this if you need to rewrite all files generated previously. 
 By default generated files preserved to prevent overwriting of added/modified content.   
 
 The output will look something like this:
@@ -403,7 +404,7 @@ class ArticleController extends DefaultController
 }
 ```
 By default every controller works with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
-So You don't need to implement anything special here.
+So you don't need to implement anything special here.
 
 
 ```php
@@ -555,9 +556,9 @@ To execute them all - run: ``` php artisan module:migrate ```
 Also worth to mention - Laravel uses table_id convention to link tables via foreign key.
 So U can either follow the default - add to RAML an id that matches to the table name 
 (just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` in RAML Types and Declarations) 
-or make Your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
+or make your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
 
-Additionally, to specify index for particular column You can add a `facets` raml property like this:
+Additionally, to specify index for particular column you can add a `facets` raml property like this:
 ```raml
     # regular index
     facets:
@@ -580,7 +581,7 @@ Additionally, to specify index for particular column You can add a `facets` raml
 ```
 to existing columns.
 
-However, there are situations where You have to create composite indices:
+However, there are situations where you have to create composite indices:
 ```raml
       last_name:
         required: false
@@ -616,12 +617,12 @@ and Tag with relationships like:
 relationships:
   type: ArticleRelationships
 ```
-This way You telling to generator: "make the relation between Article and Tag OneToMany from Article to Tag"
-The idea works with any relationship You need - ex. ManyToMany: ```TagRelationships[] -> ArticleRelationships[]```, 
+This way you telling to generator: "make the relation between Article and Tag OneToMany from Article to Tag"
+The idea works with any relationship you need - ex. ManyToMany: ```TagRelationships[] -> ArticleRelationships[]```, 
 OneToOne: ```TagRelationships -> ArticleRelationships```
 
 You can also bind several relationships to one entity, for instance - 
-You have an Article entity that must be bound to TagRelationships and TopicRelationships, this can be done similar to:
+you have an Article entity that must be bound to TagRelationships and TopicRelationships, this can be done similar to:
 ```
 relationships:
     type: TagRelationships[] | TopicRelationships
@@ -647,12 +648,12 @@ http://example.com/v1/article/1?include=tag&data=["title", "description"]
 ```
 Note: data array items MUST be set in double quotes.
 
-or You may want to ORDER BY several columns in different directions:
+or you may want to ORDER BY several columns in different directions:
 ```php
 http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
 ```
 
-Also, You have an ability to filter results this way:
+Also, you have an ability to filter results this way:
 ```php
 http://example.com/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
 ```
@@ -660,7 +661,7 @@ those arrays will be put to Laravel where clause and accordingly protected by pa
 
 The dynamic module name similar to: v1, v2 - will be taken on runtime 
 as the last element of the array in ```config/module.php``` file, 
-if You, by strange circumstances, want to use one of the previous modules, 
+if you, by strange circumstances, want to use one of the previous modules, 
 just set one of previously registered modules as the last element of an array.  
 
 An example of auto-generated ```config/module.php```:
@@ -692,7 +693,7 @@ return [
 ### Security
 
 #### Static access token
-In ```QueryParams``` RAML types You can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
+In ```QueryParams``` RAML types you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
 Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware.
  
 To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
@@ -722,7 +723,7 @@ Generated configuration part:
 
 #### JWT (Json Web Token)
 
-To support a JWT check, You need to add to any users, employees, 
+To support a JWT check, you need to add to any users, employees, 
 customers like table the ```jwt``` and ```password``` RAML properties:
 ```RAML
   password:
@@ -781,8 +782,8 @@ To declare JWT check for routes group:
 ```php
 Route::group(['middleware' => 'jwt', 
 ```
-JWT will be created on POST and updated on PATCH request to the entity You've been created, 
-for instance, if You send POST request to ```http://example.com/v1/user``` with the following content:
+JWT will be created on POST and updated on PATCH request to the entity you've been created, 
+for instance, if you send POST request to ```http://example.com/v1/user``` with the following content:
 ```json
 {
   "data": {
@@ -863,7 +864,7 @@ with additional user-defined options to let developers choose another.
 However, HMAC SHA-256 is the most popular these days. 
  
 ### Turn off JSON API support
-If you are willing to disable json api specification mappings into Laravel application (for instance - You need to generate MVC-structure into laravel-module and make Your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
+If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
 ```php
 <?php
 namespace Modules\V1\Http\Controllers;
@@ -875,7 +876,7 @@ class DefaultController extends BaseController
     protected $jsonApi = false;
 }
 ```
-As this class inherited by all Controllers - You don't have to add this property in every Controller class.
+As this class inherited by all Controllers - you don't have to add this property in every Controller class.
 By default JSON API is turned on.
 
 ### Tree structures
@@ -968,7 +969,7 @@ See wiki page for real-world examples with Postman.
 
 ### Finite-state machine
 
-To add finite-state machine to a field(column) of an entity(table) - add definition into Your RAML file like this:
+To add finite-state machine to a field(column) of an entity(table) - add definition into your RAML file like this:
 ```RAML
       status:
         description: The state of an article
@@ -983,7 +984,7 @@ To add finite-state machine to a field(column) of an entity(table) - add definit
 ```
 The only required particular item in `state_machine` declaration is an `initial` value of state machine.
 
-After generation process will pass, You'll get the following content in `config.php`:
+After generation process will pass, you'll get the following content in `config.php`:
 ```php
     'state_machine'=> [
         'article'=> [
@@ -1048,7 +1049,7 @@ As in other settings - spell check can be disabled with `enabled` set to false.
 If there is no info preset about language - the `en` will be used as default value.
 
 In responses from methods POST/PATCH (create/update) 
-You'll get the `meta` content back with filled array of failed checks in it:
+you'll get the `meta` content back with filled array of failed checks in it:
 ```json
 {
   "data": {
@@ -1079,7 +1080,7 @@ You'll get the `meta` content back with filled array of failed checks in it:
 
 ### Bit Mask
 To use bit mask with automatic flags fragmentation/defragmentation 
-You can define additional facets to an integer field like this:
+you can define additional facets to an integer field like this:
 ```RAML
   permissions:
     type: integer
@@ -1147,7 +1148,7 @@ And the request/response will be:
 Recall that U can always hide ex.: `permissions` field in index/view GET requests if U'd like.
 
 ### Custom SQL
-If by any reason You need to use custom sql query - just define it in `Modules/V1/Config/config.php`:
+If by any reason you need to use custom sql query - just define it in `Modules/V1/Config/config.php`:
 ```php
     'custom_sql'    => [
         'article' => [
@@ -1173,13 +1174,147 @@ Don't forget to add Laravel specific `$fillable` or `$guarded` array to let fill
         'title'
     ];
 ```
-Note: You need an `id` field to be present, because of json-api serializer.
+Note: you need an `id` field to be present, because of json-api serializer.
   
+### Regeneration
+It is an important feature to regenerate your code based on generated history types and the current state 
+of RAML docuemnt, which can be easily achieved by running: 
+```sh  
+  php artisan raml:generate raml/articles.raml --migrations --regenerate --merge=last
+```  
+This command will merge the last state/snapshot of document from `.gen` directory 
+and the current document (in this case from `raml/articles.raml`), 
+then creates files for models and middleware, merging it with user added content between generated props and methods.
+Moreover, it will add the new columns to newly created migration files with their indices.
+ 
+Example of regenerated middleware:
+```php
+<?php
+namespace Modules\V1\Http\Middleware;
+
+use rjapi\extension\BaseFormRequest;
+
+class TagMiddleware extends BaseFormRequest
+{
+    public $userPropOne = true;
+    // >>>props>>>
+    public $id = null;
+    // Attributes
+    public $title = null;
+    // <<<props<<<
+    public $userPropTwo = 123;
+
+
+    public function userDefinedMethod(): int
+    {
+        return 1;
+    }
+
+    // >>>methods>>>
+    public function authorize(): bool 
+    {
+        return true;
+    }
+
+    public function rules(): array 
+    {
+        return [
+            "title" => "string|required|min:3",
+        ];
+    }
+
+    public function relations(): array 
+    {
+        return [
+            "article",
+        ];
+    }
+    // <<<methods<<<
+
+    public function anotherUserDefinedMethod(): bool
+    {
+        return false;
+    }
+} 
+```
+As you can see all user content was preserved and merged with regenerated.
+ 
+The same is true for Eloquent model:
+```php
+<?php
+namespace Modules\V1\Entities;
+
+use rjapi\extension\BaseModel;
+
+class Article extends BaseModel 
+{
+    public $userPropOne = true;
+    // >>>props>>>
+    protected $primaryKey = "id";
+    protected $table = "article";
+    public $timestamps = false;
+    // <<<props<<<
+    public $userPropTwo = 123;
+
+    public function userDefinedMethod(): int
+    {
+        return 1;
+    }
+
+    // >>>methods>>>
+
+    public function tag() 
+    {
+        return $this->belongsToMany(Tag::class, 'tag_article');
+    }
+    public function topic() 
+    {
+        return $this->belongsTo(Topic::class);
+    }
+    // <<<methods<<<
+
+    public function anotherUserDefinedMethod(): bool
+    {
+        return false;
+    }
+} 
+``` 
+
+Example of regenerated migration:
+```php
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class AddColumnLastNameToUser extends Migration 
+{
+    public function up() 
+    {
+        Schema::table('user', function(Blueprint $table) {
+            $table->string('last_name', 256);
+            $table->index(['first_name', 'last_name']);
+            $table->unsignedBigInteger('permissions');
+        });
+    }
+
+    public function down() 
+    {
+        Schema::table('user', function(Blueprint $table) {
+            $table->dropColumn('last_name');
+            $table->dropColumn('permissions');
+        });
+    }
+
+} 
+``` 
+If you don't want to save history every time U running commands add `--no-history` option.  
+
 ### Conversions to RAML
 
 There are several tools for conversion between different types of documents and RAML, 
 one of the most famous (at this moment) is [APIMATIC](https://apimatic.io/transformer), 
-so there is no problem if You like ex.: Swagger, but want to use raml-json-api to build Your application with RAML.
+so there is no problem if you like ex.: Swagger, but want to use raml-json-api to build your application with RAML.
 
 ======================
 
