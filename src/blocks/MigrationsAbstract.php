@@ -3,6 +3,7 @@
 namespace rjapi\blocks;
 
 use rjapi\exception\AttributesException;
+use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
@@ -67,6 +68,31 @@ abstract class MigrationsAbstract
     }
 
     /**
+     *  Sets rows of migration with their description and options
+     * @param array $attrs
+     */
+    protected function setAddRows(array $attrs)
+    {
+        foreach($attrs as $attrKey => $attrVal) {
+            if(is_array($attrVal)) {
+                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+                    $this->setDescription($attrVal);
+                    $type = $attrVal[RamlInterface::RAML_TYPE];
+                    // create migration fields depending on types
+                    $this->setRowContent($attrVal, $type, $attrKey);
+                }
+                else {// non-standard types aka enum
+                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
+                        $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
+                    }
+                }
+                $this->setIndex($attrVal, $attrKey);
+                $this->setCompositeIndex($attrVal);
+            }
+        }
+    }
+
+    /**
      * Sets row content with opts
      * @param array $attrVal
      * @param string $type
@@ -109,6 +135,16 @@ abstract class MigrationsAbstract
         }
     }
 
+    public function dropRows(array $attrs)
+    {
+        foreach($attrs as $attrKey => $attrVal) {
+            $this->setRow(ModelsInterface::MIGRATION_DROP_COLUMN, $attrKey);
+        }
+    }
+    /**
+     * @param array  $attrVal
+     * @param string $attrKey
+     */
     private function setRowNumber(array $attrVal, string $attrKey)
     {
         if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
@@ -266,5 +302,23 @@ abstract class MigrationsAbstract
             }
         }
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, $attrKey);
+    }
+
+    /**
+     * Creates migration file with time mask
+     * @param string $migrationName
+     */
+    protected function createMigrationFile(string $migrationName)
+    {
+        $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
+        $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
+            $migrationName . PhpInterface::PHP_EXT;
+
+        // if migration file with the same name ocasionally exists we do not override it
+        $isCreated = FileManager::createFile($file, $this->sourceCode);
+        if($isCreated)
+        {
+            Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
+        }
     }
 }

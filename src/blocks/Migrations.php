@@ -11,6 +11,8 @@ use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
+use rjapi\types\CustomsInterface;
+use rjapi\types\DefaultInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 
@@ -38,23 +40,26 @@ class Migrations extends MigrationsAbstract
 
     public function create()
     {
-        $this->setContent();
-        $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
         $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE .
                          $this->tableName .
                          PhpInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
-        if(FileManager::migrationNotExists($this->generator, $migrationName))
-        {
-            $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
-                    $migrationName . PhpInterface::PHP_EXT;
-            // if migration file with the same name ocasionally exists we do not override it
-            $isCreated = FileManager::createFile($file, $this->sourceCode);
-            if($isCreated)
-            {
-                Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
-            }
-        } else if (true === $this->generator->isMerge) { // file exists and it is merge op - add columns/indices if needed
+        $attrKey = $this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES;
 
+        $isFileExists = FileManager::migrationNotExists($this->generator, $migrationName);
+        $isAdding = (true === $this->generator->isMerge && empty($this->generator->diffTypes[$attrKey]) === false);
+        if(true === $isFileExists)
+        {
+            $this->setContent();
+        } else if (true === $isAdding) {
+            $migrationName = str_replace(ModelsInterface::MIGRATION_TABLE_PTTRN, $this->tableName,
+                ModelsInterface::MIGRATION_ADD_COLUMN);
+            // file exists and it is merge op - add columns/indices for this table
+            $columnName = key($this->generator->diffTypes[$attrKey]);
+            $migrationName = str_replace(ModelsInterface::MIGRATION_COLUMN_PTTRN, $columnName, $migrationName);
+            $this->resetContent($this->generator->diffTypes[$attrKey], $columnName);
+        }
+        if (true === $isFileExists || true === $isAdding) {
+            $this->createMigrationFile($migrationName);
         }
     }
 
@@ -127,6 +132,40 @@ class Migrations extends MigrationsAbstract
         $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_DOWN);
         $this->startMethod($methodOptions);
         $this->createSchema(ModelsInterface::MIGRATION_METHOD_DROP, $this->tableName);
+        $this->endMethod();
+        $this->endClass();
+    }
+
+    /**
+     * @param array  $attrs         columns
+     * @param string $columnName    1st column
+     */
+    private function resetContent(array $attrs, string $columnName)
+    {
+        $this->setTag();
+        $this->setUse(Schema::class);
+        $this->setUse(Blueprint::class);
+        $migrationClass = Migration::class;
+        $this->setUse($migrationClass, false, true);
+        $className = str_replace(ModelsInterface::MIGRATION_COLUMN_PTTRN, Classes::getClassName($columnName),
+            ModelsInterface::MIGRATION_ADD_COLUMN_CLASS);
+        $className = str_replace(ModelsInterface::MIGRATION_TABLE_PTTRN, $this->className, $className);
+        $this->startClass($className, Classes::getName($migrationClass));
+        // migrate up
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_UP);
+        $this->startMethod($methodOptions);
+        $this->openSchema($this->tableName, ModelsInterface::MIGRATION_TABLE);
+        $this->setAddRows($attrs);
+        $this->closeSchema();
+        $this->endMethod();
+        // migrate down
+        $methodOptions = new MethodOptions();
+        $methodOptions->setName(ModelsInterface::MIGRATION_METHOD_DOWN);
+        $this->startMethod($methodOptions);
+        $this->openSchema($this->tableName, ModelsInterface::MIGRATION_TABLE);
+        $this->dropRows($attrs);
+        $this->closeSchema();
         $this->endMethod();
         $this->endClass();
     }
