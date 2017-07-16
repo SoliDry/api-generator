@@ -23,9 +23,13 @@ trait GeneratorTrait
     private $routes      = null;
     private $migrations  = null;
 
+    /**
+     * Standard generation
+     */
     private function generateResources()
     {
         $this->outputEntity();
+        $this->createControllers();
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -45,22 +49,16 @@ trait GeneratorTrait
         $this->routes = new Routes($this);
         $this->routes->create();
 
-        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
-            // create Migrations
-            $this->migrations = new Migrations($this);
-            $this->migrations->create();
-            $this->migrations->createPivot();
-        }
+        $this->createMigrations();
     }
 
+    /**
+     *  Generation with merge option
+     */
     private function mergeResources()
     {
         $this->outputEntity();
-        // create controller
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
-
+        $this->createControllers();
         // create middleware
         $this->forms = new Middleware($this);
         if (true === file_exists($this->forms->getEntityFile($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX))) {
@@ -82,12 +80,7 @@ trait GeneratorTrait
         $this->routes = new Routes($this);
         $this->routes->create();
 
-        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
-            // create Migrations
-            $this->migrations = new Migrations($this);
-            $this->migrations->create();
-            $this->migrations->createPivot();
-        }
+        $this->createMigrations();
     }
 
     private function outputEntity()
@@ -96,6 +89,28 @@ trait GeneratorTrait
             '===============' . PhpInterface::SPACE . $this->objectName
             . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
         );
+    }
+
+    /**
+     *  Creates controllers and leaves those generated in case of merge
+     */
+    private function createControllers()
+    {
+        $this->controllers = new Controllers($this);
+        $this->controllers->createDefault();
+        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
+    }
+
+    /**
+     *  Creates migrations for every entity if there is merge option - adds additional
+     */
+    private function createMigrations()
+    {
+        if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
+            $this->migrations = new Migrations($this);
+            $this->migrations->create();
+            $this->migrations->createPivot();
+        }
     }
 
     /**

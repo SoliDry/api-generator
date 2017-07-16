@@ -15,6 +15,8 @@ interface DefaultInterface
     const ANSI_COLOR_RESET  = "\x1b[0m";
 
     // generated code limiters
+    const CLASS_START  = '>>>class>>>';
+    const CLASS_END    = '<<<class<<<';
     const PROPS_START  = '>>>props>>>';
     const PROPS_END    = '<<<props<<<';
     const METHOD_START = '>>>methods>>>';
