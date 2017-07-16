@@ -25,10 +25,7 @@ trait GeneratorTrait
 
     private function generateResources()
     {
-        Console::out(
-            '================' . PhpInterface::SPACE . $this->objectName
-            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
-        );
+        $this->outputEntity();
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -58,10 +55,7 @@ trait GeneratorTrait
 
     private function mergeResources()
     {
-        Console::out(
-            '================' . PhpInterface::SPACE . $this->objectName
-            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
-        );
+        $this->outputEntity();
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -96,44 +90,77 @@ trait GeneratorTrait
         }
     }
 
+    private function outputEntity()
+    {
+        Console::out(
+            '===============' . PhpInterface::SPACE . $this->objectName
+            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
+        );
+    }
+
+    /**
+     *  Collects all attrs, types and diffs for further code-generation
+     */
     private function setMergedTypes()
     {
         if ($this->options[ConsoleInterface::OPTION_MERGE] === ConsoleInterface::MERGE_DEFAULT_VALUE) {
             $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
             if ($dirs !== false) {
-                $arrayAttrsCurrent = [];
-                $arrayAttrsHistory = [];
                 $rFiles = $this->ramlFiles;
                 $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
                 $dir = $dirs[0]; // desc last date YYYY-mmm-dd
                 $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
                 $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
-                foreach ($files as $file) {
-                    foreach ($rFiles as $ramlFile) {
-                        if (mb_strpos($file, basename($ramlFile), null, PhpInterface::ENCODING_UTF8) !== false) {
-                            $dataCurrent = Yaml::parse(file_get_contents($ramlFile));
-                            $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
-                            $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
-                            $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
-                            $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
-                            $arrayAttrsCurrent += array_filter($this->currentTypes, function($k) {
-                                return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
-                            }, ARRAY_FILTER_USE_KEY);
-                            $arrayAttrsHistory += array_filter($this->historyTypes, function($k) {
-                                return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
-                            }, ARRAY_FILTER_USE_KEY);
-                        }
-                    }
+                $this->composeTypes($dir, $files, $rFiles);
+            }
+        }
+    }
+
+    /**
+     * Gets history files and merges them with current raml files
+     * @param string $dir       desc sorted last date YYYY-mmm-dd directory
+     * @param array  $files     files from .gen/ dir saved history
+     * @param array  $ramlFiles file that were passed as an option + files from uses RAML property
+     */
+    private function composeTypes(string $dir, array $files, array $ramlFiles)
+    {
+        $attrsCurrent = [];
+        $attrsHistory = [];
+        foreach ($files as $file) {
+            foreach ($ramlFiles as $ramlFile) {
+                if (mb_strpos($file, basename($ramlFile), null, PhpInterface::ENCODING_UTF8) !== false) {
+                    $dataCurrent = Yaml::parse(file_get_contents($ramlFile));
+                    $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
+                    $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
+                    $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
+                    $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
+                    $attrsCurrent += array_filter($this->currentTypes, function($k) {
+                        return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
+                    }, ARRAY_FILTER_USE_KEY);
+                    $attrsHistory += array_filter($this->historyTypes, function($k) {
+                        return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
+                    }, ARRAY_FILTER_USE_KEY);
                 }
-                // make diffs on current raml array to add columns/indices to migrations
-                foreach ($arrayAttrsCurrent as $k => $v) {
-                    if (empty($arrayAttrsHistory[$k][RamlInterface::RAML_PROPS]) === false
-                    && (empty($v[RamlInterface::RAML_PROPS]) === false)) {
-                        foreach ($v[RamlInterface::RAML_PROPS] as $attr => $attrValue) {
-                            if (empty($arrayAttrsHistory[$k][RamlInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
-                                $this->diffTypes[$k][$attr] = $attrValue;
-                            }
-                        }
+            }
+        }
+        $this->composeDiffs($attrsCurrent, $attrsHistory);
+    }
+
+    /**
+     * Compares attributes for current and previous history and sets the diffTypes prop
+     * to process additional migrations creation
+     * @param array $attrsCurrent   Current attributes
+     * @param array $attrsHistory   History attributes
+     */
+    private function composeDiffs(array $attrsCurrent, array $attrsHistory)
+    {
+        // make diffs on current raml array to add columns/indices to migrations
+        foreach ($attrsCurrent as $k => $v) {
+            if (empty($attrsHistory[$k][RamlInterface::RAML_PROPS]) === false
+                && (empty($v[RamlInterface::RAML_PROPS]) === false)) {
+                foreach ($v[RamlInterface::RAML_PROPS] as $attr => $attrValue) {
+                    if (empty($attrsHistory[$k][RamlInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
+                        $this->diffTypes[$k][$attr] = $attrValue;
                     }
                 }
             }
