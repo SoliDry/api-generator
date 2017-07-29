@@ -3,6 +3,7 @@ namespace rjapi\types;
 
 interface DefaultInterface
 {
+    const RAML_EXT           = '.raml';
     const CONTROLLER_POSTFIX = 'Controller';
     const MIDDLEWARE_POSTFIX = 'Middleware';
 

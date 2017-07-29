@@ -7,6 +7,7 @@ use rjapi\blocks\Entities;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
+use rjapi\exception\DirectoryException;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
@@ -118,16 +119,93 @@ trait GeneratorTrait
      */
     private function setMergedTypes()
     {
-        if ($this->options[ConsoleInterface::OPTION_MERGE] === ConsoleInterface::MERGE_DEFAULT_VALUE) {
-            $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
-            if ($dirs !== false) {
-                $rFiles = $this->ramlFiles;
-                $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
-                $dir = $dirs[0]; // desc last date YYYY-mmm-dd
-                $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
-                $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
-                $this->composeTypes($dir, $files, $rFiles);
+        $opMerge = $this->options[ConsoleInterface::OPTION_MERGE];
+        $timeCheck = strtotime($opMerge); // only for validation - coz of a diff timezones
+        if (false !== $timeCheck) {
+            $dateTime = explode(PhpInterface::SPACE, $opMerge);
+            $this->mergeTime($dateTime);
+        } else if (is_numeric($opMerge) !== false) {
+            $this->mergeStep($opMerge);
+        } else if ($opMerge === ConsoleInterface::MERGE_DEFAULT_VALUE) {
+            $this->mergeLast();
+        }
+    }
+
+    /**
+     * Merges history RAML files with current by time in the past
+     * @param array $dateTime
+     * @throws DirectoryException
+     */
+    private function mergeTime(array $dateTime)
+    {
+        $date = $dateTime[0];
+        $time = str_replace(':', '', $dateTime[1]);
+        $path = DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $date . DIRECTORY_SEPARATOR;
+        if (is_dir($path) === false) {
+            throw new DirectoryException('The directory: ' . $path . ' was not found.');
+        }
+        $files = glob($path . $time . '*' . DefaultInterface::RAML_EXT);
+        foreach ($files as &$fullPath) {
+            $fullPath = str_replace($path, '', $fullPath);
+        }
+        $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
+        $this->composeTypes($date, $files, $this->ramlFiles);
+    }
+
+    /**
+     * Merges history RAML files with current by backward steps
+     * @param int $step
+     */
+    private function mergeStep(int $step)
+    {
+        $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
+        if ($dirs !== false) {
+            $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
+            $composed = $this->composeStepFiles($dirs, $step);
+            $this->composeTypes($composed['dirToPass'], $composed['filesToPass'], $this->ramlFiles);
+        }
+    }
+
+    private function composeStepFiles(array $dirs, int $step)
+    {
+        $dirToPass   = '';
+        $filesToPass = '';
+        foreach ($dirs as $dir) {
+            $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
+            $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
+            $prefixFlag = '';
+            foreach ($files as $kFile => $file) {
+                $prefix = substr($file, 0, 6); // Hms
+                if ($prefix !== $prefixFlag) {
+                    --$step;
+                    $prefixFlag = $prefix;
+                    if ($step > 0) {
+                        $skip = preg_grep('/^' . $prefix . '.*$/i', $files);
+                        $files = array_diff($files, $skip);
+                    }
+                }
+                if ($step <= 0) {
+                    $skip = preg_grep('/[^' . $prefix . '.*]+/i', $files);
+                    $files = array_diff($files, $skip);
+                    $dirToPass = $dir;
+                    $filesToPass = $files;
+                    break;
+                }
             }
+        }
+        return compact('dirToPass', 'filesToPass');
+    }
+
+    private function mergeLast()
+    {
+        $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
+        if ($dirs !== false) {
+            $rFiles = $this->ramlFiles;
+            $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
+            $dir = $dirs[0]; // desc last date YYYY-mmm-dd
+            $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
+            $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
+            $this->composeTypes($dir, $files, $rFiles);
         }
     }
 
