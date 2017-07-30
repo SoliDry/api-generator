@@ -1310,6 +1310,10 @@ class AddColumnLastNameToUser extends Migration
 ``` 
 If you don't want to save history every time U running commands add `--no-history` option.  
 
+There are also more things you can do, about rewinding history: 
+- by passing option like this `--merge=9` generator will get back for 9 steps 
+- `--merge="2017-07-29 11:35:32"` generator gets to the concrete files by time in history
+
 ### Conversions to RAML
 
 There are several tools for conversion between different types of documents and RAML, 
