@@ -33,6 +33,8 @@ trait MigrationsTrait
     }
 
     /**
+     * Creates table migration schema
+     *
      * @param string $method
      * @param string $entity
      */
@@ -44,6 +46,8 @@ trait MigrationsTrait
     }
 
     /**
+     * Writes row to migration with type and params
+     *
      * @param string      $method
      * @param string|null $property
      * @param null        $opts

@@ -64,7 +64,7 @@ abstract class MigrationsAbstract
             }
         }
         // created_at/updated_at created for every table
-        $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS, '', null, null, false);
     }
 
     /**
@@ -275,7 +275,7 @@ abstract class MigrationsAbstract
             ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
             . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
         );
-        $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS, '', null, null, false);
     }
 
     private function getEntityAttributes()
