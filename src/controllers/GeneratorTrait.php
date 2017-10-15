@@ -62,19 +62,21 @@ trait GeneratorTrait
         $this->createControllers();
         // create middleware
         $this->forms = new Middleware($this);
-        if (true === file_exists($this->forms->getEntityFile($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX))) {
-            $this->forms->recreateEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        $middlewarePath = $this->formatMiddlewarePath();
+        if (true === file_exists($this->forms->getEntityFile($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX))) {
+            $this->forms->recreateEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
         } else {
-            $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+            $this->forms->createEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
         }
 
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->createPivot();
-        if (true === file_exists($this->forms->getEntityFile($this->formatEntitiesPath()))) {
-            $this->mappers->recreateEntity($this->formatEntitiesPath());
+        $entitiesPath = $this->formatEntitiesPath();
+        if (true === file_exists($this->forms->getEntityFile($entitiesPath))) {
+            $this->mappers->recreateEntity($entitiesPath);
         } else {
-            $this->mappers->createEntity($this->formatEntitiesPath());
+            $this->mappers->createEntity($entitiesPath);
         }
 
         // create routes
