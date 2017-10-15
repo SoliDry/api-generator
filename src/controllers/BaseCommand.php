@@ -1,26 +1,22 @@
 <?php
+
 namespace rjapi\controllers;
 
 use Illuminate\Console\Command;
 use rjapi\blocks\Config;
-use rjapi\blocks\Middleware;
-use rjapi\blocks\Controllers;
 use rjapi\blocks\FileManager;
-use rjapi\blocks\Entities;
-use rjapi\blocks\Migrations;
 use rjapi\blocks\Module;
-use rjapi\blocks\Routes;
-use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
-use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use Symfony\Component\Yaml\Yaml;
 
-trait ControllersTrait
+class BaseCommand extends Command
 {
+    use GeneratorTrait;
+
     // dirs
     public $rootDir        = '';
     public $appDir         = '';
@@ -31,30 +27,28 @@ trait ControllersTrait
     public $entitiesDir    = '';
     public $migrationsDir  = '';
 
-    public $version;
-    public $objectName        = '';
-    public $defaultController = 'Default';
-    public $uriNamedParams    = null;
-    public $ramlFile          = '';
-    public $force             = null;
-    public $customTypes       = [
+    public  $version;
+    public  $objectName        = '';
+    public  $defaultController = 'Default';
+    public  $uriNamedParams    = null;
+    public  $ramlFile          = '';
+    public  $force             = null;
+    public  $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
     ];
-    public $types             = [];
-    public $frameWork         = '';
-    public $objectProps       = [];
-    public $generatedFiles    = [];
-    public $relationships     = [];
-
-    private $forms        = null;
-    private $controllers  = null;
-    private $moduleObject = null;
-    private $mappers      = null;
-    private $containers   = null;
-    private $routes       = null;
-    private $migrations   = null;
+    public  $types             = [];
+    public  $currentTypes      = [];
+    public  $historyTypes      = [];
+    public  $mergedTypes       = [];
+    public  $diffTypes         = [];
+    public  $frameWork         = '';
+    public  $objectProps       = [];
+    public  $generatedFiles    = [];
+    public  $relationships     = [];
+    private $ramlFiles         = [];
+    private $controllers       = null;
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
@@ -65,13 +59,18 @@ trait ControllersTrait
     ];
 
     public $options = [];
-
+    public $isMerge = false;
+    /** increment created routes to create file first and then append content */
+    public $routesCreated = 0;
     /**
      *  Generates api Controllers + Models to support RAML validation
+     *
+     * @param string $ramlFile path to raml file
      */
     public function actionIndex(string $ramlFile)
     {
-        $data = Yaml::parse(file_get_contents($ramlFile));
+        $this->ramlFiles[]    = $ramlFile;
+        $data                 = Yaml::parse(file_get_contents($ramlFile));
         $this->version        = str_replace('/', '', $data['version']);
         $this->appDir         = DirsInterface::APPLICATION_DIR;
         $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
@@ -81,20 +80,18 @@ trait ControllersTrait
         $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-        if((bool) env('PHP_DEV') === true)
-        {
+        if ((bool) env('PHP_DEV') === true) {
             $this->createDirs();
             $this->options = [
                 ConsoleInterface::OPTION_MIGRATIONS => 1,
                 ConsoleInterface::OPTION_REGENERATE => 1
             ];
-        }
-        else
-        {
+        } else {
             $this->options = $this->options();
         }
         $this->setIncludedTypes($data);
         $this->runGenerator();
+        $this->setGenHistory();
     }
 
     /**
@@ -102,23 +99,30 @@ trait ControllersTrait
      */
     private function runGenerator()
     {
+        if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false) { // create new or regenerate
+            $this->setMergedTypes();
+            $this->isMerge = true;
+        }
         $this->generateModule();
         $this->generateConfig();
-        foreach($this->types as $objName => $objData)
-        {
-            if(in_array($objName, $this->customTypes) === false)
-            { // if this is not a custom type generate resources
+        $this->generate();
+    }
+
+    /**
+     *  Generates new code or regenerate older with new content
+     */
+    private function generate()
+    {
+        foreach ($this->types as $objName => $objData) {
+            if (in_array($objName, $this->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
-                foreach($this->excludedSubtypes as $type)
-                {
-                    if(strpos($objName, $type) !== false)
-                    {
+                foreach ($this->excludedSubtypes as $type) {
+                    if (strpos($objName, $type) !== false) {
                         $excluded = true;
                     }
                 }
                 // if the type is among excluded - continue
-                if($excluded === true)
-                {
+                if ($excluded === true) {
                     continue;
                 }
                 $this->processObjectData($objName, $objData);
@@ -128,17 +132,19 @@ trait ControllersTrait
 
     /**
      * @param string $objName
-     * @param array $objData
+     * @param array  $objData
      */
     private function processObjectData(string $objName, array $objData)
     {
-        foreach($objData as $k => $v)
-        {
-            if($k === RamlInterface::RAML_PROPS)
-            { // process props
+        foreach ($objData as $k => $v) {
+            if ($k === RamlInterface::RAML_PROPS) { // process props
                 $this->setObjectName($objName);
                 $this->setObjectProps($v);
-                $this->generateResources();
+                if (true === $this->isMerge) {
+                    $this->mergeResources();
+                } else {
+                    $this->generateResources();
+                }
             }
         }
     }
@@ -148,7 +154,7 @@ trait ControllersTrait
         $module = new Module($this);
         $module->create();
     }
-    
+
     private function generateConfig()
     {
         $module = new Config($this);
@@ -183,13 +189,13 @@ trait ControllersTrait
         return FileManager::getModulePath($this, true) . $this->middlewareDir;
     }
 
-    public function formatEntitiesPath() : string
+    public function formatEntitiesPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
-    public function formatMigrationsPath() : string
+    public function formatMigrationsPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
@@ -199,6 +205,11 @@ trait ControllersTrait
     public function formatConfigPath()
     {
         return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
+    }
+
+    public function formatGenPath()
+    {
+        return DirsInterface::GEN_DIR . PhpInterface::SLASH . date('Y-m-d') . PhpInterface::SLASH;
     }
 
     /**
@@ -215,56 +226,33 @@ trait ControllersTrait
     }
 
     /**
-     * The creation sequence of every entity element is crucial
-     */
-    private function generateResources()
-    {
-        Console::out(
-            '================' . PhpInterface::SPACE . $this->objectName
-            . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
-        );
-        // create controller
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
-
-        // create middleware
-        $this->forms = new Middleware($this);
-        $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
-        $this->forms->createAccessToken();
-
-        // create entities/models
-        $this->mappers = new Entities($this);
-        $this->mappers->createPivot();
-        $this->mappers->createEntity($this->formatEntitiesPath());
-
-        // create routes
-        $this->routes = new Routes($this);
-        $this->routes->create();
-
-        if(empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false)
-        {
-            // create Migrations
-            $this->migrations = new Migrations($this);
-            $this->migrations->create();
-            $this->migrations->createPivot();
-        }
-    }
-
-    /**
      * Collect types = main + included files
+     *
      * @param array $data
      */
     private function setIncludedTypes(array $data)
     {
         $this->types = $data[RamlInterface::RAML_KEY_TYPES];
-        if(empty($data[RamlInterface::RAML_KEY_USES]) === false)
-        {
+        if (empty($data[RamlInterface::RAML_KEY_USES]) === false) {
             $files = $data[RamlInterface::RAML_KEY_USES];
-            foreach($files as $file)
-            {
-                $fileData = Yaml::parse(file_get_contents($file));
-                $this->types += $fileData[RamlInterface::RAML_KEY_TYPES];
+            foreach ($files as $file) {
+                $this->ramlFiles[] = $file;
+                $fileData          = Yaml::parse(file_get_contents($file));
+                $this->types       += $fileData[RamlInterface::RAML_KEY_TYPES];
+            }
+        }
+    }
+
+    private function setGenHistory()
+    {
+        if (empty($this->options[ConsoleInterface::OPTION_NO_HISTORY])) {
+            // create .gen dir to store raml history
+            FileManager::createPath($this->formatGenPath());
+            foreach ($this->ramlFiles as $file) {
+                $pathInfo = pathinfo($file);
+                $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
+                            . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
+                copy($file, $dest);
             }
         }
     }

@@ -12,11 +12,12 @@ trait MigrationsTrait
 {
     /**
      * @param string $entity
+     * @param string $schemaMethod
      */
-    public function openSchema(string $entity)
+    public function openSchema(string $entity, $schemaMethod = ModelsInterface::MIGRATION_CREATE)
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . ModelsInterface::MIGRATION_SCHEMA
-            . PhpInterface::DOUBLE_COLON . ModelsInterface::MIGRATION_CREATE
+            . PhpInterface::DOUBLE_COLON . $schemaMethod
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::QUOTES . strtolower($entity) . PhpInterface::QUOTES
             . PhpInterface::COMMA . PhpInterface::SPACE . PhpInterface::PHP_FUNCTION
             . PhpInterface::OPEN_PARENTHESES . Classes::getName(Blueprint::class) . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN
@@ -32,6 +33,8 @@ trait MigrationsTrait
     }
 
     /**
+     * Creates table migration schema
+     *
      * @param string $method
      * @param string $entity
      */
@@ -43,6 +46,8 @@ trait MigrationsTrait
     }
 
     /**
+     * Writes row to migration with type and params
+     *
      * @param string      $method
      * @param string|null $property
      * @param null        $opts

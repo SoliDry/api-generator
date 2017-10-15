@@ -1,32 +1,23 @@
 <?php
 namespace rjapi;
 
-use rjapi\types\CustomsInterface;
-use rjapi\types\DefaultInterface;
-use rjapi\types\DirsInterface;
-use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
-use Illuminate\Console\Command;
-use rjapi\controllers\ControllersTrait;
+use rjapi\controllers\BaseCommand;
 
-class RJApiGenerator extends Command implements DefaultInterface, PhpInterface, RamlInterface,
-    CustomsInterface, DirsInterface
+class RJApiGenerator extends BaseCommand
 {
-    use ControllersTrait;
-
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate}';
+    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'RAML-JSON-API PHP-code generator (based on RAML-types), with complete support of JSON-API data format';
+    protected $description = 'RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel, with complete support of JSON-API data format';
 
     /**
      *  Laravel handler for console commands

@@ -6,6 +6,7 @@ use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
+use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RoutesInterface;
 
@@ -36,7 +37,7 @@ class Routes
         $file      = FileManager::getModulePath($this->generator, true) .
                      RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
         // TODO: fix this behaviour - collect data 1-st for ex.
-        if(file_exists($file) === false)
+        if(file_exists($file) === false || $this->generator->routesCreated === 0)
         {
             $isCreated = FileManager::createFile($file, $this->sourceCode, true);
         }
@@ -45,6 +46,7 @@ class Routes
             $this->sourceCode = str_replace(PhpInterface::PHP_OPEN_TAG, '', $this->sourceCode);
             file_put_contents($file, $this->sourceCode, FILE_APPEND);
         }
+        ++$this->generator->routesCreated;
         if($isCreated)
         {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
@@ -54,7 +56,8 @@ class Routes
     private function setRoutes()
     {
         $this->setTag();
-        $this->setComment($this->className . ' routes');
+        $this->setComment(DefaultInterface::ROUTES_START, 0);
+        $this->setComment($this->className . ' routes', 0);
         $this->openGroup($this->generator->version);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_INDEX);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_VIEW, true);
@@ -63,7 +66,7 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE, true);
         // create relations process routes
         $this->setTabs();
-        $this->setComment('relation routes');
+        $this->setComment('relation routes', 0);
         $this->setRoute(RoutesInterface::METHOD_GET, $this->generator->objectName, JSONApiInterface::URI_METHOD_RELATIONS, true, true);
         $this->setRoute(RoutesInterface::METHOD_POST, $this->generator->objectName, JSONApiInterface::URI_METHOD_CREATE
             . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS), true, true);
@@ -72,5 +75,6 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->generator->objectName, JSONApiInterface::URI_METHOD_DELETE
             . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS), true, true);
         $this->closeGroup();
+        $this->setComment(DefaultInterface::ROUTES_END, 0);
     }
 }

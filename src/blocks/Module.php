@@ -34,6 +34,7 @@ class Module
         $output = [];
         exec(CommandsInterface::LARAVEL_MODULE_MAKE . PhpInterface::SPACE . $this->generator->version, $output);
         exec(CommandsInterface::LARAVEL_MODULE_USE . PhpInterface::SPACE . $this->generator->version, $output);
+        exec(CommandsInterface::LARAVEL_MODULE_LIST, $output);
         foreach($output as $str)
         {
             Console::out($str, Console::COLOR_GREEN);

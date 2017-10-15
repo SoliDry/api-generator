@@ -45,9 +45,13 @@ interface ModelsInterface
     const SQL_ASC  = 'asc';
 
     // Migrations
-    const MIGRATION_SCHEMA = 'Schema';
-    const MIGRATION_CREATE = 'create';
-    const MIGRATION_TABLE  = 'table';
+    const MIGRATION_SCHEMA           = 'Schema';
+    const MIGRATION_CREATE           = 'create';
+    const MIGRATION_TABLE            = 'table';
+    const MIGRATION_TABLE_PTTRN      = '{table}';
+    const MIGRATION_COLUMN_PTTRN     = '{column}';
+    const MIGRATION_ADD_COLUMN       = 'add_column_' . self::MIGRATION_COLUMN_PTTRN . '_to_' . self::MIGRATION_TABLE_PTTRN;
+    const MIGRATION_ADD_COLUMN_CLASS = 'AddColumn' . self::MIGRATION_COLUMN_PTTRN . 'To' . self::MIGRATION_TABLE_PTTRN;
 
     // Migration methods
     const MIGRATION_METHOD_INCREMENTS     = 'increments';
@@ -82,6 +86,7 @@ interface ModelsInterface
     const MIGRATION_METHOD_DROP           = 'dropIfExists';
     const MIGRATION_METHOD_UP             = 'up';
     const MIGRATION_METHOD_DOWN           = 'down';
+    const MIGRATION_DROP_COLUMN           = 'dropColumn';
 
     // base properties
     const PROPERTY_TABLE       = 'table';
