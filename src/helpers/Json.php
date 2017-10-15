@@ -80,15 +80,21 @@ class Json
     /**
      * Output errors in JSON API compatible format
      * @param array $errors
+     * @param bool  $return
+     * @return string
      */
-    public static function outputErrors(array $errors)
+    public static function outputErrors(array $errors, bool $return = false)
     {
         $arr[JSONApiInterface::CONTENT_ERRORS] = [];
         if(empty($errors) === false) {
             $arr[JSONApiInterface::CONTENT_ERRORS] = $errors;
         }
-        echo self::encode($arr);
-        exit(JSONApiInterface::EXIT_STATUS_ERROR);
+        $encoded = self::encode($arr);
+        if (false === $return) {
+            echo $encoded;
+            exit(JSONApiInterface::EXIT_STATUS_ERROR);
+        }
+        return $encoded;
     }
 
     /**
