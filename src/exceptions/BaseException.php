@@ -1,13 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: root
- * Date: 15.10.17
- * Time: 16:09
- */
 
 namespace rjapi\exception;
-
 
 use rjapi\helpers\Json;
 

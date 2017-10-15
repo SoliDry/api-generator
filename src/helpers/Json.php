@@ -89,7 +89,8 @@ class Json
         if(empty($errors) === false) {
             $arr[JSONApiInterface::CONTENT_ERRORS] = $errors;
         }
-        $encoded = self::encode($arr);
+        // errors and codes must be clear with readable json
+        $encoded = self::encode($arr, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         if (false === $return) {
             echo $encoded;
             exit(JSONApiInterface::EXIT_STATUS_ERROR);
@@ -165,11 +166,12 @@ class Json
 
     /**
      * @param array $array
+     * @param int   $opts
      * @return string
      */
-    public static function encode(array $array)
+    public static function encode(array $array, int $opts = 0)
     {
-        return json_encode($array);
+        return json_encode($array, $opts);
     }
 
     /**
