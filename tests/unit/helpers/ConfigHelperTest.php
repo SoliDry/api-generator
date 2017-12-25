@@ -11,8 +11,6 @@ use rjapitest\unit\TestCase;
  */
 class ConfigHelperTest extends TestCase
 {
-    private $configHelper;
-
     private $params = [
         'limit' => 15,
         'sort' => 'desc',
@@ -26,7 +24,6 @@ class ConfigHelperTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->configHelper = new ConfigHelper();
     }
 
     public function testGetters()

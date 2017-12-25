@@ -20,18 +20,18 @@ abstract class MigrationsAbstract
     const PATTERN_TIME = 'd_m_Y_Hi';
 
     private $signedIntergerMap = [
-        ModelsInterface::INT_DIGITS_TINY   => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
-        ModelsInterface::INT_DIGITS_SMALL  => ModelsInterface::MIGRATION_METHOD_SMALL_INTEGER,
+        ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
+        ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_SMALL_INTEGER,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_MEDIUM_INTEGER,
-        ModelsInterface::INT_DIGITS_INT    => ModelsInterface::MIGRATION_METHOD_INTEGER,
+        ModelsInterface::INT_DIGITS_INT => ModelsInterface::MIGRATION_METHOD_INTEGER,
         ModelsInterface::INT_DIGITS_BIGINT => ModelsInterface::MIGRATION_METHOD_BIG_INTEGER,
     ];
 
     private $unsignedIntergerMap = [
-        ModelsInterface::INT_DIGITS_TINY   => ModelsInterface::MIGRATION_METHOD_UTINYINT,
-        ModelsInterface::INT_DIGITS_SMALL  => ModelsInterface::MIGRATION_METHOD_USMALLINT,
+        ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_UTINYINT,
+        ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_USMALLINT,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_UMEDIUMINT,
-        ModelsInterface::INT_DIGITS_INT    => ModelsInterface::MIGRATION_METHOD_UINT,
+        ModelsInterface::INT_DIGITS_INT => ModelsInterface::MIGRATION_METHOD_UINT,
         ModelsInterface::INT_DIGITS_BIGINT => ModelsInterface::MIGRATION_METHOD_UBIGINT,
     ];
 
@@ -41,21 +41,20 @@ abstract class MigrationsAbstract
     protected function setRows()
     {
         $attrs = $this->getEntityAttributes();
-        foreach($attrs as $attrKey => $attrVal) {
-            if(is_array($attrVal)) {
-                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+        foreach ($attrs as $attrKey => $attrVal) {
+            if (is_array($attrVal)) {
+                if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
                     $type = $attrVal[RamlInterface::RAML_TYPE];
-                    if($attrKey === RamlInterface::RAML_ID) {
+                    if ($attrKey === RamlInterface::RAML_ID) {
                         // create an auto_increment primary key - id
                         $this->setId($attrVal, $attrKey, $type);
                         continue;
                     }
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
-                }
-                else {// non-standard types aka enum
-                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
+                } else {// non-standard types aka enum
+                    if (empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
@@ -73,16 +72,15 @@ abstract class MigrationsAbstract
      */
     protected function setAddRows(array $attrs)
     {
-        foreach($attrs as $attrKey => $attrVal) {
-            if(is_array($attrVal)) {
-                if(empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+        foreach ($attrs as $attrKey => $attrVal) {
+            if (is_array($attrVal)) {
+                if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
                     $type = $attrVal[RamlInterface::RAML_TYPE];
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
-                }
-                else {// non-standard types aka enum
-                    if(empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
+                } else {// non-standard types aka enum
+                    if (empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
@@ -101,7 +99,7 @@ abstract class MigrationsAbstract
     private function setRowContent(array $attrVal, string $type, string $attrKey)
     {
         // create migration fields depending on types
-        switch($type) {
+        switch ($type) {
             case RamlInterface::RAML_TYPE_STRING:
                 $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
                 $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null
@@ -137,17 +135,18 @@ abstract class MigrationsAbstract
 
     public function dropRows(array $attrs)
     {
-        foreach($attrs as $attrKey => $attrVal) {
+        foreach ($attrs as $attrKey => $attrVal) {
             $this->setRow(ModelsInterface::MIGRATION_DROP_COLUMN, $attrKey);
         }
     }
+
     /**
-     * @param array  $attrVal
+     * @param array $attrVal
      * @param string $attrKey
      */
     private function setRowNumber(array $attrVal, string $attrKey)
     {
-        if(empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
+        if (empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
             && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
                 || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
         ) {
@@ -160,19 +159,19 @@ abstract class MigrationsAbstract
 
     /**
      *  Sets index for particular column if facets was declared
-     * @param array  $attrVal
+     * @param array $attrVal
      * @param string $attrKey
      *
      * @throws AttributesException
      */
     public function setIndex(array $attrVal, string $attrKey)
     {
-        if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX]) === false) {
+        if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX]) === false) {
             $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX];
-            foreach($facets as $k => $v) {
-                switch($v) {
+            foreach ($facets as $k => $v) {
+                switch ($v) {
                     case ModelsInterface::INDEX_TYPE_INDEX:
-                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $attrKey,  $this->quoteParam($k));
+                        $this->setRow(ModelsInterface::INDEX_TYPE_INDEX, $attrKey, $this->quoteParam($k));
                         break;
                     case ModelsInterface::INDEX_TYPE_PRIMARY:
                         $this->setRow(ModelsInterface::INDEX_TYPE_PRIMARY, $attrKey, $this->quoteParam($k));
@@ -186,7 +185,7 @@ abstract class MigrationsAbstract
                         }
                         $build = [
                             ModelsInterface::INDEX_REFERENCES => $this->quoteParam($facets[ModelsInterface::INDEX_REFERENCES]),
-                            ModelsInterface::INDEX_ON         => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
+                            ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
                         ];
                         if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
                             $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
@@ -208,7 +207,7 @@ abstract class MigrationsAbstract
      */
     public function setCompositeIndex(array $attrVal)
     {
-        if(empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
+        if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
             $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
             if (empty($facets[ModelsInterface::INDEX_TYPE_FOREIGN]) === false) {
                 if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
@@ -216,7 +215,7 @@ abstract class MigrationsAbstract
                 }
                 $build = [
                     ModelsInterface::INDEX_REFERENCES => $this->getArrayParam($facets[ModelsInterface::INDEX_REFERENCES]),
-                    ModelsInterface::INDEX_ON         => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
+                    ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
                 ];
                 if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
                     $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
@@ -240,19 +239,18 @@ abstract class MigrationsAbstract
      */
     private function setIntegerDigit(string $key, int $max = null, bool $signed = false)
     {
-        if($signed) {
-            foreach($this->signedIntergerMap as $digits => $method) {
+        if ($signed) {
+            foreach ($this->signedIntergerMap as $digits => $method) {
                 $next = next($this->signedIntergerMap);
-                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntergerMap)))) {
+                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntergerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
             }
-        }
-        else {
-            foreach($this->unsignedIntergerMap as $digits => $method) {
+        } else {
+            foreach ($this->unsignedIntergerMap as $digits => $method) {
                 $next = next($this->unsignedIntergerMap);
-                if($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntergerMap)))) {
+                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntergerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
@@ -294,8 +292,8 @@ abstract class MigrationsAbstract
     private function setId($attrVal, $attrKey, $type)
     {
         // set incremented id int
-        if($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false) {
-            if($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS) {
+        if ($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false) {
+            if ($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS) {
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_BIG_INCREMENTS, $attrKey);
 
                 return;
@@ -316,8 +314,7 @@ abstract class MigrationsAbstract
 
         // if migration file with the same name ocasionally exists we do not override it
         $isCreated = FileManager::createFile($file, $this->sourceCode);
-        if($isCreated)
-        {
+        if ($isCreated) {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }

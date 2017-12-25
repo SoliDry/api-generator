@@ -20,6 +20,5 @@ class ControllersTest extends TestCase
     {
         $this->assertInstanceOf(ControllersInterface::class, $this->controller);
         $this->controller->createDefault();
-        $this->controller->create();
     }
 }

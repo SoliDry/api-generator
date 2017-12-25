@@ -1,7 +1,7 @@
 <phpunit bootstrap="./tests/unit/_bootstrap.php" colors="true">
     <testsuites>
         <testsuite name="BaseController">
-            <directory suffix="Test.php" phpVersion="7.0" phpVersionOperator=">=">./tests/unit/</directory>
+            <directory suffix="Test.php" phpVersion="7.1" phpVersionOperator=">=">./tests/unit/</directory>
         </testsuite>
     </testsuites>
     <filter>

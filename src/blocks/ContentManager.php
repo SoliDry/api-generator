@@ -240,6 +240,12 @@ trait ContentManager
     }
 
     /**
+     * @uses \rjapi\blocks\Controllers::setContent
+     * @uses \rjapi\blocks\Config::setContent
+     * @uses \rjapi\blocks\Migrations::setContent
+     * @uses \rjapi\blocks\Entities::setContent
+     * @uses \rjapi\blocks\Middleware::setContent
+     *
      * Creates entities like *Controller, *Middleware, BaseModel entities etc
      *
      * @param string $basePath

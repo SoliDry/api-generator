@@ -32,6 +32,5 @@ class EntitiesTest extends TestCase
     {
         $this->assertInstanceOf(FormRequestModel::class, $this->entities);
         $this->entities->createPivot();
-        $this->entities->create();
     }
 }

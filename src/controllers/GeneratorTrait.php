@@ -19,10 +19,11 @@ use Symfony\Component\Yaml\Yaml;
 
 trait GeneratorTrait
 {
-    private $forms       = null;
-    private $mappers     = null;
-    private $routes      = null;
-    private $migrations  = null;
+    private $forms = null;
+    private $mappers = null;
+    private $routes = null;
+    private $migrations = null;
+    private $controllers = null;
 
     /**
      * Standard generation
@@ -170,7 +171,7 @@ trait GeneratorTrait
 
     private function composeStepFiles(array $dirs, int $step)
     {
-        $dirToPass   = '';
+        $dirToPass = '';
         $filesToPass = '';
         foreach ($dirs as $dir) {
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
@@ -213,9 +214,9 @@ trait GeneratorTrait
 
     /**
      * Gets history files and merges them with current raml files
-     * @param string $dir       desc sorted last date YYYY-mmm-dd directory
-     * @param array  $files     files from .gen/ dir saved history
-     * @param array  $ramlFiles file that were passed as an option + files from uses RAML property
+     * @param string $dir desc sorted last date YYYY-mmm-dd directory
+     * @param array $files files from .gen/ dir saved history
+     * @param array $ramlFiles file that were passed as an option + files from uses RAML property
      */
     private function composeTypes(string $dir, array $files, array $ramlFiles)
     {
@@ -229,10 +230,10 @@ trait GeneratorTrait
                     $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
                     $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
                     $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
-                    $attrsCurrent += array_filter($this->currentTypes, function($k) {
+                    $attrsCurrent += array_filter($this->currentTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
                     }, ARRAY_FILTER_USE_KEY);
-                    $attrsHistory += array_filter($this->historyTypes, function($k) {
+                    $attrsHistory += array_filter($this->historyTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
                     }, ARRAY_FILTER_USE_KEY);
                 }
@@ -244,8 +245,8 @@ trait GeneratorTrait
     /**
      * Compares attributes for current and previous history and sets the diffTypes prop
      * to process additional migrations creation
-     * @param array $attrsCurrent   Current attributes
-     * @param array $attrsHistory   History attributes
+     * @param array $attrsCurrent Current attributes
+     * @param array $attrsHistory History attributes
      */
     private function composeDiffs(array $attrsCurrent, array $attrsHistory)
     {

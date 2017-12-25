@@ -34,11 +34,11 @@ class ApiController extends Controller
     private $middleWare  = null;
     private $relsRemoved = false;
     private $defaultOrderBy = [];
-    /** @var ConfigOptions configOptions */
+    /** @var ConfigOptions $configOptions */
     private $configOptions = null;
-    /** @var CustomSql customSql */
+    /** @var CustomSql $customSql */
     private $customSql = null;
-    /** @var BitMask bitMask */
+    /** @var BitMask $bitMask */
     private $bitMask   = null;
 
     private $jsonApiMethods = [
@@ -82,6 +82,7 @@ class ApiController extends Controller
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
+     * @throws \rjapi\exception\AttributesException
      */
     public function index(Request $request)
     {
@@ -109,6 +110,7 @@ class ApiController extends Controller
      *
      * @param Request $request
      * @param int $id
+     * @throws \rjapi\exception\AttributesException
      */
     public function view(Request $request, int $id)
     {
@@ -132,6 +134,7 @@ class ApiController extends Controller
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
+     * @throws \rjapi\exception\AttributesException
      */
     public function create(Request $request)
     {
@@ -176,6 +179,7 @@ class ApiController extends Controller
      *
      * @param Request $request
      * @param int $id
+     * @throws \rjapi\exception\AttributesException
      */
     public function update(Request $request, int $id)
     {
@@ -207,6 +211,7 @@ class ApiController extends Controller
      * Process model update
      * @param $model
      * @param array $jsonApiAttributes
+     * @throws \rjapi\exception\AttributesException
      */
     private function processUpdate($model, array $jsonApiAttributes)
     {
