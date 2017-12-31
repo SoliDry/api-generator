@@ -38,6 +38,9 @@ class Migrations extends MigrationsAbstract
         $this->generator = $generator;
     }
 
+    /**
+     * @uses \rjapi\blocks\EntitiesTrait::reset
+     */
     public function create()
     {
         $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE .
@@ -84,7 +87,7 @@ class Migrations extends MigrationsAbstract
                 if(file_exists($entityFile))
                 {
                     $this->setPivotContent($relationEntity);
-                    $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
+                    $migrationMask = date(self::PATTERN_TIME) . random_int(10, 99);
                     $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE
                                      . $this->tableName
                                      . PhpInterface::UNDERSCORE .

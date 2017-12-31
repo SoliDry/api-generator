@@ -26,7 +26,10 @@ class ConfigHelperTest extends TestCase
         parent::setUp();
     }
 
-    public function testGetters()
+    /**
+     * @test
+     */
+    public function it_gets_query_param()
     {
         $paramSort = 'sort';
         $sortData = ConfigHelper::getQueryParam($paramSort);

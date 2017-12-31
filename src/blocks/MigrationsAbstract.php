@@ -17,7 +17,7 @@ abstract class MigrationsAbstract
 {
     use ContentManager, MigrationsTrait;
 
-    const PATTERN_TIME = 'd_m_Y_Hi';
+    public const PATTERN_TIME = 'd_m_Y_Hi';
 
     private $signedIntergerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
@@ -38,7 +38,7 @@ abstract class MigrationsAbstract
     /**
      *  Sets rows of migration with their description and options
      */
-    protected function setRows()
+    protected function setRows(): void
     {
         $attrs = $this->getEntityAttributes();
         foreach ($attrs as $attrKey => $attrVal) {
@@ -58,8 +58,13 @@ abstract class MigrationsAbstract
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
-                $this->setIndex($attrVal, $attrKey);
-                $this->setCompositeIndex($attrVal);
+
+                try {
+                    $this->setIndex($attrVal, $attrKey);
+                    $this->setCompositeIndex($attrVal);
+                } catch (AttributesException $e) {
+                    echo $e->getTraceAsString();
+                }
             }
         }
         // created_at/updated_at created for every table
@@ -70,7 +75,7 @@ abstract class MigrationsAbstract
      *  Sets rows of migration with their description and options
      * @param array $attrs
      */
-    protected function setAddRows(array $attrs)
+    protected function setAddRows(array $attrs): void
     {
         foreach ($attrs as $attrKey => $attrVal) {
             if (is_array($attrVal)) {
@@ -84,8 +89,12 @@ abstract class MigrationsAbstract
                         $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
                     }
                 }
-                $this->setIndex($attrVal, $attrKey);
-                $this->setCompositeIndex($attrVal);
+                try {
+                    $this->setIndex($attrVal, $attrKey);
+                    $this->setCompositeIndex($attrVal);
+                } catch (AttributesException $e) {
+                    echo $e->getTraceAsString();
+                }
             }
         }
     }
@@ -96,7 +105,7 @@ abstract class MigrationsAbstract
      * @param string $type
      * @param string $attrKey
      */
-    private function setRowContent(array $attrVal, string $type, string $attrKey)
+    private function setRowContent(array $attrVal, string $type, string $attrKey): void
     {
         // create migration fields depending on types
         switch ($type) {
@@ -133,7 +142,7 @@ abstract class MigrationsAbstract
         }
     }
 
-    public function dropRows(array $attrs)
+    public function dropRows(array $attrs): void
     {
         foreach ($attrs as $attrKey => $attrVal) {
             $this->setRow(ModelsInterface::MIGRATION_DROP_COLUMN, $attrKey);
@@ -144,7 +153,7 @@ abstract class MigrationsAbstract
      * @param array $attrVal
      * @param string $attrKey
      */
-    private function setRowNumber(array $attrVal, string $attrKey)
+    private function setRowNumber(array $attrVal, string $attrKey): void
     {
         if (empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
             && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
@@ -164,7 +173,7 @@ abstract class MigrationsAbstract
      *
      * @throws AttributesException
      */
-    public function setIndex(array $attrVal, string $attrKey)
+    public function setIndex(array $attrVal, string $attrKey): void
     {
         if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX]) === false) {
             $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX];
@@ -205,7 +214,7 @@ abstract class MigrationsAbstract
      * @param array $attrVal
      * @throws AttributesException
      */
-    public function setCompositeIndex(array $attrVal)
+    public function setCompositeIndex(array $attrVal): void
     {
         if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
             $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
@@ -237,7 +246,7 @@ abstract class MigrationsAbstract
      * @param int $max
      * @param bool $signed
      */
-    private function setIntegerDigit(string $key, int $max = null, bool $signed = false)
+    private function setIntegerDigit(string $key, int $max = null, bool $signed = false): void
     {
         if ($signed) {
             foreach ($this->signedIntergerMap as $digits => $method) {
@@ -261,7 +270,7 @@ abstract class MigrationsAbstract
     /**
      * @param $relationEntity
      */
-    protected function setPivotRows($relationEntity)
+    protected function setPivotRows($relationEntity): void
     {
         // P = 2T/2
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
@@ -289,7 +298,7 @@ abstract class MigrationsAbstract
      * @param $attrKey
      * @param $type
      */
-    private function setId($attrVal, $attrKey, $type)
+    private function setId($attrVal, $attrKey, $type): void
     {
         // set incremented id int
         if ($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false) {
@@ -306,9 +315,9 @@ abstract class MigrationsAbstract
      * Creates migration file with time mask
      * @param string $migrationName
      */
-    protected function createMigrationFile(string $migrationName)
+    protected function createMigrationFile(string $migrationName): void
     {
-        $migrationMask = date(self::PATTERN_TIME, time()) . mt_rand(10, 99);
+        $migrationMask = date(self::PATTERN_TIME, time()) . random_int(10, 99);
         $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
             $migrationName . PhpInterface::PHP_EXT;
 

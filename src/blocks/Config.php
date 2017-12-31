@@ -25,8 +25,8 @@ class Config implements ConfigInterface
 
     protected $sourceCode = '';
     /** @var BaseCommand generator */
-    protected $generator = null;
-    protected $className = null;
+    protected $generator;
+    protected $className;
 
     private $queryParams = [
         ModelsInterface::PARAM_LIMIT,
@@ -121,6 +121,11 @@ class Config implements ConfigInterface
         }
     }
 
+    /**
+     * @uses setFsmOptions
+     * @uses setSpellOptions
+     * @uses setBitMaskOptions
+     */
     private function setConfigEntities()
     {
         foreach($this->entityMethods as $entity => $method) {
@@ -165,7 +170,6 @@ class Config implements ConfigInterface
 
     /**
      * @param string $objName
-     * @throws AttributesException
      */
     private function setFsmOptions(string $objName)
     {

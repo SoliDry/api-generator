@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapitest\unit\blocks;
 
 use rjapi\blocks\Controllers;
@@ -8,6 +9,7 @@ use rjapitest\unit\TestCase;
 
 class ControllersTest extends TestCase
 {
+    /** @var Controllers $controller */
     private $controller;
 
     public function setUp()
@@ -16,7 +18,10 @@ class ControllersTest extends TestCase
         $this->controller = new Controllers(new RJApiGenerator());
     }
 
-    public function testCreateWithDefault()
+    /**
+     * @test
+     */
+    public function it_creates_default_controller()
     {
         $this->assertInstanceOf(ControllersInterface::class, $this->controller);
         $this->controller->createDefault();

@@ -25,12 +25,6 @@ class MiddlewareTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-//        $gen = new RJApiGenerator();
-//        $gen->actionIndex('./raml/articles.raml');
-//        $gen->objectName = 'Article';
-//        $gen->version = 'V1';
-//        $gen->modulesDir = DirsInterface::MODULES_DIR;
-//        $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
         /** @var RJApiGenerator|PHPUnit_Framework_MockObject_MockObject $gen */
         $gen = $this->createMock(RJApiGenerator::class);
         $gen->method('options')->willReturn([
@@ -40,7 +34,10 @@ class MiddlewareTest extends TestCase
         $this->middleware = new Middleware($gen);
     }
 
-    public function testCreateEntity()
+    /**
+     * @test
+     */
+    public function it_creates_middleware_entity()
     {
         $this->assertInstanceOf(FormRequestModel::class, $this->middleware);
         $this->middleware->createAccessToken();

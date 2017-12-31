@@ -33,7 +33,7 @@ class Controllers implements ControllersInterface
     /**
      * Creates the DefaultController and outputs path to the console
      */
-    public function createDefault()
+    public function createDefault(): void
     {
         $this->setDefaultContent();
         $fileController = $this->generator->formatControllersPath()

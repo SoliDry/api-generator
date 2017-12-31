@@ -15,20 +15,26 @@ use rjapitest\unit\TestCase;
  */
 class ConfigTest extends TestCase
 {
+    /** @var RJApiGenerator $gen */
+    private $gen;
     private $config;
 
     public function setUp()
     {
         parent::setUp();
-        $gen = new RJApiGenerator();
-        $gen->modulesDir = DirsInterface::MODULES_DIR;
-        $gen->version = 'V1';
-        $this->config = new Config($gen);
+        $this->gen = new RJApiGenerator();
+        $this->gen->modulesDir = DirsInterface::MODULES_DIR;
+        $this->gen->version = 'V1';
+        $this->config = new Config($this->gen);
     }
 
-    public function testSetName()
+    /**
+     * @test
+     */
+    public function it_creates_config()
     {
         $this->assertInstanceOf(ConfigInterface::class, $this->config);
         $this->config->create();
+        $this->assertTrue(file_exists($this->gen->formatConfigPath() . 'config.php'));
     }
 }

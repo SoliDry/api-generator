@@ -3,9 +3,7 @@
 namespace rjapitest\unit\blocks;
 
 use PHPUnit_Framework_MockObject_MockObject;
-use rjapi\blocks\FormRequestModel;
 use rjapi\blocks\MigrationsAbstract;
-use rjapi\exception\DirectoryException;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
@@ -66,6 +64,7 @@ class MigrationsTest extends TestCase
         $gen->version = 'v1';
         $gen->modulesDir = DirsInterface::MODULES_DIR;
         $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
+        $gen->migrationsDir = DirsInterface::MIGRATIONS_DIR;
         $this->migrations = new Migrations($gen);
     }
 

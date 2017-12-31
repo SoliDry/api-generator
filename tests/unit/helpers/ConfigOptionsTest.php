@@ -19,7 +19,10 @@ class ConfigOptionsTest extends TestCase
         $this->configOptions = new ConfigOptions();
     }
 
-    public function testGettersSetters()
+    /**
+     * @test
+     */
+    public function it_sets_configuration_options()
     {
         $accessToken = sha1(time());
         $this->configOptions->setQueryAccessToken($accessToken);

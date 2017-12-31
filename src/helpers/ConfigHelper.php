@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\helpers;
 
 
@@ -10,9 +11,9 @@ use rjapi\types\PhpInterface;
 class ConfigHelper
 {
     private static $availableQueryParams = [
-        ModelsInterface::PARAM_PAGE  => ModelsInterface::DEFAULT_PAGE,
+        ModelsInterface::PARAM_PAGE => ModelsInterface::DEFAULT_PAGE,
         ModelsInterface::PARAM_LIMIT => ModelsInterface::DEFAULT_LIMIT,
-        ModelsInterface::PARAM_SORT  => ModelsInterface::DEFAULT_SORT,
+        ModelsInterface::PARAM_SORT => ModelsInterface::DEFAULT_SORT,
     ];
 
     public static function getConfigKey(): string
@@ -25,19 +26,15 @@ class ConfigHelper
 
     public static function getModuleName(): string
     {
-        if(env('APP_ENV') === 'testing') {
-            return 'V1';
-        }
-
         return config(self::getConfigKey() . PhpInterface::DOT . ModulesInterface::KEY_NAME);
     }
 
     public static function getQueryParam(string $param)
     {
-        if(array_key_exists($param, self::$availableQueryParams)) {
+        if (array_key_exists($param, self::$availableQueryParams)) {
             $params = config(self::getConfigKey() . PhpInterface::DOT . ConfigInterface::QUERY_PARAMS);
 
-            return (empty($params[$param])) ? self::$availableQueryParams[$param] : $params[$param];
+            return empty($params[$param]) ? self::$availableQueryParams[$param] : $params[$param];
         }
 
         return null;
@@ -45,11 +42,11 @@ class ConfigHelper
 
     public static function getNestedParam(string $entity, string $param, bool $lower = false)
     {
-        if(true === $lower) {
+        if (true === $lower) {
             $param = strtolower($param);
         }
         $params = config(self::getConfigKey() . PhpInterface::DOT . $entity);
 
-        return (empty($params[$param])) ? null : $params[$param];
+        return empty($params[$param]) ? null : $params[$param];
     }
 }

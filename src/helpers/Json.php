@@ -146,7 +146,7 @@ class Json
      * @param array $data
      */
     public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
-                                                $data = ModelsInterface::DEFAULT_DATA)
+                                                $data = ModelsInterface::DEFAULT_DATA): void
     {
         http_response_code($responseCode);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
@@ -210,7 +210,7 @@ class Json
      * @param array &$json
      * @param array $data
      */
-    private static function unsetArray(array &$json, array $data)
+    private static function unsetArray(array &$json, array $data): void
     {
         foreach($json as &$jsonObject) {
             foreach($jsonObject as &$v) {
@@ -227,7 +227,7 @@ class Json
      * @param array $json
      * @param array $data
      */
-    private static function unsetObject(array &$json, array $data)
+    private static function unsetObject(array &$json, array $data): void
     {
         foreach($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
             if(in_array($k, $data) === false) {
