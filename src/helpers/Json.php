@@ -102,7 +102,7 @@ class Json
      * @param Request $request
      * @param array $data
      */
-    public static function outputSerializedRelations(Request $request, array $data)
+    public static function outputSerializedRelations(Request $request, array $data): void
     {
         http_response_code(JSONApiInterface::HTTP_RESPONSE_CODE_OK);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
