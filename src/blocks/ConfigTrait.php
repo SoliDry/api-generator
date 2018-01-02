@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\blocks;
 
 use rjapi\types\ConfigInterface;
@@ -20,7 +21,7 @@ trait ConfigTrait
     private function openRoot(): void
     {
         $this->sourceCode .= PhpInterface::PHP_RETURN . PhpInterface::SPACE
-                             . PhpInterface::OPEN_BRACKET . PHP_EOL;
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
     /**
@@ -35,15 +36,15 @@ trait ConfigTrait
      * Sets the default value of the $param name
      *
      * @param string $param
-     * @param mixed  $defaultValue
+     * @param mixed $defaultValue
      */
     private function setParamDefault(string $param, $defaultValue): void
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::QUOTES . $param .
-                             PhpInterface::QUOTES
-                             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-                             . ((bool) $defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) .
-                             PhpInterface::COMMA . PHP_EOL;
+            PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . ((bool)$defaultValue === true ? PhpInterface::PHP_TYPES_BOOL_TRUE : $defaultValue) .
+            PhpInterface::COMMA . PHP_EOL;
     }
 
     /**
@@ -60,9 +61,10 @@ trait ConfigTrait
         ) {
             $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
         }
-        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $param . PhpInterface::QUOTES
-                             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-                             . $value . PhpInterface::COMMA . PHP_EOL;
+        $this->setTabs($tabs);
+        $this->sourceCode .= PhpInterface::QUOTES . $param . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . $value . PhpInterface::COMMA . PHP_EOL;
     }
 
     /**
@@ -70,7 +72,7 @@ trait ConfigTrait
      *
      * @return mixed
      */
-    abstract protected function setTabs(int $amount = 1);
+    abstract protected function setTabs(int $amount = 1): void;
 
     /**
      * Opens finite state machine
@@ -119,8 +121,8 @@ trait ConfigTrait
     private function openEntity(string $entity, int $tabs = 1): void
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $entity
-                             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
-                             . PhpInterface::OPEN_BRACKET . PHP_EOL;
+            . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
+            . PhpInterface::OPEN_BRACKET . PHP_EOL;
         array_push($this->openedBrackets, $tabs);
     }
 
