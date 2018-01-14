@@ -1,0 +1,12 @@
+
+# Comment to be posted on first time issues.
+newIssueWelcomeComment: |
+  👋 Thanks for opening your first issue here! If you're reporting a 🐞 bug, please make sure you include particular steps to reproduce it.
+
+# Comment to be posted on PRs from first time contributors.
+newPRWelcomeComment: |
+  💖 Thanks for opening this pull request! 💖
+
+# Comment to be posted on pull requests merged by a first time user.
+firstPRMergeComment: >
+  Congrats on merging your first pull request and thank you for your contribution! 🎉🎉🎉
