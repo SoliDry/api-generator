@@ -7,8 +7,8 @@
         "php": "^7.1",
         "codeception/codeception": "^2.2",
         "alecsammon/php-raml-parser": "^2.1",
-        "laravel/framework": "5.3.* || 5.4.* || 5.5.*",
-        "nwidart/laravel-modules": "^1.14",
+        "laravel/framework": ">=5.3",
+        "nwidart/laravel-modules": "^3.0",
         "league/fractal": ">=0.14",
         "lcobucci/jwt": "^3.2"
     },
