@@ -20,15 +20,15 @@ trait SpellCheckTrait
      *
      * @return array
      */
-    protected function spellCheck(array $jsonProps)
+    protected function spellCheck(array $jsonProps) : array
     {
+        if (false === extension_loaded(PhpInterface::PHP_EXTENSION_PSPELL)) {
+            return [ConfigInterface::SPELL_CHECK => 'php-pspell library has not been installed on Your system.'];
+        }
         $arr        = [];
         $spellCheck = new SpellCheck($this->entity);
         $field      = $spellCheck->getField();
         if (true === $spellCheck->isEnabled()) {
-            if (false === extension_loaded(PhpInterface::PHP_EXTENSION_PSPELL)) {
-                return [ConfigInterface::SPELL_CHECK => 'php-pspell library has not been installed on Your system.'];
-            }
             $arr = $spellCheck->check($jsonProps[$field]);
         }
 
