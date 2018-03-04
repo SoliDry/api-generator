@@ -72,10 +72,16 @@ trait OptionsTrait
         // set those only for index
         if ($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
             $this->customSql = new CustomSql($this->entity);
-            $this->configOptions->setIsCached(ConfigHelper::getNestedParam(ConfigInterface::CACHE, ConfigInterface::ENABLED));
+            $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));
+            if ($entityCache !== null) {
+                $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
+            }
         }
         if ($calledMethod === JSONApiInterface::URI_METHOD_VIEW) {
-            $this->configOptions->setIsCached(ConfigHelper::getNestedParam(ConfigInterface::CACHE, ConfigInterface::ENABLED));
+            $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));
+            if ($entityCache !== null) {
+                $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
+            }
         }
 
         if ($this->configOptions->isCached()) {
@@ -83,6 +89,9 @@ trait OptionsTrait
         }
     }
 
+    /**
+     * @param string $calledMethod
+     */
     private function setOptionsOnNotDelete(string $calledMethod) : void
     {
         if ($calledMethod !== JSONApiInterface::URI_METHOD_DELETE) {
@@ -94,6 +103,9 @@ trait OptionsTrait
         }
     }
 
+    /**
+     * @param string $calledMethod
+     */
     private function setOptionsOnCreateUpdate(string $calledMethod) : void
     {
         if (in_array($calledMethod, [JSONApiInterface::URI_METHOD_CREATE, JSONApiInterface::URI_METHOD_UPDATE]) === true) {

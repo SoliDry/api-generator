@@ -99,16 +99,11 @@ class ApiController extends Controller
             $qStr    = $request->getQueryString();
             $hashKey = JSONApiInterface::URI_METHOD_INDEX . PhpInterface::COLON . md5($qStr);
             $items   = $this->get($hashKey);
-            if (empty($items)) {
+            if ($items === null) {
                 $items = $this->getEntities($sqlOptions);
                 $this->set($hashKey, $items);
             }
         } else {
-//            if ($this->customSql->isEnabled()) {
-//                $items = $this->getCustomSqlEntities($this->customSql);
-//            } else {
-//                $items = $this->getAllEntities($sqlOptions);
-//            }
             $items = $this->getEntities($sqlOptions);
         }
 

@@ -17,7 +17,7 @@ use rjapi\types\PhpInterface;
 trait CacheTrait
 {
     /** @var Client $cache  */
-    private $cache = null;
+    private $cache;
     private $host;
     private $port;
 
@@ -43,46 +43,52 @@ trait CacheTrait
 
     private function setHostAndPort() : void
     {
-        $this->host = ConfigHelper::getNestedParam(ConfigInterface::CACHE, ConfigInterface::HOST);
+        $cacheEntity = ConfigHelper::getNestedParam(ConfigInterface::CACHE, $this->entity);
+        $this->host  = empty($cacheEntity[ConfigInterface::HOST]) ? null : $cacheEntity[ConfigInterface::HOST];
         if ($this->host === null) {
             $this->host = env('REDIS_HOST');
             if ($this->host === null) {
-                $this->host = '127.0.0.1';
+                $this->host = ConfigInterface::DEFAULT_REDIS_HOST;
             }
         }
-        $this->port = ConfigHelper::getNestedParam(ConfigInterface::CACHE, ConfigInterface::PORT);
+
+        $this->port = empty($cacheEntity[ConfigInterface::PORT]) ? null : $cacheEntity[ConfigInterface::PORT];
         if ($this->port === null) {
             $this->port = env('REDIS_PORT');
             if ($this->port === null) {
-                $this->port = '127.0.0.1';
+                $this->port = ConfigInterface::DEFAULT_REDIS_PORT;
             }
         }
     }
 
     /**
      * @param string $key
-     * @param array $val
+     * @param \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item $val
      * @return mixed
      */
-    private function set(string $key, array $val)
+    private function set(string $key, $val)
     {
         return $this->cache->set($key, $this->ser($val));
     }
 
     /**
      * @param string $key
-     * @return array
+     * @return mixed
      */
-    private function get(string $key) : array
+    private function get(string $key)
     {
-        return $this->unser($this->cache->get($key));
+        $data = $this->cache->get($key);
+        if ($data === null) {
+            return null;
+        }
+        return $this->unser($data);
     }
 
     /**
-     * @param array $data
+     * @param \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item $data
      * @return string
      */
-    protected function ser(array $data): string
+    protected function ser($data) : string
     {
         return str_replace(
             PhpInterface::DOUBLE_QUOTES, PhpInterface::DOUBLE_QUOTES_ESC,
@@ -92,14 +98,14 @@ trait CacheTrait
 
     /**
      * @param string $data
-     * @return array
+     * @return \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item
      */
-    protected function unser(string $data): array
+    protected function unser(string $data)
     {
         return unserialize(
             str_replace(
                 PhpInterface::DOUBLE_QUOTES_ESC, PhpInterface::DOUBLE_QUOTES,
-                $data), ['allowed_classes' => false]
+                $data), ['allowed_classes' => true]
         );
     }
 }

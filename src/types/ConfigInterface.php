@@ -37,4 +37,7 @@ interface ConfigInterface
 
     public const DEFAULT_ACTIVATE = 30;
     public const DEFAULT_EXPIRES  = 3600;
+
+    public const DEFAULT_REDIS_HOST = '127.0.0.1';
+    public const DEFAULT_REDIS_PORT = 6379;
 }
