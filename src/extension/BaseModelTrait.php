@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\extension;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -31,6 +32,15 @@ trait BaseModelTrait
         );
 
         return $obj->first($data);
+    }
+
+    private function getEntities(SqlOptions $sqlOptions)
+    {
+        /** @var CustomSql $customSql */
+        if ($this->customSql->isEnabled()) {
+            return $this->getCustomSqlEntities($this->customSql);
+        }
+        return $this->getAllEntities($sqlOptions);
     }
 
     /**
@@ -72,26 +82,25 @@ trait BaseModelTrait
      */
     private function getAllEntities(SqlOptions $sqlOptions)
     {
-        $limit        = $sqlOptions->getLimit();
-        $page         = $sqlOptions->getPage();
-        $data         = $sqlOptions->getData();
-        $orderBy      = $sqlOptions->getOrderBy();
-        $filter       = $sqlOptions->getFilter();
+        $limit = $sqlOptions->getLimit();
+        $page = $sqlOptions->getPage();
+        $data = $sqlOptions->getData();
+        $orderBy = $sqlOptions->getOrderBy();
+        $filter = $sqlOptions->getFilter();
         $defaultOrder = [];
-        $order        = [];
-        $first        = true;
-        foreach($orderBy as $column => $value) {
-            if($first === true) {
+        $order = [];
+        $first = true;
+        foreach ($orderBy as $column => $value) {
+            if ($first === true) {
                 $defaultOrder = [$column, $value];
-            }
-            else {
+            } else {
                 $order[] = [ModelsInterface::COLUMN    => $column,
                             ModelsInterface::DIRECTION => $value];
             }
             $first = false;
         }
         $from = ($limit * $page) - $limit;
-        $to   = $limit * $page;
+        $to = $limit * $page;
         /** @var Builder $obj */
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON .
@@ -110,7 +119,7 @@ trait BaseModelTrait
         $collection = [];
         foreach ($result as $item) {
             $class = PhpInterface::BACKSLASH . $this->modelEntity;
-            $collection[] = (new $class())->fill((array) $item);
+            $collection[] = (new $class())->fill((array)$item);
         }
         return collect($collection);
     }
@@ -120,7 +129,7 @@ trait BaseModelTrait
      * @param SqlOptions $sqlOptions
      * @return Collection
      */
-    public function getAllTreeEntities(SqlOptions $sqlOptions): Collection
+    public function getAllTreeEntities(SqlOptions $sqlOptions) : Collection
     {
         return Collection::make($this->buildTree($this->getAllEntities($sqlOptions)));
     }
@@ -134,12 +143,12 @@ trait BaseModelTrait
     private function buildTree(Collection $data, int $id = 0)
     {
         $tree = [];
-        foreach($data as $k => $child) {
-            if($child->parent_id === $id) { // child found
+        foreach ($data as $k => $child) {
+            if ($child->parent_id === $id) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildTree($data, $child->id);
-                $tree[]          = $child;
+                $tree[] = $child;
             }
         }
 
@@ -152,7 +161,7 @@ trait BaseModelTrait
      * @param int $id
      * @return array
      */
-    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id): array
+    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id) : array
     {
         return $this->buildSubTree($this->getAllEntities($sqlOptions), $id);
     }
@@ -168,17 +177,17 @@ trait BaseModelTrait
     private function buildSubTree(Collection $data, int $searchId, int $id = 0, bool $isParentFound = false)
     {
         $tree = [];
-        foreach($data as $k => $child) {
-            if($searchId === $child->id) {
+        foreach ($data as $k => $child) {
+            if ($searchId === $child->id) {
                 $isParentFound = true;
             }
-            if($child->parent_id === $id && true === $isParentFound) { // child found
+            if ($child->parent_id === $id && true === $isParentFound) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
-                $tree[]          = $child;
+                $tree[] = $child;
             }
-            if(true === $isParentFound && 0 === $id) {
+            if (true === $isParentFound && 0 === $id) {
                 return $tree;
             }
         }

@@ -18,7 +18,10 @@ interface ConfigInterface
     public const CUSTOM_SQL       = 'custom_sql';
     public const QUERY            = 'query';
     public const BINDINGS         = 'bindings';
-
+    public const DATABASE         = 'database';
+    public const PASSWORD         = 'password';
+    public const HOST             = 'host';
+    public const PORT             = 'port';
 
     public const STATE_MACHINE    = 'state_machine';
     public const SPELL_CHECK      = 'spell_check';

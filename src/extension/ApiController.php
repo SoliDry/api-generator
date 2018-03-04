@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\extension;
 
 use Illuminate\Routing\Controller;
@@ -20,7 +21,8 @@ class ApiController extends Controller
         JWTTrait,
         FsmTrait,
         SpellCheckTrait,
-        BitMaskTrait;
+        BitMaskTrait,
+        CacheTrait;
 
     // JSON API support enabled by default
     protected $jsonApi = true;
@@ -30,16 +32,16 @@ class ApiController extends Controller
     /** @var BaseModel $model */
     private $model = null;
     /** @var EntitiesTrait $modelEntity */
-    private $modelEntity = null;
-    private $middleWare  = null;
-    private $relsRemoved = false;
+    private $modelEntity    = null;
+    private $middleWare     = null;
+    private $relsRemoved    = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions $configOptions */
     private $configOptions = null;
     /** @var CustomSql $customSql */
-    private $customSql = null;
+    protected $customSql = null;
     /** @var BitMask $bitMask */
-    private $bitMask   = null;
+    private $bitMask = null;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -61,7 +63,7 @@ class ApiController extends Controller
         $this->addRelationMethods();
         $actionName   = $route->getActionName();
         $calledMethod = substr($actionName, strpos($actionName, PhpInterface::AT) + 1);
-        if($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods)) {
+        if ($this->jsonApi === false && in_array($calledMethod, $this->jsonApiMethods)) {
             Json::outputErrors(
                 [
                     [
@@ -88,17 +90,29 @@ class ApiController extends Controller
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
-        if(true === $this->isTree) {
+        if (true === $this->isTree) {
             $tree = $this->getAllTreeEntities($sqlOptions);
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree->toArray()];
         }
-        if($this->customSql->isEnabled()) {
-            $items = $this->getCustomSqlEntities($this->customSql);
+
+        if ($this->configOptions->isCached()) {
+            $qStr    = $request->getQueryString();
+            $hashKey = JSONApiInterface::URI_METHOD_INDEX . PhpInterface::COLON . md5($qStr);
+            $items   = $this->get($hashKey);
+            if (empty($items)) {
+                $items = $this->getEntities($sqlOptions);
+                $this->set($hashKey, $items);
+            }
+        } else {
+//            if ($this->customSql->isEnabled()) {
+//                $items = $this->getCustomSqlEntities($this->customSql);
+//            } else {
+//                $items = $this->getAllEntities($sqlOptions);
+//            }
+            $items = $this->getEntities($sqlOptions);
         }
-        else {
-            $items = $this->getAllEntities($sqlOptions);
-        }
-        if(true === $this->configOptions->isBitMask()) {
+
+        if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsIndex($items);
         }
         $resource = Json::getResource($this->middleWare, $items, $this->entity, true, $meta);
@@ -117,13 +131,13 @@ class ApiController extends Controller
         $meta = [];
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
-        if(true === $this->isTree) {
+        if (true === $this->isTree) {
             $sqlOptions = $this->setSqlOptions($request);
             $tree       = $this->getSubTreeEntities($sqlOptions, $id);
             $meta       = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
-        $item     = $this->getEntity($id, $data);
-        if(true === $this->configOptions->isBitMask()) {
+        $item = $this->getEntity($id, $data);
+        if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsView($item);
         }
         $resource = Json::getResource($this->middleWare, $item, $this->entity, false, $meta);
@@ -142,31 +156,31 @@ class ApiController extends Controller
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         // FSM initial state check
-        if($this->configOptions->isStateMachine() === true) {
+        if ($this->configOptions->isStateMachine() === true) {
             $this->checkFsmCreate($jsonApiAttributes);
         }
         // spell check
-        if($this->configOptions->isSpellCheck() === true) {
+        if ($this->configOptions->isSpellCheck() === true) {
             $meta = $this->spellCheck($jsonApiAttributes);
         }
         // fill in model
-        foreach($this->props as $k => $v) {
+        foreach ($this->props as $k => $v) {
             // request fields should match Middleware fields
-            if(isset($jsonApiAttributes[$k])) {
+            if (isset($jsonApiAttributes[$k])) {
                 $this->model->$k = $jsonApiAttributes[$k];
             }
         }
         // set bit mask
-        if(true === $this->configOptions->isBitMask()) {
+        if (true === $this->configOptions->isBitMask()) {
             $this->setMaskCreate($jsonApiAttributes);
         }
         $this->model->save();
         // jwt
-        if($this->configOptions->getIsJwtAction() === true) {
+        if ($this->configOptions->getIsJwtAction() === true) {
             $this->createJwtUser(); // !!! model is overridden
         }
         // set bit mask from model -> response
-        if(true === $this->configOptions->isBitMask()) {
+        if (true === $this->configOptions->isBitMask()) {
             $this->model = $this->setFlagsCreate();
         }
         $this->setRelationships($json, $this->model->id);
@@ -189,18 +203,18 @@ class ApiController extends Controller
         $jsonApiAttributes = Json::getAttributes($json);
         $model             = $this->getEntity($id);
         // FSM transition check
-        if($this->configOptions->isStateMachine() === true) {
+        if ($this->configOptions->isStateMachine() === true) {
             $this->checkFsmUpdate($jsonApiAttributes, $model);
         }
         // spell check
-        if($this->configOptions->isSpellCheck() === true) {
+        if ($this->configOptions->isSpellCheck() === true) {
             $meta = $this->spellCheck($jsonApiAttributes);
         }
         $this->processUpdate($model, $jsonApiAttributes);
         $model->save();
         $this->setRelationships($json, $model->id, true);
         // set bit mask
-        if(true === $this->configOptions->isBitMask()) {
+        if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsUpdate($model);
         }
         $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
@@ -217,24 +231,22 @@ class ApiController extends Controller
     {
         // jwt
         $isJwtAction = $this->configOptions->getIsJwtAction();
-        if($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true) {
+        if ($isJwtAction === true && (bool)$jsonApiAttributes[JwtInterface::JWT] === true) {
             $this->updateJwtUser($model, $jsonApiAttributes);
-        }
-        else { // standard processing
-            foreach($this->props as $k => $v) {
+        } else { // standard processing
+            foreach ($this->props as $k => $v) {
                 // request fields should match Middleware fields
-                if(empty($jsonApiAttributes[$k]) === false) {
-                    if($isJwtAction === true && $k === JwtInterface::PASSWORD) {// it is a regular query with password updated and jwt enabled - hash the password
+                if (empty($jsonApiAttributes[$k]) === false) {
+                    if ($isJwtAction === true && $k === JwtInterface::PASSWORD) {// it is a regular query with password updated and jwt enabled - hash the password
                         $model->$k = password_hash($jsonApiAttributes[$k], PASSWORD_DEFAULT);
-                    }
-                    else {
+                    } else {
                         $model->$k = $jsonApiAttributes[$k];
                     }
                 }
             }
         }
         // set bit mask
-        if(true === $this->configOptions->isBitMask()) {
+        if (true === $this->configOptions->isBitMask()) {
             $this->setMaskUpdate($model, $jsonApiAttributes);
         }
     }
@@ -247,7 +259,7 @@ class ApiController extends Controller
     public function delete(int $id)
     {
         $model = $this->getEntity($id);
-        if($model !== null) {
+        if ($model !== null) {
             $model->delete();
         }
         Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);

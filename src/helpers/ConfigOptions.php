@@ -19,6 +19,8 @@ class ConfigOptions
     // bit mask
     private $isBitWise = false;
     private $hiddenBitMask = false;
+    // cache settings
+    private $isCached = false;
 
     /**
      * @return mixed
@@ -182,5 +184,21 @@ class ConfigOptions
     public function setBitMaskHidden($isHidden)
     {
         $this->hiddenBitMask = $isHidden;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCached() : bool
+    {
+        return $this->isCached;
+    }
+
+    /**
+     * @param bool $isCached
+     */
+    public function setIsCached(bool $isCached) : void
+    {
+        $this->isCached = $isCached;
     }
 }
