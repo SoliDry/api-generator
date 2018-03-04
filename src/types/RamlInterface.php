@@ -4,45 +4,45 @@ namespace rjapi\types;
 interface RamlInterface
 {
     // RAML types map to FW
-    const RAML_TYPE_ARRAY    = 'array';
-    const RAML_TYPE_OBJECT   = 'object';
-    const RAML_TYPE_DATETIME = 'date';
-    const RAML_TYPE_BOOLEAN  = 'boolean';
-    const RAML_TYPE_STRING   = 'string';
-    const RAML_TYPE_INTEGER  = 'integer';
-    const RAML_TYPE_NUMBER   = 'number';
+    public const RAML_TYPE_ARRAY    = 'array';
+    public const RAML_TYPE_OBJECT   = 'object';
+    public const RAML_TYPE_DATETIME = 'date';
+    public const RAML_TYPE_BOOLEAN  = 'boolean';
+    public const RAML_TYPE_STRING   = 'string';
+    public const RAML_TYPE_INTEGER  = 'integer';
+    public const RAML_TYPE_NUMBER   = 'number';
 
-    const RAML_TYPE_FORMAT        = 'format';
-    const RAML_TYPE_FORMAT_FLOAT  = 'float';
-    const RAML_TYPE_FORMAT_DOUBLE = 'double';
+    public const RAML_TYPE_FORMAT        = 'format';
+    public const RAML_TYPE_FORMAT_FLOAT  = 'float';
+    public const RAML_TYPE_FORMAT_DOUBLE = 'double';
 
-    const RAML_PROPS           = 'properties';
-    const RAML_ATTRS           = 'attributes';
-    const RAML_RELATIONSHIPS   = 'relationships';
-    const RAML_TYPE            = 'type';
-    const RAML_ID              = 'id';
-    const RAML_DATA            = 'data';
-    const RAML_ITEMS           = 'items';
+    public const RAML_PROPS           = 'properties';
+    public const RAML_ATTRS           = 'attributes';
+    public const RAML_RELATIONSHIPS   = 'relationships';
+    public const RAML_TYPE            = 'type';
+    public const RAML_ID              = 'id';
+    public const RAML_DATA            = 'data';
+    public const RAML_ITEMS           = 'items';
 
     // facets
-    const RAML_FACETS          = 'facets';
-    const RAML_INDEX           = 'index';
-    const RAML_COMPOSITE_INDEX = 'composite_index';
+    public const RAML_FACETS          = 'facets';
+    public const RAML_INDEX           = 'index';
+    public const RAML_COMPOSITE_INDEX = 'composite_index';
 
     // RAML keys
-    const RAML_KEY_REQUIRED      = 'required';
-    const RAML_KEY_DESCRIPTION   = 'description';
-    const RAML_KEY_DEFAULT       = 'default';
-    const RAML_KEY_TYPES         = 'types';
-    const RAML_KEY_USES          = 'uses';
+    public const RAML_KEY_REQUIRED      = 'required';
+    public const RAML_KEY_DESCRIPTION   = 'description';
+    public const RAML_KEY_DEFAULT       = 'default';
+    public const RAML_KEY_TYPES         = 'types';
+    public const RAML_KEY_USES          = 'uses';
 
     // RAML filters
-    const RAML_STRING_MIN  = 'minLength';
-    const RAML_STRING_MAX  = 'maxLength';
-    const RAML_INTEGER_MIN = 'minimum';
-    const RAML_INTEGER_MAX = 'maximum';
-    const RAML_PATTERN     = 'pattern';
-    const RAML_ENUM        = 'enum';
-    const RAML_DATE        = 'date-only';
-    const RAML_TIME        = 'time-only';
+    public const RAML_STRING_MIN  = 'minLength';
+    public const RAML_STRING_MAX  = 'maxLength';
+    public const RAML_INTEGER_MIN = 'minimum';
+    public const RAML_INTEGER_MAX = 'maximum';
+    public const RAML_PATTERN     = 'pattern';
+    public const RAML_ENUM        = 'enum';
+    public const RAML_DATE        = 'date-only';
+    public const RAML_TIME        = 'time-only';
 }

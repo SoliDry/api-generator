@@ -25,7 +25,7 @@ class FileManager implements DirsInterface
      */
     public static function createFile($fileName, $content, $isNew = false): bool
     {
-        if(file_exists($fileName) === false || $isNew === true)
+        if($isNew === true || file_exists($fileName) === false)
         {
             $fp = fopen($fileName, self::FILE_MODE_CREATE);
             fwrite($fp, $content);

@@ -4,6 +4,6 @@ namespace rjapi\types;
 
 interface JwtInterface
 {
-    const JWT = 'jwt';
-    const PASSWORD = 'password';
+    public const JWT = 'jwt';
+    public const PASSWORD = 'password';
 }

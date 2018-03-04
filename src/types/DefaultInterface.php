@@ -3,25 +3,25 @@ namespace rjapi\types;
 
 interface DefaultInterface
 {
-    const RAML_EXT           = '.raml';
-    const CONTROLLER_POSTFIX = 'Controller';
-    const MIDDLEWARE_POSTFIX = 'Middleware';
+    public const RAML_EXT           = '.raml';
+    public const CONTROLLER_POSTFIX = 'Controller';
+    public const MIDDLEWARE_POSTFIX = 'Middleware';
 
-    const PREFIX_KEY = 'prefix';
+    public const PREFIX_KEY = 'prefix';
 
     // console colors
-    const ANSI_COLOR_RED    =  "\x1b[31m";
-    const ANSI_COLOR_GREEN  =  "\x1b[32m";
-    const ANSI_COLOR_YELLOW = "\x1b[33m";
-    const ANSI_COLOR_RESET  = "\x1b[0m";
+    public const ANSI_COLOR_RED    =  "\x1b[31m";
+    public const ANSI_COLOR_GREEN  =  "\x1b[32m";
+    public const ANSI_COLOR_YELLOW = "\x1b[33m";
+    public const ANSI_COLOR_RESET  = "\x1b[0m";
 
     // generated code limiters
-    const CLASS_START  = '>>>class>>>';
-    const CLASS_END    = '<<<class<<<';
-    const PROPS_START  = '>>>props>>>';
-    const PROPS_END    = '<<<props<<<';
-    const METHOD_START = '>>>methods>>>';
-    const METHOD_END   = '<<<methods<<<';
-    const ROUTES_START = '>>>routes>>>';
-    const ROUTES_END   = '<<<routes<<<';
+    public const CLASS_START  = '>>>class>>>';
+    public const CLASS_END    = '<<<class<<<';
+    public const PROPS_START  = '>>>props>>>';
+    public const PROPS_END    = '<<<props<<<';
+    public const METHOD_START = '>>>methods>>>';
+    public const METHOD_END   = '<<<methods<<<';
+    public const ROUTES_START = '>>>routes>>>';
+    public const ROUTES_END   = '<<<routes<<<';
 }

@@ -3,5 +3,5 @@ namespace rjapi\types;
 
 interface ControllersInterface
 {
-    function createDefault();
+    public function createDefault();
 }

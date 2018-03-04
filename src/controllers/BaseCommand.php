@@ -37,6 +37,7 @@ class BaseCommand extends Command
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
+        CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
     public $types = [];
     public $currentTypes = [];
@@ -173,25 +174,25 @@ class BaseCommand extends Command
         FileManager::createPath($this->formatMigrationsPath());
     }
 
-    public function formatControllersPath(): string
+    public function formatControllersPath() : string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->controllersDir;
     }
 
-    public function formatMiddlewarePath(): string
+    public function formatMiddlewarePath() : string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->middlewareDir;
     }
 
-    public function formatEntitiesPath(): string
+    public function formatEntitiesPath() : string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
-    public function formatMigrationsPath(): string
+    public function formatMigrationsPath() : string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH

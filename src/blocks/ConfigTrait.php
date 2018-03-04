@@ -88,6 +88,15 @@ trait ConfigTrait
         $this->openEntity(ConfigInterface::STATES, 4);
     }
 
+    private function openCache(string $entity, array $settings): void
+    {
+        $this->openEntity(strtolower($entity), 2);
+        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
+        foreach ($settings as $k => $v) {
+            $this->setParam($k, $v, 3);
+        }
+    }
+
     /**
      * Opens finite state machine
      *
@@ -100,6 +109,8 @@ trait ConfigTrait
         $this->openEntity(strtolower($field), 3);
         $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
     }
+
+
 
     /**
      * @param string $entity
@@ -123,7 +134,7 @@ trait ConfigTrait
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::QUOTES . $entity
             . PhpInterface::QUOTES . PhpInterface::DOUBLE_ARROW . PhpInterface::SPACE
             . PhpInterface::OPEN_BRACKET . PHP_EOL;
-        array_push($this->openedBrackets, $tabs);
+        $this->openedBrackets[] = $tabs;
     }
 
     /**
