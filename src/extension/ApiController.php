@@ -131,7 +131,19 @@ class ApiController extends Controller
             $tree       = $this->getSubTreeEntities($sqlOptions, $id);
             $meta       = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
-        $item = $this->getEntity($id, $data);
+
+        if ($this->configOptions->isCached()) {
+            $qStr    = $request->getQueryString();
+            // hash id and query string to make it unique
+            $hashKey = JSONApiInterface::URI_METHOD_VIEW . PhpInterface::COLON . md5($id . $qStr);
+            $item   = $this->get($hashKey);
+            if ($item === null) {
+                $item = $this->getEntity($id, $data);
+                $this->set($hashKey, $item);
+            }
+        } else {
+            $item = $this->getEntity($id, $data);
+        }
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsView($item);
         }
