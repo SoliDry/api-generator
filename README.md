@@ -28,6 +28,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
+* [Caching](#user-content-caching)
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
 * [Spell check](#user-content-spell-check)
@@ -862,6 +863,42 @@ http://example.com/v1/article?include=tag&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1Ni
 The algorithm to sign the token is HS256, it can be changed in future releases 
 with additional user-defined options to let developers choose another. 
 However, HMAC SHA-256 is the most popular these days. 
+
+### Caching
+RJAPI ships with caching ability (via Redis) out of the box, the only thing you need to do is to declare cache settings:
+```raml
+  Redis:
+    type: object
+    properties:
+      host:
+        type: string
+        required: true
+        default: '127.0.0.1'
+      port:
+        type: integer
+        required: true
+        minimum: 6379
+        maximum: 65535
+        default: 6379
+      database:
+        type: integer
+        required: false
+        default: 0
+```
+and set the `cache` type in any custom entity, for instance: 
+```raml
+  Article:
+    type: object
+    properties:
+      ...
+      cache: Redis
+```
+one can set multiple instances of Redis servers, if they have clusters or replica-set.
+
+For security reasons the only way to set password is via `REDIS_PASSWORD` in `.env` Laravel default configuration file. 
+
+After cache settings configured the `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
+will put resulting data into cache with hashed key of a specified uri, thus providing a unique key=value storage mechanism.
  
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
