@@ -895,11 +895,30 @@ and set the `cache` type in any custom entity, for instance:
 ```
 one can set multiple instances of Redis servers, if they have clusters or replica-set.
 
+Generated config output will look similar to:
+```php
+'cache'=> [
+    'article'=> [
+        'enabled' => true,
+        'host' => '127.0.0.1',
+        'port' => 6379,
+        'database' => 0,
+    ],
+],
+```
+
 For security reasons the only way to set password is via `REDIS_PASSWORD` in `.env` Laravel default configuration file. 
 
 After cache settings configured the `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
 will put resulting data into cache with hashed key of a specified uri, thus providing a unique key=value storage mechanism.
- 
+
+In Redis db instance you'll see serialized objects with keys like:
+```
+index:fa006676687269b5d1b12583ac1a8b64
+...
+view:f2d62a3c2003dcc0d89ef7d6746b6444
+```
+
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
 ```php
