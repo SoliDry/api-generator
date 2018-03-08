@@ -278,6 +278,7 @@ Complete composite Object looks like this:
       attributes: ArticleAttributes
       relationships:
         type: TagRelationships[] | TopicRelationships
+      cache: Redis
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
@@ -391,6 +392,14 @@ return [
             ],
         ],
     ],
+    'cache'=> [
+        'article'=> [
+            'enabled' => true,
+            'host' => '127.0.0.1',
+            'port' => 6379,
+            'database' => 0,
+        ],
+    ],    
 ];
 ```
 
