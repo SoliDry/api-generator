@@ -29,6 +29,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
 * [Caching](#user-content-caching)
+* [Soft Delete](#user-content-soft-delete)
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
 * [Spell check](#user-content-spell-check)
@@ -927,6 +928,26 @@ index:fa006676687269b5d1b12583ac1a8b64
 ...
 view:f2d62a3c2003dcc0d89ef7d6746b6444
 ```
+
+### Soft Delete
+
+When models are soft deleted, they are not actually removed from your database. 
+Instead, a `deleted_at` attribute is set on the model and inserted into the database. 
+If a model has a non-null `deleted_at` value, the model has been soft deleted.
+ 
+To enable soft deletes for a model just add `deleted_at` property on any custom type you need, ex.:
+```raml
+  ArticleAttributes:
+    description: Article attributes description
+    type: object
+    properties:
+      ...
+      deleted_at:
+        type: datetime    
+``` 
+
+Special generated properties/traits will appear for the specified types in ```Entities/``` folder, also related migration field will be created.
+It will then automatically applied to delete requests for these particular types.  
 
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
