@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\types;
 
 interface RamlInterface
@@ -16,13 +17,13 @@ interface RamlInterface
     public const RAML_TYPE_FORMAT_FLOAT  = 'float';
     public const RAML_TYPE_FORMAT_DOUBLE = 'double';
 
-    public const RAML_PROPS           = 'properties';
-    public const RAML_ATTRS           = 'attributes';
-    public const RAML_RELATIONSHIPS   = 'relationships';
-    public const RAML_TYPE            = 'type';
-    public const RAML_ID              = 'id';
-    public const RAML_DATA            = 'data';
-    public const RAML_ITEMS           = 'items';
+    public const RAML_PROPS         = 'properties';
+    public const RAML_ATTRS         = 'attributes';
+    public const RAML_RELATIONSHIPS = 'relationships';
+    public const RAML_TYPE          = 'type';
+    public const RAML_ID            = 'id';
+    public const RAML_DATA          = 'data';
+    public const RAML_ITEMS         = 'items';
 
     // facets
     public const RAML_FACETS          = 'facets';
@@ -30,11 +31,11 @@ interface RamlInterface
     public const RAML_COMPOSITE_INDEX = 'composite_index';
 
     // RAML keys
-    public const RAML_KEY_REQUIRED      = 'required';
-    public const RAML_KEY_DESCRIPTION   = 'description';
-    public const RAML_KEY_DEFAULT       = 'default';
-    public const RAML_KEY_TYPES         = 'types';
-    public const RAML_KEY_USES          = 'uses';
+    public const RAML_KEY_REQUIRED    = 'required';
+    public const RAML_KEY_DESCRIPTION = 'description';
+    public const RAML_KEY_DEFAULT     = 'default';
+    public const RAML_KEY_TYPES       = 'types';
+    public const RAML_KEY_USES        = 'uses';
 
     // RAML filters
     public const RAML_STRING_MIN  = 'minLength';
@@ -45,4 +46,5 @@ interface RamlInterface
     public const RAML_ENUM        = 'enum';
     public const RAML_DATE        = 'date-only';
     public const RAML_TIME        = 'time-only';
+    public const RAML_DATETIME    = 'datetime';
 }

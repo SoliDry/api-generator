@@ -14,7 +14,7 @@ trait MigrationsTrait
      * @param string $entity
      * @param string $schemaMethod
      */
-    public function openSchema(string $entity, $schemaMethod = ModelsInterface::MIGRATION_CREATE)
+    public function openSchema(string $entity, $schemaMethod = ModelsInterface::MIGRATION_CREATE) : void
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . ModelsInterface::MIGRATION_SCHEMA
             . PhpInterface::DOUBLE_COLON . $schemaMethod
@@ -26,7 +26,7 @@ trait MigrationsTrait
         $this->sourceCode .= PhpInterface::OPEN_BRACE . PHP_EOL;
     }
 
-    public function closeSchema()
+    public function closeSchema() : void
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE . PhpInterface::CLOSE_PARENTHESES
             . PhpInterface::SEMICOLON . PHP_EOL;
@@ -38,7 +38,7 @@ trait MigrationsTrait
      * @param string $method
      * @param string $entity
      */
-    public function createSchema(string $method, string $entity)
+    public function createSchema(string $method, string $entity) : void
     {
         $this->sourceCode .= $this->setTabs(2) . Classes::getName(Schema::class) . PhpInterface::DOUBLE_COLON
             . $method . PhpInterface::OPEN_PARENTHESES . PhpInterface::QUOTES . $entity
@@ -54,7 +54,7 @@ trait MigrationsTrait
      * @param array|null  $build
      * @param bool        $quoteProperty
      */
-    public function setRow(string $method, string $property = '', $opts = null, array $build = null, $quoteProperty = true)
+    public function setRow(string $method, string $property = '', $opts = null, array $build = null, $quoteProperty = true) : void
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
             . PhpInterface::DOLLAR_SIGN . ModelsInterface::MIGRATION_TABLE

@@ -123,9 +123,6 @@ abstract class MigrationsAbstract
             case RamlInterface::RAML_TYPE_BOOLEAN:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_UTINYINT, $attrKey);
                 break;
-            case RamlInterface::RAML_TYPE_DATETIME:
-                $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
-                break;
             case RamlInterface::RAML_TYPE_NUMBER:
                 $this->setRowNumber($attrVal, $attrKey);
                 break;
@@ -139,9 +136,19 @@ abstract class MigrationsAbstract
             case RamlInterface::RAML_TIME:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_TIME, $attrKey);
                 break;
+            case RamlInterface::RAML_DATETIME:
+                if ($attrKey === ModelsInterface::COLUMN_DEL_AT) {
+                    $this->setRow(ModelsInterface::MIGRATION_METHOD_SOFT_DEL, '', null, null, false);
+                } else {
+                    $this->setRow(ModelsInterface::MIGRATION_METHOD_DATETIME, $attrKey);
+                }
+                break;
         }
     }
 
+    /**
+     * @param array $attrs
+     */
     public function dropRows(array $attrs): void
     {
         foreach ($attrs as $attrKey => $attrVal) {
