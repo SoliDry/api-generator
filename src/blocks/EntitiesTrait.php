@@ -2,11 +2,13 @@
 
 namespace rjapi\blocks;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use rjapi\extension\ApiController;
 use rjapi\helpers\Classes;
 use rjapi\helpers\ConfigHelper as conf;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
@@ -60,5 +62,19 @@ trait EntitiesTrait
         }
 
         return null;
+    }
+
+    private function setUseSoftDelete() : void
+    {
+        if ($this->isSoftDelete()) {
+            $this->setUse(Classes::getObjectName(SoftDeletes::class), true, true);
+        }
+    }
+
+    private function setPropSoftDelete() : void
+    {
+        if ($this->isSoftDelete()) {
+            $this->createPropertyArray(ModelsInterface::PROPERTY_DATES, PhpInterface::PHP_MODIFIER_PROTECTED, [ModelsInterface::COLUMN_DEL_AT]);
+        }
     }
 }

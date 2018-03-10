@@ -2,6 +2,7 @@
 
 namespace rjapi\blocks;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
@@ -9,6 +10,7 @@ use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\RJApiGenerator;
+use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
@@ -23,21 +25,41 @@ class Entities extends FormRequestModel
 {
     use ContentManager, EntitiesTrait;
     /** @var RJApiGenerator $generator */
-    private $generator = null;
-    private $className = '';
+    private $generator;
+    private $className;
 
     protected $sourceCode = '';
     protected $localCode  = '';
+    protected $isSoftDelete = false;
 
     public function __construct($generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
+        $isSoftDelete = empty($this->generator->types[$this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES]
+            [RamlInterface::RAML_PROPS][ModelsInterface::COLUMN_DEL_AT]) === false;
+        $this->setIsSoftDelete($isSoftDelete);
     }
 
     public function setCodeState($generator)
     {
         $this->generator = $generator;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSoftDelete() : bool
+    {
+        return $this->isSoftDelete;
+    }
+
+    /**
+     * @param bool $isSoftDelete
+     */
+    public function setIsSoftDelete(bool $isSoftDelete) : void
+    {
+        $this->isSoftDelete = $isSoftDelete;
     }
 
     private function setRelations()
@@ -73,16 +95,16 @@ class Entities extends FormRequestModel
         $ucEntitty   = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
-        foreach($relatedRels as $related)
+        foreach($relatedRels as $rel)
         {
-            if(strpos($related, $this->generator->objectName) !== false)
+            if(strpos($rel, $this->generator->objectName) !== false)
             {
-                foreach($currentRels as $current)
+                foreach($currentRels as $cur)
                 {
-                    if(strpos($current, $ucEntitty) !== false)
+                    if(strpos($cur, $ucEntitty) !== false)
                     {
-                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                        $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
+                        $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
                         if($isManyCurrent === false && $isManyRelated === false)
                         {// OneToOne
                             $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
@@ -183,16 +205,16 @@ class Entities extends FormRequestModel
         $ucEntitty   = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
-        foreach($relatedRels as $related)
+        foreach($relatedRels as $rel)
         {
-            if(strpos($related, $this->generator->objectName) !== false)
+            if(strpos($rel, $this->generator->objectName) !== false)
             {
-                foreach($currentRels as $current)
+                foreach($currentRels as $cur)
                 {
-                    if(strpos($current, $ucEntitty) !== false)
+                    if(strpos($cur, $ucEntitty) !== false)
                     {
-                        $isManyCurrent = strpos($current, self::CHECK_MANY_BRACKETS);
-                        $isManyRelated = strpos($related, self::CHECK_MANY_BRACKETS);
+                        $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
+                        $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
                         if($isManyCurrent !== false && $isManyRelated !== false)
                         {// ManyToMany
                             $this->setPivot($ucEntitty);
@@ -256,9 +278,12 @@ class Entities extends FormRequestModel
         $baseMapper     = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
+        $this->setUse(SoftDeletes::class);
         $this->setUse($baseMapper, false, true);
         $this->startClass($this->className, $baseMapperName);
+        $this->setUseSoftDelete();
         $this->setComment(DefaultInterface::PROPS_START);
+        $this->setPropSoftDelete();
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
             RamlInterface::RAML_ID, true

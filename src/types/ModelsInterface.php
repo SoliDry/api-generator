@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\types;
 
 interface ModelsInterface
@@ -57,6 +58,19 @@ interface ModelsInterface
     public const MIGRATION_METHOD_INCREMENTS     = 'increments';
     public const MIGRATION_METHOD_BIG_INCREMENTS = 'bigIncrements';
     public const MIGRATION_METHOD_STRING         = 'string';
+    public const MIGRATION_METHOD_DOUBLE         = 'double';
+    public const MIGRATION_METHOD_FLOAT          = 'float';
+    public const MIGRATION_METHOD_TIMESTAMPS     = 'timestamps';
+    public const MIGRATION_METHOD_DATETIME       = 'dateTime';
+    public const MIGRATION_METHOD_DATE           = 'date';
+    public const MIGRATION_METHOD_TIME           = 'time';
+    public const MIGRATION_METHOD_ENUM           = 'enum';
+    public const MIGRATION_METHOD_DROP           = 'dropIfExists';
+    public const MIGRATION_METHOD_UP             = 'up';
+    public const MIGRATION_METHOD_DOWN           = 'down';
+    public const MIGRATION_DROP_COLUMN           = 'dropColumn';
+    public const MIGRATION_METHOD_SOFT_DEL       = 'softDeletes';
+
     // integer
     public const MIGRATION_METHOD_TINY_INTEGER   = 'tinyInteger';
     public const MIGRATION_METHOD_SMALL_INTEGER  = 'smallInteger';
@@ -75,23 +89,15 @@ interface ModelsInterface
     public const INT_DIGITS_INT    = 10;
     public const INT_DIGITS_BIGINT = 20;
 
-    // double
-    public const MIGRATION_METHOD_DOUBLE         = 'double';
-    public const MIGRATION_METHOD_FLOAT          = 'float';
-    public const MIGRATION_METHOD_TIMESTAMPS     = 'timestamps';
-    public const MIGRATION_METHOD_DATETIME       = 'dateTime';
-    public const MIGRATION_METHOD_DATE           = 'date';
-    public const MIGRATION_METHOD_TIME           = 'time';
-    public const MIGRATION_METHOD_ENUM           = 'enum';
-    public const MIGRATION_METHOD_DROP           = 'dropIfExists';
-    public const MIGRATION_METHOD_UP             = 'up';
-    public const MIGRATION_METHOD_DOWN           = 'down';
-    public const MIGRATION_DROP_COLUMN           = 'dropColumn';
-
     // base properties
     public const PROPERTY_TABLE       = 'table';
     public const PROPERTY_PRIMARY_KEY = 'primaryKey';
     public const PROPERTY_TIMESTAMPS  = 'timestamps';
+    public const PROPERTY_DATES       = 'dates';
+
+    // special columns
+    public const COLUMN_DEL_AT = 'deleted_at';
+
 
     public const ID_MAX_INCREMENTS = 10;
 

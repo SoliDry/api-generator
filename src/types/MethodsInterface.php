@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\types;
 
 
@@ -11,5 +12,5 @@ interface MethodsInterface
     public const HANDLE    = 'handle';
     public const CONFIG    = 'config';
     // php native methods
-    public const HEADER    = 'header';
+    public const HEADER = 'header';
 }

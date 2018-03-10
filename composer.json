@@ -15,10 +15,11 @@
         "codeception/codeception": "^2.2",
         "alecsammon/php-raml-parser": "^2.1",
         "laravel/framework": ">=5.3",
-        "nwidart/laravel-modules": "^3.0",
+        "nwidart/laravel-modules": "2.4.*",
         "league/fractal": ">=0.14",
         "lcobucci/jwt": "^3.2",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "fzaninotto/faker": "^1.7"
     },
     "autoload": {
         "psr-4": {

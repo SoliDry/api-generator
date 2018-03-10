@@ -13,6 +13,9 @@ interface PhpInterface
     public const PHP_FUNCTION  = 'function';
     public const PHP_RETURN    = 'return';
     public const PHP_THIS      = 'this';
+    public const PHP_REQUIRE   = 'require';
+
+    public const PHP_CONST_DIR = '__DIR__';
 
     public const SYSTEM_UPDIR  = '../';
     public const SYSTEM_CURDIR = './';

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe9a8422b1a74c89006e7119d9320156",
+    "content-hash": "726d07679741237809504e46deebe7e0",
     "packages": [
         {
             "name": "alecsammon/php-raml-parser",
@@ -606,6 +606,56 @@
                 "webdriver"
             ],
             "time": "2017-11-15T11:08:09+00:00"
+        },
+        {
+            "name": "fzaninotto/faker",
+            "version": "v1.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fzaninotto/Faker.git",
+                "reference": "d3ed4cc37051c1ca52d22d76b437d14809fc7e0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/d3ed4cc37051c1ca52d22d76b437d14809fc7e0d",
+                "reference": "d3ed4cc37051c1ca52d22d76b437d14809fc7e0d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.3.3 || ^7.0"
+            },
+            "require-dev": {
+                "ext-intl": "*",
+                "phpunit/phpunit": "^4.0 || ^5.0",
+                "squizlabs/php_codesniffer": "^1.5"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.8-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Faker\\": "src/Faker/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "François Zaninotto"
+                }
+            ],
+            "description": "Faker is a PHP library that generates fake data for you.",
+            "keywords": [
+                "data",
+                "faker",
+                "fixtures"
+            ],
+            "time": "2017-08-15T16:48:10+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -1416,27 +1466,27 @@
         },
         {
             "name": "nwidart/laravel-modules",
-            "version": "3.0.1",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nWidart/laravel-modules.git",
-                "reference": "f5574c87611823f1246f382d204b3758ccefe37e"
+                "reference": "33c4940d80a0e46c423f67206f5b0361d7859d59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nWidart/laravel-modules/zipball/f5574c87611823f1246f382d204b3758ccefe37e",
-                "reference": "f5574c87611823f1246f382d204b3758ccefe37e",
+                "url": "https://api.github.com/repos/nWidart/laravel-modules/zipball/33c4940d80a0e46c423f67206f5b0361d7859d59",
+                "reference": "33c4940d80a0e46c423f67206f5b0361d7859d59",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2.7",
-                "laravel/framework": "5.6.*",
-                "mockery/mockery": "~1.0",
-                "orchestra/testbench": "^3.6",
-                "phpunit/phpunit": "~7.0",
+                "friendsofphp/php-cs-fixer": "^2.6",
+                "laravel/framework": "5.5.*",
+                "mockery/mockery": "~0.9",
+                "orchestra/testbench": "^3.5",
+                "phpunit/phpunit": "~6.0",
                 "spatie/phpunit-snapshot-assertions": "^1.0"
             },
             "type": "library",
@@ -1450,7 +1500,7 @@
                     }
                 },
                 "branch-alias": {
-                    "dev-master": "3.0-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
@@ -1481,7 +1531,7 @@
                 "nwidart",
                 "rad"
             ],
-            "time": "2018-02-16T14:46:50+00:00"
+            "time": "2017-09-27T13:47:44+00:00"
         },
         {
             "name": "oodle/inflect",
