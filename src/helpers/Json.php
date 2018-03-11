@@ -152,6 +152,12 @@ class Json
         if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
             exit;
         }
+        if (empty($resource->getData())) { // preventing 3d party libs (League etc) from crash on empty data
+            echo self::encode([
+                ModelsInterface::PARAM_DATA => []
+            ]);
+            exit;
+        }
         $host    = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
 
