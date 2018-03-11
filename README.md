@@ -947,7 +947,47 @@ To enable soft deletes for a model just add `deleted_at` property on any custom 
 ``` 
 
 Special generated properties/traits will appear for the specified types in ```Entities/``` folder, also related migration field will be created.
-It will then automatically applied to delete requests for these particular types.  
+
+Model example:
+```php
+<?php
+namespace Modules\V2\Entities;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+use rjapi\extension\BaseModel;
+
+class Article extends BaseModel 
+{
+    use SoftDeletes;
+
+    // >>>props>>>
+    protected $dates = ['deleted_at'];
+    // ...
+}
+```
+
+Migration example:
+```php
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateArticleTable extends Migration 
+{
+    public function up() 
+    {
+        Schema::create('article', function(Blueprint $table) {
+            // ...
+            $table->softDeletes();
+            // ...
+        });
+    }
+    // ...
+}
+```
+
+It will be then automatically applied for delete requests and models won't be collected for view/index.  
 
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
