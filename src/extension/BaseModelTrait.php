@@ -24,7 +24,7 @@ trait BaseModelTrait
      *
      * @return mixed
      */
-    private function getEntity(int $id, array $data = ModelsInterface::DEFAULT_DATA)
+    private function getEntity($id, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
@@ -49,7 +49,7 @@ trait BaseModelTrait
      *
      * @return mixed
      */
-    private function getModelEntity($modelEntity, int $id)
+    private function getModelEntity($modelEntity, $id)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
@@ -140,7 +140,7 @@ trait BaseModelTrait
      * @param int $id
      * @return array
      */
-    private function buildTree(Collection $data, int $id = 0)
+    private function buildTree(Collection $data, $id = 0)
     {
         $tree = [];
         foreach ($data as $k => $child) {
@@ -161,7 +161,7 @@ trait BaseModelTrait
      * @param int $id
      * @return array
      */
-    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id) : array
+    public function getSubTreeEntities(SqlOptions $sqlOptions, $id) : array
     {
         return $this->buildSubTree($this->getAllEntities($sqlOptions), $id);
     }
@@ -174,7 +174,7 @@ trait BaseModelTrait
      * @param bool $isParentFound
      * @return array
      */
-    private function buildSubTree(Collection $data, int $searchId, int $id = 0, bool $isParentFound = false)
+    private function buildSubTree(Collection $data, $searchId, $id = 0, bool $isParentFound = false)
     {
         $tree = [];
         foreach ($data as $k => $child) {

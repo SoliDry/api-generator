@@ -121,7 +121,7 @@ class ApiController extends Controller
      * @param int $id
      * @throws \rjapi\exception\AttributesException
      */
-    public function view(Request $request, int $id)
+    public function view(Request $request, $id)
     {
         $meta = [];
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA

@@ -19,7 +19,7 @@ class Jwt
      *
      * @return string
      */
-    public static function create(int $uid, string $generatedId) : string
+    public static function create($uid, string $generatedId): string
     {
         $signer = new Sha256();
 
