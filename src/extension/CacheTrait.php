@@ -1,66 +1,16 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: arthurkushman
- * Date: 04.03.18
- * Time: 11:07
- */
 
 namespace rjapi\extension;
 
-
-use Predis\Client;
-use rjapi\helpers\ConfigHelper;
-use rjapi\types\ConfigInterface;
+use Illuminate\Support\Facades\Redis;
 use rjapi\types\PhpInterface;
 
+/**
+ * Trait CacheTrait
+ * @package rjapi\extension
+ */
 trait CacheTrait
 {
-    /** @var Client $cache  */
-    private $cache;
-    private $host;
-    private $port;
-
-    public function cacheConn() : void
-    {
-        $this->setHostAndPort();
-        $this->cache = new Client([
-            'scheme' => 'tcp',
-            'host'   => $this->host,
-            'port'   => $this->port,
-        ]);
-        // select db
-        $db = ConfigHelper::getNestedParam(ConfigInterface::CACHE, ConfigInterface::DATABASE);
-        if ($db !== null) {
-            $this->cache->select($db);
-        }
-        // enter password
-        $password = env('REDIS_PASSWORD');
-        if ($password !== null) {
-            $this->cache->auth($password);
-        }
-    }
-
-    private function setHostAndPort() : void
-    {
-        $cacheEntity = ConfigHelper::getNestedParam(ConfigInterface::CACHE, $this->entity);
-        $this->host  = empty($cacheEntity[ConfigInterface::HOST]) ? null : $cacheEntity[ConfigInterface::HOST];
-        if ($this->host === null) {
-            $this->host = env('REDIS_HOST');
-            if ($this->host === null) {
-                $this->host = ConfigInterface::DEFAULT_REDIS_HOST;
-            }
-        }
-
-        $this->port = empty($cacheEntity[ConfigInterface::PORT]) ? null : $cacheEntity[ConfigInterface::PORT];
-        if ($this->port === null) {
-            $this->port = env('REDIS_PORT');
-            if ($this->port === null) {
-                $this->port = ConfigInterface::DEFAULT_REDIS_PORT;
-            }
-        }
-    }
-
     /**
      * @param string $key
      * @param \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item $val
@@ -68,7 +18,7 @@ trait CacheTrait
      */
     private function set(string $key, $val)
     {
-        return $this->cache->set($key, $this->ser($val));
+        return Redis::set($key, $this->ser($val));
     }
 
     /**
@@ -77,7 +27,7 @@ trait CacheTrait
      */
     private function get(string $key)
     {
-        $data = $this->cache->get($key);
+        $data = Redis::get($key);
         if ($data === null) {
             return null;
         }

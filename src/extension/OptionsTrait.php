@@ -83,10 +83,6 @@ trait OptionsTrait
                 $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
             }
         }
-
-        if ($this->configOptions->isCached()) {
-            $this->cacheConn();
-        }
     }
 
     /**
