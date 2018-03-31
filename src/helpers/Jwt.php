@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\helpers;
 
 use Lcobucci\JWT\Builder;
@@ -9,6 +10,8 @@ use rjapi\types\ConfigInterface;
 
 class Jwt
 {
+    private const JWT_SECRETE_KEY = 'app.jwt_secret';
+
     /**
      * Fulfills the token with data and signs it with key
      * @param int $uid
@@ -16,7 +19,7 @@ class Jwt
      *
      * @return string
      */
-    public static function create(int $uid, string $generatedId): string
+    public static function create(int $uid, string $generatedId) : string
     {
         $signer = new Sha256();
 
@@ -27,7 +30,7 @@ class Jwt
         ->setNotBefore(time() + ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ACTIVATE))// Configures the time that the token can be used (nbf claim)
         ->setExpiration(time() + ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::EXPIRES))// Configures the expiration time of the token (nbf claim)
         ->set('uid', $uid)// Configures a new claim, called "uid"
-        ->sign($signer, $generatedId . env('JWT_SECRET') . $uid)// glue uniqid + uid
+        ->sign($signer, $generatedId . config(self::JWT_SECRETE_KEY) . $uid)// glue uniqid + uid
         ->getToken();
     }
 
@@ -46,7 +49,6 @@ class Jwt
         $data->setId($generatedId);
         $signer = new Sha256();
         $uid    = $token->getClaim('uid');
-
-        return $token->validate($data) && $token->verify($signer, $generatedId . env('JWT_SECRET') . $uid);
+        return $token->validate($data) && $token->verify($signer, $generatedId . config(self::JWT_SECRETE_KEY) . $uid);
     }
 }

@@ -768,6 +768,11 @@ U can change those `activate` and `expires` time settings as needed.
 To protect key verification in JWT token - place `JWT_SECRET` variable to .env configuration file with secret key value assigned
 (secret can be any string at any length, but be wise to use strong one, ex.: hashed with sha1/sha2 etc).
 
+Then put the value to global configuration file `config/app.php`, we need this to apply best practices for caching configs environment. 
+```php
+'jwt_secret'     => env('JWT_SECRET', 'secret'),
+```
+
 As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` :
 ```php
     /**
