@@ -88,13 +88,10 @@ trait ConfigTrait
         $this->openEntity(ConfigInterface::STATES, 4);
     }
 
-    private function openCache(string $entity, array $settings): void
+    private function openCache(string $entity): void
     {
         $this->openEntity(strtolower($entity), 2);
         $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
-        foreach ($settings as $k => $v) {
-            $this->setParam($k, $v, 3);
-        }
     }
 
     /**

@@ -884,23 +884,8 @@ RJAPI ships with caching ability (via Redis) out of the box, the only thing you 
 ```raml
   Redis:
     type: object
-    properties:
-      host:
-        type: string
-        required: true
-        default: '127.0.0.1'
-      port:
-        type: integer
-        required: true
-        minimum: 6379
-        maximum: 65535
-        default: 6379
-      database:
-        type: integer
-        required: false
-        default: 0
 ```
-and set the `cache` type in any custom entity, for instance: 
+and set the `cache` property in any custom entity, for instance: 
 ```raml
   Article:
     type: object
@@ -915,16 +900,14 @@ Generated config output will look similar to:
 'cache'=> [
     'article'=> [
         'enabled' => true,
-        'host' => '127.0.0.1',
-        'port' => 6379,
-        'database' => 0,
     ],
 ],
-```
+``` 
 
-For security reasons the only way to set password is via `REDIS_PASSWORD` in `.env` Laravel default configuration file. 
+All specific settings including host/port/password, replication, clusters etc can be easily configured via Laravel standard Redis cache settings.
+Read more on this here - [Redis Laravel configuration](https://laravel.com/docs/5.6/redis#configuration)
 
-After cache settings configured the `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
+After cache settings configured - `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
 will put resulting data into cache with hashed key of a specified uri, thus providing a unique key=value storage mechanism.
 
 In Redis db instance you'll see serialized objects with keys like:
