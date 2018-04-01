@@ -56,7 +56,7 @@ class Config implements ConfigInterface
     {
         $this->setContent();
         // create config file
-        $file = $this->generator->formatConfigPath() .
+        $file      = $this->generator->formatConfigPath() .
             ModulesInterface::CONFIG_FILENAME . PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile($file, $this->sourceCode, true);
         if ($isCreated) {
@@ -165,20 +165,13 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Method is dirty hack around dynamic params and array property deletion aka mutation
-     * if u'll have enough time to change this behaviour - do this asap
+     * Sets cache config enabled option true to activate caching mechanism
      * @param string $objName
      */
     private function setCacheOptions(string $objName)
     {
         if (empty($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]) === false) {
-            $settings = [];
-            foreach ($this->generator->types[$this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]][RamlInterface::RAML_PROPS] as $key => $val) {
-                if (isset($val[RamlInterface::RAML_KEY_DEFAULT])) {
-                    $settings[$key] = $val[RamlInterface::RAML_KEY_DEFAULT];
-                }
-            }
-            $this->openCache($objName, $settings);
+            $this->openCache($objName);
             // unset cache to prevent doubling
             unset($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]);
         }
