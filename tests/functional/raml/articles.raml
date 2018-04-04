@@ -1,7 +1,7 @@
 #%RAML 1.0
 title: My Company API
 baseUri: http://my-company.com/{version}
-version: v1
+version: v2
 mediaType:  application/vnd.api+json
 description: My Company API description RAML templates
 uses:
@@ -11,6 +11,10 @@ types:
     type: integer
     required: true
     maximum: 20
+  SID:
+    type: string
+    required: true
+    maxLength: 128
   Type:
     type: string
     required: true
@@ -27,23 +31,13 @@ types:
     properties:
       id: ID
       type: Type
-  Redis:
+  RelationshipsDataItemSID:
     type: object
     properties:
-      host:
-        type: string
-        required: true
-        default: '127.0.0.1'
-      port:
-        type: integer
-        required: true
-        minimum: 6379
-        maximum: 65535
-        default: 6379
-      database:
-        type: integer
-        required: false
-        default: 0
+      id: SID
+      type: Type
+  Redis:
+    type: object
   TagRelationships:
     description: Tag relationship description
     type: object
@@ -139,11 +133,13 @@ types:
         type: date-only
       time_to_live:
         type: time-only
+      deleted_at:
+        type: datetime
   Article:
     type: object
     properties:
       type: Type
-      id: ID
+      id: SID
       attributes: ArticleAttributes
       relationships:
         type: TagRelationships[] | TopicRelationships

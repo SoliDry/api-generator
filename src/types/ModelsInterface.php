@@ -100,6 +100,7 @@ interface ModelsInterface
 
 
     public const ID_MAX_INCREMENTS = 10;
+    public const STRING_MAX_CHARS  = 32;
 
     // db indices
     public const INDEX_TYPE_INDEX   = 'index';

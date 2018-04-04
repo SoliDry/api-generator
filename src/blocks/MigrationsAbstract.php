@@ -46,11 +46,6 @@ abstract class MigrationsAbstract
                 if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
                     $type = $attrVal[RamlInterface::RAML_TYPE];
-                    if ($attrKey === RamlInterface::RAML_ID) {
-                        // create an auto_increment primary key - id
-                        $this->setId($attrVal, $attrKey, $type);
-                        continue;
-                    }
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
                 } else {// non-standard types aka enum
@@ -116,9 +111,14 @@ abstract class MigrationsAbstract
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey, $length, $build);
                 break;
             case RamlInterface::RAML_TYPE_INTEGER:
-                $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-                $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-                $this->setIntegerDigit($attrKey, $max, ($min >= 0) ? false : true);
+                // create an auto_incremented primary key
+                if ($attrKey === RamlInterface::RAML_ID) {
+                    $this->setId($attrVal, $attrKey, $type);
+                } else {
+                    $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MIN];
+                    $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MAX];
+                    $this->setIntegerDigit($attrKey, $max, ($min >= 0) ? false : true);
+                }
                 break;
             case RamlInterface::RAML_TYPE_BOOLEAN:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_UTINYINT, $attrKey);
@@ -279,16 +279,14 @@ abstract class MigrationsAbstract
      */
     protected function setPivotRows($relationEntity): void
     {
-        // P = 2T/2
         $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
-        $this->setRow(
-            ModelsInterface::MIGRATION_METHOD_INTEGER, strtolower($this->generator->objectName)
-            . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
-        );
-        $this->setRow(
-            ModelsInterface::MIGRATION_METHOD_INTEGER, $relationEntity
-            . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID
-        );
+        $attrs = [
+            strtolower($this->generator->objectName) . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]],
+            $relationEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->generator->types[$this->generator->types[ucfirst($relationEntity)][RamlInterface::RAML_PROPS][RamlInterface::RAML_ID]],
+        ];
+        foreach ($attrs as $attrKey => $attrVal) {
+            $this->setRowContent($attrVal, $attrVal[RamlInterface::RAML_TYPE], $attrKey);
+        }
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS, '', null, null, false);
     }
 
