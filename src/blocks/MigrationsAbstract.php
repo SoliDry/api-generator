@@ -117,7 +117,7 @@ abstract class MigrationsAbstract
                 } else {
                     $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MIN];
                     $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-                    $this->setIntegerDigit($attrKey, $max, ($min >= 0) ? false : true);
+                    $this->setIntegerDigit($attrKey, $max, $min < 0);
                 }
                 break;
             case RamlInterface::RAML_TYPE_BOOLEAN:
