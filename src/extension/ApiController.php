@@ -118,10 +118,10 @@ class ApiController extends Controller
      * GET Output one entry determined by unique id as uri param
      *
      * @param Request $request
-     * @param int $id
+     * @param int|string $id
      * @throws \rjapi\exception\AttributesException
      */
-    public function view(Request $request, int $id)
+    public function view(Request $request, $id)
     {
         $meta = [];
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
@@ -199,10 +199,10 @@ class ApiController extends Controller
      * PATCH Updates one entry determined by unique id as uri param for specified fields in $request
      *
      * @param Request $request
-     * @param int $id
+     * @param int|string $id
      * @throws \rjapi\exception\AttributesException
      */
-    public function update(Request $request, int $id)
+    public function update(Request $request, $id)
     {
         $meta = [];
         // get json raw input and parse attrs
@@ -261,9 +261,9 @@ class ApiController extends Controller
     /**
      * DELETE Deletes one entry determined by unique id as uri param
      *
-     * @param int $id
+     * @param int|string $id
      */
-    public function delete(int $id)
+    public function delete($id)
     {
         $model = $this->getEntity($id);
         if ($model !== null) {

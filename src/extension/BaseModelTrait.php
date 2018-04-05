@@ -19,12 +19,12 @@ use rjapi\helpers\SqlOptions;
 trait BaseModelTrait
 {
     /**
-     * @param int $id
+     * @param int|string $id
      * @param array $data
      *
      * @return mixed
      */
-    private function getEntity(int $id, array $data = ModelsInterface::DEFAULT_DATA)
+    private function getEntity($id, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
@@ -45,11 +45,11 @@ trait BaseModelTrait
 
     /**
      * @param string $modelEntity
-     * @param int $id
+     * @param int|string $id
      *
      * @return mixed
      */
-    private function getModelEntity($modelEntity, int $id)
+    private function getModelEntity($modelEntity, $id)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
@@ -137,10 +137,10 @@ trait BaseModelTrait
     /**
      * Builds the tree based on children/parent axiom
      * @param Collection $data
-     * @param int $id
+     * @param int|string $id
      * @return array
      */
-    private function buildTree(Collection $data, int $id = 0)
+    private function buildTree(Collection $data, $id = 0)
     {
         $tree = [];
         foreach ($data as $k => $child) {
@@ -158,10 +158,10 @@ trait BaseModelTrait
     /**
      * Collects all tree elements
      * @param SqlOptions $sqlOptions
-     * @param int $id
+     * @param int|string $id
      * @return array
      */
-    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id) : array
+    public function getSubTreeEntities(SqlOptions $sqlOptions, $id) : array
     {
         return $this->buildSubTree($this->getAllEntities($sqlOptions), $id);
     }
@@ -169,12 +169,12 @@ trait BaseModelTrait
     /**
      * Builds the sub-tree for top most ancestor
      * @param Collection $data
-     * @param int $searchId
-     * @param int $id
+     * @param int|string $searchId
+     * @param int|string $id
      * @param bool $isParentFound
      * @return array
      */
-    private function buildSubTree(Collection $data, int $searchId, int $id = 0, bool $isParentFound = false)
+    private function buildSubTree(Collection $data, $searchId, $id = 0, bool $isParentFound = false) : array
     {
         $tree = [];
         foreach ($data as $k => $child) {
