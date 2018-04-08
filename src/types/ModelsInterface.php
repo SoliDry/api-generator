@@ -90,10 +90,11 @@ interface ModelsInterface
     public const INT_DIGITS_BIGINT = 20;
 
     // base properties
-    public const PROPERTY_TABLE       = 'table';
-    public const PROPERTY_PRIMARY_KEY = 'primaryKey';
-    public const PROPERTY_TIMESTAMPS  = 'timestamps';
-    public const PROPERTY_DATES       = 'dates';
+    public const PROPERTY_TABLE        = 'table';
+    public const PROPERTY_PRIMARY_KEY  = 'primaryKey';
+    public const PROPERTY_TIMESTAMPS   = 'timestamps';
+    public const PROPERTY_DATES        = 'dates';
+    public const PROPERTY_INCREMENTING = 'incrementing';
 
     // special columns
     public const COLUMN_DEL_AT = 'deleted_at';

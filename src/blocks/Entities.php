@@ -28,16 +28,16 @@ class Entities extends FormRequestModel
     private $generator;
     private $className;
 
-    protected $sourceCode = '';
-    protected $localCode  = '';
+    protected $sourceCode   = '';
+    protected $localCode    = '';
     protected $isSoftDelete = false;
 
     public function __construct($generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
-        $isSoftDelete = empty($this->generator->types[$this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES]
-            [RamlInterface::RAML_PROPS][ModelsInterface::COLUMN_DEL_AT]) === false;
+        $isSoftDelete    = empty($this->generator->types[$this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES]
+                                 [RamlInterface::RAML_PROPS][ModelsInterface::COLUMN_DEL_AT]) === false;
         $this->setIsSoftDelete($isSoftDelete);
     }
 
@@ -65,20 +65,17 @@ class Entities extends FormRequestModel
     private function setRelations()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
-        /** @var BaseFormRequest $middleWare **/
-        $middleWare       = new $middlewareEntity();
-        if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
-        {
+        /** @var BaseFormRequest $middleWare * */
+        $middleWare = new $middlewareEntity();
+        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $this->sourceCode .= PHP_EOL;
-            $relations = $middleWare->relations();
-            foreach($relations as $relationEntity)
-            {
+            $relations        = $middleWare->relations();
+            foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 // determine if ManyToMany, OneToMany, OneToOne rels
                 $current = $this->getRelationType($this->generator->objectName);
                 $related = $this->getRelationType($ucEntitty);
-                if(empty($current) === false && empty($related) === false)
-                {
+                if (empty($current) === false && empty($related) === false) {
                     $this->createRelationMethod($current, $related, $relationEntity);
                 }
             }
@@ -95,30 +92,22 @@ class Entities extends FormRequestModel
         $ucEntitty   = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
-        foreach($relatedRels as $rel)
-        {
-            if(strpos($rel, $this->generator->objectName) !== false)
-            {
-                foreach($currentRels as $cur)
-                {
-                    if(strpos($cur, $ucEntitty) !== false)
-                    {
+        foreach ($relatedRels as $rel) {
+            if (strpos($rel, $this->generator->objectName) !== false) {
+                foreach ($currentRels as $cur) {
+                    if (strpos($cur, $ucEntitty) !== false) {
                         $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
                         $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
-                        if($isManyCurrent === false && $isManyRelated === false)
-                        {// OneToOne
+                        if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
                             $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_ONE);
                         }
-                        if($isManyCurrent !== false && $isManyRelated === false)
-                        {// ManyToOne
+                        if ($isManyCurrent !== false && $isManyRelated === false) {// ManyToOne
                             $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_HAS_MANY);
                         }
-                        if($isManyCurrent === false && $isManyRelated !== false)
-                        {// OneToMany inverse
+                        if ($isManyCurrent === false && $isManyRelated !== false) {// OneToMany inverse
                             $this->setRelation($relationEntity, ModelsInterface::MODEL_METHOD_BELONGS_TO);
                         }
-                        if($isManyCurrent !== false && $isManyRelated !== false)
-                        {// ManyToMany
+                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
                             // check inversion of a pivot
                             $entityFile = $this->generator->formatEntitiesPath()
                                 . PhpInterface::SLASH . $this->generator->objectName .
@@ -126,8 +115,7 @@ class Entities extends FormRequestModel
                                 PhpInterface::PHP_EXT;
                             $relEntity  = $relationEntity;
                             $objName    = $this->generator->objectName;
-                            if(file_exists($entityFile) === false)
-                            {
+                            if (file_exists($entityFile) === false) {
                                 $relEntity = $this->generator->objectName;
                                 $objName   = $relationEntity;
                             }
@@ -147,7 +135,7 @@ class Entities extends FormRequestModel
      */
     public function setPivot(string $ucEntity)
     {
-        $file      = $this->generator->formatEntitiesPath() .
+        $file = $this->generator->formatEntitiesPath() .
             PhpInterface::SLASH .
             $this->className . Classes::getClassName($ucEntity) . PhpInterface::PHP_EXT;
         if (true === $this->generator->isMerge) {
@@ -159,8 +147,7 @@ class Entities extends FormRequestModel
             $file, $this->sourceCode,
             FileManager::isRegenerated($this->generator->options)
         );
-        if($isCreated)
-        {
+        if ($isCreated) {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
@@ -168,26 +155,22 @@ class Entities extends FormRequestModel
     public function createPivot()
     {
         $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
-        /** @var BaseFormRequest $middleWare **/
-        $middleWare       = new $middlewareEntity();
-        if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
-        {
-            $relations = $middleWare->relations();
+        /** @var BaseFormRequest $middleWare * */
+        $middleWare = new $middlewareEntity();
+        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
+            $relations        = $middleWare->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
-            foreach($relations as $relationEntity)
-            {
+            foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 $file      = $this->generator->formatEntitiesPath()
                     . PhpInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
                     PhpInterface::PHP_EXT;
                 // check if inverse Entity pivot exists
-                if(file_exists($file) === false)
-                {
+                if (file_exists($file) === false) {
                     // determine if ManyToMany, OneToMany, OneToOne rels
                     $current = $this->getRelationType($this->generator->objectName);
                     $related = $this->getRelationType($ucEntitty);
-                    if(empty($current) === false && empty($related) === false)
-                    {
+                    if (empty($current) === false && empty($related) === false) {
                         $this->createPivotClass($current, $related, $relationEntity);
                     }
                 }
@@ -205,18 +188,13 @@ class Entities extends FormRequestModel
         $ucEntitty   = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
-        foreach($relatedRels as $rel)
-        {
-            if(strpos($rel, $this->generator->objectName) !== false)
-            {
-                foreach($currentRels as $cur)
-                {
-                    if(strpos($cur, $ucEntitty) !== false)
-                    {
+        foreach ($relatedRels as $rel) {
+            if (strpos($rel, $this->generator->objectName) !== false) {
+                foreach ($currentRels as $cur) {
+                    if (strpos($cur, $ucEntitty) !== false) {
                         $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
                         $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
-                        if($isManyCurrent !== false && $isManyRelated !== false)
-                        {// ManyToMany
+                        if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
                             $this->setPivot($ucEntitty);
                         }
                     }
@@ -226,8 +204,8 @@ class Entities extends FormRequestModel
     }
 
     /**
-     * @param string    $entity
-     * @param string    $method
+     * @param string $entity
+     * @param string $method
      * @param \string[] ...$args
      */
     private function setRelation(string $entity, string $method, string ...$args)
@@ -253,10 +231,8 @@ class Entities extends FormRequestModel
             . PhpInterface::OPEN_PARENTHESES . Classes::getClassName($entity)
             . PhpInterface::DOUBLE_COLON . PhpInterface::PHP_CLASS;
 
-        if(empty($args) === false)
-        {
-            foreach($args as $val)
-            {
+        if (empty($args) === false) {
+            foreach ($args as $val) {
                 $toReturn .= PhpInterface::COMMA
                     . PhpInterface::SPACE . PhpInterface::QUOTES . $val .
                     PhpInterface::QUOTES;
@@ -296,11 +272,24 @@ class Entities extends FormRequestModel
             ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,
             PhpInterface::PHP_TYPES_BOOL_FALSE
         );
+        $this->setIncrementingProperty();
         $this->setComment(DefaultInterface::PROPS_END);
         $this->setComment(DefaultInterface::METHOD_START);
         $this->setRelations();
         $this->setComment(DefaultInterface::METHOD_END);
         $this->endClass();
+    }
+
+    private function setIncrementingProperty()
+    {
+        // O(4)
+        $idObject = $this->generator->types[$this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS][RamlInterface::RAML_ID]];
+        if ($idObject[RamlInterface::RAML_TYPE] === RamlInterface::RAML_TYPE_STRING) {
+            $this->createProperty(
+                ModelsInterface::PROPERTY_INCREMENTING, PhpInterface::PHP_MODIFIER_PUBLIC,
+                PhpInterface::PHP_TYPES_BOOL_FALSE
+            );
+        }
     }
 
     /**
@@ -330,7 +319,7 @@ class Entities extends FormRequestModel
 
     /**
      *  Sets pivot entity content to $sourceCode
-     * @param string $ucEntity  an entity upper case first name
+     * @param string $ucEntity an entity upper case first name
      */
     private function setPivotContent(string $ucEntity)
     {
