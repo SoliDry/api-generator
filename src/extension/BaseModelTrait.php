@@ -30,7 +30,10 @@ trait BaseModelTrait
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
-
+        if ($data[0] !== PhpInterface::ASTERISK) {
+            // add id to output it in json-api entity
+            $data[] = ModelsInterface::ID;
+        }
         return $obj->first($data);
     }
 
@@ -82,14 +85,14 @@ trait BaseModelTrait
      */
     private function getAllEntities(SqlOptions $sqlOptions)
     {
-        $limit = $sqlOptions->getLimit();
-        $page = $sqlOptions->getPage();
-        $data = $sqlOptions->getData();
-        $orderBy = $sqlOptions->getOrderBy();
-        $filter = $sqlOptions->getFilter();
+        $limit        = $sqlOptions->getLimit();
+        $page         = $sqlOptions->getPage();
+        $data         = $sqlOptions->getData();
+        $orderBy      = $sqlOptions->getOrderBy();
+        $filter       = $sqlOptions->getFilter();
         $defaultOrder = [];
-        $order = [];
-        $first = true;
+        $order        = [];
+        $first        = true;
         foreach ($orderBy as $column => $value) {
             if ($first === true) {
                 $defaultOrder = [$column, $value];
@@ -100,7 +103,7 @@ trait BaseModelTrait
             $first = false;
         }
         $from = ($limit * $page) - $limit;
-        $to = $limit * $page;
+        $to   = $limit * $page;
         /** @var Builder $obj */
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON .
@@ -115,10 +118,10 @@ trait BaseModelTrait
 
     private function getCustomSqlEntities(CustomSql $customSql)
     {
-        $result = DB::select($customSql->getQuery(), $customSql->getBindings());
+        $result     = DB::select($customSql->getQuery(), $customSql->getBindings());
         $collection = [];
         foreach ($result as $item) {
-            $class = PhpInterface::BACKSLASH . $this->modelEntity;
+            $class        = PhpInterface::BACKSLASH . $this->modelEntity;
             $collection[] = (new $class())->fill((array)$item);
         }
         return collect($collection);
@@ -148,7 +151,7 @@ trait BaseModelTrait
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildTree($data, $child->id);
-                $tree[] = $child;
+                $tree[]          = $child;
             }
         }
 
@@ -185,7 +188,7 @@ trait BaseModelTrait
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
-                $tree[] = $child;
+                $tree[]          = $child;
             }
             if (true === $isParentFound && 0 === $id) {
                 return $tree;
