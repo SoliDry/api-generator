@@ -174,12 +174,19 @@ version: v1
 converts to ```/Modules/V1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
+ 
+You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - code-generator 
+will produce migrations, relations and models respectively. 
 ```RAML
   ID:
     type: integer
     required: true
     # it will be BIGINT UNSIGNED in migration Schema if maximum > 10
     maximum: 20
+  SID:
+    type: string
+    required: true
+    maxLength: 128    
   Type:
     type: string
     required: true
@@ -396,9 +403,6 @@ return [
     'cache'=> [
         'article'=> [
             'enabled' => true,
-            'host' => '127.0.0.1',
-            'port' => 6379,
-            'database' => 0,
         ],
     ],    
 ];
