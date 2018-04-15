@@ -38,6 +38,13 @@ types:
       type: Type
   Redis:
     type: object
+    properties:
+      stampede_resistant:
+        type: boolean
+        default: true
+      ttl:
+        type: integer
+        default: 300
   TagRelationships:
     description: Tag relationship description
     type: object

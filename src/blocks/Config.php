@@ -172,6 +172,9 @@ class Config implements ConfigInterface
     {
         if (empty($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]) === false) {
             $this->openCache($objName);
+            foreach ($this->generator->types[$this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]][RamlInterface::RAML_PROPS] as $pName => $value) {
+                $this->setParam($pName, $value[RamlInterface::RAML_KEY_DEFAULT], 3);
+            }
             // unset cache to prevent doubling
             unset($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]);
         }
