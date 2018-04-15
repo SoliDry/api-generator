@@ -3,13 +3,13 @@ namespace rjapi\types;
 
 interface RoutesInterface
 {
-    const CLASS_ROUTE = 'Route';
+    public const CLASS_ROUTE = 'Route';
 
-    const METHOD_GROUP  = 'group';
-    const METHOD_GET    = 'get';
-    const METHOD_POST   = 'post';
-    const METHOD_PATCH  = 'patch';
-    const METHOD_DELETE = 'delete';
+    public const METHOD_GROUP  = 'group';
+    public const METHOD_GET    = 'get';
+    public const METHOD_POST   = 'post';
+    public const METHOD_PATCH  = 'patch';
+    public const METHOD_DELETE = 'delete';
 
-    const ROUTES_FILE_NAME = 'routes';
+    public const ROUTES_FILE_NAME = 'routes';
 }

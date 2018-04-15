@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\transformers;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -14,9 +15,9 @@ class DefaultTransformer extends TransformerAbstract
 {
     use EntitiesTrait;
 
-    const INCLUDE_PREFIX = 'include';
+    public const INCLUDE_PREFIX = 'include';
 
-    private $middleWare = null;
+    private $middleWare;
 
     /**
      * DefaultTransformer constructor.
@@ -63,7 +64,7 @@ class DefaultTransformer extends TransformerAbstract
      * @param string $name     Method name
      * @param array $arguments Method arguments
      *
-     * @return \League\Fractal\Resource\Collection
+     * @return \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item
      */
     public function __call($name, $arguments)
     {

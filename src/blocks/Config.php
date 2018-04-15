@@ -1,8 +1,8 @@
 <?php
+
 namespace rjapi\blocks;
 
 use rjapi\controllers\BaseCommand;
-use rjapi\exception\AttributesException;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
@@ -25,8 +25,8 @@ class Config implements ConfigInterface
 
     protected $sourceCode = '';
     /** @var BaseCommand generator */
-    protected $generator = null;
-    protected $className = null;
+    protected $generator;
+    protected $className;
 
     private $queryParams = [
         ModelsInterface::PARAM_LIMIT,
@@ -39,6 +39,7 @@ class Config implements ConfigInterface
         ConfigInterface::STATE_MACHINE => ConfigInterface::STATE_MACHINE_METHOD,
         ConfigInterface::SPELL_CHECK   => ConfigInterface::SPELL_CHECK_METHOD,
         ConfigInterface::BIT_MASK      => ConfigInterface::BIT_MASK_METHOD,
+        ConfigInterface::CACHE         => ConfigInterface::CACHE_METHOD,
     ];
 
     /**
@@ -58,7 +59,7 @@ class Config implements ConfigInterface
         $file      = $this->generator->formatConfigPath() .
             ModulesInterface::CONFIG_FILENAME . PhpInterface::PHP_EXT;
         $isCreated = FileManager::createFile($file, $this->sourceCode, true);
-        if($isCreated) {
+        if ($isCreated) {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
         }
     }
@@ -80,11 +81,11 @@ class Config implements ConfigInterface
 
     private function setQueryParams()
     {
-        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]) === false) {
+        if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]) === false) {
             $queryParams = $this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS];
             $this->openEntity(ConfigInterface::QUERY_PARAMS);
-            foreach($this->queryParams as $param) {
-                if(empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
+            foreach ($this->queryParams as $param) {
+                if (empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
                     $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
                 }
             }
@@ -94,7 +95,7 @@ class Config implements ConfigInterface
 
     /**
      *  Sets JWT config array
-     *  Ex.:
+     * @example
      *    'jwt'                  => [
      *      'enabled'  => true,
      *      'table'    => 'user',
@@ -104,16 +105,16 @@ class Config implements ConfigInterface
      */
     private function setJwtContent()
     {
-        foreach($this->generator->types as $objName => $objData) {
-            if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
+        foreach ($this->generator->types as $objName => $objData) {
+            if (in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                 $excluded = false;
-                foreach($this->generator->excludedSubtypes as $type) {
-                    if(strpos($objName, $type) !== false) {
+                foreach ($this->generator->excludedSubtypes as $type) {
+                    if (strpos($objName, $type) !== false) {
                         $excluded = true;
                     }
                 }
                 // if the type is among excluded - continue
-                if($excluded === true) {
+                if ($excluded === true) {
                     continue;
                 }
                 $this->setJwtOptions($objName);
@@ -121,23 +122,29 @@ class Config implements ConfigInterface
         }
     }
 
+    /**
+     * @uses setFsmOptions
+     * @uses setSpellOptions
+     * @uses setBitMaskOptions
+     * @uses setCacheOptions
+     */
     private function setConfigEntities()
     {
-        foreach($this->entityMethods as $entity => $method) {
+        foreach ($this->entityMethods as $entity => $methodName) {
             $this->openEntity($entity);
-            foreach($this->generator->types as $objName => $objData) {
-                if(in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
+            foreach ($this->generator->types as $objName => $objData) {
+                if (in_array($objName, $this->generator->customTypes) === false) { // if this is not a custom type generate resources
                     $excluded = false;
-                    foreach($this->generator->excludedSubtypes as $type) {
-                        if(strpos($objName, $type) !== false) {
+                    foreach ($this->generator->excludedSubtypes as $type) {
+                        if (strpos($objName, $type) !== false) {
                             $excluded = true;
                         }
                     }
                     // if the type is among excluded - continue
-                    if($excluded === true) {
+                    if ($excluded === true) {
                         continue;
                     }
-                    $this->$method($objName);
+                    $this->setOptions($objName, $methodName);
                 }
             }
             $this->closeEntities();
@@ -146,63 +153,97 @@ class Config implements ConfigInterface
 
     /**
      * @param string $objName
+     * @param string $methodName
      */
-    private function setSpellOptions(string $objName)
+    private function setOptions(string $objName, string $methodName)
     {
-        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
-            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal) && empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_CHECK]) === false) {
-                    // found FSM definition
-                    $this->openSc($objName, $propKey);
-                    $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
-                        ? ConfigInterface::DEFAULT_LANGUAGE
-                        : $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE], 4);
-                    $this->closeEntities();
+        if (empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
+            foreach ($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                $this->$methodName($objName, $propKey, $propVal);
+            }
+        }
+    }
+
+    /**
+     * Sets cache config enabled option true to activate caching mechanism
+     * @param string $objName
+     */
+    private function setCacheOptions(string $objName)
+    {
+        if (empty($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]) === false) {
+            $this->openCache($objName);
+            // unset cache to prevent doubling
+            unset($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]);
+        }
+    }
+
+    /**
+     * @param string $objName
+     * @param string $propKey
+     * @param $propVal
+     */
+    private function setSpellOptions(string $objName, string $propKey, $propVal)
+    {
+        if (is_array($propVal) && empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_CHECK]) === false) {
+            // found FSM definition
+            $this->openSc($objName, $propKey);
+            $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
+                ? ConfigInterface::DEFAULT_LANGUAGE
+                : $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE], 4);
+            $this->closeEntities();
+        }
+    }
+
+    /**
+     * @param string $objName
+     * @param string $propKey
+     * @param $propVal
+     */
+    private function setFsmOptions(string $objName, string $propKey, $propVal)
+    {
+        if (is_array($propVal)) {// create fsm
+            if (empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE]) === false) {
+                // found FSM definition
+                $this->openFsm($objName, $propKey);
+                foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
+                    $this->setTabs(5);
+                    $this->setArrayProperty($key, (array)$val);
                 }
+                $this->closeEntities();
             }
         }
     }
 
     /**
      * @param string $objName
-     * @throws AttributesException
+     * @param string $propKey
+     * @param $propVal
+     * @example
+     * 'bit_mask'=> [
+     *  'user'=> [
+     *       'permissions'=> [
+     *       'enabled' => true,
+     *       'flags'=> [
+     *           'publisher' => 1,
+     *           'editor' => 2,
+     *           'manager' => 4,
+     *           'photo_reporter' => 8,
+     *           'admin' => 16,
+     *           ],
+     *       ],
+     *     ],
+     *   ],
      */
-    private function setFsmOptions(string $objName)
+    private function setBitMaskOptions(string $objName, string $propKey, $propVal)
     {
-        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
-            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal)) {// create fsm
-                    if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE]) === false) {
-                        // found FSM definition
-                        $this->openFsm($objName, $propKey);
-                        foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::STATE_MACHINE] as $key => &$val) {
-                            $this->setTabs(5);
-                            $this->setArrayProperty($key, (array)$val);
-                        }
-                        $this->closeEntities();
-                    }
+        if (is_array($propVal)) {
+            if (empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                // found FSM definition
+                $this->openBitMask($objName, $propKey);
+                foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
+                    $this->setParam($key, (int)$val, 5);
                 }
-            }
-        }
-    }
-
-    /**
-     * @param string $objName
-     */
-    private function setBitMaskOptions(string $objName)
-    {
-        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
-            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal)) {
-                    if(empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
-                        // found FSM definition
-                        $this->openBitMask($objName, $propKey);
-                        foreach($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
-                            $this->setParam($key, (int)$val, 5);
-                        }
-                        $this->closeEntities();
-                    }
-                }
+                $this->closeEntities();
             }
         }
     }
@@ -210,12 +251,19 @@ class Config implements ConfigInterface
     /**
      * Sets jwt config options
      * @param string $objName
+     * @example
+     *  'jwt'=> [
+     *   'enabled' => true,
+     *   'table' => 'user',
+     *   'activate' => 30,
+     *   'expires' => 3600,
+     *  ],
      */
     private function setJwtOptions(string $objName)
     {
-        if(empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
-            foreach($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
+        if (empty($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS]) === false) {
+            foreach ($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if (is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
                     $this->openEntity(ConfigInterface::JWT);
                     $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 2);
                     $this->setParam(ModelsInterface::MIGRATION_TABLE, MigrationsHelper::getTableName($objName), 2);
@@ -229,12 +277,16 @@ class Config implements ConfigInterface
 
     /**
      *  Sets config trees structure
+     * @example
+     *   'trees'=> [
+     *       'menu' => true,
+     *   ],
      */
     private function setTrees()
     {
-        if(empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS]) === false) {
-            foreach($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
-                if(is_array($propVal) && empty($this->generator->types[ucfirst($propKey)]) === false) {
+        if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS]) === false) {
+            foreach ($this->generator->types[CustomsInterface::CUSTOM_TYPES_TREES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+                if (is_array($propVal) && empty($this->generator->types[ucfirst($propKey)]) === false) {
                     // ensure that there is a type of propKey ex.: Menu with parent_id field set
                     $this->openEntity(ConfigInterface::TREES);
                     $this->setParamDefault($propKey, $propVal[RamlInterface::RAML_KEY_DEFAULT]);

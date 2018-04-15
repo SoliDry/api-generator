@@ -13,8 +13,8 @@ use rjapi\types\PhpInterface;
 
 class FileManager implements DirsInterface
 {
-    const FILE_MODE_CREATE = 'w';
-    const DIR_MODE         = 0755;
+    public const FILE_MODE_CREATE = 'wb';
+    public const DIR_MODE         = 0755;
 
     /**
      * @param string $fileName
@@ -25,7 +25,7 @@ class FileManager implements DirsInterface
      */
     public static function createFile($fileName, $content, $isNew = false): bool
     {
-        if(file_exists($fileName) === false || $isNew === true)
+        if($isNew === true || file_exists($fileName) === false)
         {
             $fp = fopen($fileName, self::FILE_MODE_CREATE);
             fwrite($fp, $content);
@@ -90,9 +90,9 @@ class FileManager implements DirsInterface
      *
      * @return bool             true if option --regenerate is on, false otherwise
      */
-    public static function isRegenerated(array $options)
+    public static function isRegenerated(array $options): bool
     {
-        return (empty($options[ConsoleInterface::OPTION_REGENERATE])) ? false : true;
+        return empty($options[ConsoleInterface::OPTION_REGENERATE]) ? false : true;
     }
 
     /**
@@ -101,7 +101,7 @@ class FileManager implements DirsInterface
      *
      * @return bool                 true if migration with similar name exists, false otherwise
      */
-    public static function migrationNotExists(Command $obj, string $migrationName)
+    public static function migrationNotExists(Command $obj, string $migrationName): bool
     {
         $path  = FileManager::getModulePath($obj) . self::DATABASE_DIR . PhpInterface::SLASH
                  . $obj->migrationsDir . PhpInterface::SLASH;
@@ -109,7 +109,7 @@ class FileManager implements DirsInterface
                  . PhpInterface::PHP_EXT;
         $files = glob($file);
 
-        return (empty($files)) ? true : false;
+        return empty($files) ? true : false;
     }
 
     /**
@@ -120,7 +120,7 @@ class FileManager implements DirsInterface
      *
      * @return string
      */
-    public static function getPivotFile(string $firstEntity, string $secondEntity)
+    public static function getPivotFile(string $firstEntity, string $secondEntity): string
     {
         return DirsInterface::MODULES_DIR . PhpInterface::SLASH
                . ConfigHelper::getModuleName() . PhpInterface::SLASH .

@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapitest\unit\blocks;
 
 use rjapi\blocks\FormRequestModel;
@@ -28,10 +29,12 @@ class EntitiesTest extends TestCase
         $this->entities = new Entities($gen);
     }
 
-    public function testCreateEntity()
+    /**
+     * @test
+     */
+    public function it_creates_pivot_entity()
     {
         $this->assertInstanceOf(FormRequestModel::class, $this->entities);
         $this->entities->createPivot();
-        $this->entities->create();
     }
 }

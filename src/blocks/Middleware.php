@@ -147,11 +147,14 @@ class Middleware extends FormRequestModel
         $this->endMethod(1);
     }
 
+    /**
+     * @param $relationTypes
+     */
     private function setRelations($relationTypes)
     {
         $this->setTabs(3);
-        $this->sourceCode .= PhpInterface::DOUBLE_QUOTES . $relationTypes .
-            PhpInterface::DOUBLE_QUOTES
+        $this->sourceCode .= PhpInterface::QUOTES . $relationTypes .
+            PhpInterface::QUOTES
             . PhpInterface::COMMA;
     }
 

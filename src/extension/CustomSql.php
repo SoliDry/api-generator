@@ -8,7 +8,7 @@ use rjapi\types\ConfigInterface;
 class CustomSql
 {
     private $entity    = [];
-    private $isEnabled = false;
+    private $isEnabled;
 
     public function __construct(string $entity)
     {

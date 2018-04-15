@@ -1,10 +1,6 @@
 <?php
 namespace rjapi\exception;
 
-class MethodNotFoundException extends \Exception
+class MethodNotFoundException extends BaseException
 {
-    public function __construct($message)
-    {
-        parent::__construct($message);
-    }
 }

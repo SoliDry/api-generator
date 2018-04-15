@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\extension;
 
 use Illuminate\Database\Eloquent\Collection;
@@ -18,28 +19,40 @@ use rjapi\helpers\SqlOptions;
 trait BaseModelTrait
 {
     /**
-     * @param int $id
+     * @param int|string $id
      * @param array $data
      *
      * @return mixed
      */
-    private function getEntity(int $id, array $data = ModelsInterface::DEFAULT_DATA)
+    private function getEntity($id, array $data = ModelsInterface::DEFAULT_DATA)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
         );
-
+        if ($data[0] !== PhpInterface::ASTERISK) {
+            // add id to output it in json-api entity
+            $data[] = ModelsInterface::ID;
+        }
         return $obj->first($data);
+    }
+
+    private function getEntities(SqlOptions $sqlOptions)
+    {
+        /** @var CustomSql $customSql */
+        if ($this->customSql->isEnabled()) {
+            return $this->getCustomSqlEntities($this->customSql);
+        }
+        return $this->getAllEntities($sqlOptions);
     }
 
     /**
      * @param string $modelEntity
-     * @param int $id
+     * @param int|string $id
      *
      * @return mixed
      */
-    private function getModelEntity($modelEntity, int $id)
+    private function getModelEntity($modelEntity, $id)
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
@@ -80,11 +93,10 @@ trait BaseModelTrait
         $defaultOrder = [];
         $order        = [];
         $first        = true;
-        foreach($orderBy as $column => $value) {
-            if($first === true) {
+        foreach ($orderBy as $column => $value) {
+            if ($first === true) {
                 $defaultOrder = [$column, $value];
-            }
-            else {
+            } else {
                 $order[] = [ModelsInterface::COLUMN    => $column,
                             ModelsInterface::DIRECTION => $value];
             }
@@ -106,11 +118,11 @@ trait BaseModelTrait
 
     private function getCustomSqlEntities(CustomSql $customSql)
     {
-        $result = DB::select($customSql->getQuery(), $customSql->getBindings());
+        $result     = DB::select($customSql->getQuery(), $customSql->getBindings());
         $collection = [];
         foreach ($result as $item) {
-            $class = PhpInterface::BACKSLASH . $this->modelEntity;
-            $collection[] = (new $class())->fill((array) $item);
+            $class        = PhpInterface::BACKSLASH . $this->modelEntity;
+            $collection[] = (new $class())->fill((array)$item);
         }
         return collect($collection);
     }
@@ -120,7 +132,7 @@ trait BaseModelTrait
      * @param SqlOptions $sqlOptions
      * @return Collection
      */
-    public function getAllTreeEntities(SqlOptions $sqlOptions): Collection
+    public function getAllTreeEntities(SqlOptions $sqlOptions) : Collection
     {
         return Collection::make($this->buildTree($this->getAllEntities($sqlOptions)));
     }
@@ -128,14 +140,14 @@ trait BaseModelTrait
     /**
      * Builds the tree based on children/parent axiom
      * @param Collection $data
-     * @param int $id
+     * @param int|string $id
      * @return array
      */
-    private function buildTree(Collection $data, int $id = 0)
+    private function buildTree(Collection $data, $id = 0)
     {
         $tree = [];
-        foreach($data as $k => $child) {
-            if($child->parent_id === $id) { // child found
+        foreach ($data as $k => $child) {
+            if ($child->parent_id === $id) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildTree($data, $child->id);
@@ -149,10 +161,10 @@ trait BaseModelTrait
     /**
      * Collects all tree elements
      * @param SqlOptions $sqlOptions
-     * @param int $id
+     * @param int|string $id
      * @return array
      */
-    public function getSubTreeEntities(SqlOptions $sqlOptions, int $id): array
+    public function getSubTreeEntities(SqlOptions $sqlOptions, $id) : array
     {
         return $this->buildSubTree($this->getAllEntities($sqlOptions), $id);
     }
@@ -160,25 +172,25 @@ trait BaseModelTrait
     /**
      * Builds the sub-tree for top most ancestor
      * @param Collection $data
-     * @param int $searchId
-     * @param int $id
+     * @param int|string $searchId
+     * @param int|string $id
      * @param bool $isParentFound
      * @return array
      */
-    private function buildSubTree(Collection $data, int $searchId, int $id = 0, bool $isParentFound = false)
+    private function buildSubTree(Collection $data, $searchId, $id = 0, bool $isParentFound = false) : array
     {
         $tree = [];
-        foreach($data as $k => $child) {
-            if($searchId === $child->id) {
+        foreach ($data as $k => $child) {
+            if ($searchId === $child->id) {
                 $isParentFound = true;
             }
-            if($child->parent_id === $id && true === $isParentFound) { // child found
+            if ($child->parent_id === $id && true === $isParentFound) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
                 $tree[]          = $child;
             }
-            if(true === $isParentFound && 0 === $id) {
+            if (true === $isParentFound && 0 === $id) {
                 return $tree;
             }
         }

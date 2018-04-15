@@ -4,9 +4,9 @@ namespace rjapi\types;
 
 interface ModulesInterface
 {
-    const KEY_MODULE  = 'module';
-    const KEY_MODULES = 'modules';
-    const KEY_NAME    = 'name';
+    public const KEY_MODULE  = 'module';
+    public const KEY_MODULES = 'modules';
+    public const KEY_NAME    = 'name';
 
-    const CONFIG_FILENAME = 'config';
+    public const CONFIG_FILENAME = 'config';
 }

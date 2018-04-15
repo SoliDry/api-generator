@@ -2,10 +2,6 @@
 
 namespace rjapi\exception;
 
-class DirectoryException extends \Exception
+class DirectoryException extends BaseException
 {
-    public function __construct($message)
-    {
-        parent::__construct($message);
-    }
 }

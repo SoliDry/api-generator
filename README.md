@@ -28,6 +28,8 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
     * [JWT](#user-content-jwt-json-web-token)
+* [Caching](#user-content-caching)
+* [Soft Delete](#user-content-soft-delete)
 * [Tree structures](#user-content-tree-structures)
 * [Finite-state machine](#user-content-finite-state-machine)
 * [Spell check](#user-content-spell-check)
@@ -172,12 +174,19 @@ version: v1
 converts to ```/Modules/V1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
+ 
+You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - code-generator 
+will produce migrations, relations and models respectively. 
 ```RAML
   ID:
     type: integer
     required: true
     # it will be BIGINT UNSIGNED in migration Schema if maximum > 10
     maximum: 20
+  SID:
+    type: string
+    required: true
+    maxLength: 128    
   Type:
     type: string
     required: true
@@ -277,6 +286,7 @@ Complete composite Object looks like this:
       attributes: ArticleAttributes
       relationships:
         type: TagRelationships[] | TopicRelationships
+      cache: Redis
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
@@ -390,6 +400,11 @@ return [
             ],
         ],
     ],
+    'cache'=> [
+        'article'=> [
+            'enabled' => true,
+        ],
+    ],    
 ];
 ```
 
@@ -757,6 +772,11 @@ U can change those `activate` and `expires` time settings as needed.
 To protect key verification in JWT token - place `JWT_SECRET` variable to .env configuration file with secret key value assigned
 (secret can be any string at any length, but be wise to use strong one, ex.: hashed with sha1/sha2 etc).
 
+Then put the value to global configuration file `config/app.php`, we need this to apply best practices for caching configs environment. 
+```php
+'jwt_secret'     => env('JWT_SECRET', 'secret'),
+```
+
 As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` :
 ```php
     /**
@@ -862,7 +882,105 @@ http://example.com/v1/article?include=tag&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1Ni
 The algorithm to sign the token is HS256, it can be changed in future releases 
 with additional user-defined options to let developers choose another. 
 However, HMAC SHA-256 is the most popular these days. 
+
+### Caching
+RJAPI ships with caching ability (via Redis) out of the box, the only thing you need to do is to declare cache settings:
+```raml
+  Redis:
+    type: object
+```
+and set the `cache` property in any custom entity, for instance: 
+```raml
+  Article:
+    type: object
+    properties:
+      ...
+      cache: Redis
+```
+one can set multiple instances of Redis servers, if they have clusters or replica-set.
+
+Generated config output will look similar to:
+```php
+'cache'=> [
+    'article'=> [
+        'enabled' => true,
+    ],
+],
+``` 
+
+All specific settings including host/port/password, replication, clusters etc can be easily configured via Laravel standard Redis cache settings.
+Read more on this here - [Redis Laravel configuration](https://laravel.com/docs/5.6/redis#configuration)
+
+After cache settings configured - `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
+will put resulting data into cache with hashed key of a specified uri, thus providing a unique key=value storage mechanism.
+
+In Redis db instance you'll see serialized objects with keys like:
+```
+index:fa006676687269b5d1b12583ac1a8b64
+...
+view:f2d62a3c2003dcc0d89ef7d6746b6444
+```
+
+### Soft Delete
+
+When models are soft deleted, they are not actually removed from your database. 
+Instead, a `deleted_at` attribute is set on the model and inserted into the database. 
+If a model has a non-null `deleted_at` value, the model has been soft deleted.
  
+To enable soft deletes for a model just add `deleted_at` property on any custom type you need, ex.:
+```raml
+  ArticleAttributes:
+    description: Article attributes description
+    type: object
+    properties:
+      ...
+      deleted_at:
+        type: datetime    
+``` 
+
+Special generated properties/traits will appear for the specified types in ```Entities/``` folder, also related migration field will be created.
+
+Model example:
+```php
+<?php
+namespace Modules\V2\Entities;
+
+use Illuminate\Database\Eloquent\SoftDeletes;
+use rjapi\extension\BaseModel;
+
+class Article extends BaseModel 
+{
+    use SoftDeletes;
+
+    // >>>props>>>
+    protected $dates = ['deleted_at'];
+    // ...
+}
+```
+
+Migration example:
+```php
+<?php
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateArticleTable extends Migration 
+{
+    public function up() 
+    {
+        Schema::create('article', function(Blueprint $table) {
+            // ...
+            $table->softDeletes();
+            // ...
+        });
+    }
+    // ...
+}
+```
+
+It will be then automatically applied for delete requests and models won't be collected for view/index.  
+
 ### Turn off JSON API support
 If you are willing to disable json api specification mappings into Laravel application (for instance - you need to generate MVC-structure into laravel-module and make your own json schema, or any other output format), just set ```$jsonApi``` property in DefaultController to false:
 ```php

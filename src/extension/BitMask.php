@@ -8,7 +8,7 @@ class BitMask
 {
     private $entity    = [];
     private $field     = null;
-    private $isEnabled = false;
+    private $isEnabled;
 
     /**
      * SpellCheck constructor.
@@ -25,7 +25,7 @@ class BitMask
     /**
      * @return boolean
      */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->isEnabled;
     }
@@ -46,7 +46,8 @@ class BitMask
         return $this->entity[$this->field][ConfigInterface::FLAGS];
     }
 
-    public function isHidden() {
+    public function isHidden(): bool
+    {
         return empty($this->entity[$this->field][ConfigInterface::HIDE_MASK]) ? false : true;
     }
 }

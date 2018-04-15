@@ -19,15 +19,16 @@ use Symfony\Component\Yaml\Yaml;
 
 trait GeneratorTrait
 {
-    private $forms       = null;
-    private $mappers     = null;
-    private $routes      = null;
-    private $migrations  = null;
+    private $forms = null;
+    private $mappers = null;
+    private $routes = null;
+    private $migrations = null;
+    private $controllers = null;
 
     /**
      * Standard generation
      */
-    private function generateResources()
+    private function generateResources(): void
     {
         $this->outputEntity();
         $this->createControllers();
@@ -56,25 +57,27 @@ trait GeneratorTrait
     /**
      *  Generation with merge option
      */
-    private function mergeResources()
+    private function mergeResources(): void
     {
         $this->outputEntity();
         $this->createControllers();
         // create middleware
         $this->forms = new Middleware($this);
-        if (true === file_exists($this->forms->getEntityFile($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX))) {
-            $this->forms->recreateEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        $middlewarePath = $this->formatMiddlewarePath();
+        if (true === file_exists($this->forms->getEntityFile($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX))) {
+            $this->forms->recreateEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
         } else {
-            $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+            $this->forms->createEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
         }
 
         // create entities/models
         $this->mappers = new Entities($this);
         $this->mappers->createPivot();
-        if (true === file_exists($this->forms->getEntityFile($this->formatEntitiesPath()))) {
-            $this->mappers->recreateEntity($this->formatEntitiesPath());
+        $entitiesPath = $this->formatEntitiesPath();
+        if (true === file_exists($this->forms->getEntityFile($entitiesPath))) {
+            $this->mappers->recreateEntity($entitiesPath);
         } else {
-            $this->mappers->createEntity($this->formatEntitiesPath());
+            $this->mappers->createEntity($entitiesPath);
         }
 
         // create routes
@@ -84,7 +87,7 @@ trait GeneratorTrait
         $this->createMigrations();
     }
 
-    private function outputEntity()
+    private function outputEntity(): void
     {
         Console::out(
             '===============' . PhpInterface::SPACE . $this->objectName
@@ -95,7 +98,7 @@ trait GeneratorTrait
     /**
      *  Creates controllers and leaves those generated in case of merge
      */
-    private function createControllers()
+    private function createControllers(): void
     {
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -105,7 +108,7 @@ trait GeneratorTrait
     /**
      *  Creates migrations for every entity if there is merge option - adds additional
      */
-    private function createMigrations()
+    private function createMigrations(): void
     {
         if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
             $this->migrations = new Migrations($this);
@@ -117,13 +120,17 @@ trait GeneratorTrait
     /**
      *  Collects all attrs, types and diffs for further code-generation
      */
-    private function setMergedTypes()
+    private function setMergedTypes(): void
     {
         $opMerge = $this->options[ConsoleInterface::OPTION_MERGE];
         $timeCheck = strtotime($opMerge); // only for validation - coz of a diff timezones
         if (false !== $timeCheck) {
             $dateTime = explode(PhpInterface::SPACE, $opMerge);
-            $this->mergeTime($dateTime);
+            try {
+                $this->mergeTime($dateTime);
+            } catch (DirectoryException $e) {
+                echo $e->getTraceAsString();
+            }
         } else if (is_numeric($opMerge) !== false) {
             $this->mergeStep($opMerge);
         } else if ($opMerge === ConsoleInterface::MERGE_DEFAULT_VALUE) {
@@ -136,7 +143,7 @@ trait GeneratorTrait
      * @param array $dateTime
      * @throws DirectoryException
      */
-    private function mergeTime(array $dateTime)
+    private function mergeTime(array $dateTime): void
     {
         $date = $dateTime[0];
         $time = str_replace(':', '', $dateTime[1]);
@@ -156,7 +163,7 @@ trait GeneratorTrait
      * Merges history RAML files with current by backward steps
      * @param int $step
      */
-    private function mergeStep(int $step)
+    private function mergeStep(int $step): void
     {
         $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
         if ($dirs !== false) {
@@ -168,7 +175,7 @@ trait GeneratorTrait
 
     private function composeStepFiles(array $dirs, int $step)
     {
-        $dirToPass   = '';
+        $dirToPass = '';
         $filesToPass = '';
         foreach ($dirs as $dir) {
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
@@ -196,7 +203,7 @@ trait GeneratorTrait
         return compact('dirToPass', 'filesToPass');
     }
 
-    private function mergeLast()
+    private function mergeLast(): void
     {
         $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
         if ($dirs !== false) {
@@ -211,11 +218,11 @@ trait GeneratorTrait
 
     /**
      * Gets history files and merges them with current raml files
-     * @param string $dir       desc sorted last date YYYY-mmm-dd directory
-     * @param array  $files     files from .gen/ dir saved history
-     * @param array  $ramlFiles file that were passed as an option + files from uses RAML property
+     * @param string $dir desc sorted last date YYYY-mmm-dd directory
+     * @param array $files files from .gen/ dir saved history
+     * @param array $ramlFiles file that were passed as an option + files from uses RAML property
      */
-    private function composeTypes(string $dir, array $files, array $ramlFiles)
+    private function composeTypes(string $dir, array $files, array $ramlFiles): void
     {
         $attrsCurrent = [];
         $attrsHistory = [];
@@ -227,10 +234,10 @@ trait GeneratorTrait
                     $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
                     $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
                     $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
-                    $attrsCurrent += array_filter($this->currentTypes, function($k) {
+                    $attrsCurrent += array_filter($this->currentTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
                     }, ARRAY_FILTER_USE_KEY);
-                    $attrsHistory += array_filter($this->historyTypes, function($k) {
+                    $attrsHistory += array_filter($this->historyTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
                     }, ARRAY_FILTER_USE_KEY);
                 }
@@ -242,10 +249,10 @@ trait GeneratorTrait
     /**
      * Compares attributes for current and previous history and sets the diffTypes prop
      * to process additional migrations creation
-     * @param array $attrsCurrent   Current attributes
-     * @param array $attrsHistory   History attributes
+     * @param array $attrsCurrent Current attributes
+     * @param array $attrsHistory History attributes
      */
-    private function composeDiffs(array $attrsCurrent, array $attrsHistory)
+    private function composeDiffs(array $attrsCurrent, array $attrsHistory): void
     {
         // make diffs on current raml array to add columns/indices to migrations
         foreach ($attrsCurrent as $k => $v) {

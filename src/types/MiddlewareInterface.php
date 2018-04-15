@@ -4,7 +4,7 @@ namespace rjapi\types;
 
 interface MiddlewareInterface
 {
-    const METHOD_HANDLE = 'handle';
-    const METHOD_PARAM_REQUEST = 'request';
-    const METHOD_PARAM_NEXT = 'next';
+    public const METHOD_HANDLE = 'handle';
+    public const METHOD_PARAM_REQUEST = 'request';
+    public const METHOD_PARAM_NEXT = 'next';
 }

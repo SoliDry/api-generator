@@ -3,30 +3,41 @@ namespace rjapi\types;
 
 interface ConfigInterface
 {
-    const QUERY_PARAMS     = 'query_params';
-    const TREES            = 'trees';
-    const JWT              = 'jwt';
-    const ENABLED          = 'enabled';
-    const HIDE_MASK        = 'hide_mask';
-    const FLAGS            = 'flags';
-    const ACTIVATE         = 'activate';
-    const EXPIRES          = 'expires';
-    const STATE_MACHINE    = 'state_machine';
-    const SPELL_CHECK      = 'spell_check';
-    const BIT_MASK         = 'bit_mask';
-    const SPELL_LANGUAGE   = 'spell_language';
-    const LANGUAGE         = 'language';
-    const DEFAULT_LANGUAGE = 'en';
-    const STATES           = 'states';
-    const INITIAL          = 'initial';
-    const CUSTOM_SQL       = 'custom_sql';
-    const QUERY            = 'query';
-    const BINDINGS         = 'bindings';
+    public const QUERY_PARAMS     = 'query_params';
+    public const TREES            = 'trees';
+    public const ENABLED          = 'enabled';
+    public const HIDE_MASK        = 'hide_mask';
+    public const FLAGS            = 'flags';
+    public const ACTIVATE         = 'activate';
+    public const EXPIRES          = 'expires';
+    public const SPELL_LANGUAGE   = 'spell_language';
+    public const LANGUAGE         = 'language';
+    public const DEFAULT_LANGUAGE = 'en';
+    public const STATES           = 'states';
+    public const INITIAL          = 'initial';
+    public const CUSTOM_SQL       = 'custom_sql';
+    public const QUERY            = 'query';
+    public const BINDINGS         = 'bindings';
+    public const DATABASE         = 'database';
+    public const PASSWORD         = 'password';
+    public const HOST             = 'host';
+    public const PORT             = 'port';
 
-    const STATE_MACHINE_METHOD = 'setFsmOptions';
-    const SPELL_CHECK_METHOD   = 'setSpellOptions';
-    const BIT_MASK_METHOD      = 'setBitMaskOptions';
+    public const STATE_MACHINE    = 'state_machine';
+    public const SPELL_CHECK      = 'spell_check';
+    public const BIT_MASK         = 'bit_mask';
+    public const CACHE            = 'cache';
+    public const JWT              = 'jwt';
 
-    const DEFAULT_ACTIVATE = 30;
-    const DEFAULT_EXPIRES  = 3600;
+    public const STATE_MACHINE_METHOD = 'setFsmOptions';
+    public const SPELL_CHECK_METHOD   = 'setSpellOptions';
+    public const BIT_MASK_METHOD      = 'setBitMaskOptions';
+    public const CACHE_METHOD         = 'setCacheOptions';
+    public const JWT_METHOD           = 'setJwtOptions';
+
+    public const DEFAULT_ACTIVATE = 30;
+    public const DEFAULT_EXPIRES  = 3600;
+
+    public const DEFAULT_REDIS_HOST = '127.0.0.1';
+    public const DEFAULT_REDIS_PORT = 6379;
 }

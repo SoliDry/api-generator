@@ -15,7 +15,7 @@ abstract class FormRequestModel
 {
     use ContentManager;
 
-    const CHECK_MANY_BRACKETS = '[]';
+    public const CHECK_MANY_BRACKETS = '[]';
 
     private $legalTypes = [
         RamlInterface::RAML_TYPE_DATETIME,

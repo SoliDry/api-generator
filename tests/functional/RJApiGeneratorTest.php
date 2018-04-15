@@ -144,11 +144,11 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         if (is_dir($dir)) {
             $objects = scandir($dir);
             foreach ($objects as $object) {
-                if ($object != "." && $object != "..") {
-                    if (is_dir($dir . "/" . $object)) {
-                        self::rmdir($dir . "/" . $object);
+                if ($object !== '.' && $object !== '..') {
+                    if (is_dir($dir . '/' . $object)) {
+                        self::rmdir($dir . '/' . $object);
                     } else {
-                        unlink($dir . "/" . $object);
+                        unlink($dir . '/' . $object);
                     }
                 }
             }

@@ -1,10 +1,6 @@
 <?php
 namespace rjapi\exception;
 
-class SchemaException extends \Exception
+class SchemaException extends BaseException
 {
-    public function __construct($message)
-    {
-        parent::__construct($message);
-    }
 }
