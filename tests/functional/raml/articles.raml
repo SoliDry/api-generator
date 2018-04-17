@@ -38,13 +38,6 @@ types:
       type: Type
   Redis:
     type: object
-    properties:
-      stampede_resistant:
-        type: boolean
-        default: true
-      ttl:
-        type: integer
-        default: 300
   TagRelationships:
     description: Tag relationship description
     type: object
@@ -69,6 +62,15 @@ types:
       attributes: TagAttributes
       relationships:
         type: ArticleRelationships[]
+      cache:
+        type: Redis
+        properties:
+          stampede_resistant:
+            type: boolean
+            default: false
+          ttl:
+            type: integer
+            default: 3600
   ArticleRelationships:
     type: object
     properties:
@@ -150,7 +152,15 @@ types:
       attributes: ArticleAttributes
       relationships:
         type: TagRelationships[] | TopicRelationships
-      cache: Redis
+      cache:
+        type: Redis
+        properties:
+          stampede_resistant:
+            type: boolean
+            default: true
+          ttl:
+            type: integer
+            default: 300
   TopicRelationships:
     type: object
     properties:

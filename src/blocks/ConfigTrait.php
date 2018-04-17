@@ -138,10 +138,15 @@ trait ConfigTrait
      * Closes any configuration entity
      *
      * @param int $tabs
+     * @param bool $isSingle
      */
-    private function closeEntity(int $tabs = 1): void
+    public function closeEntity(int $tabs = 1, $isSingle = false): void
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA . PHP_EOL;
+        if ($isSingle === true) {
+            unset($this->openedBrackets[count($this->openedBrackets) - 1]);
+            $this->openedBrackets = array_values($this->openedBrackets);
+        }
     }
 
     /**

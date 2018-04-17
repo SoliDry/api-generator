@@ -176,6 +176,7 @@ class Config implements ConfigInterface
             foreach ($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE][RamlInterface::RAML_PROPS] as $prop => $value) {
                 $this->setParam($prop, $value[RamlInterface::RAML_KEY_DEFAULT], 3);
             }
+            $this->closeEntity(2, true);
             // unset cache to prevent doubling
             unset($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE]);
         }
