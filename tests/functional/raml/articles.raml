@@ -65,9 +65,12 @@ types:
       cache:
         type: Redis
         properties:
-          stampede_resistant:
+          stampede_xfetch:
             type: boolean
-            default: false
+            default: true
+          stampede_beta:
+            type: number
+            default: 1.1
           ttl:
             type: integer
             default: 3600
@@ -155,9 +158,12 @@ types:
       cache:
         type: Redis
         properties:
-          stampede_resistant:
+          stampede_xfetch:
             type: boolean
             default: true
+          stampede_beta:
+            type: number
+            default: 1.5
           ttl:
             type: integer
             default: 300

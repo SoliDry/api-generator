@@ -58,4 +58,31 @@ trait CacheTrait
                 $data), ['allowed_classes' => true]
         );
     }
+
+    /**
+     * @return float
+     */
+    public static function rnd() : float
+    {
+        $max = mt_getrandmax();
+        return random_int(1, $max) / $max;
+    }
+
+    /**
+     * @param int $delta        Amount of time it takes to recompute the value
+     * @param int $ttl          Time to live in cache
+     * @internal double $beta   > 1.0 schedule a recompute earlier, < 1.0 schedule a recompute later (0.5-2.0 best practice)
+     * @return bool
+     */
+    private function xFetch(int $delta, int $ttl) : bool
+    {
+        // todo: impl $beta from config
+        $beta = 0;
+        $now    = time();
+        $expiry = $now + $ttl;
+        $rnd    = static::rnd();
+        $logrnd = log($rnd);
+        $xfetch = $delta * $beta * $logrnd;
+        return ($now - $xfetch) >= $expiry;
+    }
 }
