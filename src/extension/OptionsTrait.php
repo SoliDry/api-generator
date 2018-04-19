@@ -72,15 +72,26 @@ trait OptionsTrait
         // set those only for index
         if ($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
             $this->customSql = new CustomSql($this->entity);
-            $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));
-            if ($entityCache !== null) {
-                $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
-            }
+            $this->setCacheOpts();
         }
         if ($calledMethod === JSONApiInterface::URI_METHOD_VIEW) {
-            $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));
-            if ($entityCache !== null) {
-                $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
+            $this->setCacheOpts();
+        }
+    }
+
+    private function setCacheOpts() : void
+    {
+        $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));
+        if ($entityCache !== null) {
+            $this->configOptions->setIsCached($entityCache[ConfigInterface::ENABLED]);
+            if (empty($entityCache[ConfigInterface::CACHE_STAMPEDE_XFETCH]) === false) {
+                $this->configOptions->setIsXFetch($entityCache[ConfigInterface::CACHE_STAMPEDE_XFETCH]);
+            }
+            if (empty($entityCache[ConfigInterface::CACHE_STAMPEDE_BETA]) === false) {
+                $this->configOptions->setCacheBeta($entityCache[ConfigInterface::CACHE_STAMPEDE_BETA]);
+            }
+            if (empty($entityCache[ConfigInterface::CACHE_TTL]) === false) {
+                $this->configOptions->setCacheTtl($entityCache[ConfigInterface::CACHE_TTL]);
             }
         }
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\types;
 
 interface ConfigInterface
@@ -23,11 +24,16 @@ interface ConfigInterface
     public const HOST             = 'host';
     public const PORT             = 'port';
 
-    public const STATE_MACHINE    = 'state_machine';
-    public const SPELL_CHECK      = 'spell_check';
-    public const BIT_MASK         = 'bit_mask';
-    public const CACHE            = 'cache';
-    public const JWT              = 'jwt';
+    public const STATE_MACHINE = 'state_machine';
+    public const SPELL_CHECK   = 'spell_check';
+    public const BIT_MASK      = 'bit_mask';
+    public const CACHE         = 'cache';
+    public const JWT           = 'jwt';
+
+    // cache entity settings
+    public const CACHE_STAMPEDE_XFETCH = 'stampede_xfetch';
+    public const CACHE_STAMPEDE_BETA   = 'stampede_beta';
+    public const CACHE_TTL             = 'ttl';
 
     public const STATE_MACHINE_METHOD = 'setFsmOptions';
     public const SPELL_CHECK_METHOD   = 'setSpellOptions';

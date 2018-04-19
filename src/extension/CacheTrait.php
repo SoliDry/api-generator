@@ -3,11 +3,14 @@
 namespace rjapi\extension;
 
 use Illuminate\Support\Facades\Redis;
+use rjapi\helpers\ConfigOptions;
 use rjapi\types\PhpInterface;
 
 /**
  * Trait CacheTrait
  * @package rjapi\extension
+ *
+ * @property ConfigOptions configOptions
  */
 trait CacheTrait
 {
@@ -76,8 +79,7 @@ trait CacheTrait
      */
     private function xFetch(int $delta, int $ttl) : bool
     {
-        // todo: impl $beta from config
-        $beta = 0;
+        $beta = $this->configOptions->getCacheBeta();
         $now    = time();
         $expiry = $now + $ttl;
         $rnd    = static::rnd();

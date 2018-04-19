@@ -37,7 +37,7 @@ class ApiController extends Controller
     private $relsRemoved    = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions $configOptions */
-    private $configOptions = null;
+    protected $configOptions = null;
     /** @var CustomSql $customSql */
     protected $customSql = null;
     /** @var BitMask $bitMask */

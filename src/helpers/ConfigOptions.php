@@ -21,6 +21,9 @@ class ConfigOptions
     private $hiddenBitMask = false;
     // cache settings
     private $isCached = false;
+    private $isXFetch = false;
+    private $cacheBeta = 1.0;
+    private $cacheTtl = 0;
 
     /**
      * @return mixed
@@ -200,5 +203,53 @@ class ConfigOptions
     public function setIsCached(bool $isCached) : void
     {
         $this->isCached = $isCached;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isXFetch() : bool
+    {
+        return $this->isXFetch;
+    }
+
+    /**
+     * @param bool $isXFetch
+     */
+    public function setIsXFetch(bool $isXFetch) : void
+    {
+        $this->isXFetch = $isXFetch;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCacheTtl() : int
+    {
+        return $this->cacheTtl;
+    }
+
+    /**
+     * @param int $cacheTtl
+     */
+    public function setCacheTtl(int $cacheTtl) : void
+    {
+        $this->cacheTtl = $cacheTtl;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCacheBeta() : float
+    {
+        return $this->cacheBeta;
+    }
+
+    /**
+     * @param float $cacheBeta
+     */
+    public function setCacheBeta(float $cacheBeta) : void
+    {
+        $this->cacheBeta = $cacheBeta;
     }
 }
