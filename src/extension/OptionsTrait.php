@@ -61,6 +61,7 @@ trait OptionsTrait
     private function setConfigOptions(string $calledMethod) : void
     {
         $this->configOptions = new ConfigOptions();
+        $this->configOptions->setCalledMethod($calledMethod);
         $this->configOptions->setJwtIsEnabled(ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ENABLED));
         $this->configOptions->setJwtTable(ConfigHelper::getNestedParam(ConfigInterface::JWT, ModelsInterface::MIGRATION_TABLE));
         if ($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity)) {// if jwt enabled=true and tables are equal

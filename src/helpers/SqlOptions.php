@@ -6,6 +6,7 @@ use rjapi\types\ModelsInterface;
 
 class SqlOptions
 {
+    public $id      = 0;
     public $sort    = null;
     public $limit   = null;
     public $page    = null;
@@ -129,5 +130,21 @@ class SqlOptions
     public function getIsTree(): bool
     {
         return $this->isTree;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = $id;
     }
 }

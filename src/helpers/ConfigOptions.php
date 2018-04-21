@@ -3,6 +3,8 @@ namespace rjapi\helpers;
 
 class ConfigOptions
 {
+    private $calledMethod = '';
+
     // query params
     private $queryLimit;
     private $querySort;
@@ -251,5 +253,21 @@ class ConfigOptions
     public function setCacheBeta(float $cacheBeta) : void
     {
         $this->cacheBeta = $cacheBeta;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCalledMethod(): string
+    {
+        return $this->calledMethod;
+    }
+
+    /**
+     * @param string $calledMethod
+     */
+    public function setCalledMethod(string $calledMethod)
+    {
+        $this->calledMethod = $calledMethod;
     }
 }

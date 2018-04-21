@@ -106,7 +106,6 @@ class ApiController extends Controller
         } else {
             $items = $this->getEntities($sqlOptions);
         }
-
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsIndex($items);
         }
@@ -126,8 +125,10 @@ class ApiController extends Controller
         $meta = [];
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
+        $sqlOptions = $this->setSqlOptions($request);
+        $sqlOptions->setId($id);
+        $sqlOptions->setData($data);
         if (true === $this->isTree) {
-            $sqlOptions = $this->setSqlOptions($request);
             $tree       = $this->getSubTreeEntities($sqlOptions, $id);
             $meta       = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
