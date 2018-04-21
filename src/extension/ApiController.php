@@ -96,13 +96,7 @@ class ApiController extends Controller
         }
 
         if ($this->configOptions->isCached()) {
-            $qStr    = $request->getQueryString();
-            $hashKey = JSONApiInterface::URI_METHOD_INDEX . PhpInterface::COLON . md5($qStr);
-            $items   = $this->get($hashKey);
-            if ($items === null) {
-                $items = $this->getEntities($sqlOptions);
-                $this->set($hashKey, $items);
-            }
+            $items = $this->getCached($request, $sqlOptions);
         } else {
             $items = $this->getEntities($sqlOptions);
         }
@@ -134,14 +128,7 @@ class ApiController extends Controller
         }
 
         if ($this->configOptions->isCached()) {
-            $qStr    = $request->getQueryString();
-            // hash id and query string to make it unique
-            $hashKey = JSONApiInterface::URI_METHOD_VIEW . PhpInterface::COLON . md5($id . $qStr);
-            $item   = $this->get($hashKey);
-            if ($item === null) {
-                $item = $this->getEntity($id, $data);
-                $this->set($hashKey, $item);
-            }
+            $item = $this->getCached($request, $sqlOptions);
         } else {
             $item = $this->getEntity($id, $data);
         }

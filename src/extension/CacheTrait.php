@@ -70,8 +70,8 @@ trait CacheTrait
     private function getStdCached(Request $request, SqlOptions $sqlOptions)
     {
         $hashKey = $this->getKeyHash($request);
-        $items = $this->get($hashKey);
-        if ($items === NULL) {
+        $items   = $this->get($hashKey);
+        if ($items === null) {
             if ($sqlOptions->getId() > 0) {
                 $items = $this->getEntity($sqlOptions->getId(), $sqlOptions->getData());
             } else {
@@ -90,14 +90,11 @@ trait CacheTrait
      */
     private function getXFetched(Request $request, SqlOptions $sqlOptions)
     {
-        $hashKey = $this->getKeyHash($request);
-        $delta = Redis::get($this->getDeltaKey($hashKey));
-        $ttl = $this->configOptions->getCacheTtl();
-        if ($delta === NULL) { // 1-st time compute
-            return $this->recompute($sqlOptions, $hashKey, $ttl);
-        }
-        $recompute = $this->xFetch($delta, $ttl);
-        if ($recompute === true) {
+        $hashKey   = $this->getKeyHash($request);
+        $delta     = Redis::get($this->getDeltaKey($hashKey));
+        $ttl       = $this->configOptions->getCacheTtl();
+        $recompute = $this->xFetch((int)$delta, $ttl);
+        if ($delta === null || $recompute === true) {
             return $this->recompute($sqlOptions, $hashKey, $ttl);
         }
 
@@ -108,7 +105,7 @@ trait CacheTrait
      * @param string $hashKey
      * @return string
      */
-    private function getDeltaKey(string $hashKey): string
+    private function getDeltaKey(string $hashKey) : string
     {
         return $hashKey . PhpInterface::COLON . RedisInterface::REDIS_DELTA;
     }
@@ -137,7 +134,7 @@ trait CacheTrait
      * @param Request $request
      * @return string
      */
-    private function getKeyHash(Request $request): string
+    private function getKeyHash(Request $request) : string
     {
         $qStr = $request->getQueryString();
 
@@ -148,7 +145,7 @@ trait CacheTrait
      * @param \League\Fractal\Resource\Collection | \League\Fractal\Resource\Item $data
      * @return string
      */
-    protected function ser($data): string
+    protected function ser($data) : string
     {
         return str_replace(
             PhpInterface::DOUBLE_QUOTES, PhpInterface::DOUBLE_QUOTES_ESC,
@@ -172,7 +169,7 @@ trait CacheTrait
     /**
      * @return float
      */
-    public static function rnd(): float
+    public static function rnd() : float
     {
         $max = mt_getrandmax();
 
@@ -181,17 +178,17 @@ trait CacheTrait
 
     /**
      * @param double $delta Amount of time it takes to recompute the value in secs ex.: 0.3 - 300ms
-     * @param int $ttl      Time to live in cache
+     * @param int $ttl Time to live in cache
      * @return bool
      * @internal double $beta   > 1.0 schedule a recompute earlier, < 1.0 schedule a recompute later (0.5-2.0 best
      *           practice)
      */
-    private function xFetch(double $delta, int $ttl): bool
+    private function xFetch(double $delta, int $ttl) : bool
     {
-        $beta = $this->configOptions->getCacheBeta();
-        $now = time();
+        $beta   = $this->configOptions->getCacheBeta();
+        $now    = time();
         $expiry = $now + $ttl;
-        $rnd = static::rnd();
+        $rnd    = static::rnd();
         $logrnd = log($rnd);
         $xfetch = $delta * $beta * $logrnd;
 
