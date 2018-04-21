@@ -93,7 +93,7 @@ trait CacheTrait
         $hashKey   = $this->getKeyHash($request);
         $delta     = Redis::get($this->getDeltaKey($hashKey));
         $ttl       = $this->configOptions->getCacheTtl();
-        $recompute = $this->xFetch((int)$delta, $ttl);
+        $recompute = $this->xFetch((float)$delta, $ttl);
         if ($delta === null || $recompute === true) {
             return $this->recompute($sqlOptions, $hashKey, $ttl);
         }
@@ -124,7 +124,7 @@ trait CacheTrait
         } else {
             $items = $this->getEntities($sqlOptions);
         }
-        $delta = Metrics::millitime() - $start;
+        $delta = (Metrics::millitime() - $start) / 1000;
         $this->set($hashKey, $items, $ttl);
         Redis::set($this->getDeltaKey($hashKey), $delta);
         return $items;
@@ -177,21 +177,20 @@ trait CacheTrait
     }
 
     /**
-     * @param double $delta Amount of time it takes to recompute the value in secs ex.: 0.3 - 300ms
+     * @param float $delta Amount of time it takes to recompute the value in secs ex.: 0.3 - 300ms
      * @param int $ttl Time to live in cache
      * @return bool
      * @internal double $beta   > 1.0 schedule a recompute earlier, < 1.0 schedule a recompute later (0.5-2.0 best
      *           practice)
      */
-    private function xFetch(double $delta, int $ttl) : bool
+    private function xFetch(float $delta, int $ttl) : bool
     {
         $beta   = $this->configOptions->getCacheBeta();
         $now    = time();
-        $expiry = $now + $ttl;
         $rnd    = static::rnd();
         $logrnd = log($rnd);
         $xfetch = $delta * $beta * $logrnd;
 
-        return ($now - $xfetch) >= $expiry;
+        return ($now - $xfetch) >= ($now + $ttl);
     }
 }
