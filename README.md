@@ -285,8 +285,7 @@ Complete composite Object looks like this:
       id: ID
       attributes: ArticleAttributes
       relationships:
-        type: TagRelationships[] | TopicRelationships
-      cache: Redis
+        type: TagRelationships[] | TopicRelationships     
 ```
 That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
@@ -401,8 +400,17 @@ return [
         ],
     ],
     'cache'=> [
+        'tag'=> [
+            'enabled' => true,
+            'stampede_xfetch' => false,
+            'stampede_beta' => 1.1,
+            'ttl' => 3600,
+        ],
         'article'=> [
             'enabled' => true,
+            'stampede_xfetch' => true,
+            'stampede_beta' => 1.5,
+            'ttl' => 300,
         ],
     ],    
 ];
@@ -895,15 +903,34 @@ and set the `cache` property in any custom entity, for instance:
     type: object
     properties:
       ...
-      cache: Redis
+      cache:
+        type: Redis
+        properties:
+          stampede_xfetch:
+            type: boolean
+            default: true
+          stampede_beta:
+            type: number
+            default: 1.5
+          ttl:
+            type: integer
+            default: 300
 ```
 one can set multiple instances of Redis servers, if they have clusters or replica-set.
+
+Another option is to make your services resistant to [Cache Stampede](https://en.wikipedia.org/wiki/Cache_stampede) (or dog-piling) by applying 
+corresponding stampede properties to `cache` entity, 
+`stampede_xfetch` turns on the xfetch implementation and `stampede_beta` should be 0.5<=beta<=2.0 (where > 1.0 schedule a recompute earlier, < 1.0 schedule a recompute later), 
+ttl property is also required in this case.
 
 Generated config output will look similar to:
 ```php
 'cache'=> [
     'article'=> [
         'enabled' => true,
+        'stampede_xfetch' => true,
+        'stampede_beta' => 1.5,
+        'ttl' => 300,
     ],
 ],
 ``` 
