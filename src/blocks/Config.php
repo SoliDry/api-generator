@@ -71,7 +71,7 @@ class Config implements ConfigInterface
     {
         $this->setTag();
         $this->openRoot();
-        $this->setParam(ModulesInterface::KEY_NAME, ucfirst($this->generator->version));
+        $this->setParam(ModulesInterface::KEY_NAME, RamlInterface::RAML_TYPE_STRING, ucfirst($this->generator->version));
         $this->setQueryParams();
         $this->setTrees();
         $this->setJwtContent();
@@ -86,7 +86,7 @@ class Config implements ConfigInterface
             $this->openEntity(ConfigInterface::QUERY_PARAMS);
             foreach ($this->queryParams as $param) {
                 if (empty($queryParams[$param][RamlInterface::RAML_KEY_DEFAULT]) === false) {
-                    $this->setParam($param, $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
+                    $this->setParam($param, $queryParams[$param][RamlInterface::RAML_TYPE], $queryParams[$param][RamlInterface::RAML_KEY_DEFAULT], 2);
                 }
             }
             $this->closeEntities();
@@ -174,7 +174,7 @@ class Config implements ConfigInterface
             && $this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE][RamlInterface::RAML_TYPE] === CustomsInterface::CUSTOM_TYPE_REDIS) {
             $this->openCache($objName);
             foreach ($this->generator->types[$objName][RamlInterface::RAML_PROPS][ConfigInterface::CACHE][RamlInterface::RAML_PROPS] as $prop => $value) {
-                $this->setParam($prop, $value[RamlInterface::RAML_KEY_DEFAULT], 3);
+                $this->setParam($prop, $value[RamlInterface::RAML_TYPE], $value[RamlInterface::RAML_KEY_DEFAULT], 3);
             }
             $this->closeEntity(2, true);
             // unset cache to prevent doubling
@@ -192,7 +192,7 @@ class Config implements ConfigInterface
         if (is_array($propVal) && empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_CHECK]) === false) {
             // found FSM definition
             $this->openSc($objName, $propKey);
-            $this->setParam(ConfigInterface::LANGUAGE, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
+            $this->setParam(ConfigInterface::LANGUAGE, RamlInterface::RAML_TYPE_STRING, empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE])
                 ? ConfigInterface::DEFAULT_LANGUAGE
                 : $propVal[RamlInterface::RAML_FACETS][ConfigInterface::SPELL_LANGUAGE], 4);
             $this->closeEntities();
@@ -246,7 +246,7 @@ class Config implements ConfigInterface
                 // found FSM definition
                 $this->openBitMask($objName, $propKey);
                 foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $key => $val) {
-                    $this->setParam($key, (int)$val, 5);
+                    $this->setParam($key, RamlInterface::RAML_TYPE_INTEGER, $val, 5);
                 }
                 $this->closeEntities();
             }
@@ -270,10 +270,10 @@ class Config implements ConfigInterface
             foreach ($this->generator->types[$objName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES][RamlInterface::RAML_PROPS] as $propKey => $propVal) {
                 if (is_array($propVal) && $propKey === CustomsInterface::CUSTOM_PROP_JWT) {// create jwt config setting
                     $this->openEntity(ConfigInterface::JWT);
-                    $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 2);
-                    $this->setParam(ModelsInterface::MIGRATION_TABLE, MigrationsHelper::getTableName($objName), 2);
-                    $this->setParam(ConfigInterface::ACTIVATE, ConfigInterface::DEFAULT_ACTIVATE, 2);
-                    $this->setParam(ConfigInterface::EXPIRES, ConfigInterface::DEFAULT_EXPIRES, 2);
+                    $this->setParam(ConfigInterface::ENABLED, RamlInterface::RAML_TYPE_BOOLEAN, PhpInterface::PHP_TYPES_BOOL_TRUE, 2);
+                    $this->setParam(ModelsInterface::MIGRATION_TABLE, RamlInterface::RAML_TYPE_STRING, MigrationsHelper::getTableName($objName), 2);
+                    $this->setParam(ConfigInterface::ACTIVATE, RamlInterface::RAML_TYPE_INTEGER, ConfigInterface::DEFAULT_ACTIVATE, 2);
+                    $this->setParam(ConfigInterface::EXPIRES, RamlInterface::RAML_TYPE_INTEGER, ConfigInterface::DEFAULT_EXPIRES, 2);
                     $this->closeEntities();
                 }
             }

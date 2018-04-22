@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\types\ConfigInterface;
 use rjapi\types\PhpInterface;
+use rjapi\types\RamlInterface;
 
 /**
  * Class ConfigTrait
@@ -50,16 +51,27 @@ trait ConfigTrait
     /**
      * Sets any config related param
      * @param string $param
+     * @param string $type
      * @param string|bool $value
      * @param int $tabs
      */
-    private function setParam(string $param, string $value, int $tabs = 1): void
+    private function setParam(string $param, string $type, string $value, int $tabs = 1): void
     {
-        if (is_numeric($value) === false
-            && is_bool($value) === false
-            && in_array($value, [PhpInterface::PHP_TYPES_BOOL_TRUE, PhpInterface::PHP_TYPES_BOOL_FALSE]) === false
-        ) {
-            $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
+        // todo: this is ugly and stupid, because of types misconception in RAML, PHP and YAML parse
+        if ($type === RamlInterface::RAML_TYPE_BOOLEAN) {
+            if ($value === PhpInterface::PHP_TYPES_BOOL_TRUE || (int)$value === 1) { // Yaml::parse converts true to 1, false to 0
+                $value = PhpInterface::PHP_TYPES_BOOL_TRUE;
+            } else {
+                $value = PhpInterface::PHP_TYPES_BOOL_FALSE;
+            }
+        } else {
+            if ($type !== RamlInterface::RAML_TYPE_NUMBER) {
+                if ($type === RamlInterface::RAML_TYPE_STRING) {
+                    $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
+                } else {
+                    settype($value, RamlInterface::RAML_TO_PHP_TYPES[$type]);
+                }
+            }
         }
         $this->setTabs($tabs);
         $this->sourceCode .= PhpInterface::QUOTES . $param . PhpInterface::QUOTES
@@ -84,14 +96,14 @@ trait ConfigTrait
     {
         $this->openEntity(strtolower($entity), 2);
         $this->openEntity(strtolower($field), 3);
-        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
+        $this->setParam(ConfigInterface::ENABLED, RamlInterface::RAML_TYPE_BOOLEAN, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
         $this->openEntity(ConfigInterface::STATES, 4);
     }
 
     private function openCache(string $entity): void
     {
         $this->openEntity(strtolower($entity), 2);
-        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
+        $this->setParam(ConfigInterface::ENABLED,  RamlInterface::RAML_TYPE_BOOLEAN,PhpInterface::PHP_TYPES_BOOL_TRUE, 3);
     }
 
     /**
@@ -104,7 +116,7 @@ trait ConfigTrait
     {
         $this->openEntity(strtolower($entity), 2);
         $this->openEntity(strtolower($field), 3);
-        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
+        $this->setParam(ConfigInterface::ENABLED, RamlInterface::RAML_TYPE_BOOLEAN, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
     }
 
 
@@ -117,7 +129,7 @@ trait ConfigTrait
     {
         $this->openEntity(strtolower($entity), 2);
         $this->openEntity(strtolower($field), 3);
-        $this->setParam(ConfigInterface::ENABLED, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
+        $this->setParam(ConfigInterface::ENABLED, RamlInterface::RAML_TYPE_BOOLEAN, PhpInterface::PHP_TYPES_BOOL_TRUE, 4);
         $this->openEntity(ConfigInterface::FLAGS, 4);
     }
 

@@ -55,6 +55,7 @@ interface PhpInterface
     public const PHP_TYPES_NULL       = 'null';
     public const PHP_TYPES_STRING     = 'string';
     public const PHP_TYPES_BOOL       = 'bool';
+    public const PHP_TYPES_INT        = 'int';
     public const PHP_TYPES_BOOL_FALSE = 'false';
     public const PHP_TYPES_BOOL_TRUE  = 'true';
 

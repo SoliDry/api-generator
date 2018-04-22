@@ -13,6 +13,11 @@ interface RamlInterface
     public const RAML_TYPE_INTEGER  = 'integer';
     public const RAML_TYPE_NUMBER   = 'number';
 
+    public const RAML_TO_PHP_TYPES = [
+        self::RAML_TYPE_STRING => PhpInterface::PHP_TYPES_STRING,
+        self::RAML_TYPE_INTEGER => PhpInterface::PHP_TYPES_INT,
+    ];
+
     public const RAML_TYPE_FORMAT        = 'format';
     public const RAML_TYPE_FORMAT_FLOAT  = 'float';
     public const RAML_TYPE_FORMAT_DOUBLE = 'double';
