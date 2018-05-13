@@ -35,6 +35,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Spell check](#user-content-spell-check)
 * [Bit mask](#user-content-bit-mask)
 * [Custom SQL](#user-content-custom-sql)
+* [Custom business logic](#user-content-custom-business-logic)
 * [Regeneration](#user-content-regeneration)
 * [Conversions to RAML](#user-content-conversions-to-raml)
 
@@ -1320,6 +1321,57 @@ Don't forget to add Laravel specific `$fillable` or `$guarded` array to let fill
     ];
 ```
 Note: you need an `id` field to be present, because of json-api serializer.
+
+### Custom business logic
+
+You can add any business logic you need, the best place for your custom-code is in pre-generated controllers ex.: 
+to add specific sanitizers on fields for `ArticleController` and modified output you can override `create` method like this:  
+```php
+<?php
+namespace Modules\V1\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class ArticleController extends DefaultController
+{
+    public function create(Request $request)
+    {
+        // any business logic here for input pre-processing data
+        parent::create($request);
+        // any business logic here for output pre-processing data
+    }
+}
+```
+There can be situations where you need to add workaround in particular method or init logic for all requests of that type index/view/create/update/delete, 
+it can be easily achieved by placing code in `DefaultController` the same way it is for any other controllers. The inheritance model made specifically for 
+those purposes will gracefully perform any ops before/after etc. For instance: 
+```php
+<?php
+namespace Modules\V1\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
+use rjapi\extension\BaseController;
+
+class DefaultController extends BaseController 
+{
+    public function __construct(Route $route)
+    {
+        // specific code before init 
+        parent::__construct($route);
+        // specific code after init 
+    }
+    
+    public function index(Request $request)
+    {
+        // specific code before index execution
+        parent::index($request); 
+        // specific code after index execution
+    }
+}
+```     
+As u may noticed there is an access to either Route and Request properties.    
+In next chapter you'll know how to place custom code in Models/Middlewares preserving it from code regeneration override.   
   
 ### Regeneration
 It is an important feature to regenerate your code based on generated history types and the current state 
