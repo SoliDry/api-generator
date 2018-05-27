@@ -24,7 +24,7 @@ class ConfigTest extends TestCase
         parent::setUp();
         $this->gen = new RJApiGenerator();
         $this->gen->modulesDir = DirsInterface::MODULES_DIR;
-        $this->gen->version = 'V1';
+        $this->gen->version = 'V2';
         $this->config = new Config($this->gen);
     }
 

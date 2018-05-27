@@ -61,7 +61,7 @@ class MigrationsTest extends TestCase
             ]
         ];
         $gen->objectName = 'Article';
-        $gen->version = 'v1';
+        $gen->version = 'v2';
         $gen->modulesDir = DirsInterface::MODULES_DIR;
         $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
         $gen->migrationsDir = DirsInterface::MIGRATIONS_DIR;

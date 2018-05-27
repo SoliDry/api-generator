@@ -11,3 +11,4 @@ storage/
 /raml/
 .env
 .gen/
+*_create*_table.php

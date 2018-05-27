@@ -5,6 +5,8 @@ use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
 
 abstract class TestCase extends TestCaseLaravel
 {
+    public const DIR_OUTPUT = './tests/_output/';
+
     /**
      * The base URL to use while testing the application.
      *

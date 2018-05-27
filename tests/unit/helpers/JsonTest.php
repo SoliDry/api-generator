@@ -4,8 +4,8 @@ namespace rjapitest\unit\helpers;
 
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
-use Modules\V1\Entities\Article;
-use Modules\V1\Http\Middleware\ArticleMiddleware;
+use Modules\V2\Entities\Article;
+use Modules\V2\Http\Middleware\ArticleMiddleware;
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
