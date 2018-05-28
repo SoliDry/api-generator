@@ -7,58 +7,40 @@ use rjapi\types\ModelsInterface;
 class SqlOptions
 {
     public $id      = 0;
-    public $sort    = null;
-    public $limit   = null;
-    public $page    = null;
+    public $limit   = ModelsInterface::DEFAULT_LIMIT;
+    public $page    = ModelsInterface::DEFAULT_PAGE;
     public $orderBy = [];
     public $data    = ModelsInterface::DEFAULT_DATA;
     public $filter  = [];
-    public $isTree  = false;
 
     /**
-     * @param null $sort
+     * @return int
      */
-    public function setSort($sort)
-    {
-        $this->sort = $sort;
-    }
-
-    /**
-     * @return null
-     */
-    public function getSort()
-    {
-        return $this->sort;
-    }
-
-    /**
-     * @return null
-     */
-    public function getLimit()
+    public function getLimit() : int
     {
         return $this->limit;
     }
 
     /**
-     * @param null $limit
+     * @param int $limit
      */
-    public function setLimit($limit)
+    public function setLimit($limit) : void
     {
         $this->limit = $limit;
     }
 
     /**
-     * @return null
+     * @return int
      */
-    public function getPage()
+    public function getPage() : int
     {
         return $this->page;
     }
 
     /**
-     * @param null $page
+     * @param int $page
      */
-    public function setPage($page)
+    public function setPage(int $page) : void
     {
         $this->page = $page;
     }
@@ -66,7 +48,7 @@ class SqlOptions
     /**
      * @return array
      */
-    public function getOrderBy()
+    public function getOrderBy() : array
     {
         return $this->orderBy;
     }
@@ -74,7 +56,7 @@ class SqlOptions
     /**
      * @param array $orderBy
      */
-    public function setOrderBy($orderBy)
+    public function setOrderBy($orderBy) : void
     {
         $this->orderBy = $orderBy;
     }
@@ -82,7 +64,7 @@ class SqlOptions
     /**
      * @return array
      */
-    public function getData()
+    public function getData() : array
     {
         return $this->data;
     }
@@ -90,7 +72,7 @@ class SqlOptions
     /**
      * @param array $data
      */
-    public function setData($data)
+    public function setData($data) : void
     {
         // id must be there anyway
         $this->data = $data;
@@ -103,7 +85,7 @@ class SqlOptions
     /**
      * @return array
      */
-    public function getFilter()
+    public function getFilter() : array
     {
         return $this->filter;
     }
@@ -111,39 +93,23 @@ class SqlOptions
     /**
      * @param array $filter
      */
-    public function setFilter($filter)
+    public function setFilter($filter) : void
     {
         $this->filter = $filter;
     }
 
     /**
-     * @param bool $isTree
+     * @return int|string
      */
-    public function setIsTree(bool $isTree)
-    {
-        $this->isTree = $isTree;
-    }
-
-    /**
-     * @return bool
-     */
-    public function getIsTree(): bool
-    {
-        return $this->isTree;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * @param int|string $id
      */
-    public function setId(int $id)
+    public function setId($id) : void
     {
         $this->id = $id;
     }

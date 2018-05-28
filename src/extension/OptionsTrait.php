@@ -21,8 +21,8 @@ use rjapi\types\RamlInterface;
 trait OptionsTrait
 {
     // default query params value
-    private $defaultPage = 0;
-    private $defaultLimit = 0;
+    private $defaultPage = ModelsInterface::DEFAULT_PAGE;
+    private $defaultLimit = ModelsInterface::DEFAULT_LIMIT;
     private $defaultSort = '';
     private $isTree = false;
 
