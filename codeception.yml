@@ -33,3 +33,4 @@ coverage:
 #            - tests/*
 #        exclude:
 #            - app/cache/CacheProvider.php
+# codecov push: bash <(curl -s https://codecov.io/bash) -t a3a66668-5d33-4f17-bbc5-0d702a6a14e8
