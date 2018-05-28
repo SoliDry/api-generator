@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1527529763">
-  <project timestamp="1527529763">
+<coverage generated="1527537744">
+  <project timestamp="1527537744">
     <package name="rjapi">
       <file name="/srv/raml-json-api/src/RJApiGenerator.php">
         <class name="rjapi\RJApiGenerator" namespace="rjapi">
@@ -2875,77 +2875,41 @@
       </file>
       <file name="/srv/raml-json-api/src/helpers/SqlOptions.php">
         <class name="rjapi\helpers\SqlOptions" namespace="rjapi\helpers">
-          <metrics complexity="17" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="0" elements="68" coveredelements="0"/>
+          <metrics complexity="13" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="32" coveredelements="32"/>
         </class>
-        <line num="21" type="method" name="setSort" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="22" type="stmt" count="0"/>
-        <line num="23" type="stmt" count="0"/>
-        <line num="24" type="stmt" count="0"/>
-        <line num="29" type="method" name="getSort" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="30" type="stmt" count="0"/>
-        <line num="31" type="stmt" count="0"/>
-        <line num="32" type="stmt" count="0"/>
-        <line num="37" type="method" name="getLimit" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="38" type="stmt" count="0"/>
-        <line num="39" type="stmt" count="0"/>
-        <line num="40" type="stmt" count="0"/>
-        <line num="45" type="method" name="setLimit" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="46" type="stmt" count="0"/>
-        <line num="47" type="stmt" count="0"/>
-        <line num="48" type="stmt" count="0"/>
-        <line num="53" type="method" name="getPage" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="54" type="stmt" count="0"/>
-        <line num="55" type="stmt" count="0"/>
-        <line num="56" type="stmt" count="0"/>
-        <line num="61" type="method" name="setPage" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="62" type="stmt" count="0"/>
-        <line num="63" type="stmt" count="0"/>
-        <line num="64" type="stmt" count="0"/>
-        <line num="69" type="method" name="getOrderBy" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="70" type="stmt" count="0"/>
-        <line num="71" type="stmt" count="0"/>
-        <line num="72" type="stmt" count="0"/>
-        <line num="77" type="method" name="setOrderBy" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="78" type="stmt" count="0"/>
-        <line num="79" type="stmt" count="0"/>
-        <line num="80" type="stmt" count="0"/>
-        <line num="85" type="method" name="getData" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="86" type="stmt" count="0"/>
-        <line num="87" type="stmt" count="0"/>
-        <line num="88" type="stmt" count="0"/>
-        <line num="93" type="method" name="setData" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="94" type="stmt" count="0"/>
-        <line num="96" type="stmt" count="0"/>
-        <line num="97" type="stmt" count="0"/>
-        <line num="98" type="stmt" count="0"/>
-        <line num="99" type="stmt" count="0"/>
-        <line num="100" type="stmt" count="0"/>
-        <line num="101" type="stmt" count="0"/>
-        <line num="106" type="method" name="getFilter" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="107" type="stmt" count="0"/>
-        <line num="108" type="stmt" count="0"/>
-        <line num="109" type="stmt" count="0"/>
-        <line num="114" type="method" name="setFilter" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="115" type="stmt" count="0"/>
-        <line num="116" type="stmt" count="0"/>
-        <line num="117" type="stmt" count="0"/>
-        <line num="122" type="method" name="setIsTree" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="123" type="stmt" count="0"/>
-        <line num="124" type="stmt" count="0"/>
-        <line num="125" type="stmt" count="0"/>
-        <line num="130" type="method" name="getIsTree" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="131" type="stmt" count="0"/>
-        <line num="132" type="stmt" count="0"/>
-        <line num="133" type="stmt" count="0"/>
-        <line num="138" type="method" name="getId" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="139" type="stmt" count="0"/>
-        <line num="140" type="stmt" count="0"/>
-        <line num="141" type="stmt" count="0"/>
-        <line num="146" type="method" name="setId" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="147" type="stmt" count="0"/>
-        <line num="148" type="stmt" count="0"/>
-        <line num="149" type="stmt" count="0"/>
-        <metrics loc="149" ncloc="99" classes="1" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="0" elements="68" coveredelements="0"/>
+        <line num="19" type="method" name="getLimit" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="21" type="stmt" count="2"/>
+        <line num="27" type="method" name="setLimit" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="35" type="method" name="getPage" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="37" type="stmt" count="2"/>
+        <line num="43" type="method" name="setPage" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="45" type="stmt" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="51" type="method" name="getOrderBy" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="53" type="stmt" count="2"/>
+        <line num="59" type="method" name="setOrderBy" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="61" type="stmt" count="1"/>
+        <line num="62" type="stmt" count="1"/>
+        <line num="67" type="method" name="getData" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="69" type="stmt" count="2"/>
+        <line num="75" type="method" name="setData" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="78" type="stmt" count="1"/>
+        <line num="79" type="stmt" count="1"/>
+        <line num="81" type="stmt" count="1"/>
+        <line num="83" type="stmt" count="1"/>
+        <line num="88" type="method" name="getFilter" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="90" type="stmt" count="2"/>
+        <line num="96" type="method" name="setFilter" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="98" type="stmt" count="1"/>
+        <line num="99" type="stmt" count="1"/>
+        <line num="104" type="method" name="getId" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="106" type="stmt" count="2"/>
+        <line num="112" type="method" name="setId" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="114" type="stmt" count="1"/>
+        <line num="115" type="stmt" count="1"/>
+        <metrics loc="115" ncloc="77" classes="1" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="32" coveredelements="32"/>
       </file>
     </package>
     <package name="rjapi\transformers">
@@ -3035,6 +2999,6 @@
     <file name="/srv/raml-json-api/src/types/RoutesInterface.php">
       <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <metrics files="71" loc="6705" ncloc="5028" classes="46" methods="347" coveredmethods="89" conditionals="0" coveredconditionals="0" statements="2301" coveredstatements="542" elements="2648" coveredelements="631"/>
+    <metrics files="71" loc="6671" ncloc="5006" classes="46" methods="343" coveredmethods="101" conditionals="0" coveredconditionals="0" statements="2269" coveredstatements="562" elements="2612" coveredelements="663"/>
   </project>
 </coverage>
