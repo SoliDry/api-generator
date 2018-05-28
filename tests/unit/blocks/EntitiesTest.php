@@ -3,7 +3,9 @@
 namespace rjapitest\unit\blocks;
 
 use Modules\V2\Entities\Article;
+use Modules\V2\Http\Middleware\ArticleTestMiddleware;
 use rjapi\blocks\FormRequestModel;
+use rjapi\blocks\Middleware;
 use rjapi\RJApiGenerator;
 use rjapi\types\DirsInterface;
 use rjapitest\unit\TestCase;
@@ -14,20 +16,24 @@ use rjapi\blocks\Entities;
  * @package rjapitest\unit\blocks
  *
  * @property Entities entities
+ * @property Middleware middleware
  */
 class EntitiesTest extends TestCase
 {
     private $entities;
+    private $middleware;
 
     public function setUp()
     {
         parent::setUp();
-        $gen              = new RJApiGenerator();
-        $gen->objectName  = 'Article';
-        $gen->version     = 'v2';
-        $gen->modulesDir  = DirsInterface::MODULES_DIR;
-        $gen->entitiesDir = DirsInterface::ENTITIES_DIR;
-        $gen->types       = [
+        $gen                = new RJApiGenerator();
+        $gen->objectName    = 'ArticleTest';
+        $gen->version       = 'v2';
+        $gen->modulesDir    = DirsInterface::MODULES_DIR;
+        $gen->entitiesDir   = DirsInterface::ENTITIES_DIR;
+        $gen->httpDir       = DirsInterface::HTTP_DIR;
+        $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
+        $gen->types         = [
             'SID'               => [
                 'type'      => 'string',
                 'required'  => true,
@@ -50,7 +56,7 @@ class EntitiesTest extends TestCase
                     ]
                 ]
             ],
-            'Article'           => [
+            'ArticleTest'       => [
                 'type'       => 'object',
                 'properties' => [
                     'type'          => 'Type',
@@ -62,27 +68,56 @@ class EntitiesTest extends TestCase
                 ]
             ]
         ];
-        $this->entities   = new Entities($gen);
+        $gen->objectProps   = [
+            'type'          => 'Type',
+            'id'            => 'ID',
+            'attributes'    => 'ArticleAttributes',
+            'relationships' => [
+                'type' => 'TagRelationships[] | TopicRelationships',
+            ]
+        ];
+        $this->entities     = new Entities($gen);
+        $this->middleware   = new Middleware($gen);
     }
 
     /**
      * @test
      */
-    public function it_creates_entity()
+    public function it_creates_middleware_and_entity()
     {
-        $this->entities->createEntity('./tests/_output/', 'Test');
-        $this->assertTrue(file_exists(self::DIR_OUTPUT. 'ArticleTest.php'));
+        // create Middleware for further entities to run
+        $this->middleware->createEntity('./tests/_output/', 'Middleware');
+        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTestMiddleware.php'));
+        require_once __DIR__ . '/../../_output/ArticleTestMiddleware.php';
+        $articleMiddleware = new ArticleTestMiddleware();
+        $this->assertNull($articleMiddleware->id);
+        $this->assertNull($articleMiddleware->title);
+        $this->assertTrue($articleMiddleware->authorize());
+        $this->assertArraySubset([
+            'title' => 'required|string|min:16|max:256|',
+        ], $articleMiddleware->rules());
+        $this->assertArraySubset(
+            [
+                'tag',
+                'topic',
+            ], $articleMiddleware->relations());
+
+        $this->entities->createEntity('./tests/_output/');
+        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTest.php'));
         // check props
         require_once __DIR__ . '/../../_output/ArticleTest.php';
         $article = new Article();
         $this->assertFalse($article->incrementing);
         $this->assertFalse($article->timestamps);
-        $extArticle = new class extends Article {
-            public function getPrimaryKey() {
+        $extArticle = new class extends Article
+        {
+            public function getPrimaryKey()
+            {
                 return $this->primaryKey;
             }
 
-            public function getTable() {
+            public function getTable()
+            {
                 return $this->table;
             }
         };

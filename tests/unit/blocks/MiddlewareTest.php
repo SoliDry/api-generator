@@ -7,10 +7,7 @@ use rjapi\blocks\FormRequestModel;
 use rjapi\blocks\Middleware;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;
-use rjapi\types\DirsInterface;
-use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class EntitiesTest
