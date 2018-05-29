@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1527537744">
-  <project timestamp="1527537744">
+<coverage generated="1527575014">
+  <project timestamp="1527575014">
     <package name="rjapi">
       <file name="/srv/raml-json-api/src/RJApiGenerator.php">
         <class name="rjapi\RJApiGenerator" namespace="rjapi">
@@ -2582,10 +2582,10 @@
         <class name="rjapi\helpers\ConfigHelper" namespace="rjapi\helpers">
           <metrics complexity="8" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="11" elements="16" coveredelements="14"/>
         </class>
-        <line num="19" type="method" name="getConfigKey" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="21" type="stmt" count="2"/>
-        <line num="22" type="stmt" count="2"/>
-        <line num="24" type="stmt" count="2"/>
+        <line num="19" type="method" name="getConfigKey" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="21" type="stmt" count="3"/>
+        <line num="22" type="stmt" count="3"/>
+        <line num="24" type="stmt" count="3"/>
         <line num="27" type="method" name="getModuleName" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="29" type="stmt" count="1"/>
         <line num="32" type="method" name="getQueryParam" visibility="public" complexity="3" crap="3.14" count="2"/>
@@ -2593,11 +2593,11 @@
         <line num="35" type="stmt" count="2"/>
         <line num="37" type="stmt" count="2"/>
         <line num="40" type="stmt" count="0"/>
-        <line num="43" type="method" name="getNestedParam" visibility="public" complexity="3" crap="3" count="1"/>
-        <line num="45" type="stmt" count="1"/>
+        <line num="43" type="method" name="getNestedParam" visibility="public" complexity="3" crap="3" count="2"/>
+        <line num="45" type="stmt" count="2"/>
         <line num="46" type="stmt" count="1"/>
-        <line num="48" type="stmt" count="1"/>
-        <line num="50" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="2"/>
+        <line num="50" type="stmt" count="2"/>
         <metrics loc="51" ncloc="51" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="11" elements="16" coveredelements="14"/>
       </file>
       <file name="/srv/raml-json-api/src/helpers/ConfigOptions.php">
@@ -2789,32 +2789,28 @@
       </file>
       <file name="/srv/raml-json-api/src/helpers/Jwt.php">
         <class name="rjapi\helpers\Jwt" namespace="rjapi\helpers">
-          <metrics complexity="3" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="0" elements="23" coveredelements="0"/>
+          <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
         </class>
-        <line num="22" type="method" name="create" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="23" type="stmt" count="0"/>
-        <line num="24" type="stmt" count="0"/>
-        <line num="26" type="stmt" count="0"/>
-        <line num="27" type="stmt" count="0"/>
-        <line num="28" type="stmt" count="0"/>
-        <line num="29" type="stmt" count="0"/>
-        <line num="30" type="stmt" count="0"/>
-        <line num="31" type="stmt" count="0"/>
-        <line num="32" type="stmt" count="0"/>
-        <line num="33" type="stmt" count="0"/>
-        <line num="34" type="stmt" count="0"/>
-        <line num="35" type="stmt" count="0"/>
-        <line num="44" type="method" name="verify" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="45" type="stmt" count="0"/>
-        <line num="46" type="stmt" count="0"/>
-        <line num="47" type="stmt" count="0"/>
-        <line num="48" type="stmt" count="0"/>
-        <line num="49" type="stmt" count="0"/>
-        <line num="50" type="stmt" count="0"/>
-        <line num="51" type="stmt" count="0"/>
-        <line num="52" type="stmt" count="0"/>
-        <line num="53" type="stmt" count="0"/>
-        <metrics loc="53" ncloc="21" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="0" elements="23" coveredelements="0"/>
+        <line num="22" type="method" name="create" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="24" type="stmt" count="1"/>
+        <line num="26" type="stmt" count="1"/>
+        <line num="27" type="stmt" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="30" type="stmt" count="1"/>
+        <line num="31" type="stmt" count="1"/>
+        <line num="32" type="stmt" count="1"/>
+        <line num="33" type="stmt" count="1"/>
+        <line num="34" type="stmt" count="1"/>
+        <line num="44" type="method" name="verify" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="47" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="52" type="stmt" count="1"/>
+        <metrics loc="53" ncloc="21" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
       </file>
       <file name="/srv/raml-json-api/src/helpers/MethodOptions.php">
         <class name="rjapi\helpers\MethodOptions" namespace="rjapi\helpers">
@@ -2849,15 +2845,13 @@
       </file>
       <file name="/srv/raml-json-api/src/helpers/Metrics.php">
         <class name="rjapi\helpers\Metrics" namespace="rjapi\helpers">
-          <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
         </class>
-        <line num="8" type="method" name="millitime" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="9" type="stmt" count="0"/>
-        <line num="10" type="stmt" count="0"/>
-        <line num="11" type="stmt" count="0"/>
-        <line num="15" type="stmt" count="0"/>
-        <line num="16" type="stmt" count="0"/>
-        <metrics loc="16" ncloc="12" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+        <line num="8" type="method" name="millitime" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="10" type="stmt" count="1"/>
+        <line num="11" type="stmt" count="1"/>
+        <line num="15" type="stmt" count="1"/>
+        <metrics loc="16" ncloc="12" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
       </file>
       <file name="/srv/raml-json-api/src/helpers/MigrationsHelper.php">
         <class name="rjapi\helpers\MigrationsHelper" namespace="rjapi\helpers">
@@ -2999,6 +2993,6 @@
     <file name="/srv/raml-json-api/src/types/RoutesInterface.php">
       <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <metrics files="71" loc="6671" ncloc="5006" classes="46" methods="343" coveredmethods="101" conditionals="0" coveredconditionals="0" statements="2269" coveredstatements="562" elements="2612" coveredelements="663"/>
+    <metrics files="71" loc="6671" ncloc="5006" classes="46" methods="343" coveredmethods="104" conditionals="0" coveredconditionals="0" statements="2263" coveredstatements="582" elements="2606" coveredelements="686"/>
   </project>
 </coverage>
