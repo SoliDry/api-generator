@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1527575014">
-  <project timestamp="1527575014">
+<coverage generated="1527710875">
+  <project timestamp="1527710875">
     <package name="rjapi">
       <file name="/srv/raml-json-api/src/RJApiGenerator.php">
         <class name="rjapi\RJApiGenerator" namespace="rjapi">
@@ -1717,23 +1717,21 @@
         <metrics loc="268" ncloc="208" classes="1" methods="14" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="127" coveredstatements="0" elements="141" coveredelements="0"/>
       </file>
     </package>
-    <package name="rjapi\exception">
+    <package name="rjapi\exceptions">
       <file name="/srv/raml-json-api/src/exceptions/AttributesException.php">
-        <class name="rjapi\exception\AttributesException" namespace="rjapi\exception">
+        <class name="rjapi\exceptions\AttributesException" namespace="rjapi\exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
       <file name="/srv/raml-json-api/src/exceptions/BaseException.php">
-        <class name="rjapi\exception\BaseException" namespace="rjapi\exception">
-          <metrics complexity="2" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="0" elements="14" coveredelements="0"/>
+        <class name="rjapi\exceptions\BaseException" namespace="rjapi\exceptions">
+          <metrics complexity="2" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="2" elements="11" coveredelements="3"/>
         </class>
-        <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="10" type="stmt" count="0"/>
-        <line num="11" type="stmt" count="0"/>
-        <line num="12" type="stmt" count="0"/>
+        <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="11" type="stmt" count="1"/>
+        <line num="12" type="stmt" count="1"/>
         <line num="14" type="method" name="__toString" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="15" type="stmt" count="0"/>
         <line num="16" type="stmt" count="0"/>
         <line num="17" type="stmt" count="0"/>
         <line num="18" type="stmt" count="0"/>
@@ -1741,29 +1739,28 @@
         <line num="20" type="stmt" count="0"/>
         <line num="21" type="stmt" count="0"/>
         <line num="22" type="stmt" count="0"/>
-        <line num="23" type="stmt" count="0"/>
-        <metrics loc="23" ncloc="23" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="0" elements="14" coveredelements="0"/>
+        <metrics loc="23" ncloc="23" classes="1" methods="2" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="2" elements="11" coveredelements="3"/>
       </file>
       <file name="/srv/raml-json-api/src/exceptions/DirectoryException.php">
-        <class name="rjapi\exception\DirectoryException" namespace="rjapi\exception">
+        <class name="rjapi\exceptions\DirectoryException" namespace="rjapi\exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
       <file name="/srv/raml-json-api/src/exceptions/MethodNotFoundException.php">
-        <class name="rjapi\exception\MethodNotFoundException" namespace="rjapi\exception">
+        <class name="rjapi\exceptions\MethodNotFoundException" namespace="rjapi\exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
       <file name="/srv/raml-json-api/src/exceptions/ModelException.php">
-        <class name="rjapi\exception\ModelException" namespace="rjapi\exception">
+        <class name="rjapi\exceptions\ModelException" namespace="rjapi\exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
       <file name="/srv/raml-json-api/src/exceptions/SchemaException.php">
-        <class name="rjapi\exception\SchemaException" namespace="rjapi\exception">
+        <class name="rjapi\exceptions\SchemaException" namespace="rjapi\exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -2119,34 +2116,24 @@
       </file>
       <file name="/srv/raml-json-api/src/extension/BitMask.php">
         <class name="rjapi\extension\BitMask" namespace="rjapi\extension">
-          <metrics complexity="8" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="0" elements="25" coveredelements="0"/>
+          <metrics complexity="8" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="15" coveredelements="15"/>
         </class>
-        <line num="18" type="method" name="__construct" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="19" type="stmt" count="0"/>
-        <line num="20" type="stmt" count="0"/>
-        <line num="21" type="stmt" count="0"/>
-        <line num="22" type="stmt" count="0"/>
-        <line num="23" type="stmt" count="0"/>
-        <line num="28" type="method" name="isEnabled" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="29" type="stmt" count="0"/>
-        <line num="30" type="stmt" count="0"/>
-        <line num="31" type="stmt" count="0"/>
-        <line num="36" type="method" name="getField" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="37" type="stmt" count="0"/>
-        <line num="38" type="stmt" count="0"/>
-        <line num="39" type="stmt" count="0"/>
-        <line num="41" type="method" name="getFlags" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="42" type="stmt" count="0"/>
-        <line num="43" type="stmt" count="0"/>
-        <line num="44" type="stmt" count="0"/>
-        <line num="45" type="stmt" count="0"/>
-        <line num="46" type="stmt" count="0"/>
-        <line num="47" type="stmt" count="0"/>
-        <line num="49" type="method" name="isHidden" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="50" type="stmt" count="0"/>
-        <line num="51" type="stmt" count="0"/>
-        <line num="52" type="stmt" count="0"/>
-        <metrics loc="52" ncloc="41" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="0" elements="25" coveredelements="0"/>
+        <line num="17" type="method" name="__construct" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="19" type="stmt" count="1"/>
+        <line num="20" type="stmt" count="1"/>
+        <line num="21" type="stmt" count="1"/>
+        <line num="22" type="stmt" count="1"/>
+        <line num="27" type="method" name="isEnabled" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="29" type="stmt" count="1"/>
+        <line num="35" type="method" name="getField" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="37" type="stmt" count="1"/>
+        <line num="44" type="method" name="getFlags" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="47" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="52" type="method" name="isHidden" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="54" type="stmt" count="1"/>
+        <metrics loc="55" ncloc="41" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="15" coveredelements="15"/>
       </file>
       <file name="/srv/raml-json-api/src/extension/BitMaskTrait.php">
         <class name="BitMaskTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
@@ -2697,14 +2684,14 @@
       </file>
       <file name="/srv/raml-json-api/src/helpers/Json.php">
         <class name="rjapi\helpers\Json" namespace="rjapi\helpers">
-          <metrics complexity="35" methods="13" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="73" coveredstatements="8" elements="86" coveredelements="8"/>
+          <metrics complexity="35" methods="13" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="73" coveredstatements="18" elements="86" coveredelements="22"/>
         </class>
-        <line num="26" type="method" name="getAttributes" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="28" type="stmt" count="0"/>
-        <line num="36" type="method" name="getRelationships" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="38" type="stmt" count="0"/>
-        <line num="46" type="method" name="getData" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="48" type="stmt" count="0"/>
+        <line num="26" type="method" name="getAttributes" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="28" type="stmt" count="1"/>
+        <line num="36" type="method" name="getRelationships" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="38" type="stmt" count="1"/>
+        <line num="46" type="method" name="getData" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="48" type="stmt" count="1"/>
         <line num="56" type="method" name="getRelations" visibility="public" complexity="5" crap="30" count="0"/>
         <line num="58" type="stmt" count="0"/>
         <line num="59" type="stmt" count="0"/>
@@ -2717,15 +2704,15 @@
         <line num="69" type="stmt" count="0"/>
         <line num="70" type="stmt" count="0"/>
         <line num="76" type="stmt" count="0"/>
-        <line num="85" type="method" name="outputErrors" visibility="public" complexity="3" crap="12" count="0"/>
-        <line num="87" type="stmt" count="0"/>
-        <line num="88" type="stmt" count="0"/>
-        <line num="89" type="stmt" count="0"/>
-        <line num="92" type="stmt" count="0"/>
-        <line num="93" type="stmt" count="0"/>
+        <line num="85" type="method" name="outputErrors" visibility="public" complexity="3" crap="3.14" count="1"/>
+        <line num="87" type="stmt" count="1"/>
+        <line num="88" type="stmt" count="1"/>
+        <line num="89" type="stmt" count="1"/>
+        <line num="92" type="stmt" count="1"/>
+        <line num="93" type="stmt" count="1"/>
         <line num="94" type="stmt" count="0"/>
         <line num="95" type="stmt" count="0"/>
-        <line num="97" type="stmt" count="0"/>
+        <line num="97" type="stmt" count="1"/>
         <line num="104" type="method" name="outputSerializedRelations" visibility="public" complexity="1" crap="2" count="0"/>
         <line num="106" type="stmt" count="0"/>
         <line num="107" type="stmt" count="0"/>
@@ -2760,8 +2747,8 @@
         <line num="167" type="stmt" count="0"/>
         <line num="168" type="stmt" count="0"/>
         <line num="169" type="stmt" count="0"/>
-        <line num="177" type="method" name="encode" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="179" type="stmt" count="0"/>
+        <line num="177" type="method" name="encode" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="179" type="stmt" count="1"/>
         <line num="186" type="method" name="decode" visibility="public" complexity="1" crap="2" count="0"/>
         <line num="188" type="stmt" count="0"/>
         <line num="196" type="method" name="getSelectedData" visibility="private" complexity="3" crap="12" count="0"/>
@@ -2785,7 +2772,7 @@
         <line num="237" type="stmt" count="0"/>
         <line num="238" type="stmt" count="0"/>
         <line num="241" type="stmt" count="0"/>
-        <metrics loc="241" ncloc="164" classes="1" methods="13" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="73" coveredstatements="8" elements="86" coveredelements="8"/>
+        <metrics loc="241" ncloc="164" classes="1" methods="13" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="73" coveredstatements="18" elements="86" coveredelements="22"/>
       </file>
       <file name="/srv/raml-json-api/src/helpers/Jwt.php">
         <class name="rjapi\helpers\Jwt" namespace="rjapi\helpers">
@@ -2993,6 +2980,6 @@
     <file name="/srv/raml-json-api/src/types/RoutesInterface.php">
       <metrics loc="14" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <metrics files="71" loc="6671" ncloc="5006" classes="46" methods="343" coveredmethods="104" conditionals="0" coveredconditionals="0" statements="2263" coveredstatements="582" elements="2606" coveredelements="686"/>
+    <metrics files="71" loc="6674" ncloc="5006" classes="46" methods="343" coveredmethods="114" conditionals="0" coveredconditionals="0" statements="2250" coveredstatements="604" elements="2593" coveredelements="718"/>
   </project>
 </coverage>

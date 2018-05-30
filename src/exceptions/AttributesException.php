@@ -1,5 +1,5 @@
 <?php
-namespace rjapi\exception;
+namespace rjapi\exceptions;
 
 class AttributesException extends BaseException
 {

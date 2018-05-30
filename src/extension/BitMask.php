@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\extension;
 
-use rjapi\exception\AttributesException;
+use rjapi\exceptions\AttributesException;
 use rjapi\types\ConfigInterface;
 
 class BitMask
@@ -12,10 +12,9 @@ class BitMask
 
     /**
      * SpellCheck constructor.
-     * @param string $entity
      * @param array $params
      */
-    public function __construct(string $entity, array $params)
+    public function __construct(array $params)
     {
         $this->entity    = $params;
         $this->field     = key($this->entity);
@@ -38,6 +37,10 @@ class BitMask
         return $this->field;
     }
 
+    /**
+     * @return mixed
+     * @throws AttributesException
+     */
     public function getFlags()
     {
         if(empty($this->entity[$this->field][ConfigInterface::FLAGS])) {

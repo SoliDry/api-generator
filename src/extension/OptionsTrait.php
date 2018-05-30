@@ -106,7 +106,7 @@ trait OptionsTrait
             $bitMaskParams = ConfigHelper::getNestedParam(ConfigInterface::BIT_MASK, MigrationsHelper::getTableName($this->entity));
             if ($bitMaskParams !== null) {
                 $this->configOptions->setBitMask(true);
-                $this->bitMask = new BitMask($this->entity, $bitMaskParams);
+                $this->bitMask = new BitMask($bitMaskParams);
             }
         }
     }

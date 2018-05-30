@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapi\exception;
+namespace rjapi\exceptions;
 
 class ModelException extends BaseException
 {
