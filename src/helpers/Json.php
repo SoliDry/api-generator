@@ -49,23 +49,23 @@ class Json
     }
 
     /**
-     * @param $relation      \Illuminate\Database\Eloquent\Collection | Model
+     * @param $relations      \Illuminate\Database\Eloquent\Collection
      * @param string $entity
      * @return array JSON API rels compatible array
      */
-    public static function getRelations($relation, string $entity)
+    public static function getRelations($relations, string $entity) : array
     {
         $jsonArr = [];
-        if ($relation instanceof \Illuminate\Database\Eloquent\Collection) {
-            $cnt = count($relation);
+        if ($relations instanceof \Illuminate\Database\Eloquent\Collection) {
+            $cnt = count($relations);
             if ($cnt > 1) {
-                foreach ($relation as $v) {
+                foreach ($relations as $v) {
                     $attrs     = $v->getAttributes();
                     $jsonArr[] = [RamlInterface::RAML_TYPE => $entity,
                                   RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
                 }
             } else {
-                foreach ($relation as $v) {
+                foreach ($relations as $v) {
                     $attrs   = $v->getAttributes();
                     $jsonArr = [RamlInterface::RAML_TYPE => $entity,
                                 RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];

@@ -9,7 +9,9 @@ use Modules\V2\Http\Middleware\ArticleMiddleware;
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
+use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Json;
+use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
 
 /**
@@ -26,7 +28,7 @@ class JsonTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->baseModel = new Article();
+        $this->baseModel       = new Article();
         $this->baseFormRequest = new ArticleMiddleware();
     }
 
@@ -44,7 +46,107 @@ class JsonTest extends TestCase
      */
     public function it_gets_resource_item()
     {
-        $resource = Json::getResource($this->baseFormRequest, $this->baseModel, Article::class, false);
+        $resource = Json::getResource($this->baseFormRequest, $this->baseModel, Article::class);
         $this->assertInstanceOf(Item::class, $resource);
     }
+
+    /**
+     * @test
+     */
+    public function it_gets_attributes()
+    {
+        $attrsData = Json::getAttributes([
+            RamlInterface::RAML_DATA => [
+                RamlInterface::RAML_ATTRS => [
+                    'title'       => 'Foo Bar Baz',
+                    'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
+                ]
+            ]
+        ]);
+        $this->assertArraySubset([
+            'title'       => 'Foo Bar Baz',
+            'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
+        ], $attrsData);
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_data()
+    {
+        $data = Json::getData([
+            RamlInterface::RAML_DATA => [
+                RamlInterface::RAML_ATTRS => [
+                    'title'       => 'Foo Bar Baz',
+                    'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
+                ]
+            ]
+        ]);
+        $this->assertArraySubset([
+            RamlInterface::RAML_ATTRS => [
+                'title'       => 'Foo Bar Baz',
+                'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
+            ]
+        ], $data);
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_relationships()
+    {
+        $relations = Json::getRelationships([
+            RamlInterface::RAML_DATA => [
+                RamlInterface::RAML_RELATIONSHIPS => [
+                    'type' => 'TagRelationships[]'
+                ]
+            ]
+        ]);
+        $this->assertArraySubset([
+            'type' => 'TagRelationships[]'
+        ], $relations);
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_json_error()
+    {
+        $encodedJson = Json::outputErrors(
+            [
+                [
+                    JSONApiInterface::ERROR_TITLE  => 'JSON API support disabled',
+                    JSONApiInterface::ERROR_DETAIL => 'JSON API method myMethod'
+                        .
+                        ' was called. You can`t call this method while JSON API support is disabled.',
+                ],
+            ], true
+        );
+        $this->assertArraySubset(['errors' => [
+            [
+                JSONApiInterface::ERROR_TITLE  => 'JSON API support disabled',
+                JSONApiInterface::ERROR_DETAIL => 'JSON API method myMethod'
+                    .
+                    ' was called. You can`t call this method while JSON API support is disabled.',
+            ]]],
+            json_decode($encodedJson, true)
+        );
+    }
+
+//    /**
+//     * @test
+//     */
+//    public function it_gets_relations()
+//    {
+//        $collection = new Collection();
+////        $items = new class extends \ArrayAccessible {
+////
+////        };
+////        $items->offsetSet(0, 'title')
+//        $collection->add([
+//            'title' => 'Foo Bar Baz'
+//        ]);
+//        $rels = Json::getRelations($collection, 'article');
+//        print_r($rels);
+//    }
 }
