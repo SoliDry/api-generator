@@ -3,7 +3,7 @@
 namespace rjapi\blocks;
 
 use Illuminate\Console\Command;
-use rjapi\exception\DirectoryException;
+use rjapi\exceptions\DirectoryException;
 use rjapi\helpers\ConfigHelper;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;

@@ -7,7 +7,6 @@ use Lcobucci\JWT\Token;
 use rjapi\helpers\Jwt;
 use rjapitest\unit\TestCase;
 
-
 class JwtTest extends TestCase
 {
     public function setUp()

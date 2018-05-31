@@ -8,8 +8,10 @@ use rjapi\blocks\FormRequestModel;
 use rjapi\blocks\Middleware;
 use rjapi\RJApiGenerator;
 use rjapi\types\DirsInterface;
+use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
 use rjapi\blocks\Entities;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class EntitiesTest

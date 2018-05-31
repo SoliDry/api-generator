@@ -156,7 +156,7 @@ class BaseCommand extends Command
     }
 
     /**
-     * @throws \rjapi\exception\DirectoryException
+     * @throws \rjapi\exceptions\DirectoryException
      */
     public function createDirs()
     {
@@ -241,7 +241,7 @@ class BaseCommand extends Command
     }
 
     /**
-     * @throws \rjapi\exception\DirectoryException
+     * @throws \rjapi\exceptions\DirectoryException
      */
     private function setGenHistory()
     {

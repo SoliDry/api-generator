@@ -9,7 +9,9 @@ use rjapi\extension\ApiController;
 use rjapi\RJApiGenerator;
 use rjapi\types\ControllersInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 class ControllersTest extends TestCase
 {
@@ -25,41 +27,8 @@ class ControllersTest extends TestCase
         $gen->modulesDir     = DirsInterface::MODULES_DIR;
         $gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $gen->httpDir        = DirsInterface::HTTP_DIR;
-        $gen->types          = [
-            'SID'               => [
-                'type'      => 'string',
-                'required'  => true,
-                'maxLength' => 128,
-            ],
-            'ArticleAttributes' => [
-                'description' => 'Article attributes description',
-                'type'        => 'object',
-                'properties'  => [
-                    'title' => [
-                        'required'  => true,
-                        'type'      => 'string',
-                        'minLength' => 16,
-                        'maxLength' => 256,
-                        'facets'    => [
-                            'index' => [
-                                'idx_title' => 'index'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'Article'           => [
-                'type'       => 'object',
-                'properties' => [
-                    'type'          => 'Type',
-                    'id'            => 'SID',
-                    'attributes'    => 'ArticleAttributes',
-                    'relationships' => [
-                        'type' => 'TagRelationships[] | TopicRelationships',
-                    ]
-                ]
-            ]
-        ];
+        $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
+        $gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
         $this->controller    = new Controllers($gen);
     }
 

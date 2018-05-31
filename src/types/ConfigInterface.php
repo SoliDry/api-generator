@@ -41,6 +41,7 @@ interface ConfigInterface
     public const CACHE_METHOD         = 'setCacheOptions';
     public const JWT_METHOD           = 'setJwtOptions';
 
+    // todo: make this prop set via config for tests to run normally
     public const DEFAULT_ACTIVATE = 30;
     public const DEFAULT_EXPIRES  = 3600;
 
