@@ -2,8 +2,10 @@
 
 namespace rjapitest\unit\helpers;
 
+use Illuminate\Support\Facades\Request;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
+use rjapi\extension\BaseJwt;
 use rjapi\helpers\Jwt;
 use rjapitest\unit\TestCase;
 
@@ -34,9 +36,26 @@ class JwtTest extends TestCase
      * @test
      * @depends it_creates_jwt_token
      * @param array $data
+     * @return array
      */
-    public function it_verifies_jwt_token(array $data)
+    public function it_verifies_jwt_token(array $data) : array
     {
         $this->assertTrue(Jwt::verify($data[0], $data[1]));
+        return $data;
+    }
+
+    /**
+     * @test
+     * @depends it_verifies_jwt_token
+     * @param array $data
+     */
+    public function it_handles_jwt(array $data)
+    {
+        $baseJwt      = new BaseJwt();
+        $request      = new Request();
+        $request->jwt = $data[0];
+        $baseJwt->handle($request, function ($request) {
+            $this->assertInstanceOf(Request::class, $request);
+        });
     }
 }

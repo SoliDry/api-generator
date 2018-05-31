@@ -1,7 +1,7 @@
 # raml-json-api [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20RAML%20&url=https://github.com/RJAPI/raml-json-api&hashtags=api,raml,json-api,laravel,developers)
 [![Build Status](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
-[![Code Coverage](https://img.shields.io/badge/coverage-%2076%20%25%20-green.svg)](https://img.shields.io/badge/coverage-%2076%20%25%20-green.svg)
+[![codecov](https://codecov.io/gh/RJAPI/raml-json-api/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ![alt RAML logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/raml_logo.png)
