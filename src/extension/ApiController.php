@@ -84,7 +84,7 @@ class ApiController extends Controller
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     public function index(Request $request)
     {
@@ -112,7 +112,7 @@ class ApiController extends Controller
      *
      * @param Request $request
      * @param int|string $id
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     public function view(Request $request, $id)
     {
@@ -143,7 +143,7 @@ class ApiController extends Controller
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     public function create(Request $request)
     {
@@ -188,7 +188,7 @@ class ApiController extends Controller
      *
      * @param Request $request
      * @param int|string $id
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     public function update(Request $request, $id)
     {
@@ -220,7 +220,7 @@ class ApiController extends Controller
      * Process model update
      * @param $model
      * @param array $jsonApiAttributes
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     private function processUpdate($model, array $jsonApiAttributes)
     {

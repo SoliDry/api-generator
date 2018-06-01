@@ -15,7 +15,7 @@ trait FsmTrait
 {
     /**
      * @param array $jsonProps JSON input properties
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     private function checkFsmCreate(array &$jsonProps)
     {
@@ -49,7 +49,7 @@ trait FsmTrait
      *
      * @param array $jsonProps
      * @param $model
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     private function checkFsmUpdate(array $jsonProps, $model)
     {

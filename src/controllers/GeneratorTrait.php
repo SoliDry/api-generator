@@ -7,7 +7,7 @@ use rjapi\blocks\Entities;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
-use rjapi\exception\DirectoryException;
+use rjapi\exceptions\DirectoryException;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;

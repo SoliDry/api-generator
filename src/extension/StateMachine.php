@@ -1,7 +1,7 @@
 <?php
 namespace rjapi\extension;
 
-use rjapi\exception\AttributesException;
+use rjapi\exceptions\AttributesException;
 use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\ConfigInterface;
