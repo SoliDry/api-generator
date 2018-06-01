@@ -5,7 +5,7 @@ namespace rjapi\transformers;
 use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\TransformerAbstract;
 use rjapi\blocks\EntitiesTrait;
-use rjapi\exception\ModelException;
+use rjapi\exceptions\ModelException;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\helpers\ConfigHelper;

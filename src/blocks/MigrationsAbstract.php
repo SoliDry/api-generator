@@ -2,7 +2,7 @@
 
 namespace rjapi\blocks;
 
-use rjapi\exception\AttributesException;
+use rjapi\exceptions\AttributesException;
 use rjapi\helpers\Console;
 use rjapi\RJApiGenerator;
 use rjapi\types\ModelsInterface;

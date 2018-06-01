@@ -13,7 +13,7 @@ trait BitMaskTrait
     /**
      * @param Collection $data
      * @return Collection
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setFlagsIndex(Collection $data)
     {
@@ -34,7 +34,7 @@ trait BitMaskTrait
     /**
      * @param BaseModel $data
      * @return BaseModel
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setFlagsView(BaseModel $data)
     {
@@ -52,7 +52,7 @@ trait BitMaskTrait
     /**
      * Creates bit mask based on bit flags and unset those flags to save via model
      * @param array $jsonProps
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setMaskCreate(array $jsonProps)
     {
@@ -72,7 +72,7 @@ trait BitMaskTrait
 
     /**
      * Sets flags on model to pass them through json api processing
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setFlagsCreate()
     {
@@ -92,7 +92,7 @@ trait BitMaskTrait
      * @param $model
      * @param array $jsonProps
      * @return mixed
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setMaskUpdate(&$model, array $jsonProps)
     {
@@ -113,7 +113,7 @@ trait BitMaskTrait
     /**
      * Sets flags on model to pass them through json api processing
      * @param $model
-     * @throws \rjapi\exception\AttributesException
+     * @throws \rjapi\exceptions\AttributesException
      */
     protected function setFlagsUpdate(&$model)
     {
