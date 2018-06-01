@@ -56,12 +56,7 @@ class SpellCheck
      */
     private function cleanText(string $text)
     {
-        $cleanText = str_replace(',', '', $text);
-        $cleanText = str_replace('.', '', $cleanText);
-        $cleanText = str_replace('-', '', $cleanText);
-        $cleanText = str_replace('- ', '', $cleanText);
-        $cleanText = str_replace(':', '', $cleanText);
-        return str_replace('"', '', $cleanText);
+        return str_replace([',', '.', '-', '- ', ':', '"'], '', $text);
     }
 
     /**
