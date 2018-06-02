@@ -1,11 +1,14 @@
 <?php
+
 namespace rjapitest\unit;
 
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
 
 abstract class TestCase extends TestCaseLaravel
 {
-    public const DIR_OUTPUT = './tests/_output/';
+    public const CONFIG_KEY  = 'v2';
+    public const MODULE_NAME = 'V2';
+    public const DIR_OUTPUT  = './tests/_output/';
 
     /**
      * The base URL to use while testing the application.

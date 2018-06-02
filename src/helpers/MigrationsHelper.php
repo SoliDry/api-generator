@@ -6,7 +6,7 @@ use rjapi\types\PhpInterface;
 
 class MigrationsHelper
 {
-    const PATTERN_SPLIT_UC = '/(?=[A-Z])/';
+    private const PATTERN_SPLIT_UC = '/(?=[A-Z])/';
 
     public static function getTableName(string $objectName)
     {

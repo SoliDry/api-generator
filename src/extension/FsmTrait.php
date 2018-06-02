@@ -17,7 +17,7 @@ trait FsmTrait
      * @param array $jsonProps JSON input properties
      * @throws \rjapi\exceptions\AttributesException
      */
-    private function checkFsmCreate(array &$jsonProps)
+    private function checkFsmCreate(array &$jsonProps) : void
     {
         $stateMachine = new StateMachine($this->entity);
         $stateField   = $stateMachine->getField();
@@ -51,7 +51,7 @@ trait FsmTrait
      * @param $model
      * @throws \rjapi\exceptions\AttributesException
      */
-    private function checkFsmUpdate(array $jsonProps, $model)
+    private function checkFsmUpdate(array $jsonProps, $model) : void
     {
         $stateMachine = new StateMachine($this->entity);
         $field        = $stateMachine->getField();

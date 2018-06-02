@@ -27,18 +27,12 @@ class StateMachine
     /**
      * @param string $field
      * @return bool
-     * @throws AttributesException
      */
-    public function isStatedField(string $field)
+    public function isStatedField(string $field) : bool
     {
-        if(empty($this->machine[$field]) === false
+        return empty($this->machine[$field]) === false
             && $this->machine[$field][ConfigInterface::ENABLED] === true
-            && empty($this->machine[$field][ConfigInterface::STATES]) === false
-        ) {
-            return true;
-        }
-
-        return false;
+            && empty($this->machine[$field][ConfigInterface::STATES]) === false;
     }
 
     /**
@@ -48,7 +42,7 @@ class StateMachine
      */
     public function isTransitive($from, $to): bool
     {
-        return $from === $to || in_array($to, $this->states[$from]);
+        return $from === $to || in_array($to, $this->states[$from], true);
     }
 
     public function isInitial($state): bool
@@ -69,7 +63,7 @@ class StateMachine
      * @param string $field
      * @throws AttributesException
      */
-    public function setStates(string $field)
+    public function setStates(string $field) : void
     {
         if(empty($this->machine[$field][ConfigInterface::STATES])) {
             throw new AttributesException('There should be "states" element filled in with FSM.');
@@ -81,7 +75,7 @@ class StateMachine
      * @param string $field
      * @throws AttributesException
      */
-    public function setInitial(string $field)
+    public function setInitial(string $field) : void
     {
         if(empty($this->machine[$field][ConfigInterface::STATES][ConfigInterface::INITIAL][0])) {
             throw new AttributesException('There should be an initial value for: "' . $field . '" field."');

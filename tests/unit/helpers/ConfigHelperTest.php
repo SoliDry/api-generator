@@ -2,6 +2,7 @@
 namespace rjapitest\unit\helpers;
 
 use rjapi\helpers\ConfigHelper;
+use rjapi\types\ConfigInterface;
 use rjapitest\unit\TestCase;
 
 /**
@@ -34,5 +35,31 @@ class ConfigHelperTest extends TestCase
         $paramSort = 'sort';
         $sortData = ConfigHelper::getQueryParam($paramSort);
         $this->assertEquals($sortData, $this->params[$paramSort]);
+        $this->assertNull(ConfigHelper::getQueryParam('foo'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_config_key()
+    {
+        $this->assertEquals(ConfigHelper::getConfigKey(), self::CONFIG_KEY);
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_module_name()
+    {
+        $this->assertEquals(ConfigHelper::getModuleName(), self::MODULE_NAME);
+    }
+
+    /**
+     * @test
+     */
+    public function it_gets_nested_param()
+    {
+        $this->assertTrue(ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ENABLED));
+        $this->assertTrue(ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ENABLED, true));
     }
 }

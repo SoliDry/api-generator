@@ -133,6 +133,19 @@ class JsonTest extends TestCase
         );
     }
 
+    /**
+     * @test
+     */
+    public function it_encodes_decodes_json()
+    {
+        $this->assertEquals('{"title":"Foo Bar Baz"}', Json::encode([
+            'title' => 'Foo Bar Baz'
+        ]));
+        $this->assertEquals([
+            'title' => 'Foo Bar Baz'
+        ], Json::decode('{"title":"Foo Bar Baz"}'));
+    }
+
 //    /**
 //     * @test
 //     */

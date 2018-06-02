@@ -1,10 +1,13 @@
 <?php
+
 namespace rjapitest\unit\blocks;
 
 use rjapi\blocks\Config;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConfigInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\JwtInterface;
+use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
 use Symfony\Component\Yaml\Yaml;
@@ -27,10 +30,10 @@ class ConfigTest extends TestCase
         $this->gen->modulesDir     = DirsInterface::MODULES_DIR;
         $this->gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $this->gen->httpDir        = DirsInterface::HTTP_DIR;
-        $this->gen->version        = 'V2';
+        $this->gen->version        = self::MODULE_NAME;
         $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $this->gen->types = $ramlData[RamlInterface::RAML_KEY_TYPES];
-        $this->gen->objectProps = [
+        $this->gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
+        $this->gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
             'attributes'    => 'ArticleAttributes',
@@ -38,7 +41,8 @@ class ConfigTest extends TestCase
                 'type' => 'TagRelationships[] | TopicRelationships',
             ]
         ];
-        $this->config           = new Config($this->gen);
+        $this->config              = new Config($this->gen);
+        $this->assertInstanceOf(ConfigInterface::class, $this->config);
     }
 
     /**
@@ -47,8 +51,29 @@ class ConfigTest extends TestCase
     public function it_creates_config()
     {
         $this->assertInstanceOf(ConfigInterface::class, $this->config);
-        // todo: mock ConfigInterface::DEFAULT_ACTIVATE for jwt to run without failing
         $this->config->create();
-        $this->assertTrue(file_exists($this->gen->formatConfigPath() . 'config.php'));
+        $confFile = $this->gen->formatConfigPath() . 'config.php';
+        $this->assertTrue(file_exists($confFile));
+        // mocking config for further usage
+        $arr = include $confFile;
+        // to get jwt not expired for verifying in JwtTest
+        $arr[JwtInterface::JWT][ConfigInterface::ACTIVATE] = 0;
+        // custom sql for CustomSqlTest
+        $arr['custom_sql'] = [
+            'article' => [
+                'enabled'  => true,
+                'query'    => 'SELECT id, title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
+                          WHERE ta.tag_id IN (
+                          SELECT id FROM tag WHERE CHAR_LENGTH(title) > :tag_len
+                          ) ORDER BY a.id DESC',
+                'bindings' => [
+                    'tag_len' => 5,
+                ]
+            ],
+        ];
+        $str               = PhpInterface::PHP_OPEN_TAG . PhpInterface::SPACE . 'return' . PhpInterface::SPACE . var_export($arr, true) . ';';
+        $fp                = fopen($confFile, 'r+');
+        fwrite($fp, $str);
+        fclose($fp);
     }
 }

@@ -23,7 +23,7 @@ class ControllersTest extends TestCase
         parent::setUp();
         $gen                 = new RJApiGenerator();
         $gen->objectName     = 'Article';
-        $gen->version        = 'v2';
+        $gen->version        = self::MODULE_NAME;
         $gen->modulesDir     = DirsInterface::MODULES_DIR;
         $gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $gen->httpDir        = DirsInterface::HTTP_DIR;
