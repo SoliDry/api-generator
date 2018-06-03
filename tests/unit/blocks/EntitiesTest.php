@@ -31,50 +31,18 @@ class EntitiesTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-//        $gen                = new RJApiGenerator();
+        /** @var RJApiGenerator $gen */
         $gen = $this->createMock(RJApiGenerator::class);
         $gen->method('formatEntitiesPath')->willReturn(self::DIR_OUTPUT);
-        $gen->objectName    = 'ArticleTest';
-        $gen->version       = 'v2';
-        $gen->modulesDir    = DirsInterface::MODULES_DIR;
-        $gen->entitiesDir   = DirsInterface::ENTITIES_DIR;
-        $gen->httpDir       = DirsInterface::HTTP_DIR;
-        $gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
-        $gen->types         = [
-            'SID'               => [
-                'type'      => 'string',
-                'required'  => true,
-                'maxLength' => 128,
-            ],
-            'ArticleAttributes' => [
-                'description' => 'Article attributes description',
-                'type'        => 'object',
-                'properties'  => [
-                    'title' => [
-                        'required'  => true,
-                        'type'      => 'string',
-                        'minLength' => 16,
-                        'maxLength' => 256,
-                        'facets'    => [
-                            'index' => [
-                                'idx_title' => 'index'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            'ArticleTest'       => [
-                'type'       => 'object',
-                'properties' => [
-                    'type'          => 'Type',
-                    'id'            => 'SID',
-                    'attributes'    => 'ArticleAttributes',
-                    'relationships' => [
-                        'type' => 'TagRelationships[] | TopicRelationships',
-                    ]
-                ]
-            ]
-        ];
+        $gen->objectName = 'Article';
+        $gen->version    = 'v2';
+        $gen->modulesDir = DirsInterface::MODULES_DIR;
+        $gen->httpDir = DirsInterface::HTTP_DIR;
+        // it is crucial to create entities/middleware in other namespace, not breaking original
+        $gen->entitiesDir   = 'TestEntities';
+        $gen->middlewareDir = 'TestMiddleware';
+        $ramlData           = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
+        $gen->types         = $ramlData[RamlInterface::RAML_KEY_TYPES];
         $gen->objectProps   = [
             'type'          => 'Type',
             'id'            => 'ID',
@@ -94,9 +62,8 @@ class EntitiesTest extends TestCase
     {
         // create Middleware for further entities to run
         $this->middleware->createEntity(self::DIR_OUTPUT, 'Middleware');
-        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTestMiddleware.php'));
-        require_once __DIR__ . '/../../_output/ArticleTestMiddleware.php';
-        $articleMiddleware = new ArticleTestMiddleware();
+        require_once __DIR__ . '/../../_output/ArticleMiddleware.php';
+        $articleMiddleware = new \Modules\V2\Http\Middleware\ArticleMiddleware();
         $this->assertNull($articleMiddleware->id);
         $this->assertNull($articleMiddleware->title);
         $this->assertTrue($articleMiddleware->authorize());
@@ -111,9 +78,9 @@ class EntitiesTest extends TestCase
 
         $this->entities->createEntity(self::DIR_OUTPUT);
         $this->entities->recreateEntity(self::DIR_OUTPUT);
-        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTest.php'));
+        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'Article.php'));
         // check props
-        require_once __DIR__ . '/../../_output/ArticleTest.php';
+        require_once __DIR__ . '/../../_output/Article.php';
         $article = new Article();
         $this->assertFalse($article->incrementing);
         $this->assertFalse($article->timestamps);
