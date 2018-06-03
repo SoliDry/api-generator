@@ -322,7 +322,7 @@ abstract class MigrationsAbstract
      */
     protected function createMigrationFile(string $migrationName): void
     {
-        $migrationMask = date(self::PATTERN_TIME, time()) . random_int(10, 99);
+        $migrationMask = date(self::PATTERN_TIME) . random_int(10, 99);
         $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
             $migrationName . PhpInterface::PHP_EXT;
 

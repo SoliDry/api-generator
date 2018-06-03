@@ -49,5 +49,29 @@ class ConfigOptionsTest extends TestCase
 
         $this->configOptions->setIsJwtAction(true);
         $this->assertTrue($this->configOptions->getIsJwtAction());
+
+        $this->configOptions->setStateMachine(true);
+        $this->assertTrue($this->configOptions->isStateMachine());
+
+        $this->configOptions->setSpellCheck(true);
+        $this->assertTrue($this->configOptions->isSpellCheck());
+
+        $this->configOptions->setBitMask(true);
+        $this->assertTrue($this->configOptions->isBitMask());
+
+        $this->configOptions->setIsCached(true);
+        $this->assertTrue($this->configOptions->isCached());
+
+        $this->configOptions->setIsXFetch(true);
+        $this->assertTrue($this->configOptions->isXFetch());
+
+        $this->configOptions->setCacheTtl(3600);
+        $this->assertEquals(3600, $this->configOptions->getCacheTtl());
+
+        $this->configOptions->setCacheBeta(1.1);
+        $this->assertEquals(1.1, $this->configOptions->getCacheBeta());
+
+        $this->configOptions->setCalledMethod('index');
+        $this->assertEquals('index', $this->configOptions->getCalledMethod());
     }
 }

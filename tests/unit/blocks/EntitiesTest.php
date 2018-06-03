@@ -88,7 +88,7 @@ class EntitiesTest extends TestCase
     public function it_creates_middleware_and_entity()
     {
         // create Middleware for further entities to run
-        $this->middleware->createEntity('./tests/_output/', 'Middleware');
+        $this->middleware->createEntity(self::DIR_OUTPUT, 'Middleware');
         $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTestMiddleware.php'));
         require_once __DIR__ . '/../../_output/ArticleTestMiddleware.php';
         $articleMiddleware = new ArticleTestMiddleware();

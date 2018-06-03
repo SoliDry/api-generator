@@ -150,7 +150,7 @@ class ConfigOptions
     /**
      * @return bool
      */
-    public function isStateMachine()
+    public function isStateMachine() : bool
     {
         return $this->isStateMachine;
     }
@@ -158,7 +158,7 @@ class ConfigOptions
     /**
      * @return boolean
      */
-    public function isSpellCheck()
+    public function isSpellCheck() : bool
     {
         return $this->spellCheck;
     }
@@ -166,29 +166,22 @@ class ConfigOptions
     /**
      * @param boolean $spellCheck
      */
-    public function setSpellCheck($spellCheck)
+    public function setSpellCheck($spellCheck) : void
     {
         $this->spellCheck = $spellCheck;
     }
 
-    public function setBitMask($isBitwise)
+    /**
+     * @param bool $isBitwise
+     */
+    public function setBitMask($isBitwise) : void
     {
         $this->isBitWise = $isBitwise;
     }
 
-    public function isBitMask()
+    public function isBitMask() : bool
     {
         return $this->isBitWise;
-    }
-
-    public function isBitMaskHidden()
-    {
-        return $this->hiddenBitMask;
-    }
-
-    public function setBitMaskHidden($isHidden)
-    {
-        $this->hiddenBitMask = $isHidden;
     }
 
     /**

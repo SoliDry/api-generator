@@ -15,7 +15,7 @@ class MethodOptions
     /**
      * @return string
      */
-    public function getModifier()
+    public function getModifier() : string
     {
         return $this->modifier;
     }
@@ -23,7 +23,7 @@ class MethodOptions
     /**
      * @param string $modifier
      */
-    public function setModifier($modifier)
+    public function setModifier($modifier) : void
     {
         $this->modifier = $modifier;
     }
@@ -31,7 +31,7 @@ class MethodOptions
     /**
      * @return string
      */
-    public function getName()
+    public function getName() : string
     {
         return $this->name;
     }
@@ -39,7 +39,7 @@ class MethodOptions
     /**
      * @param string $name
      */
-    public function setName($name)
+    public function setName($name) : void
     {
         $this->name = $name;
     }
@@ -47,7 +47,7 @@ class MethodOptions
     /**
      * @return string
      */
-    public function getReturnType()
+    public function getReturnType() : string
     {
         return $this->returnType;
     }
@@ -55,7 +55,7 @@ class MethodOptions
     /**
      * @param string $returnType
      */
-    public function setReturnType($returnType)
+    public function setReturnType($returnType) : void
     {
         $this->returnType = $returnType;
     }
@@ -63,7 +63,7 @@ class MethodOptions
     /**
      * @return boolean
      */
-    public function isStatic()
+    public function isStatic() : bool
     {
         return $this->isStatic;
     }
@@ -71,7 +71,7 @@ class MethodOptions
     /**
      * @param boolean $isStatic
      */
-    public function setIsStatic($isStatic)
+    public function setIsStatic($isStatic) : void
     {
         $this->isStatic = $isStatic;
     }
