@@ -12,9 +12,10 @@ spl_autoload_register(
     }
 );
 
-register_shutdown_function(function () {
-    $files = glob('./tests/_output/*Test*.php');
-    foreach ($files as $file) {
-        unlink($file);
-    }
-});
+//register_shutdown_function(function () {
+//    // tear down all php entities needed for test checks
+//    $files = glob('./tests/_output/*.php');
+//    foreach ($files as $file) {
+//        unlink($file);
+//    }
+//});

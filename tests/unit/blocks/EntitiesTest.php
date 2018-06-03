@@ -25,10 +25,15 @@ class EntitiesTest extends TestCase
     private $entities;
     private $middleware;
 
+    /**
+     * @throws \ReflectionException
+     */
     public function setUp()
     {
         parent::setUp();
-        $gen                = new RJApiGenerator();
+//        $gen                = new RJApiGenerator();
+        $gen = $this->createMock(RJApiGenerator::class);
+        $gen->method('formatEntitiesPath')->willReturn(self::DIR_OUTPUT);
         $gen->objectName    = 'ArticleTest';
         $gen->version       = 'v2';
         $gen->modulesDir    = DirsInterface::MODULES_DIR;
@@ -104,7 +109,8 @@ class EntitiesTest extends TestCase
                 'topic',
             ], $articleMiddleware->relations());
 
-        $this->entities->createEntity('./tests/_output/');
+        $this->entities->createEntity(self::DIR_OUTPUT);
+        $this->entities->recreateEntity(self::DIR_OUTPUT);
         $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleTest.php'));
         // check props
         require_once __DIR__ . '/../../_output/ArticleTest.php';
