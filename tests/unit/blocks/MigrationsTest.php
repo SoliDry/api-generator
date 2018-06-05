@@ -7,8 +7,10 @@ use rjapi\blocks\MigrationsAbstract;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\RamlInterface;
 use rjapitest\unit\TestCase;
 use rjapi\blocks\Migrations;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * Class MigrationsTest
@@ -35,30 +37,8 @@ class MigrationsTest extends TestCase
             ConsoleInterface::OPTION_MIGRATIONS => 1,
         ]);
         $this->gen->method('formatMigrationsPath')->willReturn(self::DIR_OUTPUT);
-        $this->gen->types         = [
-            'ID'                => [
-                'type'     => 'integer',
-                'required' => 'true',
-                'maximum'  => 20,
-            ],
-            'ArticleAttributes' => [
-                'description' => 'Article attributes description',
-                'type'        => 'object',
-                'properties'  => [
-                    'title' => [
-                        'required'  => true,
-                        'type'      => 'string',
-                        'minLength' => 16,
-                        'maxLength' => 256,
-                        'facets'    => [
-                            'index' => [
-                                'idx_title' => 'index'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
+        $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
+        $this->gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
         $this->gen->objectProps   = [
             'type'          => 'Type',
             'id'            => 'ID',

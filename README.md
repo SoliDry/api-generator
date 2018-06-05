@@ -125,46 +125,11 @@ Options:
 By default generated files preserved to prevent overwriting of added/modified content.   
 
 The output will look something like this:
-```
-Created : /srv/rjapi-laravel/Modules/V1/start.php
-Created : /srv/rjapi-laravel/Modules/V1/Http/routes.php
-Created : /srv/rjapi-laravel/Modules/V1/module.json
-Created : /srv/rjapi-laravel/Modules/V1/Resources/views/index.blade.php
-Created : /srv/rjapi-laravel/Modules/V1/Resources/views/layouts/master.blade.php
-Created : /srv/rjapi-laravel/Modules/V1/Config/config.php
-Created : /srv/rjapi-laravel/Modules/V1/composer.json
-Created : /srv/rjapi-laravel/Modules/V1/Database/Seeders/V1DatabaseSeeder.php
-Created : /srv/rjapi-laravel/Modules/V1/Providers/V1ServiceProvider.php
-Created : /srv/rjapi-laravel/Modules/V1/Http/Controllers/V1Controller.php
-Module [V1] created successfully.
-Module [V1] used successfully.
-```
-This is done (behind the scene) by wonderful package laravel-modules, 
-many thx to nWidart https://github.com/nWidart/laravel-modules 
+![Console output](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Console_generator_output.png)
 
-And RAML-types based generated files:
-```sh
-================ Tag Entities
-Modules/V1/Http/Controllers/DefaultController.php created
-Modules/V1/Http/Controllers/TagController.php created
-Modules/V1/Http/Middleware/TagMiddleware.php created
-Modules/V1/Entities/TagArticle.php created
-Modules/V1/Entities/Tag.php created
-Modules/V1/Http/routes.php created
-Modules/V1/Database/Migrations/11_01_2017_145028_create_tag_table.php created
-Modules/V1/Database/Migrations/11_01_2017_145011_create_tag_article_table.php created
-================ Article Entities
-Modules/V1/Http/Controllers/ArticleController.php created
-Modules/V1/Http/Middleware/ArticleMiddleware.php created
-Modules/V1/Entities/Article.php created
-Modules/V1/Database/Migrations/11_01_2017_145023_create_article_table.php created
-================ Topic Entities
-Modules/V1/Http/Controllers/TopicController.php created
-Modules/V1/Http/Middleware/TopicMiddleware.php created
-Modules/V1/Entities/Topic.php created
-Modules/V1/Database/Migrations/11_01_2017_145036_create_topic_table.php created
-...
-```
+After that u can see the following dirs and files module structure in your project:
+![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
+Weeee...
 
 ### RAML Types and Declarations
 
