@@ -30,7 +30,7 @@ class Routes
         $this->generator = $generator;
     }
 
-    public function create()
+    public function create() : void
     {
         $this->setRoutes();
         $isCreated = false;
@@ -53,7 +53,7 @@ class Routes
         }
     }
 
-    private function setRoutes()
+    private function setRoutes() : void
     {
         $this->setTag();
         $this->setComment(DefaultInterface::ROUTES_START, 0);
