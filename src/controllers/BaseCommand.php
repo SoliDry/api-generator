@@ -18,37 +18,37 @@ class BaseCommand extends Command
     use GeneratorTrait;
 
     // dirs
-    public $rootDir = '';
-    public $appDir = '';
-    public $modulesDir = '';
-    public $httpDir = '';
+    public $rootDir        = '';
+    public $appDir         = '';
+    public $modulesDir     = '';
+    public $httpDir        = '';
     public $controllersDir = '';
-    public $middlewareDir = '';
-    public $entitiesDir = '';
-    public $migrationsDir = '';
+    public $middlewareDir  = '';
+    public $entitiesDir    = '';
+    public $migrationsDir  = '';
 
-    public $version;
-    public $objectName = '';
-    public $defaultController = 'Default';
-    public $uriNamedParams = null;
-    public $ramlFile = '';
-    public $force = null;
-    public $customTypes = [
+    public  $version;
+    public  $objectName        = '';
+    public  $defaultController = 'Default';
+    public  $uriNamedParams    = null;
+    public  $ramlFile          = '';
+    public  $force             = null;
+    public  $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
-    public $types = [];
-    public $currentTypes = [];
-    public $historyTypes = [];
-    public $mergedTypes = [];
-    public $diffTypes = [];
-    public $frameWork = '';
-    public $objectProps = [];
-    public $generatedFiles = [];
-    public $relationships = [];
-    private $ramlFiles = [];
+    public  $types             = [];
+    public  $currentTypes      = [];
+    public  $historyTypes      = [];
+    public  $mergedTypes       = [];
+    public  $diffTypes         = [];
+    public  $frameWork         = '';
+    public  $objectProps       = [];
+    public  $generatedFiles    = [];
+    public  $relationships     = [];
+    private $ramlFiles         = [];
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
@@ -71,18 +71,22 @@ class BaseCommand extends Command
      */
     public function actionIndex(string $ramlFile)
     {
-        $this->ramlFiles[] = $ramlFile;
-        $data = Yaml::parse(file_get_contents($ramlFile));
-        $this->version = str_replace('/', '', $data['version']);
-        $this->appDir = DirsInterface::APPLICATION_DIR;
+        $this->ramlFiles[]    = $ramlFile;
+        $data                 = Yaml::parse(file_get_contents($ramlFile));
+        $this->version        = str_replace('/', '', $data['version']);
+        $this->appDir         = DirsInterface::APPLICATION_DIR;
         $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
-        $this->entitiesDir = DirsInterface::ENTITIES_DIR;
-        $this->modulesDir = DirsInterface::MODULES_DIR;
-        $this->httpDir = DirsInterface::HTTP_DIR;
-        $this->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
-        $this->migrationsDir = DirsInterface::MIGRATIONS_DIR;
+        $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
+        $this->modulesDir     = DirsInterface::MODULES_DIR;
+        $this->httpDir        = DirsInterface::HTTP_DIR;
+        $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
+        $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-        $this->options = $this->options();
+//        $this->options = $this->options();
+        $this->options = [
+            ConsoleInterface::OPTION_REGENERATE => 1,
+            ConsoleInterface::OPTION_MIGRATIONS => 1,
+        ];
         $this->setIncludedTypes($data);
         $this->runGenerator();
         $this->setGenHistory();
@@ -234,8 +238,8 @@ class BaseCommand extends Command
             $files = $data[RamlInterface::RAML_KEY_USES];
             foreach ($files as $file) {
                 $this->ramlFiles[] = $file;
-                $fileData = Yaml::parse(file_get_contents($file));
-                $this->types += $fileData[RamlInterface::RAML_KEY_TYPES];
+                $fileData          = Yaml::parse(file_get_contents($file));
+                $this->types       += $fileData[RamlInterface::RAML_KEY_TYPES];
             }
         }
     }
@@ -250,7 +254,7 @@ class BaseCommand extends Command
             FileManager::createPath($this->formatGenPath());
             foreach ($this->ramlFiles as $file) {
                 $pathInfo = pathinfo($file);
-                $dest = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
+                $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
                     . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
                 copy($file, $dest);
             }

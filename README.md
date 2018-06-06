@@ -129,7 +129,6 @@ The output will look something like this:
 
 After that u can see the following dirs and files module structure in your project:
 ![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
-Weeee...
 
 ### RAML Types and Declarations
 

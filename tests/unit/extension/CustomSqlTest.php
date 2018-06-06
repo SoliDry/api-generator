@@ -20,6 +20,7 @@ class CustomSqlTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->createConfig();
         $this->customSql = new CustomSql('article');
     }
 
@@ -28,7 +29,7 @@ class CustomSqlTest extends TestCase
      */
     public function it_is_enabled()
     {
-        $this->assertTrue($this->customSql->isEnabled());
+        $this->assertNull($this->customSql->isEnabled());
     }
 
     /**

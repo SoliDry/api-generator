@@ -15,6 +15,7 @@ class JwtTest extends TestCase
     {
         parent::setUp();
         $_SERVER['HTTP_HOST'] = 'example.com';
+        $this->createConfig();
     }
 
     /**
