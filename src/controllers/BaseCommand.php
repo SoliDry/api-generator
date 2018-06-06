@@ -82,11 +82,14 @@ class BaseCommand extends Command
         $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
-//        $this->options = $this->options();
-        $this->options = [
-            ConsoleInterface::OPTION_REGENERATE => 1,
-            ConsoleInterface::OPTION_MIGRATIONS => 1,
-        ];
+        if (env('APP_ENV') === 'dev') { // for test env based on .env
+            $this->options = [
+                ConsoleInterface::OPTION_REGENERATE => 1,
+                ConsoleInterface::OPTION_MIGRATIONS => 1,
+            ];
+        } else {
+            $this->options = $this->options();
+        }
         $this->setIncludedTypes($data);
         $this->runGenerator();
         $this->setGenHistory();

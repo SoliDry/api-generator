@@ -16,17 +16,9 @@ class BaseCommandTest extends TestCase
 {
     private $baseCommand;
 
-    /**
-     * @throws \ReflectionException
-     */
     public function setUp()
     {
         parent::setUp();
-        $command = $this->createMock(Command::class)->method('options')->willReturn([
-            ConsoleInterface::OPTION_REGENERATE => 1,
-            ConsoleInterface::OPTION_MIGRATIONS => 1,
-        ]);
-
         $this->baseCommand = new BaseCommand();
     }
 
