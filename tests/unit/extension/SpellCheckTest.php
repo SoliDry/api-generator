@@ -4,6 +4,7 @@ namespace rjapitest\unit\extensions;
 
 
 use rjapi\extension\SpellCheck;
+use rjapi\extension\SpellCheckTrait;
 use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\ConfigInterface;
@@ -18,10 +19,13 @@ use rjapitest\unit\TestCase;
  */
 class SpellCheckTest extends TestCase
 {
+    use SpellCheckTrait;
+
     private const ENTITY = 'article';
     private const DESCRIPTION = 'description';
 
     private $spellCheck;
+    private $entity;
 
     /**
      *
@@ -30,6 +34,7 @@ class SpellCheckTest extends TestCase
     {
         parent::setUp();
         $this->spellCheck = new SpellCheck(self::ENTITY);
+        $this->entity = 'article';
     }
 
     /**
@@ -63,5 +68,15 @@ class SpellCheckTest extends TestCase
     {
         $this->spellCheck = new SpellCheck(self::ENTITY);
         $this->assertEquals($this->spellCheck->getField(), self::DESCRIPTION);
+    }
+
+    /**
+     * @test
+     */
+    public function it_checks_spell_via_trait()
+    {
+        $this->assertArraySubset([], $this->spellCheck([
+            'description' => 'Standard text for testing'
+        ]));
     }
 }
