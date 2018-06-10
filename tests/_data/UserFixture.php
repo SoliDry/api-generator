@@ -26,6 +26,6 @@ class UserFixture
      */
     public static function delete($id) : void
     {
-        User::where('id', $id)->first(['*'])->delete();
+        User::destroy($id);
     }
 }

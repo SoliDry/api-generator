@@ -23,7 +23,7 @@ trait BitMaskTrait
                 $flags = $this->bitMask->getFlags();
                 $mask  = $v[$field];
                 foreach($flags as $flag => $fVal) {
-                    $v[$flag] = ($fVal & $mask) ? true : false;
+                    $v[$flag] = (bool)($fVal & $mask);
                 }
             }
             return $v;
@@ -81,7 +81,7 @@ trait BitMaskTrait
             $flags = $this->bitMask->getFlags();
             $mask  = $this->model->$field;
             foreach($flags as $flag => $fVal) {
-                $this->model->$flag = ($fVal & $mask) ? true : false;
+                $this->model->$flag = (bool)($fVal & $mask);
             }
         }
         return $this->model;
@@ -115,14 +115,14 @@ trait BitMaskTrait
      * @param $model
      * @throws \rjapi\exceptions\AttributesException
      */
-    protected function setFlagsUpdate(&$model)
+    protected function setFlagsUpdate(&$model) : void
     {
         $field = $this->bitMask->getField();
         if(isset($model[$field])) {
             $flags = $this->bitMask->getFlags();
             $mask  = $model[$field];
             foreach($flags as $flag => $fVal) {
-                $model[$flag] = ($fVal & $mask) ? true : false;
+                $model[$flag] = (bool)($fVal & $mask);
             }
         }
     }
