@@ -33,6 +33,6 @@ class ArticleFixture
      */
     public static function delete($id) : void
     {
-        Article::where('id', $id)->first(['*'])->delete();
+        Article::destroy($id);
     }
 }

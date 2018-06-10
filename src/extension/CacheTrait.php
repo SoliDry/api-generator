@@ -38,7 +38,7 @@ trait CacheTrait
      * @param string $key
      * @return mixed
      */
-    private function get(string $key)
+    private function getSource(string $key)
     {
         $data = Redis::get($key);
         if ($data === NULL) {
@@ -70,7 +70,7 @@ trait CacheTrait
     private function getStdCached(Request $request, SqlOptions $sqlOptions)
     {
         $hashKey = $this->getKeyHash($request);
-        $items   = $this->get($hashKey);
+        $items   = $this->getSource($hashKey);
         if ($items === null) {
             if ($sqlOptions->getId() > 0) {
                 $items = $this->getEntity($sqlOptions->getId(), $sqlOptions->getData());
@@ -98,7 +98,7 @@ trait CacheTrait
             return $this->recompute($sqlOptions, $hashKey, $ttl);
         }
 
-        return $this->get($hashKey);
+        return $this->getSource($hashKey);
     }
 
     /**
