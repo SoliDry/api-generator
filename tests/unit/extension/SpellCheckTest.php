@@ -43,6 +43,7 @@ class SpellCheckTest extends TestCase
     public function it_checks_text()
     {
         $this->assertEmpty($this->spellCheck->check('It checks the text correctness.'));
+        $this->assertArraySubset(['correctnesss'], $this->spellCheck->check('It checks the text correctnesss.'));
     }
 
     /**

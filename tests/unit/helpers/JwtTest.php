@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Request;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use rjapi\extension\BaseJwt;
+use rjapi\extension\BaseModel;
+use rjapi\extension\JWTTrait;
 use rjapi\helpers\Jwt;
 use rjapitest\unit\TestCase;
 

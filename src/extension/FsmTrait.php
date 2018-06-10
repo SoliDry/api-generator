@@ -1,4 +1,5 @@
 <?php
+
 namespace rjapi\extension;
 
 
@@ -21,15 +22,14 @@ trait FsmTrait
     {
         $stateMachine = new StateMachine($this->entity);
         $stateField   = $stateMachine->getField();
-        if(empty($jsonProps[$stateField])) {
+        if (empty($jsonProps[$stateField])) {
             $stateMachine->setInitial($stateField);
             $jsonProps[$stateField] = $stateMachine->getInitial();
-        }
-        else {
-            foreach($jsonProps as $k => $v) {
-                if($stateMachine->isStatedField($k) === true) {
+        } else {
+            foreach ($jsonProps as $k => $v) {
+                if ($stateMachine->isStatedField($k) === true) {
                     $stateMachine->setStates($k);
-                    if($stateMachine->isInitial($v) === false) {
+                    if ($stateMachine->isInitial($v) === false) {
                         // the field is under state machine rules and it is not initial state
                         Json::outputErrors(
                             [
@@ -56,7 +56,7 @@ trait FsmTrait
         $stateMachine = new StateMachine($this->entity);
         $field        = $stateMachine->getField();
         $stateMachine->setStates($field);
-        if(empty($jsonProps[$field]) === false
+        if (empty($jsonProps[$field]) === false
             && $stateMachine->isStatedField($field) === true
             && $stateMachine->isTransitive($model->$field, $jsonProps[$field]) === false
         ) {
