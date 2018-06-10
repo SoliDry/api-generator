@@ -236,6 +236,7 @@ trait BaseRelationsTrait
     }
 
     /**
+     * Saves model with related id from linked table full duplex
      * @param string $ucEntity
      * @param string $lowEntity
      * @param int|string $eId
@@ -245,7 +246,18 @@ trait BaseRelationsTrait
     {
         $relEntity = Classes::getModelEntity($ucEntity);
         $model     = $this->getModelEntity($relEntity, $rId);
+        // swap table and field trying to find rels with inverse
+        if (!property_exists($model, $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID)) {
+            $ucTmp     = $ucEntity;
+            $ucEntity  = ucfirst($lowEntity);
+            $relEntity = Classes::getModelEntity($ucEntity);
+            $model     = $this->getModelEntity($relEntity, $eId);
+            $lowEntity = strtolower($ucTmp);
 
+            $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+            $model->save();
+            return;
+        }
         $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
         $model->save();
     }
