@@ -60,6 +60,7 @@ class MigrationsTest extends TestCase
      */
     public function it_creates_entity()
     {
+        $this->migrations->setCodeState($this->gen);
         $this->assertInstanceOf(MigrationsAbstract::class, $this->migrations);
         $this->migrations->create();
         $this->migrations->createPivot();
