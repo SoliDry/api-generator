@@ -6,12 +6,14 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Modules\V2\Entities\Article;
 use Modules\V2\Http\Middleware\ArticleMiddleware;
+use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Json;
 use rjapi\types\RamlInterface;
+use rjapitest\_data\ArticleFixture;
 use rjapitest\unit\TestCase;
 
 /**
@@ -146,20 +148,15 @@ class JsonTest extends TestCase
         ], Json::decode('{"title":"Foo Bar Baz"}'));
     }
 
-//    /**
-//     * @test
-//     */
-//    public function it_gets_relations()
-//    {
-//        $collection = new Collection();
-////        $items = new class extends \ArrayAccessible {
-////
-////        };
-////        $items->offsetSet(0, 'title')
-//        $collection->add([
-//            'title' => 'Foo Bar Baz'
-//        ]);
-//        $rels = Json::getRelations($collection, 'article');
-//        print_r($rels);
-//    }
+    /**
+     * @test
+     */
+    public function it_gets_relations()
+    {
+        ArticleFixture::createAndGet();
+        $articles = ArticleFixture::getCollection([['topic_id', '>=', 1]]);
+        $rels = Json::getRelations($articles, 'article');
+        $this->assertInternalType(IsType::TYPE_ARRAY, $rels);
+        ArticleFixture::truncate();
+    }
 }

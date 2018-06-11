@@ -5,6 +5,7 @@ namespace rjapitest\unit\controllers;
 
 use rjapi\controllers\GeneratorTrait;
 use rjapi\types\ConsoleInterface;
+use rjapi\types\DirsInterface;
 use rjapitest\unit\TestCase;
 
 class GeneratorTraitTest extends TestCase

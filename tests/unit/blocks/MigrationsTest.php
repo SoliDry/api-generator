@@ -48,7 +48,7 @@ class MigrationsTest extends TestCase
             ]
         ];
         $this->gen->objectName    = 'Article';
-        $this->gen->version       = 'v2';
+        $this->gen->version       = self::MODULE_NAME;
         $this->gen->modulesDir    = DirsInterface::MODULES_DIR;
         $this->gen->middlewareDir = DirsInterface::MIDDLEWARE_DIR;
         $this->gen->migrationsDir = DirsInterface::MIGRATIONS_DIR;

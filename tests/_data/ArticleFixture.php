@@ -28,11 +28,21 @@ class ArticleFixture
         return $article;
     }
 
+    public static function getCollection($params)
+    {
+        return Article::where($params)->get();
+    }
+
     /**
      * @param $id
      */
     public static function delete($id) : void
     {
         Article::destroy($id);
+    }
+
+    public static function truncate()
+    {
+        Article::truncate();
     }
 }
