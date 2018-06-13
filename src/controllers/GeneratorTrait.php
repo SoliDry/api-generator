@@ -7,6 +7,7 @@ use rjapi\blocks\Entities;
 use rjapi\blocks\Middleware;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
+use rjapi\blocks\Tests;
 use rjapi\exceptions\DirectoryException;
 use rjapi\helpers\Console;
 use rjapi\types\ConsoleInterface;
@@ -19,11 +20,12 @@ use Symfony\Component\Yaml\Yaml;
 
 trait GeneratorTrait
 {
-    private $forms = null;
-    private $mappers = null;
-    private $routes = null;
-    private $migrations = null;
-    private $controllers = null;
+    private $forms;
+    private $mappers;
+    private $routes;
+    private $migrations;
+    private $controllers;
+    private $tests;
 
     /**
      * Standard generation
@@ -50,6 +52,10 @@ trait GeneratorTrait
         // create routes
         $this->routes = new Routes($this);
         $this->routes->create();
+
+        // create tests
+        $this->tests = new Tests($this);
+        $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
 
         $this->createMigrations();
     }

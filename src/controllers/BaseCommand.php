@@ -216,6 +216,11 @@ class BaseCommand extends Command
         return DirsInterface::GEN_DIR . PhpInterface::SLASH . date('Y-m-d') . PhpInterface::SLASH;
     }
 
+    public function formatFuncTestsPath()
+    {
+        return DirsInterface::TESTS_DIR . PhpInterface::SLASH . DirsInterface::TESTS_FUNC_DIR;
+    }
+
     /**
      * @param string $name
      */

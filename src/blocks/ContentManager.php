@@ -2,9 +2,9 @@
 
 namespace rjapi\blocks;
 
+use rjapi\controllers\BaseCommand;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
-use rjapi\RJApiGenerator;
 use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
@@ -13,7 +13,7 @@ use rjapi\types\RamlInterface;
  * Class ContentManager
  *
  * @package rjapi\blocks
- * @property RJApiGenerator generator
+ * @property BaseCommand generator
  * @property string sourceCode
  */
 trait ContentManager

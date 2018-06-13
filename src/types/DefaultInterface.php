@@ -6,6 +6,8 @@ interface DefaultInterface
     public const RAML_EXT           = '.raml';
     public const CONTROLLER_POSTFIX = 'Controller';
     public const MIDDLEWARE_POSTFIX = 'Middleware';
+    // set the functional postfix for Codeception
+    public const FUNCTIONAL_POSTFIX = 'Cest';
 
     public const PREFIX_KEY = 'prefix';
 

@@ -5,22 +5,21 @@ namespace rjapi\blocks;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use rjapi\controllers\BaseCommand;
 use rjapi\extension\BaseFormRequest;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
-use rjapi\RJApiGenerator;
 use rjapi\types\CustomsInterface;
-use rjapi\types\DefaultInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 
 class Migrations extends MigrationsAbstract
 {
     use EntitiesTrait;
-    /** @var RJApiGenerator $generator */
-    protected $generator  = null;
+    /** @var BaseCommand $generator */
+    protected $generator;
     protected $sourceCode = '';
 
     private $className = '';

@@ -15,6 +15,8 @@ interface DirsInterface
     public const ENTITIES_DIR      = 'Entities';
     public const DATABASE_DIR      = 'Database';
     public const MIGRATIONS_DIR    = 'Migrations';
+    public const TESTS_DIR         = 'tests';
+    public const TESTS_FUNC_DIR    = 'functional';
     // directory to store raml history
     public const GEN_DIR       = '.gen';
     public const EXCLUDED_DIRS = ['.', '..'];
