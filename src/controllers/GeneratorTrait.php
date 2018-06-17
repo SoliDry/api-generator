@@ -54,9 +54,10 @@ trait GeneratorTrait
         $this->routes->create();
 
         // create tests
-        $this->tests = new Tests($this);
-        $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
-
+        if (empty($this->options[ConsoleInterface::OPTION_TESTS]) === false) {
+            $this->tests = new Tests($this);
+            $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
+        }
         $this->createMigrations();
     }
 

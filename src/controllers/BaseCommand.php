@@ -86,6 +86,7 @@ class BaseCommand extends Command
             $this->options = [
                 ConsoleInterface::OPTION_REGENERATE => 1,
                 ConsoleInterface::OPTION_MIGRATIONS => 1,
+                ConsoleInterface::OPTION_TESTS      => 1,
             ];
         } else {
             $this->options = $this->options();

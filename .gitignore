@@ -12,3 +12,4 @@ storage/
 .env
 .gen/
 *_create*_table.php
+tests/functional/*Cest.php

@@ -10,7 +10,7 @@ class RJApiGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history}';
+    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
 
     /**
      * The console command description.
@@ -25,6 +25,10 @@ class RJApiGenerator extends BaseCommand
     public function handle()
     {
         $ramlFile = $this->argument('ramlFile');
-        $this->actionIndex($ramlFile);
+        try {
+            $this->actionIndex($ramlFile);
+        } catch (exceptions\DirectoryException $e) {
+            echo $e->getTraceAsString();
+        }
     }
 }

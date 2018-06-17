@@ -4,6 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\controllers\BaseCommand;
 use rjapi\helpers\Console;
+use rjapi\helpers\Json;
 use rjapi\helpers\MethodOptions;
 use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
@@ -129,7 +130,7 @@ trait ContentManager
      */
     private function setArrayProperty($key, array $value) : void
     {
-        $val = $this->setArrayToString($value);
+        $val              = $this->setArrayToString($value);
         $this->sourceCode .= $this->quoteParam($key)
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
             . PhpInterface::SPACE . $val . PhpInterface::COMMA . PHP_EOL;
@@ -155,7 +156,7 @@ trait ContentManager
      */
     protected function createPropertyArray(string $prop, string $modifier, array $value) : void
     {
-        $val = $this->setArrayToString($value);
+        $val              = $this->setArrayToString($value);
         $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
             $prop . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE . $val . PhpInterface::SEMICOLON . PHP_EOL;
     }
@@ -232,6 +233,26 @@ trait ContentManager
     }
 
     /**
+     * @param array $params
+     *
+     * @return string
+     */
+    private function getMethodParamsToPass(array $params) : string
+    {
+        $paramsStr = '';
+        $cnt       = count($params);
+        foreach ($params as $value) {
+            --$cnt;
+            $paramsStr .= is_array($value) ? $this->quoteParam(json_encode($value)) : $this->quoteParam($value);
+            if ($cnt > 0) {
+                $paramsStr .= PhpInterface::COMMA . PhpInterface::SPACE;
+            }
+        }
+
+        return $paramsStr;
+    }
+
+    /**
      * @param string $str
      */
     public function setEchoString(string $str) : void
@@ -264,6 +285,7 @@ trait ContentManager
      * @uses \rjapi\blocks\Migrations::setContent
      * @uses \rjapi\blocks\Entities::setContent
      * @uses \rjapi\blocks\Middleware::setContent
+     * @uses \rjapi\blocks\Tests::setContent
      *
      * Creates entities like *Controller, *Middleware, BaseModel entities etc
      *
@@ -371,5 +393,19 @@ trait ContentManager
     {
         $start            = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, null, PhpInterface::ENCODING_UTF8) - 3;
         $this->sourceCode .= $this->setTabs() . mb_substr($this->resourceCode, $start, null, PhpInterface::ENCODING_UTF8);
+    }
+
+    /**
+     *
+     * @param string $object
+     * @param string $method
+     * @param array $params
+     */
+    private function methodCallOnObject(string $object, string $method, array $params = []) : void
+    {
+        $this->sourceCode .= $this->setTabs(2) . PhpInterface::DOLLAR_SIGN . $object
+            . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
+            . $this->getMethodParamsToPass($params)
+            . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 }
