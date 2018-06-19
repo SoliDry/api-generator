@@ -235,15 +235,20 @@ trait ContentManager
     /**
      * @param array $params
      *
+     * @param bool $arrayToJson
      * @return string
      */
-    private function getMethodParamsToPass(array $params) : string
+    private function getMethodParamsToPass(array $params, $arrayToJson = true) : string
     {
         $paramsStr = '';
         $cnt       = count($params);
         foreach ($params as $value) {
             --$cnt;
-            $paramsStr .= is_array($value) ? $this->quoteParam(json_encode($value)) : $this->quoteParam($value);
+            if (is_array($value)) {
+                $paramsStr .= $arrayToJson ? $this->quoteParam(json_encode($value)) : var_export($value, true);
+            } else {
+                $paramsStr .= $this->quoteParam($value);
+            }
             if ($cnt > 0) {
                 $paramsStr .= PhpInterface::COMMA . PhpInterface::SPACE;
             }
@@ -400,12 +405,13 @@ trait ContentManager
      * @param string $object
      * @param string $method
      * @param array $params
+     * @param bool $arrayToJson
      */
-    private function methodCallOnObject(string $object, string $method, array $params = []) : void
+    private function methodCallOnObject(string $object, string $method, array $params = [], $arrayToJson = true) : void
     {
         $this->sourceCode .= $this->setTabs(2) . PhpInterface::DOLLAR_SIGN . $object
             . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
-            . $this->getMethodParamsToPass($params)
+            . $this->getMethodParamsToPass($params, $arrayToJson)
             . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
     }
 }

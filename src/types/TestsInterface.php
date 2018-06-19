@@ -18,6 +18,6 @@ interface TestsInterface
     public const SEND_PATCH  = 'sendPATCH';
     public const SEND_DELETE = 'sendDELETE';
 
-    public const SEE_RESP_IS_JSON  = 'seeResponseIsJson';
-    public const SEE_RESP_CONTAINS = 'seeResponseContains';
+    public const SEE_RESP_IS_JSON       = 'seeResponseIsJson';
+    public const SEE_RESP_CONTAINS_JSON = 'seeResponseContainsJson';
 }

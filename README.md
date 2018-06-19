@@ -23,6 +23,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Models](#user-content-models)
     * [Routes](#user-content-routes)
     * [Migrations](#user-content-migrations)
+    * [Tests](#user-content-tests)
 * [Relationships](#user-content-relationships-particular-qualities)
 * [Query parameters](#user-content-query-parameters)
 * [Security](#user-content-security)
@@ -590,6 +591,19 @@ an example for foreign key would be like:
         onDelete: cascade
         onUpdate: cascade        
 ``` 
+
+#### Tests
+To provide convenient way for integration/functional testing, one can generate tests by providing `--tests` command option, e.g.:
+```bash
+php artisan raml:generate raml/articles.raml --migrations --tests
+``` 
+in command output you'll see the following files have been created:
+```bash
+tests/functional/ArticleCest.php created
+...
+tests/functional/TagCest.php created
+``` 
+For more info on how to set an environment for functional tests in Laravel - see https://codeception.com/for/laravel 
 
 ### Relationships particular qualities
 To let generator know about what a particular relationship to apply (ex.: ManyToMany, OneToMany, OneToOne) 
