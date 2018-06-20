@@ -126,7 +126,7 @@ Options:
 By default generated files preserved to prevent overwriting of added/modified content.   
 
 The output will look something like this:
-![Console output](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Console_generator_output.png)
+![Console output](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Console_gen_out.png)
 
 After that u can see the following dirs and files module structure in your project:
 ![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
