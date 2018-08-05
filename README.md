@@ -1507,3 +1507,5 @@ To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
 JSON-API support is provided, particularly for output, by Fractal package - http://fractal.thephpleague.com/
 
 Happy coding ;-)
+
+PS The purpose of this repo is to prevent doing the same things over and over again, expecting different results. (Thx to Albert Einstein) 
