@@ -105,26 +105,17 @@ abstract class MigrationsAbstract
         // create migration fields depending on types
         switch ($type) {
             case RamlInterface::RAML_TYPE_STRING:
-                $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
-                $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null
-                    : [RamlInterface::RAML_KEY_DEFAULT => $this->quoteParam($attrVal[RamlInterface::RAML_KEY_DEFAULT])];
-                $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey, $length, $build);
+                $this->setStringRow($attrKey, $attrVal);
                 break;
             case RamlInterface::RAML_TYPE_INTEGER:
                 // create an auto_incremented primary key
-                if ($attrKey === RamlInterface::RAML_ID) {
-                    $this->setId($attrVal, $attrKey, $type);
-                } else {
-                    $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-                    $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-                    $this->setIntegerDigit($attrKey, $max, $min < 0);
-                }
+                $this->setIntegerRow($attrKey, $attrVal, $type);
                 break;
             case RamlInterface::RAML_TYPE_BOOLEAN:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_UTINYINT, $attrKey);
                 break;
             case RamlInterface::RAML_TYPE_NUMBER:
-                $this->setRowNumber($attrVal, $attrKey);
+                $this->setNumberRow($attrVal, $attrKey);
                 break;
             case RamlInterface::RAML_ENUM:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
@@ -157,23 +148,6 @@ abstract class MigrationsAbstract
     }
 
     /**
-     * @param array $attrVal
-     * @param string $attrKey
-     */
-    private function setRowNumber(array $attrVal, string $attrKey): void
-    {
-        if (empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
-            && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
-                || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
-        ) {
-            $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-            $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-            $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
-                . PhpInterface::SPACE . $min);
-        }
-    }
-
-    /**
      *  Sets index for particular column if facets was declared
      * @param array $attrVal
      * @param string $attrKey
@@ -196,53 +170,8 @@ abstract class MigrationsAbstract
                         $this->setRow(ModelsInterface::INDEX_TYPE_UNIQUE, $attrKey, $this->quoteParam($k));
                         break;
                     case ModelsInterface::INDEX_TYPE_FOREIGN:
-                        if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
-                            throw new AttributesException('There must be references and on attributes for foreign key construction.');
-                        }
-                        $build = [
-                            ModelsInterface::INDEX_REFERENCES => $this->quoteParam($facets[ModelsInterface::INDEX_REFERENCES]),
-                            ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
-                        ];
-                        if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
-                            $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
-                        }
-                        if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
-                            $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
-                        }
-                        $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, $this->quoteParam($k), $build);
+                        $this->setForeignIndex($facets, $attrKey, $k);
                         break;
-                }
-            }
-        }
-    }
-
-    /**
-     * Creates composite index via facets
-     * @param array $attrVal
-     * @throws AttributesException
-     */
-    public function setCompositeIndex(array $attrVal): void
-    {
-        if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
-            $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
-            if (empty($facets[ModelsInterface::INDEX_TYPE_FOREIGN]) === false) {
-                if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
-                    throw new AttributesException('There must be references and on attributes for foreign key construction.');
-                }
-                $build = [
-                    ModelsInterface::INDEX_REFERENCES => $this->getArrayParam($facets[ModelsInterface::INDEX_REFERENCES]),
-                    ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
-                ];
-                if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
-                    $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
-                }
-                if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
-                    $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
-                }
-                $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $this->getArrayParam($facets[ModelsInterface::INDEX_TYPE_FOREIGN]), null, $build, false);
-            } else {
-                foreach ($facets as $k => $v) {
-                    $this->setRow($k, $this->getArrayParam($v), null, null, false);
                 }
             }
         }
