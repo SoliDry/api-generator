@@ -13,7 +13,7 @@ use rjapi\types\ModelsInterface;
 use rjapi\helpers\Json;
 use rjapi\types\PhpInterface;
 
-class ApiController extends Controller
+class ApiController extends Controller implements JSONApiInterface
 {
     use BaseRelationsTrait,
         OptionsTrait,
@@ -28,20 +28,20 @@ class ApiController extends Controller
     protected $jsonApi = true;
 
     private $props  = [];
-    private $entity = null;
+    private $entity;
     /** @var BaseModel $model */
-    private $model = null;
+    private $model;
     /** @var EntitiesTrait $modelEntity */
-    private $modelEntity    = null;
-    private $middleWare     = null;
+    private $modelEntity;
+    private $middleWare;
     private $relsRemoved    = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions $configOptions */
-    protected $configOptions = null;
+    protected $configOptions;
     /** @var CustomSql $customSql */
-    protected $customSql = null;
+    protected $customSql;
     /** @var BitMask $bitMask */
-    private $bitMask = null;
+    private $bitMask;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -249,9 +249,10 @@ class ApiController extends Controller
     /**
      * DELETE Deletes one entry determined by unique id as uri param
      *
+     * @param Request $request
      * @param int|string $id
      */
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         $model = $this->getEntity($id);
         if ($model !== null) {

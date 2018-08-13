@@ -1,10 +1,14 @@
 <?php
 namespace rjapi\extension;
 
+use Illuminate\Http\Request;
+
 interface JSONApiInterface
 {
+    public const CONTENT_TYPE_KEY = 'Content-Type';
+
     public const HEADER_CONTENT_TYPE       = 'Content-Type: ';
-    public const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json';
+    public const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json; supported-ext="bulk"';
 
     public const PARAM_ACCESS_TOKEN     = 'access_token';
     public const CLASS_API_ACCESS_TOKEN = 'ApiAccessToken';
@@ -44,4 +48,15 @@ interface JSONApiInterface
     public const ERROR_DETAIL = 'detail';
 
     public const ENCODE_DEPTH_1024 = 1024;
+
+    // methods JSON-API must implement
+    public function index(Request $request);
+
+    public function view(Request $request, $id);
+
+    public function create(Request $request);
+
+    public function update(Request $request, $id);
+
+    public function delete(Request $request, $id);
 }
