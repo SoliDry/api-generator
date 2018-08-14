@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 interface JSONApiInterface
 {
     public const CONTENT_TYPE_KEY = 'Content-Type';
+    public const SUPPORTED_EXT    = 'supported-ext';
+    public const EXT_BULK         = 'bulk';
 
     public const HEADER_CONTENT_TYPE       = 'Content-Type: ';
     public const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json; supported-ext="bulk"';

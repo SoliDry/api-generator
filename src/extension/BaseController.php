@@ -3,6 +3,8 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use rjapi\exceptions\HeadersException;
+use rjapi\helpers\Request as RequestHelper;
 
 class BaseController extends ApiController
 {
@@ -13,25 +15,34 @@ class BaseController extends ApiController
      */
     public function create(Request $request)
     {
-        parent::create($request);
+        if (RequestHelper::isExt($request, self::EXT_BULK)) {
+            // todo: impl create bulk
+        } else {
+            parent::create($request);
+        }
     }
 
     /**
      * @param Request $request
-     * @param int|string $id
-     * @throws \rjapi\exceptions\AttributesException
+     * @throws HeadersException
      */
-    public function update(Request $request, $id)
+    public function updateBulk(Request $request)
     {
-        parent::update($request, $id);
+        if (RequestHelper::isExt($request, self::EXT_BULK) === false) {
+            throw new HeadersException('There is no ' . self::EXT_BULK . ' value in ' . self::SUPPORTED_EXT . ' key of ' . self::CONTENT_TYPE_KEY);
+        }
+        // todo: impl update bulk
     }
 
     /**
      * @param Request $request
-     * @param int|string $id
+     * @throws HeadersException
      */
-    public function delete(Request $request, $id)
+    public function deleteBulk(Request $request)
     {
-        parent::delete($request, $id);
+        if (RequestHelper::isExt($request, self::EXT_BULK) === false) {
+            throw new HeadersException('There is no ' . self::EXT_BULK . ' value in ' . self::SUPPORTED_EXT . ' key of ' . self::CONTENT_TYPE_KEY);
+        }
+        // todo: impl delete bulk
     }
 }
