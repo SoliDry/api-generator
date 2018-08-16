@@ -1,12 +1,20 @@
 <?php
+
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
 
 interface JSONApiInterface
 {
+    public const AVAILABLE_BULKS = [
+        'createBulk',
+        'updateBulk',
+        'deleteBulk',
+    ];
+
     public const CONTENT_TYPE_KEY = 'Content-Type';
     public const SUPPORTED_EXT    = 'supported-ext';
+    public const EXT              = 'ext';
     public const EXT_BULK         = 'bulk';
 
     public const HEADER_CONTENT_TYPE       = 'Content-Type: ';

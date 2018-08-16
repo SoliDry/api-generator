@@ -29,6 +29,17 @@ class Json
     }
 
     /**
+     * Returns an array of bulk attributes for each element
+     *
+     * @param array $jsonApiArr
+     * @return array
+     */
+    public static function getBulkAttributes(array $jsonApiArr) : array
+    {
+        return empty($jsonApiArr[RamlInterface::RAML_DATA]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA];
+    }
+
+    /**
      * @param array $jsonApiArr
      *
      * @return array

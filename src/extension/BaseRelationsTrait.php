@@ -148,7 +148,7 @@ trait BaseRelationsTrait
      * @param int|string $eId
      * @param bool $isRemovable
      */
-    private function setRelationships(array $json, $eId, bool $isRemovable = false) : void
+    protected function setRelationships(array $json, $eId, bool $isRemovable = false) : void
     {
         $jsonApiRels = Json::getRelationships($json);
         if (empty($jsonApiRels) === false) {

@@ -15,6 +15,10 @@ class Request
     public static function getSupportedExtensions(Req $request) : array
     {
         $contentType = $request->header(JSONApiInterface::CONTENT_TYPE_KEY);
+        if (mb_strpos($contentType, JSONApiInterface::EXT) === false) {
+            return [];
+        }
+
         [$i, $ext] = explode(';', $contentType);
         [$j, $supportedExt] = explode('=', $ext);
 

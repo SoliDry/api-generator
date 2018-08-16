@@ -27,13 +27,13 @@ class ApiController extends Controller implements JSONApiInterface
     // JSON API support enabled by default
     protected $jsonApi = true;
 
-    private $props  = [];
-    private $entity;
+    protected $props = [];
+    protected $entity;
     /** @var BaseModel $model */
-    private $model;
+    protected $model;
     /** @var EntitiesTrait $modelEntity */
     private $modelEntity;
-    private $middleWare;
+    protected $middleWare;
     private $relsRemoved    = false;
     private $defaultOrderBy = [];
     /** @var ConfigOptions $configOptions */
@@ -116,15 +116,15 @@ class ApiController extends Controller implements JSONApiInterface
      */
     public function view(Request $request, $id)
     {
-        $meta = [];
-        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+        $meta       = [];
+        $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
         $sqlOptions = $this->setSqlOptions($request);
         $sqlOptions->setId($id);
         $sqlOptions->setData($data);
         if (true === $this->isTree) {
-            $tree       = $this->getSubTreeEntities($sqlOptions, $id);
-            $meta       = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
+            $tree = $this->getSubTreeEntities($sqlOptions, $id);
+            $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
 
         if ($this->configOptions->isCached()) {
@@ -143,6 +143,7 @@ class ApiController extends Controller implements JSONApiInterface
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
+     * @throws \LogicException
      * @throws \rjapi\exceptions\AttributesException
      */
     public function create(Request $request)

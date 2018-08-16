@@ -17,7 +17,7 @@ trait JWTTrait
     /**
      *  Creates new user with JWT + password hashed
      */
-    private function createJwtUser()
+    protected function createJwtUser()
     {
         if(empty($this->model->password)) {
             Json::outputErrors(
