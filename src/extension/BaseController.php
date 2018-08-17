@@ -2,10 +2,8 @@
 
 namespace rjapi\extension;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Facades\DB;
 use rjapi\exceptions\HeadersException;
 use rjapi\helpers\Json;
 use rjapi\helpers\Request as RequestHelper;
@@ -35,61 +33,15 @@ class BaseController extends ApiController
      */
     public function createBulk(Request $request)
     {
-        $meta              = [];
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
-        $collection = new Collection();
 
-        try {
-            DB::beginTransaction();
-            foreach ($jsonApiAttributes as $jsonObject) {
-                // FSM initial state check
-                if ($this->configOptions->isStateMachine() === true) {
-                    $this->checkFsmCreate($jsonObject);
-                }
-
-                // spell check
-                if ($this->configOptions->isSpellCheck() === true) {
-                    $meta[] = $this->spellCheck($jsonObject);
-                }
-
-                // fill in model
-                foreach ($this->props as $k => $v) {
-                    // request fields should match Middleware fields
-                    if (isset($jsonObject[$k])) {
-                        $this->model->$k = $jsonObject[$k];
-                    }
-                }
-
-                // set bit mask
-                if (true === $this->configOptions->isBitMask()) {
-                    $this->setMaskCreate($jsonObject);
-                }
-
-                $collection->push($this->model);
-                $this->model->save();
-
-                // jwt
-                if ($this->configOptions->getIsJwtAction() === true) {
-                    $this->createJwtUser(); // !!! model is overridden
-                }
-
-                // set bit mask from model -> response
-                if (true === $this->configOptions->isBitMask()) {
-                    $this->model = $this->setFlagsCreate();
-                }
-            }
-            DB::commit();
-        } catch (\PDOException $e) {
-            echo $e->getTraceAsString();
-            DB::rollBack();
-        }
-
-        $resource = Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
-        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        Json::outputSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
+     * Update bulk of items in transaction mode
+     *
      * @param Request $request
      * @throws HeadersException
      * @throws \rjapi\exceptions\AttributesException
@@ -100,6 +52,8 @@ class BaseController extends ApiController
     }
 
     /**
+     * Delete bulk of items in transaction mode
+     *
      * @param Request $request
      * @throws HeadersException
      */

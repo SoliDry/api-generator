@@ -2,10 +2,17 @@
 
 namespace rjapi\blocks;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+use League\Fractal\Resource\ResourceAbstract;
 use rjapi\extension\ApiController;
+use rjapi\extension\BaseFormRequest;
+use rjapi\extension\BaseModel;
 use rjapi\helpers\Classes;
 use rjapi\helpers\ConfigHelper as conf;
+use rjapi\helpers\ConfigOptions;
+use rjapi\helpers\Json;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\ModelsInterface;
@@ -17,14 +24,16 @@ use rjapi\types\RamlInterface;
  *
  * @package rjapi\blocks
  * @property ApiController entity
- * @property ApiController middleWare
+ * @property BaseFormRequest middleWare
  * @property ApiController props
- * @property ApiController model
+ * @property BaseModel model
  * @property ApiController modelEntity
+ * @property ConfigOptions configOptions
+ *
  */
 trait EntitiesTrait
 {
-    public function getMiddlewareEntity(string $version, string $object): string
+    public function getMiddlewareEntity(string $version, string $object) : string
     {
         return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
             PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
@@ -34,14 +43,74 @@ trait EntitiesTrait
             DefaultInterface::MIDDLEWARE_POSTFIX;
     }
 
-    protected function setEntities(): void
+    protected function setEntities() : void
     {
-        $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity = $this->getMiddlewareEntity(conf::getModuleName(), $this->entity);
-        $this->middleWare = new $middlewareEntity();
-        $this->props = get_object_vars($this->middleWare);
+        $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
+        $middlewareEntity  = $this->getMiddlewareEntity(conf::getModuleName(), $this->entity);
+        $this->middleWare  = new $middlewareEntity();
+        $this->props       = get_object_vars($this->middleWare);
         $this->modelEntity = Classes::getModelEntity($this->entity);
-        $this->model = new $this->modelEntity();
+        $this->model       = new $this->modelEntity();
+    }
+
+    /**
+     * @param array $jsonApiAttributes
+     * @return ResourceAbstract
+     * @throws \rjapi\exceptions\AttributesException
+     */
+    protected function saveBulk(array $jsonApiAttributes) : ResourceAbstract
+    {
+        $meta       = [];
+        $collection = new Collection();
+
+        try {
+            DB::beginTransaction();
+            foreach ($jsonApiAttributes as $jsonObject) {
+
+                $this->model = new $this->modelEntity();
+
+                // FSM initial state check
+                if ($this->configOptions->isStateMachine() === true) {
+                    $this->checkFsmCreate($jsonObject);
+                }
+
+                // spell check
+                if ($this->configOptions->isSpellCheck() === true) {
+                    $meta[] = $this->spellCheck($jsonObject);
+                }
+
+                // fill in model
+                foreach ($this->props as $k => $v) {
+                    // request fields should match Middleware fields
+                    if (isset($jsonObject[$k])) {
+                        $this->model->$k = $jsonObject[$k];
+                    }
+                }
+
+                // set bit mask
+                if (true === $this->configOptions->isBitMask()) {
+                    $this->setMaskCreate($jsonObject);
+                }
+
+                $collection->push($this->model);
+                $this->model->save();
+                // jwt
+                if ($this->configOptions->getIsJwtAction() === true) {
+                    $this->createJwtUser(); // !!! model is overridden
+                }
+
+                // set bit mask from model -> response
+                if (true === $this->configOptions->isBitMask()) {
+                    $this->model = $this->setFlagsCreate();
+                }
+            }
+            DB::commit();
+        } catch (\PDOException $e) {
+            echo $e->getTraceAsString();
+            DB::rollBack();
+        }
+
+        return Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
     }
 
     /**
@@ -53,7 +122,7 @@ trait EntitiesTrait
     private function getRelationType(string $objectName)
     {
         if (empty($this->generator->types[$objectName][RamlInterface::RAML_PROPS]
-            [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+                  [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
         ) {
             return trim(
                 $this->generator->types[$objectName][RamlInterface::RAML_PROPS]
