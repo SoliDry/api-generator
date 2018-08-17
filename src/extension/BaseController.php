@@ -2,10 +2,10 @@
 
 namespace rjapi\extension;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\DB;
-use League\Fractal\Resource\Collection;
 use rjapi\exceptions\HeadersException;
 use rjapi\helpers\Json;
 use rjapi\helpers\Request as RequestHelper;
@@ -38,19 +38,21 @@ class BaseController extends ApiController
         $meta              = [];
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
+        $collection = new Collection();
 
         try {
-            $collection = new Collection();
             DB::beginTransaction();
             foreach ($jsonApiAttributes as $jsonObject) {
                 // FSM initial state check
                 if ($this->configOptions->isStateMachine() === true) {
                     $this->checkFsmCreate($jsonObject);
                 }
+
                 // spell check
                 if ($this->configOptions->isSpellCheck() === true) {
                     $meta[] = $this->spellCheck($jsonObject);
                 }
+
                 // fill in model
                 foreach ($this->props as $k => $v) {
                     // request fields should match Middleware fields
@@ -58,17 +60,20 @@ class BaseController extends ApiController
                         $this->model->$k = $jsonObject[$k];
                     }
                 }
+
                 // set bit mask
                 if (true === $this->configOptions->isBitMask()) {
                     $this->setMaskCreate($jsonObject);
                 }
 
-                $collection->setData($this->model);
+                $collection->push($this->model);
                 $this->model->save();
+
                 // jwt
                 if ($this->configOptions->getIsJwtAction() === true) {
                     $this->createJwtUser(); // !!! model is overridden
                 }
+
                 // set bit mask from model -> response
                 if (true === $this->configOptions->isBitMask()) {
                     $this->model = $this->setFlagsCreate();
@@ -80,8 +85,7 @@ class BaseController extends ApiController
             DB::rollBack();
         }
 
-        $this->setRelationships($json, $this->model->id);
-        $resource = Json::getResource($this->middleWare, $collection, $this->entity, false, $meta);
+        $resource = Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
