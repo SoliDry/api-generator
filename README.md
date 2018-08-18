@@ -25,6 +25,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Migrations](#user-content-migrations)
     * [Tests](#user-content-tests)
 * [Relationships](#user-content-relationships-particular-qualities)
+* [Bulk extension](#user-content-bulk-extension)
 * [Query parameters](#user-content-query-parameters)
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
@@ -410,12 +411,13 @@ So one can implement certain logic for particular controller or for all.
 Validation BaseFormRequest example:
 ```php
 <?php
-namespace Modules\V1\Http\Middleware;
+namespace Modules\V2\Http\Middleware;
 
 use rjapi\extension\BaseFormRequest;
 
 class ArticleMiddleware extends BaseFormRequest 
 {
+    // >>>props>>>
     public $id = null;
     // Attributes
     public $title = null;
@@ -424,32 +426,45 @@ class ArticleMiddleware extends BaseFormRequest
     public $show_in_top = null;
     public $status = null;
     public $topic_id = null;
+    public $rate = null;
+    public $date_posted = null;
+    public $time_to_live = null;
+    public $deleted_at = null;
+    // <<<props<<<
 
-    public function authorize(): bool {
+    // >>>methods>>>
+    public function authorize(): bool 
+    {
         return true;
     }
 
-    public function rules(): array {
+    public function rules(): array 
+    {
         return [
-            "title" => "required|string|min:16|max:256",
-            "description" => "required|string|min:32|max:1024",
-            "url" => "string|min:16|max:255",
-            // Show at the top of main page
-            "show_in_top" => "boolean",
-            // The state of an article
-            "status" => "in:draft,published,postponed,archived",
-            // ManyToOne Topic relationship
-            "topic_id" => "required|integer|min:1|max:9",
+            'title' => 'required|string|min:16|max:256|',
+            'description' => 'required|string|min:32|max:1024|',
+            'url' => 'string|min:16|max:255|',
+                // Show at the top of main page
+            'show_in_top' => 'boolean',
+                // The state of an article
+            'status' => 'in:draft,published,postponed,archived|',
+                // ManyToOne Topic relationship
+            'topic_id' => 'required|integer|min:1|max:6|',
+            'rate' => '|min:3|max:9|',
+            'date_posted' => '',
+            'time_to_live' => '',
+            'deleted_at' => '',
         ];
     }
 
-    public function relations(): array {
+    public function relations(): array 
+    {
         return [
-            "tag",
-            "topic",
+            'tag',
+            'topic',
         ];
     }
-
+    // <<<methods<<<
 }
 ```
 #### Models
@@ -457,24 +472,33 @@ class ArticleMiddleware extends BaseFormRequest
 BaseModel example:
 ```php
 <?php
-namespace Modules\V1\Entities;
+namespace Modules\V2\Entities;
 
+use Illuminate\Database\Eloquent\SoftDeletes;
 use rjapi\extension\BaseModel;
 
 class Article extends BaseModel 
 {
-    protected $primaryKey = "id";
-    protected $table = "article";
-    public $timestamps = false;
+    use SoftDeletes;
 
-    public function tag() {
+    // >>>props>>>
+    protected $dates = ['deleted_at'];
+    protected $primaryKey = 'id';
+    protected $table = 'article';
+    public $timestamps = false;
+    public $incrementing = false;
+    // <<<props<<<
+    // >>>methods>>>
+
+    public function tag() 
+    {
         return $this->belongsToMany(Tag::class, 'tag_article');
     }
-
-    public function topic() {
+    public function topic() 
+    {
         return $this->belongsTo(Topic::class);
     }
-
+    // <<<methods<<<
 }
 ```
 
@@ -482,20 +506,29 @@ class Article extends BaseModel
 
 Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in raml:
 ```php
-Route::group(['prefix' => 'v1', 'namespace' => 'Modules\\V1\\Http\\Controllers'], function()
+// >>>routes>>>
+// Article routes
+Route::group(['prefix' => 'v2', 'namespace' => 'Modules\\V2\\Http\\Controllers'], function()
 {
+    // bulk routes
+    Route::post('/article/bulk', 'ArticleController@createBulk');
+    Route::patch('/article/bulk', 'ArticleController@updateBulk');
+    Route::delete('/article/bulk', 'ArticleController@deleteBulk');
+    // basic routes
     Route::get('/article', 'ArticleController@index');
     Route::get('/article/{id}', 'ArticleController@view');
     Route::post('/article', 'ArticleController@create');
     Route::patch('/article/{id}', 'ArticleController@update');
     Route::delete('/article/{id}', 'ArticleController@delete');
     // relation routes
-    Route::get('/article/{id}/relationships/{relations}', 'ArticleController@relations');
-    Route::post('/article/{id}/relationships/{relations}', 'ArticleController@createRelations');
-    Route::patch('/article/{id}/relationships/{relations}', 'ArticleController@updateRelations');
-    Route::delete('/article/{id}/relationships/{relations}', 'ArticleController@deleteRelations');
+    Route::get('/article/relationships/{relations}', 'ArticleController@relations');
+    Route::post('/article/relationships/{relations}', 'ArticleController@createRelations');
+    Route::patch('/article/relationships/{relations}', 'ArticleController@updateRelations');
+    Route::delete('/article/relationships/{relations}', 'ArticleController@deleteRelations');
 });
+// <<<routes<<<
 ```
+As you may noticed there are relationships api-calls and bulk extension batch queries support.  
 
 #### Migrations
 
@@ -691,6 +724,69 @@ return [
     ],
 ];
 ```
+
+### Bulk extension
+
+Multiple resources can be created by sending a POST request to a URL that represents a collection of resources.
+
+```http request
+POST /photos
+Content-Type: application/vnd.api+json; ext=bulk
+Accept: application/vnd.api+json; ext=bulk
+
+{
+  "data": [{
+    "type": "photos",
+    "title": "Ember Hamster",
+    "src": "http://example.com/images/productivity.png"
+  }, {
+    "type": "photos",
+    "title": "Mustaches on a Stick",
+    "src": "http://example.com/images/mustaches.png"
+  }]
+}
+```
+
+Multiple resources can be updated by sending a PATCH request to a URL that represents a collection of resources to which they all belong.
+
+```http request
+PATCH /articles
+Content-Type: application/vnd.api+json; ext=bulk
+Accept: application/vnd.api+json; ext=bulk
+
+{
+  "data": [{
+    "type": "articles",
+    "id": "1",
+    "title": "To TDD or Not"
+  }, {
+    "type": "articles",
+    "id": "2",
+    "title": "To cache or not"
+  }]
+}
+
+```
+
+Multiple resources can be deleted by sending a DELETE request to a URL that represents a collection of resources to which they all belong.
+
+```http request
+DELETE /articles
+Content-Type: application/vnd.api+json; ext=bulk
+Accept: application/vnd.api+json; ext=bulk
+
+{
+  "data": [
+    { "type": "articles", "id": "1" },
+    { "type": "articles", "id": "2" }
+  ]
+}
+```
+
+A request completely succeed or fail (in a single "transaction").
+
+Therefore, any request that involves multiple operations only succeed if all operations are performed successfully. 
+The state of the server will not be changed by a request if any individual operation fails.
 
 ### Security
 
