@@ -10,6 +10,7 @@ use rjapi\exceptions\AttributesException;
 use rjapi\extension\ApiController;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
+use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\ConfigHelper as conf;
 use rjapi\helpers\ConfigOptions;
@@ -128,7 +129,7 @@ trait EntitiesTrait
             DB::beginTransaction();
             foreach ($jsonApiAttributes as $jsonObject) {
 
-                $model = $this->getEntity($jsonObject['id']);
+                $model = $this->getEntity($jsonObject[JSONApiInterface::CONTENT_ID]);
 
                 // FSM transition check
                 if ($this->configOptions->isStateMachine() === true) {
@@ -169,11 +170,11 @@ trait EntitiesTrait
             DB::beginTransaction();
 
             foreach ($jsonApiAttributes as $jsonObject) {
-                $model = $this->getEntity($jsonObject['id']);
+                $model = $this->getEntity($jsonObject[JSONApiInterface::CONTENT_ID]);
 
                 if ($model === null) {
                     DB::rollBack();
-                    throw new AttributesException('There is no such id: ' . $jsonObject['id'] . ' - transaction is rolled back.');
+                    throw new AttributesException('There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID] . ' or model was already deleted - transaction has been rolled back.');
                 }
 
                 $model->delete();
