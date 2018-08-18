@@ -4,6 +4,7 @@ namespace rjapi\extension;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
+use League\Fractal\Resource\Collection;
 use rjapi\exceptions\HeadersException;
 use rjapi\helpers\Json;
 use rjapi\helpers\Request as RequestHelper;
@@ -43,22 +44,31 @@ class BaseController extends ApiController
      * Update bulk of items in transaction mode
      *
      * @param Request $request
-     * @throws HeadersException
+     * @throws \LogicException
      * @throws \rjapi\exceptions\AttributesException
      */
     public function updateBulk(Request $request)
     {
+        $json              = Json::decode($request->getContent());
+        $jsonApiAttributes = Json::getBulkAttributes($json);
 
+        Json::outputSerializedData($this->mutateBulk($jsonApiAttributes));
     }
 
     /**
      * Delete bulk of items in transaction mode
      *
      * @param Request $request
-     * @throws HeadersException
+     * @throws \LogicException
+     * @throws \rjapi\exceptions\AttributesException
      */
     public function deleteBulk(Request $request)
     {
+        $json              = Json::decode($request->getContent());
+        $jsonApiAttributes = Json::getBulkAttributes($json);
 
+        $this->removeBulk($jsonApiAttributes);
+
+        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 }

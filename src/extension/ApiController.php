@@ -194,25 +194,32 @@ class ApiController extends Controller implements JSONApiInterface
     public function update(Request $request, $id)
     {
         $meta = [];
+
         // get json raw input and parse attrs
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
         $model             = $this->getEntity($id);
+
         // FSM transition check
         if ($this->configOptions->isStateMachine() === true) {
             $this->checkFsmUpdate($jsonApiAttributes, $model);
         }
+
         // spell check
         if ($this->configOptions->isSpellCheck() === true) {
             $meta = $this->spellCheck($jsonApiAttributes);
         }
+
         $this->processUpdate($model, $jsonApiAttributes);
         $model->save();
+
         $this->setRelationships($json, $model->id, true);
+
         // set bit mask
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsUpdate($model);
         }
+
         $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
         Json::outputSerializedData($resource);
     }
@@ -241,6 +248,7 @@ class ApiController extends Controller implements JSONApiInterface
                 }
             }
         }
+
         // set bit mask
         if (true === $this->configOptions->isBitMask()) {
             $this->setMaskUpdate($model, $jsonApiAttributes);

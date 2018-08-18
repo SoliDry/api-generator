@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Resource\ResourceAbstract;
+use rjapi\exceptions\AttributesException;
 use rjapi\extension\ApiController;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
@@ -111,6 +112,78 @@ trait EntitiesTrait
         }
 
         return Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
+    }
+
+    /**
+     * @param array $jsonApiAttributes
+     * @return ResourceAbstract
+     * @throws \rjapi\exceptions\AttributesException
+     */
+    protected function mutateBulk(array $jsonApiAttributes) : ResourceAbstract
+    {
+        $meta       = [];
+        $collection = new Collection();
+
+        try {
+            DB::beginTransaction();
+            foreach ($jsonApiAttributes as $jsonObject) {
+
+                $model = $this->getEntity($jsonObject['id']);
+
+                // FSM transition check
+                if ($this->configOptions->isStateMachine() === true) {
+                    $this->checkFsmUpdate($jsonObject, $model);
+                }
+
+                // spell check
+                if ($this->configOptions->isSpellCheck() === true) {
+                    $meta[] = $this->spellCheck($jsonObject);
+                }
+
+                $this->processUpdate($model, $jsonObject);
+                $collection->push($model);
+                $model->save();
+
+                // set bit mask
+                if (true === $this->configOptions->isBitMask()) {
+                    $this->setFlagsUpdate($model);
+                }
+
+            }
+            DB::commit();
+        } catch (\PDOException $e) {
+            echo $e->getTraceAsString();
+            DB::rollBack();
+        }
+
+        return Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
+    }
+
+    /**
+     * @param array $jsonApiAttributes
+     * @throws AttributesException
+     */
+    public function removeBulk(array $jsonApiAttributes) : void
+    {
+        try {
+            DB::beginTransaction();
+
+            foreach ($jsonApiAttributes as $jsonObject) {
+                $model = $this->getEntity($jsonObject['id']);
+
+                if ($model === null) {
+                    DB::rollBack();
+                    throw new AttributesException('There is no such id: ' . $jsonObject['id'] . ' - transaction is rolled back.');
+                }
+
+                $model->delete();
+            }
+
+            DB::commit();
+        } catch (\PDOException $e) {
+            echo $e->getTraceAsString();
+            DB::rollBack();
+        }
     }
 
     /**
