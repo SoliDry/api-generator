@@ -60,7 +60,6 @@ class BaseController extends ApiController
      *
      * @param Request $request
      * @throws \LogicException
-     * @throws \rjapi\exceptions\AttributesException
      */
     public function deleteBulk(Request $request)
     {

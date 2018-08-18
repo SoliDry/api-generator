@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Resource\ResourceAbstract;
-use rjapi\exceptions\AttributesException;
 use rjapi\extension\ApiController;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
@@ -162,7 +161,6 @@ trait EntitiesTrait
 
     /**
      * @param array $jsonApiAttributes
-     * @throws AttributesException
      */
     public function removeBulk(array $jsonApiAttributes) : void
     {
@@ -174,7 +172,14 @@ trait EntitiesTrait
 
                 if ($model === null) {
                     DB::rollBack();
-                    throw new AttributesException('There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID] . ' or model was already deleted - transaction has been rolled back.');
+                    Json::outputErrors(
+                        [
+                            [
+                                JSONApiInterface::ERROR_TITLE => 'There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID],
+                                JSONApiInterface::ERROR_DETAIL => 'There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID] . ' or model was already deleted - transaction has been rolled back.'
+                            ],
+                        ]
+                    );
                 }
 
                 $model->delete();
