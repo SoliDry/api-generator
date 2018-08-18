@@ -23,12 +23,15 @@ interface JSONApiInterface
     public const PARAM_ACCESS_TOKEN     = 'access_token';
     public const CLASS_API_ACCESS_TOKEN = 'ApiAccessToken';
 
-    public const URI_METHOD_INDEX     = 'index';
-    public const URI_METHOD_VIEW      = 'view';
-    public const URI_METHOD_CREATE    = 'create';
-    public const URI_METHOD_UPDATE    = 'update';
-    public const URI_METHOD_DELETE    = 'delete';
-    public const URI_METHOD_RELATIONS = 'relations';
+    public const URI_METHOD_INDEX       = 'index';
+    public const URI_METHOD_VIEW        = 'view';
+    public const URI_METHOD_CREATE      = 'create';
+    public const URI_METHOD_UPDATE      = 'update';
+    public const URI_METHOD_DELETE      = 'delete';
+    public const URI_METHOD_RELATIONS   = 'relations';
+    public const URI_METHOD_CREATE_BULK = 'createBulk';
+    public const URI_METHOD_UPDATE_BULK = 'updateBulk';
+    public const URI_METHOD_DELETE_BULK = 'deleteBulk';
 
     // JSON API supported responses
     public const HTTP_RESPONSE_CODE_OK               = 200;
