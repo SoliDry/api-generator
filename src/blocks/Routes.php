@@ -104,6 +104,6 @@ class Routes
         $this->setRoute(RoutesInterface::METHOD_PATCH, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_UPDATE
             . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
         $this->setRoute(RoutesInterface::METHOD_DELETE, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE
-            . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
+            . ucfirst (JSONApiInterface::URI_METHOD_RELATIONS)));
     }
 }

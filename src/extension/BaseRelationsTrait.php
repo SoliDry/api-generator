@@ -59,10 +59,10 @@ trait BaseRelationsTrait
      * PATCH relationships for specific entity id
      *
      * @param Request $request
-     * @param int $id
+     * @param int|string $id
      * @param string $relation
      */
-    public function updateRelations(Request $request, int $id, string $relation) : void
+    public function updateRelations(Request $request, $id, string $relation) : void
     {
         $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->middleWare, $model, $this->entity);
