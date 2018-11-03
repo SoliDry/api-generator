@@ -30,7 +30,7 @@ class Middleware extends FormRequestModel
 
     protected $sourceCode    = '';
     protected $resourceCode  = '';
-    protected $generator     = null;
+    protected $generator;
     private $additionalProps = [
         'id' => [
             'type' => 'integer',

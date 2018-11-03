@@ -30,15 +30,16 @@ class BaseCommand extends Command
     public  $version;
     public  $objectName        = '';
     public  $defaultController = 'Default';
-    public  $uriNamedParams    = null;
+    public  $uriNamedParams;
     public  $ramlFile          = '';
-    public  $force             = null;
+    public  $force;
     public  $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
+
     public  $types             = [];
     public  $currentTypes      = [];
     public  $historyTypes      = [];

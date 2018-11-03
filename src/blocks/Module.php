@@ -15,8 +15,8 @@ class Module
 
     protected $sourceCode = '';
     /** @var RJApiGenerator generator */
-    protected $generator = null;
-    protected $className = null;
+    protected $generator;
+    protected $className;
 
     public function __construct($generator)
     {

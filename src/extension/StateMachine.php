@@ -10,9 +10,9 @@ class StateMachine
 {
     private $machine = [];
     private $states  = [];
-    private $initial = null;
+    private $initial;
     // state field taken from table in config
-    private $field = null;
+    private $field;
 
     /**
      * StateMachine constructor.
