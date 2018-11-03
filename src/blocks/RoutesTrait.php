@@ -79,7 +79,7 @@ trait RoutesTrait
      */
     private function composeRelationsUri() : string
     {
-        return $this->composeBaseUri() . PhpInterface::SLASH . RamlInterface::RAML_RELATIONSHIPS
+        return $this->composeRelationsBaseUri() . PhpInterface::SLASH . RamlInterface::RAML_RELATIONSHIPS
             . PhpInterface::SLASH . PhpInterface::OPEN_BRACE
             . ModelsInterface::MODEL_METHOD_RELATIONS . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
     }
@@ -114,12 +114,24 @@ trait RoutesTrait
     }
 
     /**
+     * Creates base uri
      *
      * @return string
      */
     private function composeBaseUri() : string
     {
         return PhpInterface::QUOTES . PhpInterface::SLASH . strtolower($this->generator->objectName);
+    }
+
+    /**
+     * Creates base uri for relations
+     * @return string
+     */
+    private function composeRelationsBaseUri() : string
+    {
+        return PhpInterface::QUOTES . PhpInterface::SLASH . strtolower($this->generator->objectName) .
+            PhpInterface::SLASH . PhpInterface::OPEN_BRACE
+            . RamlInterface::RAML_ID . PhpInterface::CLOSE_BRACE;
     }
 
     /**
