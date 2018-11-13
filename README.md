@@ -384,7 +384,7 @@ return [
 ```
 
 #### Controllers
-DefaultController example:
+Entity controller example:
 ```php
 <?php
 namespace Modules\V1\Http\Controllers;
@@ -394,18 +394,20 @@ class ArticleController extends DefaultController
 }
 ```
 By default every controller works with any of GET - index/view, POST - create, PATCH - update, DELETE - delete methods.
-So you don't need to implement anything special here.
+Thus you don't need to implement anything special here.
 
-
+DefaultController example:
 ```php
 <?php
 namespace Modules\V1\Http\Controllers;
 
-class ArticleController extends DefaultController 
+use rjapi\extension\BaseController;
+
+class DefaultController extends BaseController 
 {
 }
 ```
-So one can implement certain logic for particular controller or for all.
+To provide developer-based (user-space) implementation of certain logic for all controllers.
 
 #### Middlewares
 Validation BaseFormRequest example:
