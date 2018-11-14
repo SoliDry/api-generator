@@ -32,10 +32,10 @@ class ApiController extends Controller implements JSONApiInterface
     /** @var BaseModel $model */
     protected $model;
     /** @var EntitiesTrait $modelEntity */
-    private $modelEntity;
-    protected $middleWare;
-    private $relsRemoved    = false;
-    private $defaultOrderBy = [];
+    private   $modelEntity;
+    protected $formRequest;
+    private   $relsRemoved    = false;
+    private   $defaultOrderBy = [];
     /** @var ConfigOptions $configOptions */
     protected $configOptions;
     /** @var CustomSql $customSql */
@@ -103,7 +103,7 @@ class ApiController extends Controller implements JSONApiInterface
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsIndex($items);
         }
-        $resource = Json::getResource($this->middleWare, $items, $this->entity, true, $meta);
+        $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
 
@@ -135,7 +135,7 @@ class ApiController extends Controller implements JSONApiInterface
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsView($item);
         }
-        $resource = Json::getResource($this->middleWare, $item, $this->entity, false, $meta);
+        $resource = Json::getResource($this->formRequest, $item, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
 
@@ -161,7 +161,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
         // fill in model
         foreach ($this->props as $k => $v) {
-            // request fields should match Middleware fields
+            // request fields should match FormRequest fields
             if (isset($jsonApiAttributes[$k])) {
                 $this->model->$k = $jsonApiAttributes[$k];
             }
@@ -180,7 +180,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->model = $this->setFlagsCreate();
         }
         $this->setRelationships($json, $this->model->id);
-        $resource = Json::getResource($this->middleWare, $this->model, $this->entity, false, $meta);
+        $resource = Json::getResource($this->formRequest, $this->model, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
@@ -220,7 +220,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsUpdate($model);
         }
 
-        $resource = Json::getResource($this->middleWare, $model, $this->entity, false, $meta);
+        $resource = Json::getResource($this->formRequest, $model, $this->entity, false, $meta);
         Json::outputSerializedData($resource);
     }
 
@@ -238,7 +238,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->updateJwtUser($model, $jsonApiAttributes);
         } else { // standard processing
             foreach ($this->props as $k => $v) {
-                // request fields should match Middleware fields
+                // request fields should match FormRequest fields
                 if (empty($jsonApiAttributes[$k]) === false) {
                     if ($isJwtAction === true && $k === JwtInterface::PASSWORD) {// it is a regular query with password updated and jwt enabled - hash the password
                         $model->$k = password_hash($jsonApiAttributes[$k], PASSWORD_DEFAULT);

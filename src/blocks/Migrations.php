@@ -70,12 +70,12 @@ class Migrations extends MigrationsAbstract
      */
     public function createPivot()
     {
-        $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
-        /** @var BaseFormRequest $middleWare **/
-        $middleWare       = new $middlewareEntity();
-        if(method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS))
+        $formRequestEntity = $this->getFormRequestEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $formRequest **/
+        $formRequest       = new $formRequestEntity();
+        if(method_exists($formRequest, ModelsInterface::MODEL_METHOD_RELATIONS))
         {
-            $relations = $middleWare->relations();
+            $relations = $formRequest->relations();
             foreach($relations as $relationEntity)
             {
                 $entityFile = $this->generator->formatEntitiesPath()

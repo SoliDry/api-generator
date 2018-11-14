@@ -25,7 +25,7 @@ use rjapi\types\RamlInterface;
  *
  * @package rjapi\blocks
  * @property ApiController entity
- * @property BaseFormRequest middleWare
+ * @property BaseFormRequest $formRequest
  * @property ApiController props
  * @property BaseModel model
  * @property ApiController modelEntity
@@ -34,22 +34,22 @@ use rjapi\types\RamlInterface;
  */
 trait EntitiesTrait
 {
-    public function getMiddlewareEntity(string $version, string $object) : string
+    public function getFormRequestEntity(string $version, string $object) : string
     {
         return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
             PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
             PhpInterface::BACKSLASH .
-            DirsInterface::MIDDLEWARE_DIR . PhpInterface::BACKSLASH .
+            DirsInterface::FORM_REQUEST_DIR . PhpInterface::BACKSLASH .
             $object .
-            DefaultInterface::MIDDLEWARE_POSTFIX;
+            DefaultInterface::FORM_REQUEST_POSTFIX;
     }
 
     protected function setEntities() : void
     {
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $middlewareEntity  = $this->getMiddlewareEntity(conf::getModuleName(), $this->entity);
-        $this->middleWare  = new $middlewareEntity();
-        $this->props       = get_object_vars($this->middleWare);
+        $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
+        $this->formRequest = new $formRequestEntity();
+        $this->props       = get_object_vars($this->formRequest);
         $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model       = new $this->modelEntity();
     }
@@ -82,7 +82,7 @@ trait EntitiesTrait
 
                 // fill in model
                 foreach ($this->props as $k => $v) {
-                    // request fields should match Middleware fields
+                    // request fields should match FormRequest fields
                     if (isset($jsonObject[$k])) {
                         $this->model->$k = $jsonObject[$k];
                     }
@@ -111,7 +111,7 @@ trait EntitiesTrait
             DB::rollBack();
         }
 
-        return Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
+        return Json::getResource($this->formRequest, $collection, $this->entity, true, $meta);
     }
 
     /**
@@ -156,7 +156,7 @@ trait EntitiesTrait
             DB::rollBack();
         }
 
-        return Json::getResource($this->middleWare, $collection, $this->entity, true, $meta);
+        return Json::getResource($this->formRequest, $collection, $this->entity, true, $meta);
     }
 
     /**

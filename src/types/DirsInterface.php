@@ -11,7 +11,7 @@ interface DirsInterface
     public const MODULES_DIR       = 'Modules';
     public const HTTP_DIR          = 'Http';
     public const CONTROLLERS_DIR   = 'Controllers';
-    public const MIDDLEWARE_DIR    = 'Middleware';
+    public const FORM_REQUEST_DIR  = 'Requests';
     public const ENTITIES_DIR      = 'Entities';
     public const DATABASE_DIR      = 'Database';
     public const MIGRATIONS_DIR    = 'Migrations';

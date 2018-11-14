@@ -51,7 +51,7 @@ trait BaseRelationsTrait
     public function createRelations(Request $request, $id, string $relation) : void
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        $resource = Json::getResource($this->formRequest, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
 
@@ -65,7 +65,7 @@ trait BaseRelationsTrait
     public function updateRelations(Request $request, $id, string $relation) : void
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = Json::getResource($this->middleWare, $model, $this->entity);
+        $resource = Json::getResource($this->formRequest, $model, $this->entity);
         Json::outputSerializedData($resource);
     }
 

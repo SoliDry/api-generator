@@ -4,7 +4,7 @@ namespace rjapitest\unit\blocks;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\blocks\FormRequestModel;
-use rjapi\blocks\Middleware;
+use rjapi\blocks\FormRequest;
 use rjapi\RJApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
@@ -16,7 +16,7 @@ use Symfony\Component\Yaml\Yaml;
  * Class EntitiesTest
  * @package rjapitest\unit\blocks
  *
- * @property Middleware middleware
+ * @property FormRequest middleware
  */
 class MiddlewareTest extends TestCase
 {
@@ -40,10 +40,10 @@ class MiddlewareTest extends TestCase
         $gen->modulesDir     = DirsInterface::MODULES_DIR;
         $gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $gen->httpDir        = DirsInterface::HTTP_DIR;
-        $gen->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
+        $gen->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
         $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
         $gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
-        $gen->objectProps   = [
+        $gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
             'attributes'    => 'ArticleAttributes',
@@ -51,7 +51,7 @@ class MiddlewareTest extends TestCase
                 'type' => 'TagRelationships[] | TopicRelationships',
             ]
         ];
-        $this->middleware = new Middleware($gen);
+        $this->middleware = new FormRequest($gen);
     }
 
     /**

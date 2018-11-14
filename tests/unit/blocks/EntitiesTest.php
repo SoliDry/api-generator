@@ -5,7 +5,7 @@ namespace rjapitest\unit\blocks;
 use Modules\V2\Entities\Article;
 use Modules\V2\Http\Middleware\ArticleTestMiddleware;
 use rjapi\blocks\FormRequestModel;
-use rjapi\blocks\Middleware;
+use rjapi\blocks\FormRequest;
 use rjapi\RJApiGenerator;
 use rjapi\types\DirsInterface;
 use rjapi\types\RamlInterface;
@@ -18,7 +18,7 @@ use Symfony\Component\Yaml\Yaml;
  * @package rjapitest\unit\blocks
  *
  * @property Entities entities
- * @property Middleware middleware
+ * @property FormRequest middleware
  */
 class EntitiesTest extends TestCase
 {
@@ -39,11 +39,11 @@ class EntitiesTest extends TestCase
         $gen->modulesDir = DirsInterface::MODULES_DIR;
         $gen->httpDir = DirsInterface::HTTP_DIR;
         // it is crucial to create entities/middleware in other namespace, not breaking original
-        $gen->entitiesDir   = 'TestEntities';
-        $gen->middlewareDir = 'TestMiddleware';
-        $ramlData           = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $gen->types         = $ramlData[RamlInterface::RAML_KEY_TYPES];
-        $gen->objectProps   = [
+        $gen->entitiesDir    = 'TestEntities';
+        $gen->formRequestDir = 'TestMiddleware';
+        $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
+        $gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
+        $gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
             'attributes'    => 'ArticleAttributes',
@@ -51,8 +51,8 @@ class EntitiesTest extends TestCase
                 'type' => 'TagRelationships[] | TopicRelationships',
             ]
         ];
-        $this->entities     = new Entities($gen);
-        $this->middleware   = new Middleware($gen);
+        $this->entities      = new Entities($gen);
+        $this->middleware   = new FormRequest($gen);
     }
 
     /**

@@ -4,7 +4,7 @@ namespace rjapi\controllers;
 
 use rjapi\blocks\Controllers;
 use rjapi\blocks\Entities;
-use rjapi\blocks\Middleware;
+use rjapi\blocks\FormRequest;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
 use rjapi\blocks\Tests;
@@ -39,9 +39,9 @@ trait GeneratorTrait
         $this->controllers->createDefault();
         $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
 
-        // create middleware
-        $this->forms = new Middleware($this);
-        $this->forms->createEntity($this->formatMiddlewarePath(), DefaultInterface::MIDDLEWARE_POSTFIX);
+        // create FormRequest
+        $this->forms = new FormRequest($this);
+        $this->forms->createEntity($this->formatRequestsPath(), DefaultInterface::FORM_REQUEST_POSTFIX);
         $this->forms->createAccessToken();
 
         // create entities/models
@@ -68,13 +68,13 @@ trait GeneratorTrait
     {
         $this->outputEntity();
         $this->createControllers();
-        // create middleware
-        $this->forms = new Middleware($this);
-        $middlewarePath = $this->formatMiddlewarePath();
-        if (true === file_exists($this->forms->getEntityFile($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX))) {
-            $this->forms->recreateEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
+
+        $this->forms = new FormRequest($this);
+        $formRequestPath = $this->formatRequestsPath();
+        if (true === file_exists($this->forms->getEntityFile($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX))) {
+            $this->forms->recreateEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
         } else {
-            $this->forms->createEntity($middlewarePath, DefaultInterface::MIDDLEWARE_POSTFIX);
+            $this->forms->createEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
         }
 
         // create entities/models

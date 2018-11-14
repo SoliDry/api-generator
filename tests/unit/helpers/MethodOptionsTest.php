@@ -10,7 +10,7 @@ namespace rjapitest\unit\helpers;
 
 
 use rjapi\helpers\MethodOptions;
-use rjapi\types\MiddlewareInterface;
+use rjapi\types\FromRequestInterface;
 use rjapi\types\PhpInterface;
 use rjapitest\unit\TestCase;
 
@@ -48,12 +48,12 @@ class MethodOptionsTest extends TestCase
         $this->assertTrue($this->methodOptions->isStatic());
 
         $this->methodOptions->setParams([
-            MiddlewareInterface::METHOD_PARAM_REQUEST,
-            PhpInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT,
+            FromRequestInterface::METHOD_PARAM_REQUEST,
+            PhpInterface::CLASS_CLOSURE => FromRequestInterface::METHOD_PARAM_NEXT,
         ]);
         $this->assertArraySubset([
-            MiddlewareInterface::METHOD_PARAM_REQUEST,
-            PhpInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT,
+            FromRequestInterface::METHOD_PARAM_REQUEST,
+            PhpInterface::CLASS_CLOSURE => FromRequestInterface::METHOD_PARAM_NEXT,
         ], $this->methodOptions->getParams());
     }
 }

@@ -126,7 +126,7 @@ class Json
     }
 
     /**
-     * @param BaseFormRequest $middleware
+     * @param BaseFormRequest $formRequest
      * @param                 $model
      * @param string $entity
      * @param bool $isCollection
@@ -134,9 +134,9 @@ class Json
      * @param array $meta
      * @return Collection|Item
      */
-    public static function getResource(BaseFormRequest $middleware, $model, string $entity, bool $isCollection = false, array $meta = [])
+    public static function getResource(BaseFormRequest $formRequest, $model, string $entity, bool $isCollection = false, array $meta = [])
     {
-        $transformer = new DefaultTransformer($middleware);
+        $transformer = new DefaultTransformer($formRequest);
         if ($isCollection === true) {
             $collection = new Collection($model, $transformer, strtolower($entity));
             if (empty($meta) === false) {

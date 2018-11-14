@@ -17,17 +17,17 @@ class DefaultTransformer extends TransformerAbstract
 
     public const INCLUDE_PREFIX = 'include';
 
-    private $middleWare;
+    private $formRequest;
 
     /**
      * DefaultTransformer constructor.
      *
-     * @param BaseFormRequest $middleWare
+     * @param BaseFormRequest $formRequest
      */
-    public function __construct(BaseFormRequest $middleWare)
+    public function __construct(BaseFormRequest $formRequest)
     {
-        $this->middleWare = $middleWare;
-        $this->setAvailableIncludes($middleWare->relations());
+        $this->formRequest = $formRequest;
+        $this->setAvailableIncludes($formRequest->relations());
     }
 
     /**
@@ -39,7 +39,7 @@ class DefaultTransformer extends TransformerAbstract
     {
         $arr = [];
         if ($object instanceof BaseModel) {
-            $props = get_object_vars($this->middleWare);
+            $props = get_object_vars($this->formRequest);
             try {
                 foreach ($props as $prop => $value) {
                     $arr[$prop] = $object->$prop;
@@ -70,15 +70,15 @@ class DefaultTransformer extends TransformerAbstract
     {
         // getting entity relation name, ex.: includeAuthor - author
         $entityName = str_replace(self::INCLUDE_PREFIX, '', $name);
-        $middlewareEntity = $this->getMiddlewareEntity(ConfigHelper::getModuleName(), $entityName);
-        $middleWare = new $middlewareEntity();
+        $formRequestEntity = $this->getFormRequestEntity(ConfigHelper::getModuleName(), $entityName);
+        $formRequest = new $formRequestEntity();
         $entityNameLow = MigrationsHelper::getTableName($entityName);
         // getting object, ex.: Book
         $obj = $arguments[0];
         $entity = $obj->$entityNameLow;
         if ($entity instanceof Collection) {
-            return $this->collection($entity, new DefaultTransformer($middleWare), $entityNameLow);
+            return $this->collection($entity, new DefaultTransformer($formRequest), $entityNameLow);
         }
-        return $this->item($entity, new DefaultTransformer($middleWare), $entityNameLow);
+        return $this->item($entity, new DefaultTransformer($formRequest), $entityNameLow);
     }
 }

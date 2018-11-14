@@ -15,9 +15,9 @@ class Controllers implements ControllersInterface
     use ContentManager;
 
     /** @var RJApiGenerator generator */
-    private $generator = null;
+    private $generator;
     private $sourceCode = '';
-    private $className = '';
+    private $className;
 
     /**
      * Controllers constructor.

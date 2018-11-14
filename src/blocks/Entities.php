@@ -17,7 +17,7 @@ use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
 /**
- * Class Middleware
+ * Class FormRequest
  * @package rjapi\blocks
  * @property RJApiGenerator generator
  */
@@ -64,12 +64,12 @@ class Entities extends FormRequestModel
 
     private function setRelations()
     {
-        $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
-        /** @var BaseFormRequest $middleWare * */
-        $middleWare = new $middlewareEntity();
-        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
+        $formRequestEntity = $this->getFormRequestEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $formRequest * */
+        $formRequest = new $formRequestEntity();
+        if (method_exists($formRequest, ModelsInterface::MODEL_METHOD_RELATIONS)) {
             $this->sourceCode .= PHP_EOL;
-            $relations        = $middleWare->relations();
+            $relations        = $formRequest->relations();
             foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);
                 // determine if ManyToMany, OneToMany, OneToOne rels
@@ -154,11 +154,11 @@ class Entities extends FormRequestModel
 
     public function createPivot()
     {
-        $middlewareEntity = $this->getMiddlewareEntity($this->generator->version, $this->className);
-        /** @var BaseFormRequest $middleWare * */
-        $middleWare = new $middlewareEntity();
-        if (method_exists($middleWare, ModelsInterface::MODEL_METHOD_RELATIONS)) {
-            $relations        = $middleWare->relations();
+        $formRequestEntity = $this->getFormRequestEntity($this->generator->version, $this->className);
+        /** @var BaseFormRequest $formRequest * */
+        $formRequest = new $formRequestEntity();
+        if (method_exists($formRequest, ModelsInterface::MODEL_METHOD_RELATIONS)) {
+            $relations        = $formRequest->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
             foreach ($relations as $relationEntity) {
                 $ucEntitty = ucfirst($relationEntity);

@@ -15,16 +15,17 @@ use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\HTTPMethodsInterface;
 use rjapi\types\MethodsInterface;
-use rjapi\types\MiddlewareInterface;
+use rjapi\types\FromRequestInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RamlInterface;
 
 /**
- * Class Middleware
+ * Class FormRequest
+ *
  * @package rjapi\blocks
  * @property RJApiGenerator generator
  */
-class Middleware extends FormRequestModel
+class FormRequest extends FormRequestModel
 {
     use ContentManager;
 
@@ -36,7 +37,7 @@ class Middleware extends FormRequestModel
             'type' => 'integer',
         ],
     ];
-    private $className = '';
+    private $className;
 
     public function __construct(BaseCommand $generator)
     {
@@ -159,7 +160,7 @@ class Middleware extends FormRequestModel
     }
 
     /**
-     *  Sets content of *Middleware
+     *  Sets content of *FormRequest
      */
     private function setContent()
     {
@@ -167,13 +168,13 @@ class Middleware extends FormRequestModel
         $this->setNamespace(
             $this->generator->httpDir .
             PhpInterface::BACKSLASH .
-            $this->generator->middlewareDir
+            $this->generator->formRequestDir
         );
 
         $baseFullForm = BaseFormRequest::class;
         $baseFormName = Classes::getName($baseFullForm);
         $this->setUse($baseFullForm, false, true);
-        $this->startClass($this->className . DefaultInterface::MIDDLEWARE_POSTFIX, $baseFormName);
+        $this->startClass($this->className . DefaultInterface::FORM_REQUEST_POSTFIX, $baseFormName);
 
         $this->setComment(DefaultInterface::PROPS_START);
         if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
@@ -198,12 +199,12 @@ class Middleware extends FormRequestModel
     }
 
     /**
-     *  Sets content of *Middleware
+     *  Sets content of *FormRequest
      */
     private function resetContent()
     {
-        $this->setBeforeProps($this->getEntityFile($this->generator->formatMiddlewarePath(),
-            DefaultInterface::MIDDLEWARE_POSTFIX));
+        $this->setBeforeProps($this->getEntityFile($this->generator->formatRequestsPath(),
+            DefaultInterface::FORM_REQUEST_POSTFIX));
         $this->setComment(DefaultInterface::PROPS_START, 0);
         if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
             && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
@@ -231,7 +232,7 @@ class Middleware extends FormRequestModel
             $this->setAccessTokenContent();
             $fileForm  = strtolower(DirsInterface::APPLICATION_DIR)
                 . PhpInterface::SLASH . $this->generator->httpDir
-                . PhpInterface::SLASH . $this->generator->middlewareDir
+                . PhpInterface::SLASH . $this->generator->formRequestDir
                 . PhpInterface::SLASH . JSONApiInterface::CLASS_API_ACCESS_TOKEN
                 . PhpInterface::PHP_EXT;
             $isCreated = FileManager::createFile(
@@ -249,16 +250,16 @@ class Middleware extends FormRequestModel
         $this->setTag();
         $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
             DirsInterface::APPLICATION_DIR . PhpInterface::BACKSLASH . $this->generator->httpDir .
-            PhpInterface::BACKSLASH . $this->generator->middlewareDir
+            PhpInterface::BACKSLASH . $this->generator->formRequestDir
             . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
 
         $this->setUse(PhpInterface::CLASS_CLOSURE, false, true);
         $this->startClass(JSONApiInterface::CLASS_API_ACCESS_TOKEN);
         $methodOptions = new MethodOptions();
-        $methodOptions->setName(MiddlewareInterface::METHOD_HANDLE);
+        $methodOptions->setName(FromRequestInterface::METHOD_HANDLE);
         $methodOptions->setParams([
-            MiddlewareInterface::METHOD_PARAM_REQUEST,
-            PhpInterface::CLASS_CLOSURE => MiddlewareInterface::METHOD_PARAM_NEXT,
+            FromRequestInterface::METHOD_PARAM_REQUEST,
+            PhpInterface::CLASS_CLOSURE => FromRequestInterface::METHOD_PARAM_NEXT,
         ]);
         $this->startMethod($methodOptions);
         $this->setHandleMethodContent();
@@ -271,7 +272,7 @@ class Middleware extends FormRequestModel
         $this->setTabs(2);
         $this->sourceCode .= PhpInterface::IF . PhpInterface::SPACE . PhpInterface::OPEN_PARENTHESES
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::PHP_TYPES_STRING . PhpInterface::CLOSE_PARENTHESES
-            . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . MiddlewareInterface::METHOD_PARAM_REQUEST
+            . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN . FromRequestInterface::METHOD_PARAM_REQUEST
             . PhpInterface::ARROW . JSONApiInterface::PARAM_ACCESS_TOKEN . PhpInterface::SPACE . PhpInterface::EXCLAMATION
             . PhpInterface::EQUALS . PhpInterface::EQUALS . PhpInterface::SPACE
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::PHP_TYPES_STRING . PhpInterface::CLOSE_PARENTHESES
@@ -294,8 +295,8 @@ class Middleware extends FormRequestModel
         $this->sourceCode .= PhpInterface::DIE . PhpInterface::SEMICOLON . PHP_EOL;
         $this->setTabs(2);
         $this->sourceCode .= PhpInterface::CLOSE_BRACE . PHP_EOL . PHP_EOL;
-        $this->setMethodReturn(PhpInterface::DOLLAR_SIGN . MiddlewareInterface::METHOD_PARAM_NEXT
-            . PhpInterface::OPEN_PARENTHESES . PhpInterface::DOLLAR_SIGN . MiddlewareInterface::METHOD_PARAM_REQUEST
+        $this->setMethodReturn(PhpInterface::DOLLAR_SIGN . FromRequestInterface::METHOD_PARAM_NEXT
+            . PhpInterface::OPEN_PARENTHESES . PhpInterface::DOLLAR_SIGN . FromRequestInterface::METHOD_PARAM_REQUEST
             . PhpInterface::CLOSE_PARENTHESES);
 
     }

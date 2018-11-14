@@ -23,7 +23,7 @@ class BaseCommand extends Command
     public $modulesDir     = '';
     public $httpDir        = '';
     public $controllersDir = '';
-    public $middlewareDir  = '';
+    public $formRequestDir = '';
     public $entitiesDir    = '';
     public $migrationsDir  = '';
 
@@ -80,7 +80,7 @@ class BaseCommand extends Command
         $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
         $this->modulesDir     = DirsInterface::MODULES_DIR;
         $this->httpDir        = DirsInterface::HTTP_DIR;
-        $this->middlewareDir  = DirsInterface::MIDDLEWARE_DIR;
+        $this->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
         if (env('APP_ENV') === 'dev') { // for test env based on .env
@@ -176,7 +176,7 @@ class BaseCommand extends Command
         // create controllers dir
         FileManager::createPath($this->formatControllersPath());
         // create forms dir
-        FileManager::createPath($this->formatMiddlewarePath());
+        FileManager::createPath($this->formatRequestsPath());
         // create mapper dir
         FileManager::createPath($this->formatEntitiesPath());
         // create migrations dir
@@ -189,10 +189,10 @@ class BaseCommand extends Command
         return FileManager::getModulePath($this, true) . $this->controllersDir;
     }
 
-    public function formatMiddlewarePath() : string
+    public function formatRequestsPath() : string
     {
         /** @var Command $this */
-        return FileManager::getModulePath($this, true) . $this->middlewareDir;
+        return FileManager::getModulePath($this, true) . $this->formRequestDir;
     }
 
     public function formatEntitiesPath() : string

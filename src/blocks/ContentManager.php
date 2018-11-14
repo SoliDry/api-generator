@@ -289,10 +289,10 @@ trait ContentManager
      * @uses \rjapi\blocks\Config::setContent
      * @uses \rjapi\blocks\Migrations::setContent
      * @uses \rjapi\blocks\Entities::setContent
-     * @uses \rjapi\blocks\Middleware::setContent
+     * @uses \rjapi\blocks\FormRequest::setContent
      * @uses \rjapi\blocks\Tests::setContent
      *
-     * Creates entities like *Controller, *Middleware, BaseModel entities etc
+     * Creates entities like *Controller, *FormRequest, BaseModel entities etc
      *
      * @param string $basePath
      * @param string $postFix
@@ -322,7 +322,7 @@ trait ContentManager
     }
 
     /**
-     * Creates entities like *Controller, *Middleware, BaseModel entities etc
+     * Creates entities like *Controller, *FormRequest, BaseModel entities etc
      *
      * @param string $basePath
      * @param string $postFix

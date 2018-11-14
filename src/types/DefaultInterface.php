@@ -3,9 +3,9 @@ namespace rjapi\types;
 
 interface DefaultInterface
 {
-    public const RAML_EXT           = '.raml';
-    public const CONTROLLER_POSTFIX = 'Controller';
-    public const MIDDLEWARE_POSTFIX = 'Middleware';
+    public const RAML_EXT             = '.raml';
+    public const CONTROLLER_POSTFIX   = 'Controller';
+    public const FORM_REQUEST_POSTFIX = 'FormRequest';
     // set the functional postfix for Codeception
     public const FUNCTIONAL_POSTFIX = 'Cest';
 

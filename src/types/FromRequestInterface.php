@@ -2,7 +2,7 @@
 namespace rjapi\types;
 
 
-interface MiddlewareInterface
+interface FromRequestInterface
 {
     public const METHOD_HANDLE = 'handle';
     public const METHOD_PARAM_REQUEST = 'request';
