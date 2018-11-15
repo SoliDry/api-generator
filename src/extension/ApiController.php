@@ -100,9 +100,11 @@ class ApiController extends Controller implements JSONApiInterface
         } else {
             $items = $this->getEntities($sqlOptions);
         }
+
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsIndex($items);
         }
+
         $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
@@ -122,6 +124,7 @@ class ApiController extends Controller implements JSONApiInterface
         $sqlOptions = $this->setSqlOptions($request);
         $sqlOptions->setId($id);
         $sqlOptions->setData($data);
+
         if (true === $this->isTree) {
             $tree = $this->getSubTreeEntities($sqlOptions, $id);
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
@@ -132,9 +135,11 @@ class ApiController extends Controller implements JSONApiInterface
         } else {
             $item = $this->getEntity($id, $data);
         }
+
         if (true === $this->configOptions->isBitMask()) {
             $this->setFlagsView($item);
         }
+
         $resource = Json::getResource($this->formRequest, $item, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
     }
@@ -151,14 +156,17 @@ class ApiController extends Controller implements JSONApiInterface
         $meta              = [];
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getAttributes($json);
+
         // FSM initial state check
         if ($this->configOptions->isStateMachine() === true) {
             $this->checkFsmCreate($jsonApiAttributes);
         }
+
         // spell check
         if ($this->configOptions->isSpellCheck() === true) {
             $meta = $this->spellCheck($jsonApiAttributes);
         }
+
         // fill in model
         foreach ($this->props as $k => $v) {
             // request fields should match FormRequest fields
@@ -166,19 +174,23 @@ class ApiController extends Controller implements JSONApiInterface
                 $this->model->$k = $jsonApiAttributes[$k];
             }
         }
+
         // set bit mask
         if (true === $this->configOptions->isBitMask()) {
             $this->setMaskCreate($jsonApiAttributes);
         }
         $this->model->save();
+
         // jwt
         if ($this->configOptions->getIsJwtAction() === true) {
             $this->createJwtUser(); // !!! model is overridden
         }
+
         // set bit mask from model -> response
         if (true === $this->configOptions->isBitMask()) {
             $this->model = $this->setFlagsCreate();
         }
+
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->formRequest, $this->model, $this->entity, false, $meta);
         Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
@@ -267,6 +279,7 @@ class ApiController extends Controller implements JSONApiInterface
         if ($model !== null) {
             $model->delete();
         }
+
         Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
