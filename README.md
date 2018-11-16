@@ -19,7 +19,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
     * [Controllers](#user-content-controllers)
-    * [Middlewares](#user-content-middlewares)
+    * [FormRequests](#user-content-formrequests)
     * [Models](#user-content-models)
     * [Routes](#user-content-routes)
     * [Migrations](#user-content-migrations)
@@ -113,7 +113,7 @@ php artisan raml:generate raml/articles.raml --migrations
 ```
 
 This command creates the whole environment for you to proceed building complex API based on RAML/Laravel/JSON API, 
-in particular: directories for modular app, Controllers/Middlewares/Models+Pivots to support full MVC, 
+in particular: directories for modular app, Controllers/FormRequests/Models+Pivots to support full MVC, 
 Routes (JSON API compatible) and even migrations to help you create RDBMS structure.
  
 ```raml/articles.raml``` - raml file in raml directory in the root of your project, 
@@ -302,7 +302,7 @@ where no params were passed.
 Complete directory structure after generator will end up it`s work will be like:
 ```php
 Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
-Modules/{ModuleName}/Http/Middleware/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
 Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
 Modules/{ModuleName}/Http/routes.php - contains routings pointing to controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
@@ -409,15 +409,15 @@ class DefaultController extends BaseController
 ```
 To provide developer-based (user-space) implementation of certain logic for all controllers.
 
-#### Middlewares
+#### FormRequests
 Validation BaseFormRequest example:
 ```php
 <?php
-namespace Modules\V2\Http\Middleware;
+namespace Modules\V2\Http\Requests;
 
 use rjapi\extension\BaseFormRequest;
 
-class ArticleMiddleware extends BaseFormRequest 
+class ArticleFormRequest extends BaseFormRequest 
 {
     // >>>props>>>
     public $id = null;
@@ -721,7 +721,7 @@ return [
         // default settings
         'limit' => 15,
         'sort' => 'desc',
-        // access token to check via global middleware
+        // access token to check via global FormRequest
         'access_token' => 'db7329d5a3f381875ea6ce7e28fe1ea536d0acaf',
     ],
 ];
@@ -794,9 +794,9 @@ The state of the server will not be changed by a request if any individual opera
 
 #### Static access token
 In ```QueryParams``` RAML types you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
-Generator will create ```app/Http/Middleware/ApiAccessToken.php``` global middleware.
+Generator will create ```app/Http/FormRequest/ApiAccessToken.php``` global FormRequest.
  
-To activate this check on every request - add ApiAccessToken middleware to ```app/Http/Middleware/Kernel.php```, ex.:
+To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/FormRequest/Kernel.php```, ex.:
 ```php
 class Kernel extends HttpKernel
 {
@@ -1447,7 +1447,7 @@ class DefaultController extends BaseController
 }
 ```     
 As u may noticed there is an access to either Route and Request properties.    
-In next chapter you'll know how to place custom code in Models/Middlewares preserving it from code regeneration override.   
+In next chapter you'll know how to place custom code in Models/FormRequest preserving it from code regeneration override.   
   
 ### Regeneration
 It is an important feature to regenerate your code based on generated history types and the current state 
@@ -1457,17 +1457,17 @@ of RAML docuemnt, which can be easily achieved by running:
 ```  
 This command will merge the last state/snapshot of document from `.gen` directory 
 and the current document (in this case from `raml/articles.raml`), 
-then creates files for models and middleware, merging it with user added content between generated props and methods.
+then creates files for models and FormRequest, merging it with user added content between generated props and methods.
 Moreover, it will add the new columns to newly created migration files with their indices.
  
-Example of regenerated middleware:
+Example of regenerated FormRequest:
 ```php
 <?php
-namespace Modules\V1\Http\Middleware;
+namespace Modules\V2\Http\Requests;
 
 use rjapi\extension\BaseFormRequest;
 
-class TagMiddleware extends BaseFormRequest
+class TagFormRequest extends BaseFormRequest
 {
     public $userPropOne = true;
     // >>>props>>>
