@@ -796,7 +796,7 @@ The state of the server will not be changed by a request if any individual opera
 In ```QueryParams``` RAML types you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
 Generator will create ```app/Http/FormRequest/ApiAccessToken.php``` global FormRequest.
  
-To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/FormRequest/Kernel.php```, ex.:
+To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/Kernel.php```, ex.:
 ```php
 class Kernel extends HttpKernel
 {
@@ -809,7 +809,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Middleware\ApiAccessToken::class,
+        \App\Http\Requests\ApiAccessToken::class,
     ];
 ```
 Generated configuration part:
