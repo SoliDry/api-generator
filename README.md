@@ -794,7 +794,7 @@ The state of the server will not be changed by a request if any individual opera
 
 #### Static access token
 In ```QueryParams``` RAML types you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
-Generator will create ```app/Http/FormRequest/ApiAccessToken.php``` global FormRequest.
+Generator will create ```App\Http\Requests\ApiAccessToken.php``` global FormRequest.
  
 To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/Kernel.php```, ex.:
 ```php
