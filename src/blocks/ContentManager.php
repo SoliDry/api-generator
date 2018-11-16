@@ -144,9 +144,14 @@ trait ContentManager
      */
     protected function createProperty(string $prop, string $modifier, $value = PhpInterface::PHP_TYPES_NULL, bool $isString = false) : void
     {
-        $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
-            $prop . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE
-            . (($isString === false) ? $value : PhpInterface::QUOTES . $value . PhpInterface::QUOTES) . PhpInterface::SEMICOLON . PHP_EOL;
+        if ($value === PhpInterface::PHP_TYPES_NULL) { // drop null assignments as they are already nullable by default
+            $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
+                $prop . PhpInterface::SEMICOLON . PHP_EOL;
+        } else {
+            $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
+                $prop . PhpInterface::SPACE . PhpInterface::EQUALS . PhpInterface::SPACE
+                . (($isString === false) ? $value : PhpInterface::QUOTES . $value . PhpInterface::QUOTES) . PhpInterface::SEMICOLON . PHP_EOL;
+        }
     }
 
     /**
