@@ -15,6 +15,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-laravel-specific-configuration)
     * [Running generator](#user-content-running-generator)
+* [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
 * [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
@@ -131,6 +132,40 @@ The output will look something like this:
 
 After that u can see the following dirs and files module structure in your project:
 ![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
+
+### Open API Types and Declarations
+OAS (Open API Specification) was developed as merge of Swagger and RAML specs
+
+```YAML
+openapi: 3.0.1
+info: This api provides access to articles
+servers:
+- url: https://{environment}.example.com:{port}/{basePath}
+  description: Production server
+  variables:
+    environment:
+      default: api
+      description: An api for devices at Google dot com
+    port:
+      enum:
+        - 80
+        - 443
+      defualt: 80
+    basePath:
+      default: v3 # this version will be used as Modules subdirectory and base path uri in routes 
+# to declare globally which files to include with other components declarations
+uses:
+  $ref: oas/topic.yaml
+```
+U can set multiple servers as well as multiple files into the main `openapi.yaml`, thus code will be generated for every server module e.g.: Modules/v2, Modules/v3, Modules/v4 
+and there will be other types from different files. 
+
+Basic and custom types are declared as in RAML section under
+```yaml
+components:
+  schemas:
+``` 
+see bellow.
 
 ### RAML Types and Declarations
 
