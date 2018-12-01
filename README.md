@@ -8,7 +8,7 @@
 ![alt Laravel logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/laravel-logo-white.png)
 ![alt JSON API logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/jsonapi.png)
 
-RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, with complete support of JSON-API data format 
+JSON-API PHP-code generator (based on OAS/RAML) for Laravel framework, with complete support of JSON-API data format 
 
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
@@ -40,7 +40,6 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Custom SQL](#user-content-custom-sql)
 * [Custom business logic](#user-content-custom-business-logic)
 * [Regeneration](#user-content-regeneration)
-* [Conversions to RAML](#user-content-conversions-to-raml)
 
 ### Installation via composer:
 First of all - create Laravel project if you didn't do that yet:
@@ -110,7 +109,7 @@ composer dump-autoload
 
 Run in console:
 ```
-php artisan raml:generate raml/articles.raml --migrations
+php artisan api:generate raml/articles.raml --migrations
 ```
 
 This command creates the whole environment for you to proceed building complex API based on RAML/Laravel/JSON API, 
@@ -134,7 +133,8 @@ After that u can see the following dirs and files module structure in your proje
 ![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Open API Types and Declarations
-OAS (Open API Specification) was developed as merge of Swagger and RAML specs
+OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
+has been implemented for ApiGenerator
 
 ```YAML
 openapi: 3.0.1
@@ -541,7 +541,7 @@ class Article extends BaseModel
 
 #### Routes
 
-Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in raml:
+Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in yaml:
 ```php
 // >>>routes>>>
 // Article routes
@@ -665,7 +665,7 @@ an example for foreign key would be like:
 #### Tests
 To provide convenient way for integration/functional testing, one can generate tests by providing `--tests` command option, e.g.:
 ```bash
-php artisan raml:generate raml/articles.raml --migrations --tests
+php artisan api:generate raml/articles.raml --migrations --tests
 ``` 
 in command output you'll see the following files have been created:
 ```bash
@@ -1488,7 +1488,7 @@ In next chapter you'll know how to place custom code in Models/FormRequest prese
 It is an important feature to regenerate your code based on generated history types and the current state 
 of RAML docuemnt, which can be easily achieved by running: 
 ```sh  
-  php artisan raml:generate raml/articles.raml --migrations --regenerate --merge=last
+  php artisan api:generate raml/articles.raml --migrations --regenerate --merge=last
 ```  
 This command will merge the last state/snapshot of document from `.gen` directory 
 and the current document (in this case from `raml/articles.raml`), 
@@ -1622,17 +1622,13 @@ There are also more things you can do, about rewinding history:
 - by passing option like this `--merge=9` generator will get back for 9 steps 
 - `--merge="2017-07-29 11:35:32"` generator gets to the concrete files by time in history
 
-### Conversions to RAML
-
-There are several tools for conversion between different types of documents and RAML, 
-one of the most famous (at this moment) is [APIMATIC](https://apimatic.io/transformer), 
-so there is no problem if you like ex.: Swagger, but want to use raml-json-api to build your application with RAML.
-
 ======================
 
 HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/raml-json-api/wiki
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
+
+To get deep-into ```Open API``` specification - https://swagger.io/specification/
 
 To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 

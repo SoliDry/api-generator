@@ -10,7 +10,7 @@ class ApiGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'raml:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
+    protected $signature = 'api:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
 
     /**
      * The console command description.
