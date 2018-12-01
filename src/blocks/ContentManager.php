@@ -8,7 +8,7 @@ use rjapi\helpers\Json;
 use rjapi\helpers\MethodOptions;
 use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
  * Class ContentManager
@@ -206,7 +206,7 @@ trait ContentManager
     public function setDescription(array $attrVal) : void
     {
         foreach ($attrVal as $k => $v) {
-            if ($k === RamlInterface::RAML_KEY_DESCRIPTION) {
+            if ($k === ApiInterface::RAML_KEY_DESCRIPTION) {
                 $this->setTabs(3);
                 $this->setComment($v);
             }

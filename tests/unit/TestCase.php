@@ -3,7 +3,7 @@
 namespace rjapitest\unit;
 
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ConfigInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\JwtInterface;
@@ -37,7 +37,7 @@ abstract class TestCase extends TestCaseLaravel
 
     public function createConfig()
     {
-        $gen             = new RJApiGenerator();
+        $gen             = new ApiGenerator();
         $gen->modulesDir = DirsInterface::MODULES_DIR;
         $gen->version    = self::MODULE_NAME;
         $confFile        = $gen->formatConfigPath() . 'config.php';

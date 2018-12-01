@@ -5,7 +5,7 @@ namespace rjapi\blocks;
 use rjapi\extension\BaseController;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ControllersInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
@@ -14,7 +14,7 @@ class Controllers implements ControllersInterface
 {
     use ContentManager;
 
-    /** @var RJApiGenerator generator */
+    /** @var ApiGenerator generator */
     private $generator;
     private $sourceCode = '';
     private $className;
@@ -22,7 +22,7 @@ class Controllers implements ControllersInterface
     /**
      * Controllers constructor.
      *
-     * @param RJApiGenerator $generator
+     * @param ApiGenerator $generator
      */
     public function __construct($generator)
     {

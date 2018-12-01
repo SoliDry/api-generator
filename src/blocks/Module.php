@@ -4,7 +4,7 @@ namespace rjapi\blocks;
 
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\CommandsInterface;
 use rjapi\types\ModulesInterface;
 use rjapi\types\PhpInterface;
@@ -14,7 +14,7 @@ class Module
     use ContentManager;
 
     protected $sourceCode = '';
-    /** @var RJApiGenerator generator */
+    /** @var ApiGenerator generator */
     protected $generator;
     protected $className;
 

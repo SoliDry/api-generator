@@ -9,22 +9,22 @@ use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
 use rjapi\helpers\MigrationsHelper;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
  * Class FormRequest
  * @package rjapi\blocks
- * @property RJApiGenerator generator
+ * @property ApiGenerator generator
  */
 class Entities extends FormRequestModel
 {
     use ContentManager, EntitiesTrait;
-    /** @var RJApiGenerator $generator */
+    /** @var ApiGenerator $generator */
     private $generator;
     private $className;
 
@@ -37,7 +37,7 @@ class Entities extends FormRequestModel
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
         $isSoftDelete    = empty($this->generator->types[$this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES]
-                                 [RamlInterface::RAML_PROPS][ModelsInterface::COLUMN_DEL_AT]) === false;
+                                 [ApiInterface::RAML_PROPS][ModelsInterface::COLUMN_DEL_AT]) === false;
         $this->setIsSoftDelete($isSoftDelete);
     }
 
@@ -262,7 +262,7 @@ class Entities extends FormRequestModel
         $this->setPropSoftDelete();
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
+            ApiInterface::RAML_ID, true
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
@@ -283,8 +283,8 @@ class Entities extends FormRequestModel
     private function setIncrementingProperty()
     {
         // O(4)
-        $idObject = $this->generator->types[$this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS][RamlInterface::RAML_ID]];
-        if ($idObject[RamlInterface::RAML_TYPE] === RamlInterface::RAML_TYPE_STRING) {
+        $idObject = $this->generator->types[$this->generator->types[$this->generator->objectName][ApiInterface::RAML_PROPS][ApiInterface::RAML_ID]];
+        if ($idObject[ApiInterface::RAML_TYPE] === ApiInterface::RAML_TYPE_STRING) {
             $this->createProperty(
                 ModelsInterface::PROPERTY_INCREMENTING, PhpInterface::PHP_MODIFIER_PUBLIC,
                 PhpInterface::PHP_TYPES_BOOL_FALSE
@@ -301,7 +301,7 @@ class Entities extends FormRequestModel
         $this->setComment(DefaultInterface::PROPS_START, 0);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
+            ApiInterface::RAML_ID, true
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
@@ -335,7 +335,7 @@ class Entities extends FormRequestModel
         $this->setComment(DefaultInterface::PROPS_START);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
+            ApiInterface::RAML_ID, true
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
@@ -360,7 +360,7 @@ class Entities extends FormRequestModel
         $this->setComment(DefaultInterface::PROPS_START, 0);
         $this->createProperty(
             ModelsInterface::PROPERTY_PRIMARY_KEY, PhpInterface::PHP_MODIFIER_PROTECTED,
-            RamlInterface::RAML_ID, true
+            ApiInterface::RAML_ID, true
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,

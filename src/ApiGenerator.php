@@ -3,7 +3,7 @@ namespace rjapi;
 
 use rjapi\controllers\BaseCommand;
 
-class RJApiGenerator extends BaseCommand
+class ApiGenerator extends BaseCommand
 {
     /**
      * The name and signature of the console command.

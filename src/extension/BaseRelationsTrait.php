@@ -11,7 +11,7 @@ use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 trait BaseRelationsTrait
 {
@@ -110,7 +110,7 @@ trait BaseRelationsTrait
         if (empty($jsonApiRels) === false) {
             $lowEntity = strtolower($this->entity);
             foreach ($jsonApiRels as $index => $val) {
-                $rId = $val[RamlInterface::RAML_ID];
+                $rId = $val[ApiInterface::RAML_ID];
                 // if pivot file exists then save
                 $ucEntity = ucfirst($relation);
                 $file     = DirsInterface::MODULES_DIR . PhpInterface::SLASH
@@ -124,8 +124,8 @@ trait BaseRelationsTrait
                         $pivotEntity,
                         [
                             [
-                                $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $id,
-                                $relation . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID  => $rId,
+                                $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => $id,
+                                $relation . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID  => $rId,
                             ],
                         ]
                     )->delete();
@@ -133,10 +133,10 @@ trait BaseRelationsTrait
                     $relEntity = Classes::getModelEntity($ucEntity);
                     $model     = $this->getModelEntities(
                         $relEntity, [
-                            $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID, $id,
+                            $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID, $id,
                         ]
                     );
-                    $model->update([$relation . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => 0]);
+                    $model->update([$relation . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => 0]);
                 }
             }
             Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
@@ -153,14 +153,14 @@ trait BaseRelationsTrait
         $jsonApiRels = Json::getRelationships($json);
         if (empty($jsonApiRels) === false) {
             foreach ($jsonApiRels as $entity => $value) {
-                if (empty($value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID]) === false) {
+                if (empty($value[ApiInterface::RAML_DATA][ApiInterface::RAML_ID]) === false) {
                     // if there is only one relationship
-                    $rId = $value[RamlInterface::RAML_DATA][RamlInterface::RAML_ID];
+                    $rId = $value[ApiInterface::RAML_DATA][ApiInterface::RAML_ID];
                     $this->saveRelationship($entity, $eId, $rId, $isRemovable);
                 } else {
                     // if there is an array of relationships
-                    foreach ($value[RamlInterface::RAML_DATA] as $index => $val) {
-                        $rId = $val[RamlInterface::RAML_ID];
+                    foreach ($value[ApiInterface::RAML_DATA] as $index => $val) {
+                        $rId = $val[ApiInterface::RAML_ID];
                         $this->saveRelationship($entity, $eId, $rId, $isRemovable);
                     }
                 }
@@ -214,7 +214,7 @@ trait BaseRelationsTrait
             // clean up old links
             $this->getModelEntities(
                 $pivotEntity,
-                [$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID, $eId]
+                [$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID, $eId]
             )->delete();
             $this->relsRemoved = true;
         }
@@ -229,9 +229,9 @@ trait BaseRelationsTrait
      */
     private function savePivot(string $pivotEntity, string $lowEntity, string $entity, $eId, $rId) : void
     {
-        $pivot                                                                   = new $pivotEntity();
-        $pivot->{$entity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID}    = $rId;
-        $pivot->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $pivot                                                                  = new $pivotEntity();
+        $pivot->{$entity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID}    = $rId;
+        $pivot->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $eId;
         $pivot->save();
     }
 
@@ -247,18 +247,18 @@ trait BaseRelationsTrait
         $relEntity = Classes::getModelEntity($ucEntity);
         $model     = $this->getModelEntity($relEntity, $rId);
         // swap table and field trying to find rels with inverse
-        if (!property_exists($model, $lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID)) {
+        if (!property_exists($model, $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID)) {
             $ucTmp     = $ucEntity;
             $ucEntity  = ucfirst($lowEntity);
             $relEntity = Classes::getModelEntity($ucEntity);
             $model     = $this->getModelEntity($relEntity, $eId);
             $lowEntity = strtolower($ucTmp);
 
-            $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $rId;
+            $model->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $rId;
             $model->save();
             return;
         }
-        $model->{$lowEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID} = $eId;
+        $model->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $eId;
         $model->save();
     }
 }

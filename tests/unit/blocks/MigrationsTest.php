@@ -4,10 +4,10 @@ namespace rjapitest\unit\blocks;
 
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\blocks\MigrationsAbstract;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapitest\unit\TestCase;
 use rjapi\blocks\Migrations;
 use Symfony\Component\Yaml\Yaml;
@@ -17,7 +17,7 @@ use Symfony\Component\Yaml\Yaml;
  * @package rjapitest\unit\blocks
  *
  * @property Migrations migrations
- * @property RJApiGenerator gen
+ * @property ApiGenerator gen
  */
 class MigrationsTest extends TestCase
 {
@@ -30,15 +30,15 @@ class MigrationsTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        /** @var RJApiGenerator|PHPUnit_Framework_MockObject_MockObject $gen */
-        $this->gen = $this->createMock(RJApiGenerator::class);
+        /** @var ApiGenerator|PHPUnit_Framework_MockObject_MockObject $gen */
+        $this->gen = $this->createMock(ApiGenerator::class);
         $this->gen->method('options')->willReturn([
             ConsoleInterface::OPTION_REGENERATE => 1,
             ConsoleInterface::OPTION_MIGRATIONS => 1,
         ]);
         $this->gen->method('formatMigrationsPath')->willReturn(self::DIR_OUTPUT);
         $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $this->gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
+        $this->gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
         $this->gen->objectProps   = [
             'type'          => 'Type',
             'id'            => 'ID',

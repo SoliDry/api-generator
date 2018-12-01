@@ -10,7 +10,7 @@ use rjapi\helpers\MigrationsHelper;
 use rjapi\helpers\SqlOptions;
 use rjapi\types\ConfigInterface;
 use rjapi\types\ModelsInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
  * Trait OptionsTrait
@@ -42,7 +42,7 @@ trait OptionsTrait
             $request->input(ModelsInterface::PARAM_SORT);
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : Json::decode($request->input(ModelsInterface::PARAM_DATA));
-        $orderBy = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [RamlInterface::RAML_ID => $sort]
+        $orderBy = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [ApiInterface::RAML_ID => $sort]
             : Json::decode($request->input(ModelsInterface::PARAM_ORDER_BY));
         $filter = ($request->input(ModelsInterface::PARAM_FILTER) === null) ? [] : Json::decode($request->input(ModelsInterface::PARAM_FILTER));
         $sqlOptions->setLimit($limit);

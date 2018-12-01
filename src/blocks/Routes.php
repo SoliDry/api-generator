@@ -5,7 +5,7 @@ namespace rjapi\blocks;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Classes;
 use rjapi\helpers\Console;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\DefaultInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\RoutesInterface;
@@ -14,7 +14,7 @@ class Routes
 {
     use ContentManager, RoutesTrait;
 
-    /** @var RJApiGenerator $generator */
+    /** @var ApiGenerator $generator */
     private   $generator;
     protected $sourceCode = '';
 

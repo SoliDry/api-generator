@@ -2,13 +2,13 @@
 
 namespace rjapi\blocks;
 
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
- * @property RJApiGenerator generator
+ * @property ApiGenerator generator
  * @property string sourceCode
  */
 abstract class FormRequestModel
@@ -18,24 +18,24 @@ abstract class FormRequestModel
     public const CHECK_MANY_BRACKETS = '[]';
 
     private $legalTypes = [
-        RamlInterface::RAML_TYPE_DATETIME,
-        RamlInterface::RAML_TYPE_STRING,
-        RamlInterface::RAML_TYPE_INTEGER,
-        RamlInterface::RAML_TYPE_BOOLEAN,
-        RamlInterface::RAML_TYPE_ARRAY,
+        ApiInterface::RAML_TYPE_DATETIME,
+        ApiInterface::RAML_TYPE_STRING,
+        ApiInterface::RAML_TYPE_INTEGER,
+        ApiInterface::RAML_TYPE_BOOLEAN,
+        ApiInterface::RAML_TYPE_ARRAY,
     ];
 
     private $excludedKeys = [
-        RamlInterface::RAML_KEY_DESCRIPTION,
-        RamlInterface::RAML_KEY_DEFAULT,
+        ApiInterface::RAML_KEY_DESCRIPTION,
+        ApiInterface::RAML_KEY_DEFAULT,
     ];
 
     protected function setPropertyFilters()
     {
         $attrCnt =
-            count($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS]);
-        foreach($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-                [RamlInterface::RAML_PROPS] as $attrKey => $attrVal)
+            count($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS]);
+        foreach($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]]
+                [ApiInterface::RAML_PROPS] as $attrKey => $attrVal)
         {
             --$attrCnt;
             // determine attr
@@ -63,7 +63,7 @@ abstract class FormRequestModel
         foreach($attrVal as $k => $v)
         {
             --$cnt;
-            if($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === false)
+            if($k === ApiInterface::RAML_KEY_REQUIRED && (bool)$v === false)
             {
                 continue;
             }
@@ -85,9 +85,9 @@ abstract class FormRequestModel
      */
     private function setRequired(string $k, $v)
     {
-        if($k === RamlInterface::RAML_KEY_REQUIRED && (bool)$v === true)
+        if($k === ApiInterface::RAML_KEY_REQUIRED && (bool)$v === true)
         {
-            $this->sourceCode .= RamlInterface::RAML_KEY_REQUIRED;
+            $this->sourceCode .= ApiInterface::RAML_KEY_REQUIRED;
         }
     }
 
@@ -97,7 +97,7 @@ abstract class FormRequestModel
      */
     private function setPattern(string $k, $v)
     {
-        if($k === RamlInterface::RAML_PATTERN)
+        if($k === ApiInterface::RAML_PATTERN)
         {
             $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_REGEX . PhpInterface::COLON . $v;
         }
@@ -109,7 +109,7 @@ abstract class FormRequestModel
      */
     private function setEnum(string $k, $v)
     {
-        if($k === RamlInterface::RAML_ENUM)
+        if($k === ApiInterface::RAML_ENUM)
         {
             $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_ENUM . PhpInterface::COLON . implode(PhpInterface::COMMA, $v);
         }
@@ -121,7 +121,7 @@ abstract class FormRequestModel
      */
     private function setType(string $k, $v)
     {
-        if($k === RamlInterface::RAML_TYPE && in_array($v, $this->legalTypes))
+        if($k === ApiInterface::RAML_TYPE && in_array($v, $this->legalTypes))
         {
             $this->sourceCode .= $v;
         }
@@ -133,11 +133,11 @@ abstract class FormRequestModel
      */
     private function setMinMax(string $k, $v)
     {
-        if($k === RamlInterface::RAML_STRING_MIN || $k === RamlInterface::RAML_INTEGER_MIN)
+        if($k === ApiInterface::RAML_STRING_MIN || $k === ApiInterface::RAML_INTEGER_MIN)
         {
             $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MIN . PhpInterface::COLON . $v;
         }
-        else if($k === RamlInterface::RAML_STRING_MAX || $k === RamlInterface::RAML_INTEGER_MAX)
+        else if($k === ApiInterface::RAML_STRING_MAX || $k === ApiInterface::RAML_INTEGER_MAX)
         {
             $this->sourceCode .= ModelsInterface::LARAVEL_FILTER_MAX . PhpInterface::COLON . $v;
         }

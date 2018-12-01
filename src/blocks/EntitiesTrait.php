@@ -18,7 +18,7 @@ use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
  * Class EntitiesTrait
@@ -200,12 +200,12 @@ trait EntitiesTrait
      */
     private function getRelationType(string $objectName)
     {
-        if (empty($this->generator->types[$objectName][RamlInterface::RAML_PROPS]
-                  [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
+        if (empty($this->generator->types[$objectName][ApiInterface::RAML_PROPS]
+                  [ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]) === false
         ) {
             return trim(
-                $this->generator->types[$objectName][RamlInterface::RAML_PROPS]
-                [RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]
+                $this->generator->types[$objectName][ApiInterface::RAML_PROPS]
+                [ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]
             );
         }
 

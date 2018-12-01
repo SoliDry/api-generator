@@ -12,7 +12,7 @@ use rjapi\extension\BaseFormRequest;
 use rjapi\extension\BaseModel;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Json;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapitest\_data\ArticleFixture;
 use rjapitest\unit\TestCase;
 
@@ -58,8 +58,8 @@ class JsonTest extends TestCase
     public function it_gets_attributes()
     {
         $attrsData = Json::getAttributes([
-            RamlInterface::RAML_DATA => [
-                RamlInterface::RAML_ATTRS => [
+            ApiInterface::RAML_DATA => [
+                ApiInterface::RAML_ATTRS => [
                     'title'       => 'Foo Bar Baz',
                     'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
                 ]
@@ -77,15 +77,15 @@ class JsonTest extends TestCase
     public function it_gets_data()
     {
         $data = Json::getData([
-            RamlInterface::RAML_DATA => [
-                RamlInterface::RAML_ATTRS => [
+            ApiInterface::RAML_DATA => [
+                ApiInterface::RAML_ATTRS => [
                     'title'       => 'Foo Bar Baz',
                     'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
                 ]
             ]
         ]);
         $this->assertArraySubset([
-            RamlInterface::RAML_ATTRS => [
+            ApiInterface::RAML_ATTRS => [
                 'title'       => 'Foo Bar Baz',
                 'description' => 'Foo Bar Baz Foo Bar Baz Foo Bar Baz',
             ]
@@ -98,8 +98,8 @@ class JsonTest extends TestCase
     public function it_gets_relationships()
     {
         $relations = Json::getRelationships([
-            RamlInterface::RAML_DATA => [
-                RamlInterface::RAML_RELATIONSHIPS => [
+            ApiInterface::RAML_DATA => [
+                ApiInterface::RAML_RELATIONSHIPS => [
                     'type' => 'TagRelationships[]'
                 ]
             ]

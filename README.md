@@ -57,7 +57,7 @@ composer require rjapi/raml-json-api
 Add command to ```$commands``` array in ```app/Console/Kernel.php```
 ```php
 protected $commands = [
-    RJApiGenerator::class,
+    ApiGenerator::class,
 ];
 ```
 

@@ -6,9 +6,9 @@ use Modules\V2\Entities\Article;
 use Modules\V2\Http\Middleware\ArticleTestMiddleware;
 use rjapi\blocks\FormRequestModel;
 use rjapi\blocks\FormRequest;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\DirsInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapitest\unit\TestCase;
 use rjapi\blocks\Entities;
 use Symfony\Component\Yaml\Yaml;
@@ -31,8 +31,8 @@ class EntitiesTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        /** @var RJApiGenerator $gen */
-        $gen = $this->createMock(RJApiGenerator::class);
+        /** @var ApiGenerator $gen */
+        $gen = $this->createMock(ApiGenerator::class);
         $gen->method('formatEntitiesPath')->willReturn(self::DIR_OUTPUT);
         $gen->objectName = 'Article';
         $gen->version    = 'v2';
@@ -42,7 +42,7 @@ class EntitiesTest extends TestCase
         $gen->entitiesDir    = 'TestEntities';
         $gen->formRequestDir = 'TestMiddleware';
         $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
+        $gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
         $gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',

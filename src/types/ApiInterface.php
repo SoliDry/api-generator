@@ -2,8 +2,17 @@
 
 namespace rjapi\types;
 
-interface RamlInterface
+interface ApiInterface
 {
+    public const OPEN_API_KEY = 'openapi';
+    public const API_SERVERS  = 'servers';
+
+    public const API_VARS       = 'variables';
+    public const API_BASE_PATH  = 'basePath';
+    public const API_DEFAULT    = 'default';
+    public const API_COMPONENTS = 'components';
+    public const API_SCHEMAS    = 'schemas';
+
     // RAML types map to FW
     public const RAML_TYPE_ARRAY    = 'array';
     public const RAML_TYPE_OBJECT   = 'object';
@@ -14,7 +23,7 @@ interface RamlInterface
     public const RAML_TYPE_NUMBER   = 'number';
 
     public const RAML_TO_PHP_TYPES = [
-        self::RAML_TYPE_STRING => PhpInterface::PHP_TYPES_STRING,
+        self::RAML_TYPE_STRING  => PhpInterface::PHP_TYPES_STRING,
         self::RAML_TYPE_INTEGER => PhpInterface::PHP_TYPES_INT,
     ];
 

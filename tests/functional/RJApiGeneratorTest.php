@@ -5,12 +5,12 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route;
 use Modules\V1\Http\Controllers\ArticleController;
 use Modules\V1\Http\Controllers\DefaultController;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 
 /**
  * Class ApiGeneratorTest
  *
- * @property RJApiGenerator gen
+ * @property ApiGenerator gen
  */
 class RJApiGeneratorTest extends \Codeception\Test\Unit
 {
@@ -36,7 +36,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
                 }
             }
         );
-        $this->gen = new RJApiGenerator();
+        $this->gen = new ApiGenerator();
     }
 
     protected function _after()

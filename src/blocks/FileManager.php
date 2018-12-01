@@ -5,7 +5,7 @@ namespace rjapi\blocks;
 use Illuminate\Console\Command;
 use rjapi\exceptions\DirectoryException;
 use rjapi\helpers\ConfigHelper;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\ModulesInterface;
@@ -67,7 +67,7 @@ class FileManager implements DirsInterface
      */
     public static function getModulePath(Command $obj, bool $http = false) : string
     {
-        /** @var RJApiGenerator $obj */
+        /** @var ApiGenerator $obj */
         $path =
             $obj->modulesDir . PhpInterface::SLASH . strtoupper($obj->version) . PhpInterface::SLASH;
         if($http === true)

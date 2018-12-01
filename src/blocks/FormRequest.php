@@ -7,7 +7,7 @@ use rjapi\extension\BaseFormRequest;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Console;
 use rjapi\helpers\MethodOptions;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\helpers\Classes;
 use rjapi\types\ConfigInterface;
 use rjapi\types\CustomsInterface;
@@ -17,13 +17,13 @@ use rjapi\types\HTTPMethodsInterface;
 use rjapi\types\MethodsInterface;
 use rjapi\types\FromRequestInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
  * Class FormRequest
  *
  * @package rjapi\blocks
- * @property RJApiGenerator generator
+ * @property ApiGenerator generator
  */
 class FormRequest extends FormRequestModel
 {
@@ -72,13 +72,13 @@ class FormRequest extends FormRequestModel
     private function setPropsContent()
     {
         $this->setComment(CustomsInterface::CUSTOM_TYPES_ATTRIBUTES);
-        foreach ($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]]
-                 [RamlInterface::RAML_PROPS] as $propKey => $propVal) {
+        foreach ($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]]
+                 [ApiInterface::RAML_PROPS] as $propKey => $propVal) {
             if (is_array($propVal)) {
                 $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC);
-                if (empty($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
+                if (empty($propVal[ApiInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
                     $this->setComment(ConfigInterface::BIT_MASK);
-                    foreach ($propVal[RamlInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
+                    foreach ($propVal[ApiInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
                         $this->createProperty($flag, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
                     }
                 }
@@ -94,7 +94,7 @@ class FormRequest extends FormRequestModel
                 PHP_EOL;
             foreach ($relationTypes as $attrKey => $attrVal) {
                 // determine attr
-                if ($attrKey !== RamlInterface::RAML_ID && $attrKey !== RamlInterface::RAML_TYPE) {
+                if ($attrKey !== ApiInterface::RAML_ID && $attrKey !== ApiInterface::RAML_TYPE) {
                     $this->createProperty($attrKey, PhpInterface::PHP_MODIFIER_PUBLIC);
                 }
             }
@@ -133,8 +133,8 @@ class FormRequest extends FormRequestModel
         // attrs validation
         $this->startArray();
         if (empty($relationTypes) === false) {
-            $rel = empty($relationTypes[RamlInterface::RAML_TYPE]) ? $relationTypes :
-                $relationTypes[RamlInterface::RAML_TYPE];
+            $rel = empty($relationTypes[ApiInterface::RAML_TYPE]) ? $relationTypes :
+                $relationTypes[ApiInterface::RAML_TYPE];
 
             $rels = explode(PhpInterface::PIPE, str_replace('[]', '', $rel));
             foreach ($rels as $k => $rel) {
@@ -177,11 +177,11 @@ class FormRequest extends FormRequestModel
         $this->startClass($this->className . DefaultInterface::FORM_REQUEST_POSTFIX, $baseFormName);
 
         $this->setComment(DefaultInterface::PROPS_START);
-        if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-            && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
+        if (empty($this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]) === false
+            && empty($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]]) === false) {
             $this->setProps(
-                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
-                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
+                $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]]
+                [ApiInterface::RAML_PROPS][ApiInterface::RAML_DATA][ApiInterface::RAML_ITEMS]
             );
         } else {
             $this->setProps();
@@ -190,8 +190,8 @@ class FormRequest extends FormRequestModel
         $this->sourceCode .= PHP_EOL;
         $this->setComment(DefaultInterface::METHOD_START);
         $this->constructRules();
-        $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
-            ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
+        $relTypes = empty($this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE])
+            ? [] : $this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE];
         $this->constructRelations($relTypes);
         $this->setComment(DefaultInterface::METHOD_END);
         // create closing brace
@@ -206,11 +206,11 @@ class FormRequest extends FormRequestModel
         $this->setBeforeProps($this->getEntityFile($this->generator->formatRequestsPath(),
             DefaultInterface::FORM_REQUEST_POSTFIX));
         $this->setComment(DefaultInterface::PROPS_START, 0);
-        if (empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]) === false
-            && empty($this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]) === false) {
+        if (empty($this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]) === false
+            && empty($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]]) === false) {
             $this->setProps(
-                $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE]]
-                [RamlInterface::RAML_PROPS][RamlInterface::RAML_DATA][RamlInterface::RAML_ITEMS]
+                $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]]
+                [ApiInterface::RAML_PROPS][ApiInterface::RAML_DATA][ApiInterface::RAML_ITEMS]
             );
         } else {
             $this->setProps();
@@ -218,16 +218,16 @@ class FormRequest extends FormRequestModel
         $this->setAfterProps(DefaultInterface::METHOD_START);
         $this->setComment(DefaultInterface::METHOD_START, 0);
         $this->constructRules();
-        $relTypes = empty($this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE])
-            ? [] : $this->generator->objectProps[RamlInterface::RAML_RELATIONSHIPS][RamlInterface::RAML_TYPE];
+        $relTypes = empty($this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE])
+            ? [] : $this->generator->objectProps[ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE];
         $this->constructRelations($relTypes);
         $this->setAfterMethods();
     }
 
     public function createAccessToken()
     {
-        if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][RamlInterface::RAML_PROPS]
-                  [JSONApiInterface::PARAM_ACCESS_TOKEN][RamlInterface::RAML_KEY_DEFAULT]) === false
+        if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][ApiInterface::RAML_PROPS]
+                  [JSONApiInterface::PARAM_ACCESS_TOKEN][ApiInterface::RAML_KEY_DEFAULT]) === false
         ) {
             $this->setAccessTokenContent();
             $fileForm  = strtolower(DirsInterface::APPLICATION_DIR)

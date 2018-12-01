@@ -8,7 +8,7 @@ use rjapi\helpers\MethodOptions;
 use rjapi\types\DefaultInterface;
 use rjapi\types\MethodsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapi\types\TestsInterface;
 
 class Tests
@@ -131,8 +131,8 @@ class Tests
     private function setDeleteContent(MethodOptions $methodOpts) : void
     {
         $id = $this->getId();
-        if (empty($this->attributesState[RamlInterface::RAML_ID]) === false) {
-            $id = $this->attributesState[RamlInterface::RAML_ID];
+        if (empty($this->attributesState[ApiInterface::RAML_ID]) === false) {
+            $id = $this->attributesState[ApiInterface::RAML_ID];
         }
         $methodOpts->setName(TestsInterface::TRY . $this->generator->objectName . ucfirst(MethodsInterface::DELETE));
         $this->startMethod($methodOpts);
@@ -146,8 +146,8 @@ class Tests
 
     private function getId()
     {
-        if (empty($this->attributesState[RamlInterface::RAML_ID]) === false) {
-            return $this->attributesState[RamlInterface::RAML_ID];
+        if (empty($this->attributesState[ApiInterface::RAML_ID]) === false) {
+            return $this->attributesState[ApiInterface::RAML_ID];
         }
         return 1;
     }
@@ -160,19 +160,19 @@ class Tests
     {
         $attrs = [];
         // set id if it's string
-        if (empty($this->attributesState[RamlInterface::RAML_ID]) === false) {
-            $attrs[RamlInterface::RAML_ID] = $this->attributesState[RamlInterface::RAML_ID];
+        if (empty($this->attributesState[ApiInterface::RAML_ID]) === false) {
+            $attrs[ApiInterface::RAML_ID] = $this->attributesState[ApiInterface::RAML_ID];
         }
-        $props = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+        $props = $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS];
         foreach ($this->attributesState as $attrKey => $attrVal) {
-            if ($required === false || ($required === true && empty($props[$attrKey][RamlInterface::RAML_KEY_REQUIRED]) === false)) {
+            if ($required === false || ($required === true && empty($props[$attrKey][ApiInterface::RAML_KEY_REQUIRED]) === false)) {
                 $attrs[$attrKey] = $attrVal;
             }
         }
         return [
-            RamlInterface::RAML_DATA => [
-                RamlInterface::RAML_TYPE  => mb_strtolower($this->generator->objectName),
-                RamlInterface::RAML_ATTRS => $attrs,
+            ApiInterface::RAML_DATA => [
+                ApiInterface::RAML_TYPE  => mb_strtolower($this->generator->objectName),
+                ApiInterface::RAML_ATTRS => $attrs,
             ],
         ];
     }
@@ -184,28 +184,28 @@ class Tests
     private function getJsonApiResponse($required = false) : array
     {
         $attrs = [];
-        $props = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+        $props = $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS];
         foreach ($this->attributesState as $attrKey => $attrVal) {
-            if ($required === false || ($required === true && empty($props[$attrKey][RamlInterface::RAML_KEY_REQUIRED]) === false)) {
+            if ($required === false || ($required === true && empty($props[$attrKey][ApiInterface::RAML_KEY_REQUIRED]) === false)) {
                 $attrs[$attrKey] = $attrVal;
             }
         }
         return [
-            RamlInterface::RAML_DATA => [
-                RamlInterface::RAML_TYPE  => mb_strtolower($this->generator->objectName),
-                RamlInterface::RAML_ID    => $this->getId(),
-                RamlInterface::RAML_ATTRS => $attrs,
+            ApiInterface::RAML_DATA => [
+                ApiInterface::RAML_TYPE  => mb_strtolower($this->generator->objectName),
+                ApiInterface::RAML_ID    => $this->getId(),
+                ApiInterface::RAML_ATTRS => $attrs,
             ],
         ];
     }
 
     private function collectProps()
     {
-        $idObject = $this->generator->types[$this->generator->types[$this->generator->objectName][RamlInterface::RAML_PROPS][RamlInterface::RAML_ID]];
-        if ($idObject[RamlInterface::RAML_TYPE] === RamlInterface::RAML_TYPE_STRING) {
-            $this->attributesState[RamlInterface::RAML_ID] = uniqid();
+        $idObject = $this->generator->types[$this->generator->types[$this->generator->objectName][ApiInterface::RAML_PROPS][ApiInterface::RAML_ID]];
+        if ($idObject[ApiInterface::RAML_TYPE] === ApiInterface::RAML_TYPE_STRING) {
+            $this->attributesState[ApiInterface::RAML_ID] = uniqid();
         }
-        $props = $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+        $props = $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS];
         foreach ($props as $attrKey => $attrVal) {
             $this->attributesState[$attrKey] = $this->getAttributeValue($attrVal);
         }
@@ -218,22 +218,22 @@ class Tests
     private function getAttributeValue(array $attrVal)
     {
         $faker = Factory::create();
-        $type  = !empty($attrVal[RamlInterface::RAML_ENUM]) ? RamlInterface::RAML_ENUM : $attrVal[RamlInterface::RAML_TYPE];
+        $type  = !empty($attrVal[ApiInterface::RAML_ENUM]) ? ApiInterface::RAML_ENUM : $attrVal[ApiInterface::RAML_TYPE];
         switch ($type) {
-            case RamlInterface::RAML_TYPE_NUMBER:
-            case RamlInterface::RAML_TYPE_INTEGER:
+            case ApiInterface::RAML_TYPE_NUMBER:
+            case ApiInterface::RAML_TYPE_INTEGER:
                 return $faker->randomDigit;
-            case RamlInterface::RAML_TYPE_STRING:
+            case ApiInterface::RAML_TYPE_STRING:
                 return $faker->userName;
-            case RamlInterface::RAML_TYPE_BOOLEAN:
+            case ApiInterface::RAML_TYPE_BOOLEAN:
                 return $faker->boolean;
-            case RamlInterface::RAML_ENUM:
-                return $attrVal[RamlInterface::RAML_ENUM][0];
-            case RamlInterface::RAML_DATE:
+            case ApiInterface::RAML_ENUM:
+                return $attrVal[ApiInterface::RAML_ENUM][0];
+            case ApiInterface::RAML_DATE:
                 return $faker->date();
-            case RamlInterface::RAML_TIME:
+            case ApiInterface::RAML_TIME:
                 return $faker->time();
-            case RamlInterface::RAML_DATETIME:
+            case ApiInterface::RAML_DATETIME:
                 return $faker->dateTime()->format('Y-m-d H:i:s');
         }
         return $faker->name;

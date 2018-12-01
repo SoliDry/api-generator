@@ -11,7 +11,7 @@ use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\Serializer\JsonApiSerializer;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapi\extension\BaseFormRequest;
 use rjapi\extension\JSONApiInterface;
 use rjapi\transformers\DefaultTransformer;
@@ -25,7 +25,7 @@ class Json
      */
     public static function getAttributes(array $jsonApiArr) : array
     {
-        return empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_ATTRS];
+        return empty($jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_ATTRS]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_ATTRS];
     }
 
     /**
@@ -36,7 +36,7 @@ class Json
      */
     public static function getBulkAttributes(array $jsonApiArr) : array
     {
-        return empty($jsonApiArr[RamlInterface::RAML_DATA]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA];
+        return empty($jsonApiArr[ApiInterface::RAML_DATA]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA];
     }
 
     /**
@@ -46,7 +46,7 @@ class Json
      */
     public static function getRelationships(array $jsonApiArr) : array
     {
-        return empty($jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA][RamlInterface::RAML_RELATIONSHIPS];
+        return empty($jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_RELATIONSHIPS]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_RELATIONSHIPS];
     }
 
     /**
@@ -56,7 +56,7 @@ class Json
      */
     public static function getData(array $jsonApiArr) : array
     {
-        return empty($jsonApiArr[RamlInterface::RAML_DATA]) ? [] : $jsonApiArr[RamlInterface::RAML_DATA];
+        return empty($jsonApiArr[ApiInterface::RAML_DATA]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA];
     }
 
     /**
@@ -72,14 +72,14 @@ class Json
             if ($cnt > 1) {
                 foreach ($relations as $v) {
                     $attrs     = $v->getAttributes();
-                    $jsonArr[] = [RamlInterface::RAML_TYPE => $entity,
-                                  RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
+                    $jsonArr[] = [ApiInterface::RAML_TYPE => $entity,
+                                  ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
                 }
             } else {
                 foreach ($relations as $v) {
                     $attrs   = $v->getAttributes();
-                    $jsonArr = [RamlInterface::RAML_TYPE => $entity,
-                                RamlInterface::RAML_ID   => $attrs[RamlInterface::RAML_ID]];
+                    $jsonArr = [ApiInterface::RAML_TYPE => $entity,
+                                ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
                 }
             }
         }
@@ -210,7 +210,7 @@ class Json
             return $json;
         }
         $jsonArr = self::decode($json);
-        $current = current($jsonArr[RamlInterface::RAML_DATA]);
+        $current = current($jsonArr[ApiInterface::RAML_DATA]);
         if (empty($current[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) {// this is an array of values
             self::unsetArray($jsonArr, $data);
         } else {// this is just one element

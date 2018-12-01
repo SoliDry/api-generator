@@ -8,7 +8,7 @@ use rjapi\exceptions\AttributesException;
 use rjapi\helpers\Classes;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 trait MigrationsTrait
 {
@@ -87,11 +87,11 @@ trait MigrationsTrait
      */
     private function setIntegerRow(string $attrKey, array $attrVal, $type) : void
     {
-        if ($attrKey === RamlInterface::RAML_ID) {
+        if ($attrKey === ApiInterface::RAML_ID) {
             $this->setId($attrVal, $attrKey, $type);
         } else {
-            $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-            $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? null : $attrVal[RamlInterface::RAML_INTEGER_MAX];
+            $min = empty($attrVal[ApiInterface::RAML_INTEGER_MIN]) ? null : $attrVal[ApiInterface::RAML_INTEGER_MIN];
+            $max = empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) ? null : $attrVal[ApiInterface::RAML_INTEGER_MAX];
             $this->setIntegerDigit($attrKey, $max, $min < 0);
         }
     }
@@ -104,9 +104,9 @@ trait MigrationsTrait
      */
     private function setStringRow(string $attrKey, array $attrVal) : void
     {
-        $length = empty($attrVal[RamlInterface::RAML_STRING_MAX]) ? null : $attrVal[RamlInterface::RAML_STRING_MAX];
-        $build = empty($attrVal[RamlInterface::RAML_KEY_DEFAULT]) ? null
-            : [RamlInterface::RAML_KEY_DEFAULT => $this->quoteParam($attrVal[RamlInterface::RAML_KEY_DEFAULT])];
+        $length = empty($attrVal[ApiInterface::RAML_STRING_MAX]) ? null : $attrVal[ApiInterface::RAML_STRING_MAX];
+        $build = empty($attrVal[ApiInterface::RAML_KEY_DEFAULT]) ? null
+            : [ApiInterface::RAML_KEY_DEFAULT => $this->quoteParam($attrVal[ApiInterface::RAML_KEY_DEFAULT])];
         $this->setRow(ModelsInterface::MIGRATION_METHOD_STRING, $attrKey, $length, $build);
     }
 
@@ -116,13 +116,13 @@ trait MigrationsTrait
      */
     private function setNumberRow(array $attrVal, string $attrKey): void
     {
-        if (empty($attrVal[RamlInterface::RAML_TYPE_FORMAT]) === false
-            && ($attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
-                || $attrVal[RamlInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
+        if (empty($attrVal[ApiInterface::RAML_TYPE_FORMAT]) === false
+            && ($attrVal[ApiInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
+                || $attrVal[ApiInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
         ) {
-            $max = empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MAX];
-            $min = empty($attrVal[RamlInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[RamlInterface::RAML_INTEGER_MIN];
-            $this->setRow($attrVal[RamlInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
+            $max = empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MAX];
+            $min = empty($attrVal[ApiInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MIN];
+            $this->setRow($attrVal[ApiInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
                 . PhpInterface::SPACE . $min);
         }
     }
@@ -160,8 +160,8 @@ trait MigrationsTrait
      */
     private function setCompositeIndex(array $attrVal): void
     {
-        if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX]) === false) {
-            $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_COMPOSITE_INDEX];
+        if (empty($attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_COMPOSITE_INDEX]) === false) {
+            $facets = $attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_COMPOSITE_INDEX];
             if (empty($facets[ModelsInterface::INDEX_TYPE_FOREIGN]) === false) {
                 if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
                     throw new AttributesException('There must be references on attributes for foreign key construction.');

@@ -4,13 +4,13 @@ namespace rjapi\blocks;
 
 use rjapi\exceptions\AttributesException;
 use rjapi\helpers\Console;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 
 /**
- * @property RJApiGenerator generator
+ * @property ApiGenerator generator
  * @property string sourceCode
  */
 abstract class MigrationsAbstract
@@ -43,14 +43,14 @@ abstract class MigrationsAbstract
         $attrs = $this->getEntityAttributes();
         foreach ($attrs as $attrKey => $attrVal) {
             if (is_array($attrVal)) {
-                if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+                if (empty($attrVal[ApiInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
-                    $type = $attrVal[RamlInterface::RAML_TYPE];
+                    $type = $attrVal[ApiInterface::RAML_TYPE];
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
                 } else {// non-standard types aka enum
-                    if (empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
-                        $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
+                    if (empty($attrVal[ApiInterface::RAML_ENUM]) === false) {
+                        $this->setRowContent($attrVal, ApiInterface::RAML_ENUM, $attrKey);
                     }
                 }
 
@@ -74,14 +74,14 @@ abstract class MigrationsAbstract
     {
         foreach ($attrs as $attrKey => $attrVal) {
             if (is_array($attrVal)) {
-                if (empty($attrVal[RamlInterface::RAML_TYPE]) === false) {
+                if (empty($attrVal[ApiInterface::RAML_TYPE]) === false) {
                     $this->setDescription($attrVal);
-                    $type = $attrVal[RamlInterface::RAML_TYPE];
+                    $type = $attrVal[ApiInterface::RAML_TYPE];
                     // create migration fields depending on types
                     $this->setRowContent($attrVal, $type, $attrKey);
                 } else {// non-standard types aka enum
-                    if (empty($attrVal[RamlInterface::RAML_ENUM]) === false) {
-                        $this->setRowContent($attrVal, RamlInterface::RAML_ENUM, $attrKey);
+                    if (empty($attrVal[ApiInterface::RAML_ENUM]) === false) {
+                        $this->setRowContent($attrVal, ApiInterface::RAML_ENUM, $attrKey);
                     }
                 }
                 try {
@@ -104,30 +104,30 @@ abstract class MigrationsAbstract
     {
         // create migration fields depending on types
         switch ($type) {
-            case RamlInterface::RAML_TYPE_STRING:
+            case ApiInterface::RAML_TYPE_STRING:
                 $this->setStringRow($attrKey, $attrVal);
                 break;
-            case RamlInterface::RAML_TYPE_INTEGER:
+            case ApiInterface::RAML_TYPE_INTEGER:
                 // create an auto_incremented primary key
                 $this->setIntegerRow($attrKey, $attrVal, $type);
                 break;
-            case RamlInterface::RAML_TYPE_BOOLEAN:
+            case ApiInterface::RAML_TYPE_BOOLEAN:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_UTINYINT, $attrKey);
                 break;
-            case RamlInterface::RAML_TYPE_NUMBER:
+            case ApiInterface::RAML_TYPE_NUMBER:
                 $this->setNumberRow($attrVal, $attrKey);
                 break;
-            case RamlInterface::RAML_ENUM:
+            case ApiInterface::RAML_ENUM:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_ENUM, $attrKey,
                     $this->getArrayParam($attrVal[ModelsInterface::MIGRATION_METHOD_ENUM]));
                 break;
-            case RamlInterface::RAML_DATE:
+            case ApiInterface::RAML_DATE:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_DATE, $attrKey);
                 break;
-            case RamlInterface::RAML_TIME:
+            case ApiInterface::RAML_TIME:
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_TIME, $attrKey);
                 break;
-            case RamlInterface::RAML_DATETIME:
+            case ApiInterface::RAML_DATETIME:
                 if ($attrKey === ModelsInterface::COLUMN_DEL_AT) {
                     $this->setRow(ModelsInterface::MIGRATION_METHOD_SOFT_DEL, '', null, null, false);
                 } else {
@@ -156,8 +156,8 @@ abstract class MigrationsAbstract
      */
     public function setIndex(array $attrVal, string $attrKey): void
     {
-        if (empty($attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX]) === false) {
-            $facets = $attrVal[RamlInterface::RAML_FACETS][RamlInterface::RAML_INDEX];
+        if (empty($attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_INDEX]) === false) {
+            $facets = $attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_INDEX];
             foreach ($facets as $k => $v) {
                 switch ($v) {
                     case ModelsInterface::INDEX_TYPE_INDEX:
@@ -208,21 +208,21 @@ abstract class MigrationsAbstract
      */
     protected function setPivotRows($relationEntity): void
     {
-        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, RamlInterface::RAML_ID);
+        $this->setRow(ModelsInterface::MIGRATION_METHOD_INCREMENTS, ApiInterface::RAML_ID);
         $attrs = [
-            strtolower($this->generator->objectName) . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]],
-            $relationEntity . PhpInterface::UNDERSCORE . RamlInterface::RAML_ID => $this->generator->types[$this->generator->types[ucfirst($relationEntity)][RamlInterface::RAML_PROPS][RamlInterface::RAML_ID]],
+            strtolower($this->generator->objectName) . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ID]],
+            $relationEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID                          => $this->generator->types[$this->generator->types[ucfirst($relationEntity)][ApiInterface::RAML_PROPS][ApiInterface::RAML_ID]],
         ];
         foreach ($attrs as $attrKey => $attrVal) {
-            $this->setRowContent($attrVal, $attrVal[RamlInterface::RAML_TYPE], $attrKey);
+            $this->setRowContent($attrVal, $attrVal[ApiInterface::RAML_TYPE], $attrKey);
         }
         $this->setRow(ModelsInterface::MIGRATION_METHOD_TIMESTAMPS, '', null, null, false);
     }
 
     private function getEntityAttributes()
     {
-        $attrsArray = [RamlInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ID]]] +
-            $this->generator->types[$this->generator->objectProps[RamlInterface::RAML_ATTRS]][RamlInterface::RAML_PROPS];
+        $attrsArray = [ApiInterface::RAML_ID => $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ID]]] +
+            $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS];
 
         return $attrsArray;
     }
@@ -235,8 +235,8 @@ abstract class MigrationsAbstract
     private function setId($attrVal, $attrKey, $type): void
     {
         // set incremented id int
-        if ($type === RamlInterface::RAML_TYPE_INTEGER && empty($attrVal[RamlInterface::RAML_INTEGER_MAX]) === false) {
-            if ($attrVal[RamlInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS) {
+        if ($type === ApiInterface::RAML_TYPE_INTEGER && empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) === false) {
+            if ($attrVal[ApiInterface::RAML_INTEGER_MAX] > ModelsInterface::ID_MAX_INCREMENTS) {
                 $this->setRow(ModelsInterface::MIGRATION_METHOD_BIG_INCREMENTS, $attrKey);
 
                 return;

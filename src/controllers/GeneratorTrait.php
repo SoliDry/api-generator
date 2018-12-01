@@ -15,7 +15,7 @@ use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
 
 trait GeneratorTrait
@@ -131,6 +131,7 @@ trait GeneratorTrait
     {
         $opMerge = $this->options[ConsoleInterface::OPTION_MERGE];
         $timeCheck = strtotime($opMerge); // only for validation - coz of a diff timezones
+
         if (false !== $timeCheck) {
             $dateTime = explode(PhpInterface::SPACE, $opMerge);
             try {
@@ -158,10 +159,12 @@ trait GeneratorTrait
         if (is_dir($path) === false) {
             throw new DirectoryException('The directory: ' . $path . ' was not found.');
         }
+
         $files = glob($path . $time . '*' . DefaultInterface::RAML_EXT);
         foreach ($files as &$fullPath) {
             $fullPath = str_replace($path, '', $fullPath);
         }
+
         $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
         $this->composeTypes($date, $files, $this->ramlFiles);
     }
@@ -238,8 +241,8 @@ trait GeneratorTrait
                 if (mb_strpos($file, basename($ramlFile), null, PhpInterface::ENCODING_UTF8) !== false) {
                     $dataCurrent = Yaml::parse(file_get_contents($ramlFile));
                     $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
-                    $this->currentTypes = $dataCurrent[RamlInterface::RAML_KEY_TYPES];
-                    $this->historyTypes = $dataHistory[RamlInterface::RAML_KEY_TYPES];
+                    $this->currentTypes = $dataCurrent[ApiInterface::RAML_KEY_TYPES];
+                    $this->historyTypes = $dataHistory[ApiInterface::RAML_KEY_TYPES];
                     $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
                     $attrsCurrent += array_filter($this->currentTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
@@ -263,10 +266,10 @@ trait GeneratorTrait
     {
         // make diffs on current raml array to add columns/indices to migrations
         foreach ($attrsCurrent as $k => $v) {
-            if (empty($attrsHistory[$k][RamlInterface::RAML_PROPS]) === false
-                && (empty($v[RamlInterface::RAML_PROPS]) === false)) {
-                foreach ($v[RamlInterface::RAML_PROPS] as $attr => $attrValue) {
-                    if (empty($attrsHistory[$k][RamlInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
+            if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS]) === false
+                && (empty($v[ApiInterface::RAML_PROPS]) === false)) {
+                foreach ($v[ApiInterface::RAML_PROPS] as $attr => $attrValue) {
+                    if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
                         $this->diffTypes[$k][$attr] = $attrValue;
                     }
                 }

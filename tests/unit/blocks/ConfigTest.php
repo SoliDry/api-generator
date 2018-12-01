@@ -3,12 +3,12 @@
 namespace rjapitest\unit\blocks;
 
 use rjapi\blocks\Config;
-use rjapi\RJApiGenerator;
+use rjapi\ApiGenerator;
 use rjapi\types\ConfigInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\JwtInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapitest\unit\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -19,20 +19,20 @@ use Symfony\Component\Yaml\Yaml;
  */
 class ConfigTest extends TestCase
 {
-    /** @var RJApiGenerator $gen */
+    /** @var ApiGenerator $gen */
     private $gen;
     private $config;
 
     public function setUp()
     {
         parent::setUp();
-        $this->gen                 = new RJApiGenerator();
+        $this->gen                 = new ApiGenerator();
         $this->gen->modulesDir     = DirsInterface::MODULES_DIR;
         $this->gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $this->gen->httpDir        = DirsInterface::HTTP_DIR;
         $this->gen->version        = self::MODULE_NAME;
         $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $this->gen->types          = $ramlData[RamlInterface::RAML_KEY_TYPES];
+        $this->gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
         $this->gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',

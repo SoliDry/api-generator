@@ -8,6 +8,7 @@ artisan
 config/
 routes/
 storage/
+/oas/
 /raml/
 .env
 .gen/

@@ -5,7 +5,7 @@ namespace rjapitest\unit\extensions;
 
 use Modules\V2\Entities\Article;
 use rjapi\extension\BaseRelationsTrait;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapitest\_data\ArticleFixture;
 use rjapitest\_data\TopicFixture;
 use rjapitest\unit\TestCase;
@@ -35,10 +35,10 @@ class BaseRelationsTraitTest extends TestCase
     public function it_sets_relationships()
     {
         $this->setRelationships([
-            RamlInterface::RAML_DATA => [
-                'type'                            => 'article',
-                'id'                              => $this->article->id,
-                RamlInterface::RAML_RELATIONSHIPS => [
+            ApiInterface::RAML_DATA => [
+                'type'                           => 'article',
+                'id'                             => $this->article->id,
+                ApiInterface::RAML_RELATIONSHIPS => [
                     'topic' => [
                         'data' => ['type' => 'topic', 'id' => $this->topic->id]
                     ],

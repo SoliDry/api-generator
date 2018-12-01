@@ -7,7 +7,7 @@ use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapi\helpers\SqlOptions;
 
 /**
@@ -28,7 +28,7 @@ trait BaseModelTrait
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
+            . ModelsInterface::MODEL_METHOD_WHERE, [ApiInterface::RAML_ID, $id]
         );
         if ($data[0] !== PhpInterface::ASTERISK) {
             // add id to output it in json-api entity
@@ -56,7 +56,7 @@ trait BaseModelTrait
     {
         $obj = call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
-            . ModelsInterface::MODEL_METHOD_WHERE, [RamlInterface::RAML_ID, $id]
+            . ModelsInterface::MODEL_METHOD_WHERE, [ApiInterface::RAML_ID, $id]
         );
 
         return $obj->first();

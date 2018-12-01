@@ -8,7 +8,7 @@ use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use rjapi\types\RoutesInterface;
 
 /**
@@ -79,7 +79,7 @@ trait RoutesTrait
      */
     private function composeRelationsUri() : string
     {
-        return $this->composeRelationsBaseUri() . PhpInterface::SLASH . RamlInterface::RAML_RELATIONSHIPS
+        return $this->composeRelationsBaseUri() . PhpInterface::SLASH . ApiInterface::RAML_RELATIONSHIPS
             . PhpInterface::SLASH . PhpInterface::OPEN_BRACE
             . ModelsInterface::MODEL_METHOD_RELATIONS . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
     }
@@ -90,7 +90,7 @@ trait RoutesTrait
     private function composeIdUri() : string
     {
         return $this->composeBaseUri() . PhpInterface::SLASH . PhpInterface::OPEN_BRACE
-            . RamlInterface::RAML_ID . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
+            . ApiInterface::RAML_ID . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
     }
 
     /**
@@ -131,7 +131,7 @@ trait RoutesTrait
     {
         return PhpInterface::QUOTES . PhpInterface::SLASH . strtolower($this->generator->objectName) .
             PhpInterface::SLASH . PhpInterface::OPEN_BRACE
-            . RamlInterface::RAML_ID . PhpInterface::CLOSE_BRACE;
+            . ApiInterface::RAML_ID . PhpInterface::CLOSE_BRACE;
     }
 
     /**

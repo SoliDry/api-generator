@@ -10,7 +10,7 @@ use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
 use rjapi\types\DirsInterface;
 use rjapi\types\PhpInterface;
-use rjapi\types\RamlInterface;
+use rjapi\types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
 
 class BaseCommand extends Command
@@ -27,29 +27,29 @@ class BaseCommand extends Command
     public $entitiesDir    = '';
     public $migrationsDir  = '';
 
-    public  $version;
-    public  $objectName        = '';
-    public  $defaultController = 'Default';
-    public  $uriNamedParams;
-    public  $ramlFile          = '';
-    public  $force;
-    public  $customTypes       = [
+    public $version;
+    public $objectName        = '';
+    public $defaultController = 'Default';
+    public $uriNamedParams;
+    public $ramlFile          = '';
+    public $force;
+    public $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
 
-    public  $types             = [];
-    public  $currentTypes      = [];
-    public  $historyTypes      = [];
-    public  $mergedTypes       = [];
-    public  $diffTypes         = [];
-    public  $frameWork         = '';
-    public  $objectProps       = [];
-    public  $generatedFiles    = [];
-    public  $relationships     = [];
-    private $ramlFiles         = [];
+    public  $types          = [];
+    public  $currentTypes   = [];
+    public  $historyTypes   = [];
+    public  $mergedTypes    = [];
+    public  $diffTypes      = [];
+    public  $frameWork      = '';
+    public  $objectProps    = [];
+    public  $generatedFiles = [];
+    public  $relationships  = [];
+    private $files          = [];
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
@@ -64,17 +64,33 @@ class BaseCommand extends Command
     /** increment created routes to create file first and then append content */
     public $routesCreated = 0;
 
+    public $data = [];
+
     /**
      *  Generates api Controllers + Models to support RAML validation
      *
-     * @param string $ramlFile path to raml file
+     * @param string $file path to raml file
      * @throws \rjapi\exceptions\DirectoryException
      */
-    public function actionIndex(string $ramlFile)
+    public function actionIndex(string $file)
     {
-        $this->ramlFiles[]    = $ramlFile;
-        $data                 = Yaml::parse(file_get_contents($ramlFile));
-        $this->version        = str_replace('/', '', $data['version']);
+        $this->files[] = $file;
+        $this->data    = Yaml::parse(file_get_contents($file));
+        $this->formatDetector();
+    }
+
+    private function formatDetector()
+    {
+        if (empty($this->data[ApiInterface::OPEN_API_KEY]) === false) {
+            $this->generateOpenApi();
+        } else { // backward compatibility support of RAML
+            $this->generateRaml();
+        }
+    }
+
+    private function generateRaml()
+    {
+        $this->version        = str_replace('/', '', $this->data['version']);
         $this->appDir         = DirsInterface::APPLICATION_DIR;
         $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
@@ -92,9 +108,40 @@ class BaseCommand extends Command
         } else {
             $this->options = $this->options();
         }
-        $this->setIncludedTypes($data);
+
+        $this->setIncludedTypes();
         $this->runGenerator();
         $this->setGenHistory();
+    }
+
+    private function generateOpenApi()
+    {
+        $this->appDir         = DirsInterface::APPLICATION_DIR;
+        $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
+        $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
+        $this->modulesDir     = DirsInterface::MODULES_DIR;
+        $this->httpDir        = DirsInterface::HTTP_DIR;
+        $this->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
+        $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
+
+        foreach ($this->data[ApiInterface::API_SERVERS] as $server) {
+            $vars = $server[ApiInterface::API_VARS];
+            $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
+
+            if (env('APP_ENV') === 'dev') { // for test env based on .env
+                $this->options = [
+                    ConsoleInterface::OPTION_REGENERATE => 1,
+                    ConsoleInterface::OPTION_MIGRATIONS => 1,
+                    ConsoleInterface::OPTION_TESTS      => 1,
+                ];
+            } else {
+                $this->options = $this->options();
+            }
+
+            $this->setOpenApiIncludedTypes();
+            $this->runGenerator();
+            $this->setGenHistory();
+        }
     }
 
     /**
@@ -106,6 +153,7 @@ class BaseCommand extends Command
             $this->setMergedTypes();
             $this->isMerge = true;
         }
+
         $this->generateModule();
         $this->generateConfig();
         $this->generate();
@@ -140,7 +188,7 @@ class BaseCommand extends Command
     private function processObjectData(string $objName, array $objData)
     {
         foreach ($objData as $k => $v) {
-            if ($k === RamlInterface::RAML_PROPS) { // process props
+            if ($k === ApiInterface::RAML_PROPS) { // process props
                 $this->setObjectName($objName);
                 $this->setObjectProps($v);
                 if (true === $this->isMerge) {
@@ -241,15 +289,28 @@ class BaseCommand extends Command
      *
      * @param array $data
      */
-    private function setIncludedTypes(array $data)
+    private function setIncludedTypes()
     {
-        $this->types = $data[RamlInterface::RAML_KEY_TYPES];
-        if (empty($data[RamlInterface::RAML_KEY_USES]) === false) {
-            $files = $data[RamlInterface::RAML_KEY_USES];
+        $this->types = $this->data[ApiInterface::RAML_KEY_TYPES];
+        if (empty($this->data[ApiInterface::RAML_KEY_USES]) === false) {
+            $files = $this->data[ApiInterface::RAML_KEY_USES];
             foreach ($files as $file) {
-                $this->ramlFiles[] = $file;
-                $fileData          = Yaml::parse(file_get_contents($file));
-                $this->types       += $fileData[RamlInterface::RAML_KEY_TYPES];
+                $this->files[] = $file;
+                $fileData      = Yaml::parse(file_get_contents($file));
+                $this->types   += $fileData[ApiInterface::RAML_KEY_TYPES];
+            }
+        }
+    }
+
+    private function setOpenApiIncludedTypes()
+    {
+        $this->types = $this->data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+        if (empty($this->data[ApiInterface::RAML_KEY_USES]) === false) {
+            $files = $this->data[ApiInterface::RAML_KEY_USES];
+            foreach ($files as $file) {
+                $this->files[] = $file;
+                $fileData      = Yaml::parse(file_get_contents($file));
+                $this->types   += $fileData[ApiInterface::RAML_KEY_TYPES];
             }
         }
     }
@@ -262,7 +323,7 @@ class BaseCommand extends Command
         if (empty($this->options[ConsoleInterface::OPTION_NO_HISTORY])) {
             // create .gen dir to store raml history
             FileManager::createPath($this->formatGenPath());
-            foreach ($this->ramlFiles as $file) {
+            foreach ($this->files as $file) {
                 $pathInfo = pathinfo($file);
                 $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
                     . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
