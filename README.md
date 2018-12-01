@@ -1,7 +1,6 @@
 # raml-json-api
-PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  
+PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  [![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20OAS%20&url=https://github.com/RJAPI/raml-json-api&hashtags=php,api,oas,raml,json-api,laravel,developers)
 
-[![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20RAML%20&url=https://github.com/RJAPI/raml-json-api&hashtags=api,raml,json-api,laravel,developers)
 [![Build Status](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
 [![codecov](https://codecov.io/gh/RJAPI/raml-json-api/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
