@@ -27,8 +27,8 @@ class RJApiGenerator extends BaseCommand
         $ramlFile = $this->argument('ramlFile');
         try {
             $this->actionIndex($ramlFile);
-        } catch (exceptions\DirectoryException $e) {
-            echo $e->getTraceAsString();
+        } catch (\Exception $e) {
+            $this->error($e->getTraceAsString());
         }
     }
 }
