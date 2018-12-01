@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/RJAPI/raml-json-api/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-![alt RAML logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/raml_logo.png)
+![alt OAS logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/OpenAPI_Logo_Pantone-1.png)
 ![alt Laravel logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/laravel-logo-white.png)
 ![alt JSON API logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/jsonapi.png)
 
