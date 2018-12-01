@@ -1,6 +1,6 @@
 {
-    "description": "RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel framework, with complete support of JSON-API data format",
-    "type": "rjapi-raml",
+    "description": "PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format",
+    "type": "oas-json-api",
     "name": "rjapi/raml-json-api",
     "license": "MIT",
     "authors": [
