@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\TransformerAbstract;
 use Modules\V2\Entities\Article;
-use Modules\V2\Http\Middleware\ArticleMiddleware;
+use Modules\V2\Http\Requests\ArticleFormRequest;
 use PHPUnit\Framework\Constraint\IsType;
 use rjapi\extension\BaseModel;
 use rjapi\transformers\DefaultTransformer;
@@ -25,7 +25,7 @@ class DefaultTransformerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $middleware        = new ArticleMiddleware();
+        $middleware        = new ArticleFormRequest();
         $this->transformer = new DefaultTransformer($middleware);
     }
 

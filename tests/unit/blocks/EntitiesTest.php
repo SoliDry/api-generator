@@ -3,7 +3,7 @@
 namespace rjapitest\unit\blocks;
 
 use Modules\V2\Entities\Article;
-use Modules\V2\Http\Middleware\ArticleTestMiddleware;
+use Modules\V2\Http\Requests\ArticleFormRequest;
 use rjapi\blocks\FormRequestModel;
 use rjapi\blocks\FormRequest;
 use rjapi\ApiGenerator;
@@ -61,9 +61,9 @@ class EntitiesTest extends TestCase
     public function it_creates_middleware_and_entity()
     {
         // create Middleware for further entities to run
-        $this->middleware->createEntity(self::DIR_OUTPUT, 'Middleware');
-        require_once __DIR__ . '/../../_output/ArticleMiddleware.php';
-        $articleMiddleware = new \Modules\V2\Http\Middleware\ArticleMiddleware();
+        $this->middleware->createEntity(self::DIR_OUTPUT, 'FormRequest');
+        require_once __DIR__ . '/../../_output/ArticleFormRequest.php';
+        $articleMiddleware = new \Modules\V2\Http\Requests\ArticleFormRequest();
         $this->assertNull($articleMiddleware->id);
         $this->assertNull($articleMiddleware->title);
         $this->assertTrue($articleMiddleware->authorize());

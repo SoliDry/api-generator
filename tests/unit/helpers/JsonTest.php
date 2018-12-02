@@ -5,7 +5,7 @@ namespace rjapitest\unit\helpers;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use Modules\V2\Entities\Article;
-use Modules\V2\Http\Middleware\ArticleMiddleware;
+use Modules\V2\Http\Requests\ArticleFormRequest;
 use PHPUnit\Framework\Constraint\IsType;
 use PHPUnit_Framework_MockObject_MockObject;
 use rjapi\extension\BaseFormRequest;
@@ -31,7 +31,7 @@ class JsonTest extends TestCase
     {
         parent::setUp();
         $this->baseModel       = new Article();
-        $this->baseFormRequest = new ArticleMiddleware();
+        $this->baseFormRequest = new ArticleFormRequest();
     }
 
     /**

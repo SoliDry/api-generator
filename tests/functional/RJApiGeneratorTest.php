@@ -14,7 +14,7 @@ use rjapi\ApiGenerator;
  */
 class RJApiGeneratorTest extends \Codeception\Test\Unit
 {
-    const MODULES_DIR = './Modules/';
+    public const MODULES_DIR = './Modules/';
 
     /**
      * @var \FunctionalTester
@@ -70,7 +70,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
     public function testMiddleware()
     {
         // base model
-        $formIn = new \Modules\V1\Http\Middleware\ArticleMiddleware();
+        $formIn = new \Modules\V2\Http\Requests\ArticleFormRequest();
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
@@ -91,7 +91,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
         ], $formIn->relations());
 
         // related
-        $formIn = new \Modules\V1\Http\Middleware\TagMiddleware();
+        $formIn = new \Modules\V2\Http\Requests\TagFormRequest();
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
@@ -102,7 +102,7 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
             "article",
         ], $formIn->relations());
 
-        $formIn = new \Modules\V1\Http\Middleware\TopicMiddleware();
+        $formIn = new \Modules\V2\Http\Requests\TopicFormRequest();
         $this->assertInstanceOf(FormRequest::class, $formIn);
         $this->assertNotEmpty($formIn->rules());
         $this->assertArraySubset([
@@ -119,20 +119,20 @@ class RJApiGeneratorTest extends \Codeception\Test\Unit
      */
     public function testEntities()
     {
-        $article = new \Modules\V1\Entities\Article();
+        $article = new \Modules\V2\Entities\Article();
         $this->assertObjectHasAttribute('primaryKey', $article);
         $this->assertObjectHasAttribute('table', $article);
         $this->assertObjectHasAttribute('timestamps', $article);
         $this->assertTrue(method_exists($article, 'tag'), 'Class Article doesn`t have method tag');
         $this->assertTrue(method_exists($article, 'topic'), 'Class Article doesn`t have method topic');
 
-        $tag = new \Modules\V1\Entities\Tag();
+        $tag = new \Modules\V2\Entities\Tag();
         $this->assertObjectHasAttribute('primaryKey', $tag);
         $this->assertObjectHasAttribute('table', $tag);
         $this->assertObjectHasAttribute('timestamps', $tag);
         $this->assertTrue(method_exists($tag, 'article'), 'Class Tag doesn`t have method article');
 
-        $topic = new \Modules\V1\Entities\Topic();
+        $topic = new \Modules\V2\Entities\Topic();
         $this->assertObjectHasAttribute('primaryKey', $topic);
         $this->assertObjectHasAttribute('table', $topic);
         $this->assertObjectHasAttribute('timestamps', $topic);
