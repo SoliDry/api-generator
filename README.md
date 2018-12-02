@@ -1,9 +1,9 @@
 # api-generator
 PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  [![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20OAS%20&url=https://github.com/RJAPI/api-generator&hashtags=php,api,oas,raml,json-api,laravel,developers)
 
-[![Build Status](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
-[![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
+[![Build Status](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/api-generator/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/api-generator/?branch=master)
+[![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
