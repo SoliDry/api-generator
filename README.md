@@ -1,14 +1,14 @@
-# raml-json-api
-PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  [![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20OAS%20&url=https://github.com/RJAPI/raml-json-api&hashtags=php,api,oas,raml,json-api,laravel,developers)
+# api-generator
+PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  [![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20OAS%20&url=https://github.com/RJAPI/api-generator&hashtags=php,api,oas,raml,json-api,laravel,developers)
 
-[![Build Status](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
-[![codecov](https://codecov.io/gh/RJAPI/raml-json-api/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
+[![Build Status](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/raml-json-api/?branch=master)
+[![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/raml-json-api)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-![alt OAS logo](https://github.com/RJAPI/raml-json-api/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
-![alt Laravel logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/laravel-logo-white.png)
-![alt JSON API logo](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/jsonapi.png)
+![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
+![alt Laravel logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/laravel-logo-white.png)
+![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png)
 
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
@@ -16,7 +16,6 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Configuration](#user-content-laravel-specific-configuration)
     * [Running generator](#user-content-running-generator)
 * [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
-* [RAML Types and Declarations](#user-content-raml-types-and-declarations)
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
     * [Controllers](#user-content-controllers)
@@ -49,7 +48,7 @@ composer create-project --prefer-dist laravel/laravel your_app
 
 then in your project directory run:
 ``` 
-composer require rjapi/raml-json-api 
+composer require rjapi/api-generator
 ```
 
 ### Laravel specific configuration
@@ -109,15 +108,15 @@ composer dump-autoload
 
 Run in console:
 ```
-php artisan api:generate raml/articles.raml --migrations
+php artisan api:generate oas/openapi.yaml --migrations
 ```
 
-This command creates the whole environment for you to proceed building complex API based on RAML/Laravel/JSON API, 
+This command creates the whole environment for you to proceed building complex API based on OAS/Laravel/JSON API, 
 in particular: directories for modular app, Controllers/FormRequests/Models+Pivots to support full MVC, 
 Routes (JSON API compatible) and even migrations to help you create RDBMS structure.
  
-```raml/articles.raml``` - raml file in raml directory in the root of your project, 
-which should be prepared before or you may wish to just try by copying an example from ``` tests/functional/raml/articles.raml```
+```oas/openapi.yaml``` - file in oas directory in the root of your project, 
+which should be prepared before or you may wish to just try by copying an example from ``` tests/functional/oas/openapi.yaml```
 
 Options:
 
@@ -127,14 +126,14 @@ Options:
 By default generated files preserved to prevent overwriting of added/modified content.   
 
 The output will look something like this:
-![Console output](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Console_generator_output.png)
+![Console output](https://github.com/RJAPI/api-generator/blob/master/tests/images/Console_generator_output.png)
 
 After that u can see the following dirs and files module structure in your project:
-![Dirs and files](https://github.com/RJAPI/raml-json-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
+![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Open API Types and Declarations
 OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
-has been implemented for ApiGenerator
+has been implemented for api-generator
 
 ```YAML
 openapi: 3.0.1
@@ -152,34 +151,25 @@ servers:
         - 443
       defualt: 80
     basePath:
-      default: v3 # this version will be used as Modules subdirectory and base path uri in routes 
+      default: v3 # this version will be used as Modules subdirectory and base path uri in routes e.g. /Modules/V2/ and /v2/articles 
 # to declare globally which files to include with other components declarations
 uses:
-  $ref: oas/topic.yaml
+  topics: oas/topic.yaml
 ```
 U can set multiple servers as well as multiple files into the main `openapi.yaml`, thus code will be generated for every server module e.g.: Modules/v2, Modules/v3, Modules/v4 
 and there will be other types from different files. 
 
-Basic and custom types are declared as in RAML section under
+Basic and custom types are declared under
 ```yaml
 components:
   schemas:
 ``` 
-see bellow.
-
-### RAML Types and Declarations
-
-The ```version``` root property !required
-```RAML
-version: v1
-```
-converts to ```/Modules/V1/``` directory.
 
 Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
  
-You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - code-generator 
+You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - api-generator 
 will produce migrations, relations and models respectively. 
-```RAML
+```yaml
   ID:
     type: integer
     required: true
@@ -203,7 +193,7 @@ will produce migrations, relations and models respectively.
 ```
 
 Special data type ``` RelationshipsDataItem ``` - !required
-```RAML
+```yaml
   RelationshipsDataItem:
     type: object
     properties:
@@ -213,7 +203,7 @@ Special data type ``` RelationshipsDataItem ``` - !required
 defined in every relationship custom type
 
 Attributes ```*Attributes``` are defined for every custom Object ex.:
-```RAML
+```yaml
   ArticleAttributes:
     description: Article attributes description
     type: object
@@ -267,7 +257,7 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
 ```
 
 Relationships custom type definition semantics ```*Relationships```
-```RAML
+```yaml
   TagRelationships:
     description: Tag relationship description
     type: object
@@ -279,7 +269,7 @@ Relationships custom type definition semantics ```*Relationships```
 ```
 
 Complete composite Object looks like this: 
-```RAML
+```yaml
   Article:
     type: object
     properties:
@@ -289,23 +279,21 @@ Complete composite Object looks like this:
       relationships:
         type: TagRelationships[] | TopicRelationships     
 ```
-That is all that PHP-code generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
+That is all that api-generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
 
 To use multiple files processing add (as root element):
-```RAML
+```yaml
 uses:
-  topics: raml/topic.raml
-  otherfile: raml/otherFile.raml
-  yetanother: raml/yetanother.raml
+  topics: oas/openapi.yaml
+  otherfile: oas/otherFile.yaml
+  yetanother: oas/yetanother.yaml
 ```
 all files will be generated as if they were one composite object.
-The thing to note here, is that RAML-spec requires to include all header info 
-and dependent types into those included. You can see warning details in Atom IDE with Workbench API plugin, 
-or any other RAML analysing tools. 
+
 
 To set default values for GET query parameters - set QueryParams like this:
-```RAML
+```yaml
   QueryParams:
     type: object
     properties:
@@ -337,7 +325,7 @@ where no params were passed.
 Complete directory structure after generator will end up it`s work will be like:
 ```php
 Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
-Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes in RAML)
+Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes)
 Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
 Modules/{ModuleName}/Http/routes.php - contains routings pointing to controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
@@ -613,12 +601,12 @@ All migrations for specific module will be placed in ``` Modules/{ModuleName}/Da
 To execute them all - run: ``` php artisan module:migrate ```
 
 Also worth to mention - Laravel uses table_id convention to link tables via foreign key.
-So U can either follow the default - add to RAML an id that matches to the table name 
-(just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` in RAML Types and Declarations) 
+So U can either follow the default - add to yaml an id that matches to the table name 
+(just like in example: `topic_id` -> in article table for topic table `id`, see `ArticleAttributes` in OAS Types and Declarations) 
 or make your own foreign key and add it to ```hasMany/belongsTo -> $foreignKey``` parameter in generated BaseModel entity.
 
-Additionally, to specify index for particular column you can add a `facets` raml property like this:
-```raml
+Additionally, to specify index for particular column you can add a `facets` property like this:
+```yaml
     # regular index
     facets:
       index:
@@ -641,7 +629,7 @@ Additionally, to specify index for particular column you can add a `facets` raml
 to existing columns.
 
 However, there are situations where you have to create composite indices:
-```raml
+```yaml
       last_name:
         required: false
         type: string
@@ -652,7 +640,7 @@ However, there are situations where you have to create composite indices:
             index: ['first_name', 'last_name'] # can be unique, primary
 ```
 an example for foreign key would be like: 
-```raml
+```yaml
     facets:
       composite_index:
         foreign: ['first_column', 'second_column'] 
@@ -665,7 +653,7 @@ an example for foreign key would be like:
 #### Tests
 To provide convenient way for integration/functional testing, one can generate tests by providing `--tests` command option, e.g.:
 ```bash
-php artisan api:generate raml/articles.raml --migrations --tests
+php artisan api:generate oas/openapi.yaml --migrations --tests
 ``` 
 in command output you'll see the following files have been created:
 ```bash
@@ -828,7 +816,7 @@ The state of the server will not be changed by a request if any individual opera
 ### Security
 
 #### Static access token
-In ```QueryParams``` RAML types you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
+In ```QueryParams``` you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
 Generator will create ```App\Http\Requests\ApiAccessToken.php``` global FormRequest.
  
 To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/Kernel.php```, ex.:
@@ -859,8 +847,8 @@ Generated configuration part:
 #### JWT (Json Web Token)
 
 To support a JWT check, you need to add to any users, employees, 
-customers like table the ```jwt``` and ```password``` RAML properties:
-```RAML
+customers like table the ```jwt``` and ```password``` properties:
+```yaml
   password:
     description: user password to refresh JWT (encrypted with password_hash)
     required: true
@@ -1005,12 +993,12 @@ However, HMAC SHA-256 is the most popular these days.
 
 ### Caching
 RJAPI ships with caching ability (via Redis) out of the box, the only thing you need to do is to declare cache settings:
-```raml
+```yaml
   Redis:
     type: object
 ```
 and set the `cache` property in any custom entity, for instance: 
-```raml
+```yaml
   Article:
     type: object
     properties:
@@ -1067,7 +1055,7 @@ Instead, a `deleted_at` attribute is set on the model and inserted into the data
 If a model has a non-null `deleted_at` value, the model has been soft deleted.
  
 To enable soft deletes for a model just add `deleted_at` property on any custom type you need, ex.:
-```raml
+```yaml
   ArticleAttributes:
     description: Article attributes description
     type: object
@@ -1138,8 +1126,8 @@ By default JSON API is turned on.
 
 ### Tree structures
 
-You can easily build a tree structure by declaring it in RAML as `Trees` custom type:   
-```RAML
+You can easily build a tree structure by declaring it as `Trees` custom type:   
+```yaml
   Trees:
     type: object
     properties:
@@ -1152,7 +1140,7 @@ You can easily build a tree structure by declaring it in RAML as `Trees` custom 
 ```
 
 and adding `parent_id` to the targeted table, ex.:
-```RAML
+```yaml
   MenuAttributes:
     type: object
     properties:
@@ -1226,8 +1214,8 @@ See wiki page for real-world examples with Postman.
 
 ### Finite-state machine
 
-To add finite-state machine to a field(column) of an entity(table) - add definition into your RAML file like this:
-```RAML
+To add finite-state machine to a field(column) of an entity(table) - add definition into your OAS file like this:
+```yaml
       status:
         description: The state of an article
         enum: ["draft", "published", "postponed", "archived"]
@@ -1280,7 +1268,7 @@ apt-get install aspell-fr
 
 #### Usage 
 You may want to set spell check on particular field/column: 
-```RAML
+```yaml
       description:
         required: true
         type: string
@@ -1338,7 +1326,7 @@ you'll get the `meta` content back with filled array of failed checks in it:
 ### Bit Mask
 To use bit mask with automatic flags fragmentation/defragmentation 
 you can define additional facets to an integer field like this:
-```RAML
+```yaml
   permissions:
     type: integer
     required: false
@@ -1486,12 +1474,12 @@ In next chapter you'll know how to place custom code in Models/FormRequest prese
   
 ### Regeneration
 It is an important feature to regenerate your code based on generated history types and the current state 
-of RAML docuemnt, which can be easily achieved by running: 
+of OpenApi document, which can be easily achieved by running: 
 ```sh  
-  php artisan api:generate raml/articles.raml --migrations --regenerate --merge=last
+  php artisan api:generate oas/openapi.yaml --migrations --regenerate --merge=last
 ```  
 This command will merge the last state/snapshot of document from `.gen` directory 
-and the current document (in this case from `raml/articles.raml`), 
+and the current document (in this case from `oas/openapi.yaml`), 
 then creates files for models and FormRequest, merging it with user added content between generated props and methods.
 Moreover, it will add the new columns to newly created migration files with their indices.
  
@@ -1624,7 +1612,7 @@ There are also more things you can do, about rewinding history:
 
 ======================
 
-HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/raml-json-api/wiki
+HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/api-generator/wiki
 
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 

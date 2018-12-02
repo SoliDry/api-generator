@@ -1,7 +1,7 @@
 {
     "description": "PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format",
-    "type": "oas-json-api",
-    "name": "rjapi/raml-json-api",
+    "type": "api-generator",
+    "name": "rjapi/api-generator",
     "license": "MIT",
     "authors": [
         {

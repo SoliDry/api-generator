@@ -16,7 +16,7 @@ servers:
       default: v3
 # to declare globally which files to include with other components declarations
 uses:
-  $ref: oas/topic.yaml
+  topics: oas/topic.yaml
 components:
   schemas:
     ID:
