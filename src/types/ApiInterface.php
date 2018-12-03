@@ -6,6 +6,7 @@ interface ApiInterface
 {
     public const OPEN_API_KEY = 'openapi';
     public const API_SERVERS  = 'servers';
+    public const API_INFO     = 'info';
 
     public const API_VARS       = 'variables';
     public const API_BASE_PATH  = 'basePath';

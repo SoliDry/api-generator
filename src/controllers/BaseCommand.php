@@ -88,8 +88,22 @@ class BaseCommand extends Command
      */
     private function validate()
     {
+        // required yaml fields will be thrown as exceptions
         if (empty($this->data[ApiInterface::OPEN_API_KEY])) {
-            throw new SchemaException('There must be ' . ApiInterface::OPEN_API_KEY . ' document root field');
+            throw new SchemaException('There must be ' . ApiInterface::OPEN_API_KEY . ', ' . ApiInterface::API_SERVERS . ' document root fields');
+        }
+
+        $schemas = $this->data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+        if (empty($schemas[CustomsInterface::CUSTOM_TYPES_ID])
+            || empty($schemas[CustomsInterface::CUSTOM_TYPES_TYPE])
+            || empty($schemas[CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM])) {
+            throw new SchemaException('At least these types must be declared: ' . CustomsInterface::CUSTOM_TYPES_ID
+                . ', ' . CustomsInterface::CUSTOM_TYPES_TYPE . ', ' . CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM
+                . ' as components -> schemas descendants');
+        }
+
+        if (empty($this->data[ApiInterface::API_INFO])) {
+            $this->warn(ApiInterface::API_INFO . ': field would be convenient to show users what this API is about');
         }
     }
 
@@ -104,7 +118,7 @@ class BaseCommand extends Command
         $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
 
         foreach ($this->data[ApiInterface::API_SERVERS] as $server) {
-            $vars = $server[ApiInterface::API_VARS];
+            $vars          = $server[ApiInterface::API_VARS];
             $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
 
             if (env('APP_ENV') === 'dev') { // for test env based on .env

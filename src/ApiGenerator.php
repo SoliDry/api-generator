@@ -28,6 +28,7 @@ class ApiGenerator extends BaseCommand
         try {
             $this->actionIndex($ramlFile);
         } catch (\Exception $e) {
+            $this->info($e->getMessage());
             $this->error($e->getTraceAsString());
         }
     }
