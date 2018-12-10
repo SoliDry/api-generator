@@ -280,3 +280,74 @@ components:
         type: Type
         id: ID
         attributes: MenuAttributes
+/article:
+  get:
+    queryParameters: QueryParams
+    responses:
+      200:
+        body:
+          application/json.vnd+json:
+            type: Article[]
+  post:
+    body:
+      application/json.vnd+json:
+        type: Article
+    responses:
+      200:
+        body:
+          application/json.vnd+json:
+            type: Article
+  /{id}:
+    get:
+      responses:
+        200:
+          body:
+            application/json.vnd+json:
+              type: Article
+    patch:
+      body:
+        application/json.vnd+json:
+          type: Article
+      responses:
+        200:
+          body:
+            application/json.vnd+json:
+              type: Article
+    delete:
+      responses:
+        204:
+    /relationships/tag:
+      get:
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      post:
+        body:
+          application/json.vnd+json:
+            type: TagRelationships
+        responses:
+          201:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      patch:
+        body:
+          application/json.vnd+json:
+            type: TagRelationships
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: TagRelationships
+      delete:
+        responses:
+          204:
+    /tag:
+      get:
+        responses:
+          200:
+            body:
+              application/json.vnd+json:
+                type: Tag[]
