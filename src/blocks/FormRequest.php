@@ -230,11 +230,10 @@ class FormRequest extends FormRequestModel
                   [JSONApiInterface::PARAM_ACCESS_TOKEN][ApiInterface::RAML_KEY_DEFAULT]) === false
         ) {
             $this->setAccessTokenContent();
-            $fileForm  = strtolower(DirsInterface::APPLICATION_DIR)
-                . PhpInterface::SLASH . $this->generator->httpDir
-                . PhpInterface::SLASH . $this->generator->formRequestDir
+            $fileForm  = FileManager::getModulePath($this->generator, true) . $this->generator->formRequestDir
                 . PhpInterface::SLASH . JSONApiInterface::CLASS_API_ACCESS_TOKEN
                 . PhpInterface::PHP_EXT;
+
             $isCreated = FileManager::createFile(
                 $fileForm, $this->sourceCode,
                 FileManager::isRegenerated($this->generator->options)
