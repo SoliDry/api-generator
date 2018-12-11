@@ -818,7 +818,7 @@ The state of the server will not be changed by a request if any individual opera
 
 #### Static access token
 In ```QueryParams``` you can declare the ```access_token``` property, that will be placed to ```Modules/{ModuleName}/Config/config.php```.
-Generator will create ```App\Http\Requests\ApiAccessToken.php``` global FormRequest.
+Generator will create ```Modules\{ModuleName}\Http\Requests\ApiAccessToken.php``` FormRequest.
  
 To activate this check on every request - add ApiAccessToken FormRequest to ```app/Http/Kernel.php```, ex.:
 ```php
@@ -833,7 +833,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
-        \App\Http\Requests\ApiAccessToken::class,
+        \Modules\V2\Http\Requests\ApiAccessToken::class,
     ];
 ```
 Generated configuration part:
@@ -1618,8 +1618,6 @@ HTTP request/response examples can be found on WiKi page - https://github.com/RJ
 Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
 
 To get deep-into ```Open API``` specification - https://swagger.io/specification/
-
-To get deep-into ```RAML``` specification - https://github.com/raml-org/raml-spec/blob/master/versions/raml-10/raml-10.md/
 
 To get deep-into ```JSON-API``` specification - http://jsonapi.org/format/
 JSON-API support is provided, particularly for output, by Fractal package - http://fractal.thephpleague.com/
