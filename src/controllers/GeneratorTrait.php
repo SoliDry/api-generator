@@ -4,6 +4,7 @@ namespace rjapi\controllers;
 
 use rjapi\blocks\Controllers;
 use rjapi\blocks\Entities;
+use rjapi\blocks\FileManager;
 use rjapi\blocks\FormRequest;
 use rjapi\blocks\Migrations;
 use rjapi\blocks\Routes;
@@ -58,6 +59,9 @@ trait GeneratorTrait
             $this->tests = new Tests($this);
             $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
         }
+
+        FileManager::createPath($this->formatFuncTestsPath());
+
         $this->createMigrations();
     }
 
