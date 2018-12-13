@@ -16,6 +16,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-laravel-specific-configuration)
     * [Running generator](#user-content-running-generator)
+    * [Docker repo](#user-content-docker-repository)
 * [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
@@ -131,6 +132,16 @@ The output will look something like this:
 
 After that u can see the following dirs and files module structure in your project:
 ![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
+
+### Docker repository
+Another way of installing and playing with api-generator (in sandbox fashion) is via public docker repo:
+```bash
+docker pull zeusakm/ubuntuforapi
+```
+
+There will be pre-installed Laravel 5.5.* application in `/var/www/api-generator` + php7.1/php7.1-fpm/nginx/mysql (with migrated tables) etc.
+
+We'll be glad to any contribution for docker repository.
 
 ### Open API Types and Declarations
 OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
