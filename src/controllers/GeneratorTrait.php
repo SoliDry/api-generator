@@ -137,7 +137,7 @@ trait GeneratorTrait
             try {
                 $this->mergeTime($dateTime);
             } catch (DirectoryException $e) {
-                echo $e->getTraceAsString();
+                $this->error($e->getTraceAsString());
             }
         } else if (is_numeric($opMerge) !== false) {
             $this->mergeStep($opMerge);
