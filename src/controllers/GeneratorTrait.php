@@ -56,11 +56,11 @@ trait GeneratorTrait
 
         // create tests
         if (empty($this->options[ConsoleInterface::OPTION_TESTS]) === false) {
+            FileManager::createPath($this->formatFuncTestsPath());
+
             $this->tests = new Tests($this);
             $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
         }
-
-        FileManager::createPath($this->formatFuncTestsPath());
 
         $this->createMigrations();
     }
