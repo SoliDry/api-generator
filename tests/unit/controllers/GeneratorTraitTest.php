@@ -21,17 +21,17 @@ class GeneratorTraitTest extends TestCase
     public  $objectProps    = [];
     public  $generatedFiles = [];
     public  $relationships  = [];
-    private $ramlFiles      = [];
+    private $files          = [];
 
     private $options;
 
     public function setUp()
     {
         parent::setUp();
-        $this->options   = [ // merge last option
+        $this->options = [ // merge last option
                              ConsoleInterface::OPTION_MERGE => ConsoleInterface::MERGE_DEFAULT_VALUE,
         ];
-        $this->ramlFiles = [
+        $this->files   = [
             __DIR__ . '/../../functional/raml/articles.raml',
         ];
     }

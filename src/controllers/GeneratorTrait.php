@@ -174,7 +174,7 @@ trait GeneratorTrait
         }
 
         $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
-        $this->composeTypes($date, $files, $this->ramlFiles);
+        $this->composeTypes($date, $files, $this->files);
     }
 
     /**
@@ -187,7 +187,7 @@ trait GeneratorTrait
         if ($dirs !== false) {
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
             $composed = $this->composeStepFiles($dirs, $step);
-            $this->composeTypes($composed['dirToPass'], $composed['filesToPass'], $this->ramlFiles);
+            $this->composeTypes($composed['dirToPass'], $composed['filesToPass'], $this->files);
         }
     }
 
@@ -225,7 +225,7 @@ trait GeneratorTrait
     {
         $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
         if ($dirs !== false) {
-            $rFiles = $this->ramlFiles;
+            $rFiles = $this->files;
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
             $dir = $dirs[0]; // desc last date YYYY-mmm-dd
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
@@ -238,16 +238,16 @@ trait GeneratorTrait
      * Gets history files and merges them with current raml files
      * @param string $dir desc sorted last date YYYY-mmm-dd directory
      * @param array $files files from .gen/ dir saved history
-     * @param array $ramlFiles file that were passed as an option + files from uses RAML property
+     * @param array $inputFiles file that were passed as an option + files from uses RAML property
      */
-    private function composeTypes(string $dir, array $files, array $ramlFiles): void
+    private function composeTypes(string $dir, array $files, array $inputFiles): void
     {
         $attrsCurrent = [];
         $attrsHistory = [];
         foreach ($files as $file) {
-            foreach ($ramlFiles as $ramlFile) {
-                if (mb_strpos($file, basename($ramlFile), null, PhpInterface::ENCODING_UTF8) !== false) {
-                    $dataCurrent = Yaml::parse(file_get_contents($ramlFile));
+            foreach ($inputFiles as $inFile) {
+                if (mb_strpos($file, basename($inFile), null, PhpInterface::ENCODING_UTF8) !== false) {
+                    $dataCurrent = Yaml::parse(file_get_contents($inFile));
                     $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
                     $this->currentTypes = $dataCurrent[ApiInterface::RAML_KEY_TYPES];
                     $this->historyTypes = $dataHistory[ApiInterface::RAML_KEY_TYPES];

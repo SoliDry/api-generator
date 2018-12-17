@@ -10,7 +10,7 @@ class ApiGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'api:generate {ramlFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
+    protected $signature = 'api:generate {inputFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
 
     /**
      * The console command description.
@@ -24,9 +24,9 @@ class ApiGenerator extends BaseCommand
      */
     public function handle()
     {
-        $ramlFile = $this->argument('ramlFile');
+        $inputFile = $this->argument('inputFile');
         try {
-            $this->actionIndex($ramlFile);
+            $this->actionIndex($inputFile);
         } catch (\Exception $e) {
             $this->info($e->getMessage());
             $this->error($e->getTraceAsString());
