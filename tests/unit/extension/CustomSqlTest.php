@@ -29,7 +29,7 @@ class CustomSqlTest extends TestCase
      */
     public function it_is_enabled()
     {
-        $this->assertNull($this->customSql->isEnabled());
+        $this->assertTrue($this->customSql->isEnabled());
     }
 
     /**

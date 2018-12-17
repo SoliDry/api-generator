@@ -62,7 +62,7 @@ class ConfigTest extends TestCase
         $arr['custom_sql'] = [
             'article' => [
                 'enabled'  => true,
-                'query'    => 'SELECT id, title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
+                'query'    => 'SELECT a.id, a.title FROM article a INNER JOIN tag_article ta ON ta.article_id=a.id 
                           WHERE ta.tag_id IN (
                           SELECT id FROM tag WHERE CHAR_LENGTH(title) > :tag_len
                           ) ORDER BY a.id DESC',
