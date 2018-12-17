@@ -41,8 +41,8 @@ class MiddlewareTest extends TestCase
         $gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $gen->httpDir        = DirsInterface::HTTP_DIR;
         $gen->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
-        $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
+        $data                = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
+        $gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         $gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
@@ -51,7 +51,7 @@ class MiddlewareTest extends TestCase
                 'type' => 'TagRelationships[] | TopicRelationships',
             ]
         ];
-        $this->middleware = new FormRequest($gen);
+        $this->middleware    = new FormRequest($gen);
     }
 
     /**

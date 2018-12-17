@@ -30,8 +30,8 @@ class RouterTest extends TestCase
         $this->gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $this->gen->httpDir        = DirsInterface::HTTP_DIR;
         $this->gen->version        = self::MODULE_NAME;
-        $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $this->gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
+        $data                      = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
+        $this->gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         $this->gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',

@@ -249,8 +249,8 @@ trait GeneratorTrait
                 if (mb_strpos($file, basename($inFile), null, PhpInterface::ENCODING_UTF8) !== false) {
                     $dataCurrent = Yaml::parse(file_get_contents($inFile));
                     $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
-                    $this->currentTypes = $dataCurrent[ApiInterface::RAML_KEY_TYPES];
-                    $this->historyTypes = $dataHistory[ApiInterface::RAML_KEY_TYPES];
+                    $this->currentTypes = $dataCurrent[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+                    $this->historyTypes = $dataHistory[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                     $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
                     $attrsCurrent += array_filter($this->currentTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;

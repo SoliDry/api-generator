@@ -37,12 +37,12 @@ class EntitiesTest extends TestCase
         $gen->objectName = 'Article';
         $gen->version    = 'v2';
         $gen->modulesDir = DirsInterface::MODULES_DIR;
-        $gen->httpDir = DirsInterface::HTTP_DIR;
+        $gen->httpDir    = DirsInterface::HTTP_DIR;
         // it is crucial to create entities/middleware in other namespace, not breaking original
         $gen->entitiesDir    = 'TestEntities';
         $gen->formRequestDir = 'TestMiddleware';
-        $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
+        $data                = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
+        $gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         $gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
@@ -52,7 +52,7 @@ class EntitiesTest extends TestCase
             ]
         ];
         $this->entities      = new Entities($gen);
-        $this->middleware   = new FormRequest($gen);
+        $this->middleware    = new FormRequest($gen);
     }
 
     /**

@@ -37,9 +37,9 @@ class MigrationsTest extends TestCase
             ConsoleInterface::OPTION_MIGRATIONS => 1,
         ]);
         $this->gen->method('formatMigrationsPath')->willReturn(self::DIR_OUTPUT);
-        $ramlData                  = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $this->gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
-        $this->gen->objectProps   = [
+        $data                      = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
+        $this->gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+        $this->gen->objectProps    = [
             'type'          => 'Type',
             'id'            => 'ID',
             'attributes'    => 'ArticleAttributes',
@@ -47,12 +47,12 @@ class MigrationsTest extends TestCase
                 'type' => 'TagRelationships[] | TopicRelationships',
             ]
         ];
-        $this->gen->objectName    = 'Article';
-        $this->gen->version       = self::MODULE_NAME;
-        $this->gen->modulesDir    = DirsInterface::MODULES_DIR;
+        $this->gen->objectName     = 'Article';
+        $this->gen->version        = self::MODULE_NAME;
+        $this->gen->modulesDir     = DirsInterface::MODULES_DIR;
         $this->gen->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
-        $this->gen->migrationsDir = DirsInterface::MIGRATIONS_DIR;
-        $this->migrations         = new Migrations($this->gen);
+        $this->gen->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
+        $this->migrations          = new Migrations($this->gen);
     }
 
     /**

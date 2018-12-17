@@ -27,8 +27,8 @@ class ControllersTest extends TestCase
         $gen->modulesDir     = DirsInterface::MODULES_DIR;
         $gen->controllersDir = DirsInterface::CONTROLLERS_DIR;
         $gen->httpDir        = DirsInterface::HTTP_DIR;
-        $ramlData            = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/raml/articles.raml'));
-        $gen->types          = $ramlData[ApiInterface::RAML_KEY_TYPES];
+        $data                = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
+        $gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         $this->controller    = new Controllers($gen);
     }
 

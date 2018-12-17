@@ -71,7 +71,6 @@ class BaseCommand extends Command
      *  Generates api Controllers + Models to support RAML validation
      *
      * @param string $file path to raml file
-     * @throws \rjapi\exceptions\DirectoryException
      * @throws SchemaException
      */
     public function actionIndex(string $file)

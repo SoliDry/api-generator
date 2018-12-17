@@ -32,7 +32,7 @@ class GeneratorTraitTest extends TestCase
                              ConsoleInterface::OPTION_MERGE => ConsoleInterface::MERGE_DEFAULT_VALUE,
         ];
         $this->files   = [
-            __DIR__ . '/../../functional/raml/articles.raml',
+            __DIR__ . '/../../functional/oas/openapi.yaml',
         ];
     }
 

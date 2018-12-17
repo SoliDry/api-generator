@@ -1,9 +1,7 @@
 <?php
 namespace rjapitest\unit\controllers;
 
-use Illuminate\Console\Command;
 use rjapi\controllers\BaseCommand;
-use rjapi\types\ConsoleInterface;
 use rjapitest\unit\TestCase;
 
 /**
@@ -24,11 +22,11 @@ class BaseCommandTest extends TestCase
 
     /**
      * @test
-     * @throws \rjapi\exceptions\DirectoryException
+     * @throws \rjapi\exceptions\SchemaException
      */
     public function it_creates_sources_from_raml()
     {
-        $this->baseCommand->actionIndex(__DIR__ . '/../../functional/raml/articles.raml');
+        $this->baseCommand->actionIndex(__DIR__ . '/../../functional/oas/openapi.yaml');
         $this->assertInstanceOf(BaseCommand::class, $this->baseCommand);
     }
 }
