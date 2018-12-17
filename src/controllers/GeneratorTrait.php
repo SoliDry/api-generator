@@ -227,7 +227,7 @@ trait GeneratorTrait
         if ($dirs !== false) {
             $rFiles = $this->files;
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
-            $dir = $dirs[0]; // desc last date YYYY-mmm-dd
+            $dir = $dirs[0]; // desc last date YYYY-mm-dd
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
             $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
             $this->composeTypes($dir, $files, $rFiles);

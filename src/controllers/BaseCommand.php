@@ -33,7 +33,6 @@ class BaseCommand extends Command
     public $objectName        = '';
     public $defaultController = 'Default';
     public $uriNamedParams;
-    public $ramlFile          = '';
     public $force;
     public $customTypes       = [
         CustomsInterface::CUSTOM_TYPES_ID,
