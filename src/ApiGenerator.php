@@ -10,14 +10,23 @@ class ApiGenerator extends BaseCommand
      *
      * @var string
      */
-    protected $signature = 'api:generate {inputFile} {--migrations} {--regenerate} {--merge=} {--no-history} {--tests}';
+    protected $signature = 'api:generate {inputFile : The file (in yaml format) based on which code-base will be generated.} 
+    {--migrations : Whether to generate migrations for RDBMS} 
+    {--regenerate : Whether to regenerate code by overriding previously created files} 
+    {--merge= : Type of merge: "last" to merge last generated changes with current document, "number" of steps to get back in history e.g.: --merge=9 will get code-generator 9 steps backward to merge, "timestamp" generator gets to the concrete files by time in history} 
+    {--no-history : Set this option if you don`t want to save history} 
+    {--tests : To generate functional/integration tests for current API}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'RAML-JSON-API PHP-code generator (based on RAML-types) for Laravel, with complete support of JSON-API data format';
+    protected $description = 'PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format 
+    -------------------------------------------
+    By passing an input file to api:generate command you can easily generate code-base for a project, 
+    whether it will be monolithic one, or some sort of micro-services, light inner APIs, SPAs etc
+    See more on https://github.com/RJAPI/api-generator';
 
     /**
      *  Laravel handler for console commands
