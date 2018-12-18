@@ -272,12 +272,24 @@ trait GeneratorTrait
      */
     private function composeDiffs(array $attrsCurrent, array $attrsHistory): void
     {
-        // make diffs on current raml array to add columns/indices to migrations
+        // make diffs on current array to add columns/indices to migrations
         foreach ($attrsCurrent as $k => $v) {
             if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS]) === false
                 && (empty($v[ApiInterface::RAML_PROPS]) === false)) {
                 foreach ($v[ApiInterface::RAML_PROPS] as $attr => $attrValue) {
                     if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
+                        $this->diffTypes[$k][$attr] = $attrValue;
+                    }
+                }
+            }
+        }
+
+        // reflect array from history to append lost props
+        foreach ($attrsHistory as $k => $v) {
+            if (empty($attrsCurrent[$k][ApiInterface::RAML_PROPS]) === false
+                && (empty($v[ApiInterface::RAML_PROPS]) === false)) {
+                foreach ($v[ApiInterface::RAML_PROPS] as $attr => $attrValue) {
+                    if (empty($attrsCurrent[$k][ApiInterface::RAML_PROPS][$attr])) { // if there is no such element in current data - collect
                         $this->diffTypes[$k][$attr] = $attrValue;
                     }
                 }

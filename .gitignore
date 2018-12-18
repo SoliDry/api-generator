@@ -14,3 +14,4 @@ storage/
 .gen/
 *_create*_table.php
 tests/functional/*Cest.php
+composer.lock
