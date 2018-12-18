@@ -35,6 +35,7 @@ trait GeneratorTrait
     {
         $this->outputEntity();
         $this->createControllers();
+
         // create controller
         $this->controllers = new Controllers($this);
         $this->controllers->createDefault();
@@ -142,6 +143,7 @@ trait GeneratorTrait
 
         if (false !== $timeCheck) {
             $dateTime = explode(PhpInterface::SPACE, $opMerge);
+
             try {
                 $this->mergeTime($dateTime);
             } catch (DirectoryException $e) {
@@ -228,8 +230,10 @@ trait GeneratorTrait
             $rFiles = $this->files;
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
             $dir = $dirs[0]; // desc last date YYYY-mm-dd
+
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
             $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
+
             $this->composeTypes($dir, $files, $rFiles);
         }
     }
@@ -244,14 +248,18 @@ trait GeneratorTrait
     {
         $attrsCurrent = [];
         $attrsHistory = [];
+
         foreach ($files as $file) {
             foreach ($inputFiles as $inFile) {
+
                 if (mb_strpos($file, basename($inFile), null, PhpInterface::ENCODING_UTF8) !== false) {
                     $dataCurrent = Yaml::parse(file_get_contents($inFile));
                     $dataHistory = Yaml::parse(file_get_contents(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $file));
+
                     $this->currentTypes = $dataCurrent[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                     $this->historyTypes = $dataHistory[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                     $this->types += array_merge_recursive($this->historyTypes, $this->currentTypes);
+
                     $attrsCurrent += array_filter($this->currentTypes, function ($k) {
                         return strpos($k, CustomsInterface::CUSTOM_TYPES_ATTRIBUTES) !== false;
                     }, ARRAY_FILTER_USE_KEY);
@@ -261,6 +269,7 @@ trait GeneratorTrait
                 }
             }
         }
+
         $this->composeDiffs($attrsCurrent, $attrsHistory);
     }
 
@@ -276,6 +285,7 @@ trait GeneratorTrait
         foreach ($attrsCurrent as $k => $v) {
             if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS]) === false
                 && (empty($v[ApiInterface::RAML_PROPS]) === false)) {
+
                 foreach ($v[ApiInterface::RAML_PROPS] as $attr => $attrValue) {
                     if (empty($attrsHistory[$k][ApiInterface::RAML_PROPS][$attr])) { // if there is no such element in history data - collect
                         $this->diffTypes[$k][$attr] = $attrValue;
@@ -288,6 +298,7 @@ trait GeneratorTrait
         foreach ($attrsHistory as $k => $v) {
             if (empty($attrsCurrent[$k][ApiInterface::RAML_PROPS]) === false
                 && (empty($v[ApiInterface::RAML_PROPS]) === false)) {
+
                 foreach ($v[ApiInterface::RAML_PROPS] as $attr => $attrValue) {
                     if (empty($attrsCurrent[$k][ApiInterface::RAML_PROPS][$attr])) { // if there is no such element in current data - collect
                         $this->diffTypes[$k][$attr] = $attrValue;
