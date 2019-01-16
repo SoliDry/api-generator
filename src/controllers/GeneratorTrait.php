@@ -28,6 +28,8 @@ trait GeneratorTrait
     private $controllers;
     private $tests;
 
+    private $genDir;
+
     /**
      * Standard generation
      */
@@ -188,54 +190,86 @@ trait GeneratorTrait
         $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
         if ($dirs !== false) {
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
-            $composed = $this->composeStepFiles($dirs, $step);
-            $this->composeTypes($composed['dirToPass'], $composed['filesToPass'], $this->files);
+            $this->composeTypes($this->genDir, $this->composeStepFiles($dirs, $step), $this->files);
         }
     }
 
-    private function composeStepFiles(array $dirs, int $step)
+    private function composeStepFiles(array $dirs, int $step): array
     {
-        $dirToPass = '';
-        $filesToPass = '';
+        $filesToPass = [];
         foreach ($dirs as $dir) {
             $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
             $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
+
             $prefixFlag = '';
             foreach ($files as $kFile => $file) {
                 $prefix = substr($file, 0, 6); // Hms
+                $template = '/^' . $prefix . '.*$/i';
+
                 if ($prefix !== $prefixFlag) {
                     --$step;
                     $prefixFlag = $prefix;
                     if ($step > 0) {
-                        $skip = preg_grep('/^' . $prefix . '.*$/i', $files);
+                        $skip = preg_grep($template, $files);
                         $files = array_diff($files, $skip);
                     }
                 }
+
                 if ($step <= 0) {
-                    $skip = preg_grep('/[^' . $prefix . '.*]+/i', $files);
-                    $files = array_diff($files, $skip);
-                    $dirToPass = $dir;
+                    $files = preg_grep($template, $files);
+                    $this->genDir = $dir;
                     $filesToPass = $files;
-                    break;
+                    break 2;
                 }
             }
         }
-        return compact('dirToPass', 'filesToPass');
+
+        return $this->adjustFiles($filesToPass);
     }
 
     private function mergeLast(): void
     {
+        $lastFiles = $this->getLastFiles();
+        if (empty($lastFiles) === false) {
+            $this->composeTypes($lastFiles['dir'], $lastFiles['files'], $this->files);
+        }
+    }
+
+    /**
+     * Gets last files according to main file named "openapi" by spec of OAS
+     * and it's included files defined in "uses" property
+     *
+     * @return array
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     */
+    private function getLastFiles(): array
+    {
         $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
         if ($dirs !== false) {
-            $rFiles = $this->files;
             $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
-            $dir = $dirs[0]; // desc last date YYYY-mm-dd
+            $this->genDir = $dirs[0]; // desc last date YYYY-mm-dd
 
-            $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $dir, SCANDIR_SORT_DESCENDING);
+            $files = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $this->genDir, SCANDIR_SORT_DESCENDING);
             $files = array_diff($files, DirsInterface::EXCLUDED_DIRS);
 
-            $this->composeTypes($dir, $files, $rFiles);
+            $lastFiles = [];
+            foreach ($files as $file) {
+                if (($pos = strpos($file, ApiInterface::OPEN_API_KEY)) !== false) {
+                    $lastFiles[] = $file;
+                    $content = Yaml::parse(file_get_contents($this->formatGenPathByDir() .$file));
+                    if (empty($content[ApiInterface::RAML_KEY_USES]) === false) {
+                        foreach ($content[ApiInterface::RAML_KEY_USES] as $subFile) {
+                            $lastFiles[] = substr($file, 0, $pos) . basename($subFile);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            return $this->adjustFiles($lastFiles);
         }
+
+        return [];
     }
 
     /**
@@ -306,5 +340,20 @@ trait GeneratorTrait
                 }
             }
         }
+    }
+
+    private function adjustFiles(array $files)
+    {
+        $tmpFile = '';
+        foreach ($files as $k => $file) {
+            if (strpos($file, ApiInterface::OPEN_API_KEY) !== false) {
+                $tmpFile = $file;
+                unset($files[$k]);
+                break;
+            }
+        }
+        array_unshift($files, $tmpFile);
+
+        return $files;
     }
 }

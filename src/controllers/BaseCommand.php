@@ -66,16 +66,25 @@ class BaseCommand extends Command
 
     public $data = [];
 
+    public $isRollback = false;
+
     /**
-     *  Generates api Controllers + Models to support RAML validation
+     * Generates api components for OAS
      *
-     * @param string $file path to raml file
+     * @param mixed $files path to openapi file or an array of files in case of rollback
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      * @throws SchemaException
      */
-    public function actionIndex(string $file)
+    public function actionIndex($files)
     {
-        $this->files[] = $file;
-        $this->data    = Yaml::parse(file_get_contents($file));
+        if ($this->isRollback) {
+            $this->files = $files;
+            $this->data = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $files[0]));
+        } else {
+            $this->files[] = $files;
+            $this->data = Yaml::parse(file_get_contents($files));
+        }
+
         $this->validate();
         $this->generateOpenApi();
     }
@@ -133,7 +142,9 @@ class BaseCommand extends Command
             $this->runGenerator();
 
             try {
-                $this->setGenHistory();
+                if ($this->isRollback === false) {
+                    $this->setGenHistory();
+                }
             } catch (DirectoryException $ex) {
                 $this->error($ex->getTraceAsString());
             }
@@ -262,6 +273,11 @@ class BaseCommand extends Command
         return DirsInterface::GEN_DIR . PhpInterface::SLASH . date('Y-m-d') . PhpInterface::SLASH;
     }
 
+    public function formatGenPathByDir(): string
+    {
+        return DirsInterface::GEN_DIR . PhpInterface::SLASH . $this->genDir . PhpInterface::SLASH;
+    }
+
     public function formatFuncTestsPath()
     {
         return DirsInterface::TESTS_DIR . PhpInterface::SLASH . DirsInterface::TESTS_FUNC_DIR;
@@ -284,11 +300,18 @@ class BaseCommand extends Command
     {
         $this->types = $this->data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         if (empty($this->data[ApiInterface::RAML_KEY_USES]) === false) {
-            $files = $this->data[ApiInterface::RAML_KEY_USES];
-            foreach ($files as $file) {
-                $this->files[] = $file;
-                $fileData      = Yaml::parse(file_get_contents($file));
-                $this->types   += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+            if ($this->isRollback) {
+                foreach ($this->files as $file) {
+                    $fileData    = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
+                    $this->types += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+                }
+            } else {
+                $files = $this->data[ApiInterface::RAML_KEY_USES];
+                foreach ($files as $file) {
+                    $this->files[] = $file;
+                    $fileData      = Yaml::parse(file_get_contents($file));
+                    $this->types   += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+                }
             }
         }
     }
@@ -308,5 +331,25 @@ class BaseCommand extends Command
                 copy($file, $dest);
             }
         }
+    }
+
+    protected function getRollbackInputFile(): array
+    {
+        $rollBack = $this->option('rollback');
+        if ($rollBack === ConsoleInterface::MERGE_DEFAULT_VALUE) {
+            $this->isRollback = true;
+            return $this->getLastFiles();
+        }
+
+        if (is_numeric($rollBack)) {
+            $dirs = scandir(DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR, SCANDIR_SORT_DESCENDING);
+            if ($dirs !== false) {
+                $this->isRollback = true;
+                $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
+                return $this->composeStepFiles($dirs, $rollBack);
+            }
+        }
+
+        return [];
     }
 }
