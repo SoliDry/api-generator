@@ -1622,6 +1622,8 @@ There are also more things you can do, about rewinding history:
 - by passing option like this `--merge=9` generator will get back for 9 steps 
 - `--merge="2017-07-29 11:35:32"` generator gets to the concrete files by time in history
 
+Although, if you need to totally rollback the state of a system - use `--rollback` option, with the same keys as in merge. 
+
 ======================
 
 HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/api-generator/wiki

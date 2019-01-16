@@ -333,6 +333,13 @@ class BaseCommand extends Command
         }
     }
 
+    /**
+     * Get files to process within rollback
+     *
+     * @return array
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
+     * @throws DirectoryException
+     */
     protected function getRollbackInputFile(): array
     {
         $rollBack = $this->option('rollback');
@@ -348,6 +355,13 @@ class BaseCommand extends Command
                 $dirs = array_diff($dirs, DirsInterface::EXCLUDED_DIRS);
                 return $this->composeStepFiles($dirs, $rollBack);
             }
+        }
+
+        if (strtotime($rollBack) !== false) {
+            $this->isRollback = true;
+            $dateTime = explode(PhpInterface::SPACE, $rollBack);
+
+            return $this->composeTimeFiles($dateTime);
         }
 
         return [];
