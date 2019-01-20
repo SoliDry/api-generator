@@ -120,9 +120,21 @@ class Json
         $arr[JSONApiInterface::CONTENT_LINKS] = [
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
         ];
+
         $arr[JSONApiInterface::CONTENT_DATA]  = $data;
         echo self::encode($arr);
-        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
+
+        self::successExit();
+    }
+
+    /**
+     *  Exits with status code 0 on production servers
+     */
+    private static function successExit() : void
+    {
+        if (env('APP_ENV') !== 'dev') {
+            exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
+        }
     }
 
     /**
@@ -145,8 +157,10 @@ class Json
 
             return $collection;
         }
+
         $item = new Item($model, $transformer, strtolower($entity));
         $item->setMeta($meta);
+
         return $item;
     }
 
@@ -163,21 +177,25 @@ class Json
         if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
             exit;
         }
+
         if (empty($resource->getData())) { // preventing 3d party libs (League etc) from crash on empty data
             echo self::encode([
                 ModelsInterface::PARAM_DATA => []
             ]);
             exit;
         }
+
         $host    = $_SERVER['HTTP_HOST'];
         $manager = new Manager();
 
         if (isset($_GET['include'])) {
             $manager->parseIncludes($_GET['include']);
         }
+
         $manager->setSerializer(new JsonApiSerializer($host));
         echo self::getSelectedData($manager->createData($resource)->toJson(), $data);
-        exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
+
+        self::successExit();
     }
 
     /**
@@ -209,8 +227,10 @@ class Json
         if (current($data) === PhpInterface::ASTERISK) {// do nothing - grab all fields
             return $json;
         }
+
         $jsonArr = self::decode($json);
         $current = current($jsonArr[ApiInterface::RAML_DATA]);
+
         if (empty($current[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) {// this is an array of values
             self::unsetArray($jsonArr, $data);
         } else {// this is just one element

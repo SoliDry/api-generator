@@ -6,6 +6,7 @@ namespace rjapitest\unit\controllers;
 use rjapi\controllers\GeneratorTrait;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\PhpInterface;
 use rjapitest\unit\TestCase;
 
 class GeneratorTraitTest extends TestCase
@@ -36,6 +37,11 @@ class GeneratorTraitTest extends TestCase
         ];
     }
 
+    public function formatGenPathByDir(): string
+    {
+        return DirsInterface::GEN_DIR . PhpInterface::SLASH . $this->genDir . PhpInterface::SLASH;
+    }
+
     /**
      * @test
      */
@@ -50,7 +56,7 @@ class GeneratorTraitTest extends TestCase
         ];
         $this->setMergedTypes();
         $this->assertNotEmpty($this->types);
-        $this->options = [ // merge last option
+        $this->options = [ // merge time option
                            ConsoleInterface::OPTION_MERGE => date('Y-m-d H:i:s', time() - 3600),
         ];
         $this->setMergedTypes();

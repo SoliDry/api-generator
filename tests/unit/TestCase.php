@@ -2,6 +2,7 @@
 
 namespace rjapitest\unit;
 
+use Faker\Factory;
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
 use rjapi\ApiGenerator;
 use rjapi\types\ConfigInterface;
@@ -62,5 +63,44 @@ abstract class TestCase extends TestCaseLaravel
         $fp                = fopen($confFile, 'r+');
         fwrite($fp, $str);
         fclose($fp);
+    }
+
+    /**
+     * Fake generated provider for articles
+     */
+    public function articleProvider()
+    {
+        $faker = Factory::create();
+
+        return [
+            [[
+                 [
+                     'id'           => uniqid(),
+                     'title'        => $faker->title,
+                     'fake_attr'    => 'attr',
+                     'description'  => $faker->name,
+                     'url'          => $faker->url . uniqid('', true),
+                     'topic_id'     => $faker->randomNumber(),
+                     'rate'         => $faker->randomFloat(),
+                     'status'       => 'draft',
+                     'show_in_top'  => random_int(0, 1),
+                     'date_posted'  => $faker->date(),
+                     'time_to_live' => $faker->time(),
+                 ],
+                 [
+                     'id'           => uniqid(),
+                     'title'        => $faker->title,
+                     'fake_attr'    => 'attr',
+                     'description'  => $faker->name,
+                     'url'          => $faker->url  . uniqid('', true),
+                     'topic_id'     => $faker->randomNumber(),
+                     'rate'         => $faker->randomFloat(),
+                     'status'       => 'draft',
+                     'show_in_top'  => random_int(0, 1),
+                     'date_posted'  => $faker->date(),
+                     'time_to_live' => $faker->time(),
+                 ],
+             ]],
+        ];
     }
 }
