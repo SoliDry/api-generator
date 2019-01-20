@@ -149,4 +149,21 @@ class BaseControllerTest extends TestCase
         $this->baseController->deleteBulk(\rjapitest\unit\extensions\request($data));
         $this->assertInstanceOf(BaseController::class, $this->baseController);
     }
+
+    /**
+     * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState disabled
+     * @throws AttributesException
+     */
+    public function it_runs_index()
+    {
+        $router               = new Route(['GET'], '/v2/article?include=tag&data=["title", "description"]', function () {
+        });
+        $router->setAction(['controller' => 'ArticleController@index']);
+        $this->baseController = new ArticleController($router);
+
+        $this->baseController->index(\rjapitest\unit\extensions\request());
+        $this->assertInstanceOf(BaseController::class, $this->baseController);
+    }
 }

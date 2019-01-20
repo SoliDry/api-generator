@@ -4,6 +4,7 @@ namespace rjapitest\unit\extensions;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 use Modules\V2\Entities\Article;
 use rjapi\extension\CacheTrait;
@@ -51,11 +52,11 @@ class CacheTraitTest extends TestCase
     public function it_sets_and_gets_exp_val()
     {
         $val = $this->getStdCached($this->req, $this->sqlOptions);
-        $this->assertInstanceOf(Article::class, $val);
+        $this->assertInstanceOf(Collection::class, $val);
         $this->req->server->set('REQUEST_URI', 'foo=bar');
         $this->sqlOptions->setId(0);
         $val = $this->getStdCached($this->req, $this->sqlOptions);
-        $this->assertNotEmpty($val);
+        $this->assertEmpty($val);
     }
 
     /**
