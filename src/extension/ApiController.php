@@ -89,8 +89,8 @@ class ApiController extends Controller implements JSONApiInterface
     {
         // this seems like needless params passed by default, but they needed for backward compatibility in Laravel prev versions
         return response('', 200)->withHeaders([
-            'Allow'                               => HTTPMethodsInterface::HTTP_METHODS_AVAILABLE,
-            JSONApiInterface::HEADER_CONTENT_TYPE => JSONApiInterface::HEADER_CONTENT_TYPE_VALUE,
+            'Allow'                            => HTTPMethodsInterface::HTTP_METHODS_AVAILABLE,
+            JSONApiInterface::CONTENT_TYPE_KEY => JSONApiInterface::HEADER_CONTENT_TYPE_VALUE,
         ]);
     }
 
