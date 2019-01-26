@@ -11,4 +11,6 @@ interface HTTPMethodsInterface
     public const HTTP_METHOD_PATCH   = 'PATCH';
     public const HTTP_METHOD_HEAD    = 'HEAD';
     public const HTTP_METHOD_OPTIONS = 'OPTIONS';
+
+    public const HTTP_METHODS_AVAILABLE = 'HEAD,GET,POST,PATCH,DELETE,OPTIONS';
 }

@@ -8,6 +8,7 @@ use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\helpers\ConfigOptions;
 use rjapi\blocks\EntitiesTrait;
+use rjapi\types\HTTPMethodsInterface;
 use rjapi\types\JwtInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\helpers\Json;
@@ -78,6 +79,15 @@ class ApiController extends Controller implements JSONApiInterface
         $this->setEntities();
         $this->setDefaults();
         $this->setConfigOptions($calledMethod);
+    }
+
+    /**
+     * Responds with header of an allowed/available http methods
+     * @return mixed
+     */
+    public function options()
+    {
+        return response()->header('Allow', HTTPMethodsInterface::HTTP_METHODS_AVAILABLE);
     }
 
     /**

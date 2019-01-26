@@ -87,6 +87,7 @@ class Routes
     {
         $this->setComment('basic routes');
 
+        $this->setRoute(RoutesInterface::METHOD_OPTIONS, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_OPTIONS));
         $this->setRoute(RoutesInterface::METHOD_GET, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_INDEX));
         $this->setRoute(RoutesInterface::METHOD_GET, $this->composeIdUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_VIEW));
         $this->setRoute(RoutesInterface::METHOD_POST, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE));

@@ -32,6 +32,7 @@ interface JSONApiInterface
     public const URI_METHOD_CREATE_BULK = 'createBulk';
     public const URI_METHOD_UPDATE_BULK = 'updateBulk';
     public const URI_METHOD_DELETE_BULK = 'deleteBulk';
+    public const URI_METHOD_OPTIONS     = 'options';
 
     // JSON API supported responses
     public const HTTP_RESPONSE_CODE_OK               = 200;
