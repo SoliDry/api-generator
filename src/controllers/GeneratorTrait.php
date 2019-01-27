@@ -15,6 +15,7 @@ use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
 use rjapi\types\DefaultInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\ErrorsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -184,7 +185,7 @@ trait GeneratorTrait
         $path = DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $this->genDir . DIRECTORY_SEPARATOR;
 
         if (is_dir($path) === false) {
-            throw new DirectoryException('The directory: ' . $path . ' was not found.');
+            throw new DirectoryException('The directory: ' . $path . ' was not found.', ErrorsInterface::CODE_DIR_NOT_FOUND);
         }
 
         $files = glob($path . $time . '*');

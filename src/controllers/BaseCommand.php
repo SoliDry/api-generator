@@ -11,6 +11,7 @@ use rjapi\exceptions\SchemaException;
 use rjapi\types\ConsoleInterface;
 use rjapi\types\CustomsInterface;
 use rjapi\types\DirsInterface;
+use rjapi\types\ErrorsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -97,16 +98,14 @@ class BaseCommand extends Command
     {
         // required yaml fields will be thrown as exceptions
         if (empty($this->data[ApiInterface::OPEN_API_KEY])) {
-            throw new SchemaException('There must be ' . ApiInterface::OPEN_API_KEY . ', ' . ApiInterface::API_SERVERS . ' document root fields');
+            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_OPEN_API_KEY], ErrorsInterface::CODE_OPEN_API_KEY);
         }
 
         $schemas = $this->data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         if (empty($schemas[CustomsInterface::CUSTOM_TYPES_ID])
             || empty($schemas[CustomsInterface::CUSTOM_TYPES_TYPE])
             || empty($schemas[CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM])) {
-            throw new SchemaException('At least these types must be declared: ' . CustomsInterface::CUSTOM_TYPES_ID
-                . ', ' . CustomsInterface::CUSTOM_TYPES_TYPE . ', ' . CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM
-                . ' as components -> schemas descendants');
+            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_CUSTOM_TYPES], ErrorsInterface::CODE_CUSTOM_TYPES);
         }
 
         if (empty($this->data[ApiInterface::API_INFO])) {

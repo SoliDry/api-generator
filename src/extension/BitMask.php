@@ -3,6 +3,7 @@ namespace rjapi\extension;
 
 use rjapi\exceptions\AttributesException;
 use rjapi\types\ConfigInterface;
+use rjapi\types\ErrorsInterface;
 
 class BitMask
 {
@@ -44,7 +45,7 @@ class BitMask
     public function getFlags()
     {
         if(empty($this->entity[$this->field][ConfigInterface::FLAGS])) {
-            throw new AttributesException('Flags should be preset for bit mask.');
+            throw new AttributesException(ErrorsInterface::JSON_API_ERRORS[ErrorsInterface::HTTP_CODE_FSM_FLAGS], ErrorsInterface::HTTP_CODE_FSM_FLAGS);
         }
         return $this->entity[$this->field][ConfigInterface::FLAGS];
     }
