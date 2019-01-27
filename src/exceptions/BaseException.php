@@ -35,12 +35,14 @@ class BaseException extends \Exception
         return response()->json(
             [
                 JSONApiInterface::CONTENT_ERRORS => [
-                    'code'    => $this->getCode(),
-                    'message' => $this->getMessage(),
-                    'file'    => $this->getFile(),
-                    'line'    => $this->getLine(),
-                    'uri'     => $request->getUri(),
-                    'meta'    => $this->getTraceAsString(),
+                    [
+                        'code'    => $this->getCode(),
+                        'message' => $this->getMessage(),
+                        'file'    => $this->getFile(),
+                        'line'    => $this->getLine(),
+                        'uri'     => $request->getUri(),
+                        'meta'    => $this->getTraceAsString(),
+                    ],
                 ]
             ]
         );
