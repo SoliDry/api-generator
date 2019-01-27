@@ -2,6 +2,8 @@
 
 namespace rjapi\exceptions;
 
+use Illuminate\Http\Response;
+use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Json;
 
 class BaseException extends \Exception
@@ -20,5 +22,27 @@ class BaseException extends \Exception
             'file'    => $this->getFile(),
             'line'    => $this->getLine(),
         ], true);
+    }
+
+    /**
+     * Render the exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return Response
+     */
+    public function render($request) : Response
+    {
+        return response()->json(
+            [
+                JSONApiInterface::CONTENT_ERRORS => [
+                    'code'    => $this->getCode(),
+                    'message' => $this->getMessage(),
+                    'file'    => $this->getFile(),
+                    'line'    => $this->getLine(),
+                    'uri'     => $request->getUri(),
+                    'meta'    => $this->getTraceAsString(),
+                ]
+            ]
+        );
     }
 }
