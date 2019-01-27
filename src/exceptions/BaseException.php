@@ -2,7 +2,7 @@
 
 namespace rjapi\exceptions;
 
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 use rjapi\extension\JSONApiInterface;
 use rjapi\helpers\Json;
 
@@ -28,9 +28,9 @@ class BaseException extends \Exception
      * Render the exception into an HTTP response.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return Response
+     * @return JsonResponse
      */
-    public function render($request) : Response
+    public function render($request) : JsonResponse
     {
         return response()->json(
             [
