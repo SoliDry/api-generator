@@ -8,6 +8,7 @@ use League\Fractal\Resource\Collection;
 use rjapi\exceptions\HeadersException;
 use rjapi\helpers\Json;
 use rjapi\helpers\Request as RequestHelper;
+use rjapi\types\ErrorsInterface;
 
 class BaseController extends ApiController
 {
@@ -21,7 +22,7 @@ class BaseController extends ApiController
     {
         parent::__construct($route);
         if (in_array($route->getActionMethod(), self::AVAILABLE_BULKS, true) && RequestHelper::isExt(request(), self::EXT_BULK) === false) {
-            throw new HeadersException('There is no ' . self::EXT_BULK . ' value in ' . self::EXT . ' key of ' . self::CONTENT_TYPE_KEY . ' header');
+            throw new HeadersException(ErrorsInterface::JSON_API_ERRORS[ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR], ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR);
         }
     }
 

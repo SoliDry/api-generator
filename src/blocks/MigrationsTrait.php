@@ -6,6 +6,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 use rjapi\exceptions\AttributesException;
 use rjapi\helpers\Classes;
+use rjapi\types\ErrorsInterface;
 use rjapi\types\ModelsInterface;
 use rjapi\types\PhpInterface;
 use rjapi\types\ApiInterface;
@@ -122,6 +123,7 @@ trait MigrationsTrait
         ) {
             $max = empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MAX];
             $min = empty($attrVal[ApiInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MIN];
+
             $this->setRow($attrVal[ApiInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
                 . PhpInterface::SPACE . $min);
         }
@@ -138,18 +140,22 @@ trait MigrationsTrait
     private function setForeignIndex(array $facets, string $attrKey, $k) : void
     {
         if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
-            throw new AttributesException('There must be references and on attributes for foreign key construction.');
+            throw new AttributesException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_FOREIGN_KEY], ErrorsInterface::CODE_FOREIGN_KEY);
         }
+
         $build = [
             ModelsInterface::INDEX_REFERENCES => $this->quoteParam($facets[ModelsInterface::INDEX_REFERENCES]),
             ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
         ];
+
         if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
             $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
         }
+
         if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
             $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
         }
+
         $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $attrKey, $this->quoteParam($k), $build);
     }
 
@@ -161,21 +167,26 @@ trait MigrationsTrait
     private function setCompositeIndex(array $attrVal): void
     {
         if (empty($attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_COMPOSITE_INDEX]) === false) {
+
             $facets = $attrVal[ApiInterface::RAML_FACETS][ApiInterface::RAML_COMPOSITE_INDEX];
             if (empty($facets[ModelsInterface::INDEX_TYPE_FOREIGN]) === false) {
                 if (empty($facets[ModelsInterface::INDEX_REFERENCES]) || empty($facets[ModelsInterface::INDEX_ON])) {
-                    throw new AttributesException('There must be references on attributes for foreign key construction.');
+                    throw new AttributesException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_FOREIGN_KEY], ErrorsInterface::CODE_FOREIGN_KEY);
                 }
+
                 $build = [
                     ModelsInterface::INDEX_REFERENCES => $this->getArrayParam($facets[ModelsInterface::INDEX_REFERENCES]),
                     ModelsInterface::INDEX_ON => $this->quoteParam($facets[ModelsInterface::INDEX_ON]),
                 ];
+
                 if (empty($facets[ModelsInterface::INDEX_ON_DELETE]) === false) {
                     $build[ModelsInterface::INDEX_ON_DELETE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_DELETE]);
                 }
+
                 if (empty($facets[ModelsInterface::INDEX_ON_UPDATE]) === false) {
                     $build[ModelsInterface::INDEX_ON_UPDATE] = $this->quoteParam($facets[ModelsInterface::INDEX_ON_UPDATE]);
                 }
+
                 $this->setRow(ModelsInterface::INDEX_TYPE_FOREIGN, $this->getArrayParam($facets[ModelsInterface::INDEX_TYPE_FOREIGN]), null, $build, false);
             } else {
                 foreach ($facets as $k => $v) {

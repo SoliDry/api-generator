@@ -5,6 +5,7 @@ use rjapi\exceptions\AttributesException;
 use rjapi\helpers\ConfigHelper;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\ConfigInterface;
+use rjapi\types\ErrorsInterface;
 
 class StateMachine
 {
@@ -66,8 +67,9 @@ class StateMachine
     public function setStates(string $field) : void
     {
         if(empty($this->machine[$field][ConfigInterface::STATES])) {
-            throw new AttributesException('There should be "states" element filled in with FSM.');
+            throw new AttributesException(ErrorsInterface::JSON_API_ERRORS[ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR], ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR);
         }
+
         $this->states = $this->machine[$field][ConfigInterface::STATES];
     }
 
@@ -78,8 +80,9 @@ class StateMachine
     public function setInitial(string $field) : void
     {
         if(empty($this->machine[$field][ConfigInterface::STATES][ConfigInterface::INITIAL][0])) {
-            throw new AttributesException('There should be an initial value for: "' . $field . '" field."');
+            throw new AttributesException('There should be an initial value for: "' . $field . '" field."', ErrorsInterface::HTTP_CODE_FSM_INIT_ATTR);
         }
+
         $this->initial = $this->machine[$field][ConfigInterface::STATES][ConfigInterface::INITIAL][0];
     }
 
