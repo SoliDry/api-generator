@@ -34,8 +34,7 @@
         "phpunit/phpunit": ">=6.5",
         "mockery/mockery": "~1.0",
         "codeception/codeception": "^2.4",
-        "fzaninotto/faker": "^1.7",
-        "php": "^7.1"
+        "fzaninotto/faker": "^1.7"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
