@@ -115,16 +115,14 @@ class Json
      * @param array $data
      * @return string
      */
-    public static function outputSerializedRelations(Request $request, array $data) : string
+    public static function prepareSerializedRelations(Request $request, array $data) : string
     {
-        http_response_code(JSONApiInterface::HTTP_RESPONSE_CODE_OK);
-        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
-
         $arr[JSONApiInterface::CONTENT_LINKS] = [
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
         ];
 
         $arr[JSONApiInterface::CONTENT_DATA] = $data;
+
         return self::encode($arr);
     }
 
@@ -157,24 +155,15 @@ class Json
 
     /**
      * @param ResourceInterface $resource
-     * @param int $responseCode
      * @param array $data
      * @return string
      */
-    public static function prepareSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
-                                                 $data = ModelsInterface::DEFAULT_DATA) : string
+    public static function prepareSerializedData(ResourceInterface $resource, $data = ModelsInterface::DEFAULT_DATA) : string
     {
-        http_response_code($responseCode);
-        header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
-        if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
-            exit;
-        }
-
         if (empty($resource->getData())) { // preventing 3d party libs (League etc) from crash on empty data
-            echo self::encode([
+            return self::encode([
                 ModelsInterface::PARAM_DATA => []
             ]);
-            exit;
         }
 
         $host    = $_SERVER['HTTP_HOST'];

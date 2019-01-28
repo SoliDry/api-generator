@@ -122,7 +122,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
-        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData()));
+        return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
     }
 
     /**
@@ -158,7 +158,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $item, $this->entity, false, $meta);
-        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data));
+        return $this->getResponse(Json::prepareSerializedData($resource,  $data));
     }
 
     /**
@@ -210,7 +210,7 @@ class ApiController extends Controller implements JSONApiInterface
 
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->formRequest, $this->model, $this->entity, false, $meta);
-        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED));
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -299,7 +299,7 @@ class ApiController extends Controller implements JSONApiInterface
             $model->delete();
         }
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT));
+        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -313,8 +313,12 @@ class ApiController extends Controller implements JSONApiInterface
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
     }
 
-    public function getResponse(string $json) : Response
+    public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : Response
     {
-        return response($json)->withHeaders(JSONApiInterface::STANDARD_HEADERS);
+        if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
+            return response()->withHeaders(JSONApiInterface::STANDARD_HEADERS)->setStatusCode($responseCode);
+        }
+
+        return response($json)->withHeaders(JSONApiInterface::STANDARD_HEADERS)->setStatusCode($responseCode);
     }
 }

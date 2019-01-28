@@ -39,7 +39,7 @@ class BaseController extends ApiController
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
-        return $this->getResponse(Json::prepareSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED));
+        return $this->getResponse(Json::prepareSerializedData($this->saveBulk($jsonApiAttributes)), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -71,6 +71,6 @@ class BaseController extends ApiController
 
         $this->removeBulk($jsonApiAttributes);
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT));
+        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 }

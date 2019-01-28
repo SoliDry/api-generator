@@ -3,6 +3,7 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\FileManager;
 use rjapi\helpers\Classes;
@@ -23,9 +24,9 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
-     * @return string
+     * @return Response
      */
-    public function relations(Request $request, $id, string $relation) : string
+    public function relations(Request $request, $id, string $relation) : Response
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
@@ -40,7 +41,7 @@ trait BaseRelationsTrait
         }
 
         $resource = Json::getRelations($model->$relation, $relation);
-        return Json::outputSerializedRelations($request, $resource);
+        return $this->getResponse(Json::prepareSerializedRelations($request, $resource));
     }
 
     /**
@@ -49,13 +50,14 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
-     * @return string
+     * @return Response
      */
-    public function createRelations(Request $request, $id, string $relation) : string
+    public function createRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->formRequest, $model, $this->entity);
-        return Json::prepareSerializedData($resource);
+
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -64,13 +66,14 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
-     * @return string
+     * @return Response
      */
-    public function updateRelations(Request $request, $id, string $relation) : string
+    public function updateRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->formRequest, $model, $this->entity);
-        return Json::prepareSerializedData($resource);
+
+        return $this->getResponse(Json::prepareSerializedData($resource));
     }
 
     /**
@@ -106,9 +109,9 @@ trait BaseRelationsTrait
      * @param Request $request JSON API formatted string
      * @param int|string $id int id of an entity
      * @param string $relation
-     * @return string
+     * @return Response
      */
-    public function deleteRelations(Request $request, $id, string $relation) : string
+    public function deleteRelations(Request $request, $id, string $relation) : Response
     {
         $json        = Json::decode($request->getContent());
         $jsonApiRels = Json::getData($json);
@@ -146,7 +149,7 @@ trait BaseRelationsTrait
             }
         }
 
-        return Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
