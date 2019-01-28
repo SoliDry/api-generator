@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "laravel/framework": ">=5.3",
+        "php": ">=7.0",
         "nwidart/laravel-modules": "2.4.*",
         "league/fractal": ">=0.14",
         "lcobucci/jwt": "^3.2",
@@ -31,6 +31,7 @@
         }
     },
     "require-dev": {
+        "laravel/framework": ">=5.3",
         "phpunit/phpunit": ">=6.5",
         "mockery/mockery": "~1.0",
         "codeception/codeception": "^2.4",

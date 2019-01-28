@@ -2,6 +2,7 @@
 
 namespace rjapi\extension;
 
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -98,10 +99,10 @@ class ApiController extends Controller implements JSONApiInterface
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
-     * @return string
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function index(Request $request) : string
+    public function index(Request $request) : Response
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
@@ -121,7 +122,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
-        return Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
+        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData()));
     }
 
     /**
@@ -129,10 +130,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return string
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function view(Request $request, $id) : string
+    public function view(Request $request, $id) : Response
     {
         $meta       = [];
         $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
@@ -157,18 +158,17 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $item, $this->entity, false, $meta);
-        return Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data);
+        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $data));
     }
 
     /**
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
-     * @return string
-     * @throws \LogicException
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function create(Request $request): string
+    public function create(Request $request) : Response
     {
         $meta              = [];
         $json              = Json::decode($request->getContent());
@@ -210,7 +210,7 @@ class ApiController extends Controller implements JSONApiInterface
 
         $this->setRelationships($json, $this->model->id);
         $resource = Json::getResource($this->formRequest, $this->model, $this->entity, false, $meta);
-        return Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->getResponse(Json::prepareSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_CREATED));
     }
 
     /**
@@ -218,10 +218,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return string
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function update(Request $request, $id): string
+    public function update(Request $request, $id) : Response
     {
         $meta = [];
 
@@ -251,7 +251,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $model, $this->entity, false, $meta);
-        return Json::prepareSerializedData($resource);
+        return $this->getResponse(Json::prepareSerializedData($resource));
     }
 
     /**
@@ -290,16 +290,16 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return string
+     * @return Response
      */
-    public function delete(Request $request, $id) : string
+    public function delete(Request $request, $id) : Response
     {
         $model = $this->getEntity($id);
         if ($model !== null) {
             $model->delete();
         }
 
-        return Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->getResponse(Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT));
     }
 
     /**
@@ -311,5 +311,10 @@ class ApiController extends Controller implements JSONApiInterface
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
+    }
+
+    public function getResponse(string $json) : Response
+    {
+        return response($json)->withHeaders(JSONApiInterface::STANDARD_HEADERS);
     }
 }

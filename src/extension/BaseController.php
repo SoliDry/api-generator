@@ -3,6 +3,7 @@
 namespace rjapi\extension;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use rjapi\exceptions\HeadersException;
@@ -30,48 +31,46 @@ class BaseController extends ApiController
      * Creates bulk of items in transaction mode
      *
      * @param Request $request
-     * @return string
-     * @throws \LogicException
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function createBulk(Request $request) : string
+    public function createBulk(Request $request) : Response
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
-        return Json::prepareSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->getResponse(Json::prepareSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED));
     }
 
     /**
      * Update bulk of items in transaction mode
      *
      * @param Request $request
-     * @return string
-     * @throws \LogicException
+     * @return Response
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function updateBulk(Request $request) : string
+    public function updateBulk(Request $request) : Response
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
-        return Json::prepareSerializedData($this->mutateBulk($jsonApiAttributes));
+        return $this->getResponse(Json::prepareSerializedData($this->mutateBulk($jsonApiAttributes)));
     }
 
     /**
      * Delete bulk of items in transaction mode
      *
      * @param Request $request
-     * @return string
+     * @return Response
      * @throws \LogicException
      */
-    public function deleteBulk(Request $request) : string
+    public function deleteBulk(Request $request) : Response
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
         $this->removeBulk($jsonApiAttributes);
 
-        return Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->getResponse(Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT));
     }
 }
