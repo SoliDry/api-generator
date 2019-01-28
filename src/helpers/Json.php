@@ -168,9 +168,10 @@ class Json
      * @param ResourceInterface $resource
      * @param int $responseCode
      * @param array $data
+     * @return string
      */
     public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
-                                                $data = ModelsInterface::DEFAULT_DATA) : void
+                                                $data = ModelsInterface::DEFAULT_DATA) : string
     {
         http_response_code($responseCode);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
@@ -193,9 +194,7 @@ class Json
         }
 
         $manager->setSerializer(new JsonApiSerializer($host));
-        echo self::getSelectedData($manager->createData($resource)->toJson(), $data);
-
-        self::successExit();
+        return self::getSelectedData($manager->createData($resource)->toJson(), $data);
     }
 
     /**

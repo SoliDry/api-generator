@@ -98,6 +98,7 @@ class ApiController extends Controller implements JSONApiInterface
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
+     * @return string
      * @throws \rjapi\exceptions\AttributesException
      */
     public function index(Request $request)
@@ -120,7 +121,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
-        Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
+        return Json::outputSerializedData($resource, JSONApiInterface::HTTP_RESPONSE_CODE_OK, $sqlOptions->getData());
     }
 
     /**
