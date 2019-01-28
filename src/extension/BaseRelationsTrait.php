@@ -25,7 +25,7 @@ trait BaseRelationsTrait
      * @param string $relation
      * @return string
      */
-    public function relations(Request $request, $id, string $relation)
+    public function relations(Request $request, $id, string $relation) : string
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
@@ -106,8 +106,9 @@ trait BaseRelationsTrait
      * @param Request $request JSON API formatted string
      * @param int|string $id int id of an entity
      * @param string $relation
+     * @return string
      */
-    public function deleteRelations(Request $request, $id, string $relation) : void
+    public function deleteRelations(Request $request, $id, string $relation) : string
     {
         $json        = Json::decode($request->getContent());
         $jsonApiRels = Json::getData($json);
@@ -143,8 +144,9 @@ trait BaseRelationsTrait
                     $model->update([$relation . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => 0]);
                 }
             }
-            Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
+
+        return Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
