@@ -23,6 +23,7 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
+     * @return string
      */
     public function relations(Request $request, $id, string $relation)
     {
@@ -37,8 +38,9 @@ trait BaseRelationsTrait
                 ]
             );
         }
+
         $resource = Json::getRelations($model->$relation, $relation);
-        Json::outputSerializedRelations($request, $resource);
+        return Json::outputSerializedRelations($request, $resource);
     }
 
     /**
@@ -47,12 +49,13 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
+     * @return string
      */
-    public function createRelations(Request $request, $id, string $relation) : void
+    public function createRelations(Request $request, $id, string $relation) : string
     {
         $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->formRequest, $model, $this->entity);
-        Json::outputSerializedData($resource);
+        return Json::prepareSerializedData($resource);
     }
 
     /**
@@ -61,12 +64,13 @@ trait BaseRelationsTrait
      * @param Request $request
      * @param int|string $id
      * @param string $relation
+     * @return string
      */
-    public function updateRelations(Request $request, $id, string $relation) : void
+    public function updateRelations(Request $request, $id, string $relation) : string
     {
         $model    = $this->presetRelations($request, $id, $relation);
         $resource = Json::getResource($this->formRequest, $model, $this->entity);
-        Json::outputSerializedData($resource);
+        return Json::prepareSerializedData($resource);
     }
 
     /**
@@ -139,7 +143,7 @@ trait BaseRelationsTrait
                     $model->update([$relation . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => 0]);
                 }
             }
-            Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+            Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
         }
     }
 

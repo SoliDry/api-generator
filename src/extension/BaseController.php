@@ -30,45 +30,48 @@ class BaseController extends ApiController
      * Creates bulk of items in transaction mode
      *
      * @param Request $request
+     * @return string
      * @throws \LogicException
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function createBulk(Request $request)
+    public function createBulk(Request $request) : string
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
-        Json::outputSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return Json::prepareSerializedData($this->saveBulk($jsonApiAttributes), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
      * Update bulk of items in transaction mode
      *
      * @param Request $request
+     * @return string
      * @throws \LogicException
      * @throws \rjapi\exceptions\AttributesException
      */
-    public function updateBulk(Request $request)
+    public function updateBulk(Request $request) : string
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
-        Json::outputSerializedData($this->mutateBulk($jsonApiAttributes));
+        return Json::prepareSerializedData($this->mutateBulk($jsonApiAttributes));
     }
 
     /**
      * Delete bulk of items in transaction mode
      *
      * @param Request $request
+     * @return string
      * @throws \LogicException
      */
-    public function deleteBulk(Request $request)
+    public function deleteBulk(Request $request) : string
     {
         $json              = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
         $this->removeBulk($jsonApiAttributes);
 
-        Json::outputSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return Json::prepareSerializedData(new Collection(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 }

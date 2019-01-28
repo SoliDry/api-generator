@@ -109,10 +109,13 @@ class Json
     }
 
     /**
+     * Returns composition of relations
+     *
      * @param Request $request
      * @param array $data
+     * @return string
      */
-    public static function outputSerializedRelations(Request $request, array $data) : void
+    public static function outputSerializedRelations(Request $request, array $data) : string
     {
         http_response_code(JSONApiInterface::HTTP_RESPONSE_CODE_OK);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
@@ -121,20 +124,8 @@ class Json
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
         ];
 
-        $arr[JSONApiInterface::CONTENT_DATA]  = $data;
-        echo self::encode($arr);
-
-        self::successExit();
-    }
-
-    /**
-     *  Exits with status code 0 on production servers
-     */
-    private static function successExit() : void
-    {
-        if (env('APP_ENV') !== 'dev') {
-            exit(JSONApiInterface::EXIT_STATUS_SUCCESS);
-        }
+        $arr[JSONApiInterface::CONTENT_DATA] = $data;
+        return self::encode($arr);
     }
 
     /**
@@ -170,8 +161,8 @@ class Json
      * @param array $data
      * @return string
      */
-    public static function outputSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
-                                                $data = ModelsInterface::DEFAULT_DATA) : string
+    public static function prepareSerializedData(ResourceInterface $resource, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK,
+                                                 $data = ModelsInterface::DEFAULT_DATA) : string
     {
         http_response_code($responseCode);
         header(JSONApiInterface::HEADER_CONTENT_TYPE . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE);
