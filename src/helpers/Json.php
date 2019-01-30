@@ -82,6 +82,10 @@ class Json
                                 ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
                 }
             }
+        } elseif ($relations instanceof Model) {
+            $attrs   = $relations->getAttributes();
+            $jsonArr = [ApiInterface::RAML_TYPE => $entity,
+                        ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
         }
 
         return $jsonArr;
