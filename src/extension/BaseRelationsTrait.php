@@ -8,6 +8,7 @@ use League\Fractal\Resource\Collection;
 use rjapi\blocks\FileManager;
 use rjapi\helpers\Classes;
 use rjapi\helpers\ConfigHelper;
+use rjapi\helpers\Errors;
 use rjapi\helpers\Json;
 use rjapi\helpers\MigrationsHelper;
 use rjapi\types\DirsInterface;
@@ -30,14 +31,7 @@ trait BaseRelationsTrait
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
-            Json::outputErrors(
-                [
-                    [
-                        JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id .
-                            ' - not found.',
-                    ],
-                ]
-            );
+            Json::outputErrors((new Errors())->getModelNotFound($this->entity, $id));
         }
 
         $resource = Json::getRelations($model->$relation, $relation);
@@ -86,18 +80,13 @@ trait BaseRelationsTrait
     {
         $json = Json::decode($request->getContent());
         $this->setRelationships($json, $id, true);
+
         // set include for relations
         $_GET['include'] = $relation;
         $model           = $this->getEntity($id);
+
         if (empty($model)) {
-            Json::outputErrors(
-                [
-                    [
-                        JSONApiInterface::ERROR_TITLE => 'Database object ' . $this->entity . ' with $id = ' . $id .
-                            ' - not found.',
-                    ],
-                ]
-            );
+            Json::outputErrors((new Errors())->getModelNotFound($this->entity, $id));
         }
 
         return $model;
@@ -255,6 +244,7 @@ trait BaseRelationsTrait
     {
         $relEntity = Classes::getModelEntity($ucEntity);
         $model     = $this->getModelEntity($relEntity, $rId);
+
         // swap table and field trying to find rels with inverse
         if (!property_exists($model, $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID)) {
             $ucTmp     = $ucEntity;
@@ -267,6 +257,7 @@ trait BaseRelationsTrait
             $model->save();
             return;
         }
+
         $model->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $eId;
         $model->save();
     }
