@@ -2,7 +2,6 @@
 
 namespace rjapitest\unit;
 
-use Faker\Factory;
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
 use rjapi\ApiGenerator;
 use rjapi\types\ConfigInterface;
@@ -10,8 +9,15 @@ use rjapi\types\DirsInterface;
 use rjapi\types\JwtInterface;
 use rjapi\types\PhpInterface;
 
+/**
+ * Class TestCase
+ * @inheritdoc
+ * @package rjapitest\unit
+ */
 abstract class TestCase extends TestCaseLaravel
 {
+    public const API_VERSION = 'v1';
+
     public const CONFIG_KEY  = 'v2';
     public const MODULE_NAME = 'V2';
     public const DIR_OUTPUT  = './tests/_output/';
@@ -63,44 +69,5 @@ abstract class TestCase extends TestCaseLaravel
         $fp                = fopen($confFile, 'r+');
         fwrite($fp, $str);
         fclose($fp);
-    }
-
-    /**
-     * Fake generated provider for articles
-     */
-    public function articleProvider()
-    {
-        $faker = Factory::create();
-
-        return [
-            [[
-                 [
-                     'id'           => uniqid(),
-                     'title'        => $faker->title,
-                     'fake_attr'    => 'attr',
-                     'description'  => $faker->name,
-                     'url'          => $faker->url . uniqid('', true),
-                     'topic_id'     => $faker->randomNumber(),
-                     'rate'         => $faker->randomFloat(),
-                     'status'       => 'draft',
-                     'show_in_top'  => random_int(0, 1),
-                     'date_posted'  => $faker->date(),
-                     'time_to_live' => $faker->time(),
-                 ],
-                 [
-                     'id'           => uniqid(),
-                     'title'        => $faker->title,
-                     'fake_attr'    => 'attr',
-                     'description'  => $faker->name,
-                     'url'          => $faker->url  . uniqid('', true),
-                     'topic_id'     => $faker->randomNumber(),
-                     'rate'         => $faker->randomFloat(),
-                     'status'       => 'draft',
-                     'show_in_top'  => random_int(0, 1),
-                     'date_posted'  => $faker->date(),
-                     'time_to_live' => $faker->time(),
-                 ],
-             ]],
-        ];
     }
 }

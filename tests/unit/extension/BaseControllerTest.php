@@ -3,13 +3,14 @@
 namespace rjapitest\unit\extensions;
 
 
+use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Modules\V2\Entities\Article;
 use Modules\V2\Http\Controllers\ArticleController;
-use ReflectionException;
 use rjapi\exceptions\AttributesException;
 use rjapi\extension\BaseController;
+use rjapi\extension\JSONApiInterface;
 use rjapitest\_data\ArticleFixture;
 use rjapitest\unit\TestCase;
 
@@ -51,27 +52,62 @@ class BaseControllerTest extends TestCase
     }
 
     /**
-     * @test
-     * @dataProvider articleProvider
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
-     * @param $data
+     * Fake generated provider for articles
+     * @throws \Exception
      */
-    public function it_creates_bulk($data)
+    public function articleBulkProvider()
     {
-        try {
-            $this->baseController->createBulk(\rjapitest\unit\extensions\request($data));
-        } catch (AttributesException $e) {
-            echo $e->getTraceAsString();
-        }
+        $faker = Factory::create();
 
-        $this->assertInstanceOf(BaseController::class, $this->baseController);
+        return ['data' => [
+            [
+                'id'           => uniqid(),
+                'title'        => $faker->title,
+                'fake_attr'    => 'attr',
+                'description'  => $faker->name,
+                'url'          => $faker->url . uniqid('', true),
+                'topic_id'     => random_int(1, 127),
+                'rate'         => random_int(1, 10),
+                'status'       => 'draft',
+                'show_in_top'  => random_int(0, 1),
+                'date_posted'  => date('Y-m-d'),
+                'time_to_live' => $faker->time(),
+            ],
+            [
+                'id'           => uniqid(),
+                'title'        => $faker->title,
+                'fake_attr'    => 'attr',
+                'description'  => $faker->name,
+                'url'          => $faker->url . uniqid('', true),
+                'topic_id'     => random_int(1, 127),
+                'rate'         => random_int(1, 10),
+                'status'       => 'draft',
+                'show_in_top'  => random_int(0, 1),
+                'date_posted'  => date('Y-m-d'),
+                'time_to_live' => $faker->time(),
+            ],
+        ],
+        ];
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
+     * @throws \Exception
+     */
+    public function it_creates_bulk()
+    {
+        $data = $this->articleBulkProvider();
+        $resp = $this->baseController->createBulk(\rjapitest\unit\extensions\request($data));
+
+        $respJson = json_decode($resp->getContent(), true)['data'];
+        foreach ($data['data'] as $k => $v) {
+            $this->assertEquals($v['id'], $respJson[$k]['id']);
+        }
+    }
+
+    /**
+     * @test
+     * @throws AttributesException
      */
     public function it_updates_bulk()
     {
@@ -79,13 +115,16 @@ class BaseControllerTest extends TestCase
         $firstItem  = ArticleFixture::createAndGet();
         $secondItem = ArticleFixture::createAndGet();
 
+        // change values
+        $faker = Factory::create();
+
         $data = [
             'data' => [
                 [
                     'type'         => 'article',
                     'id'           => $firstItem->id,
-                    'title'        => $firstItem->title,
-                    'description'  => $firstItem->description,
+                    'title'        => $faker->title,
+                    'description'  => $faker->name,
                     'fake_attr'    => 'attr',
                     'url'          => $firstItem->url,
                     'show_in_top'  => $firstItem->show_in_top,
@@ -97,8 +136,8 @@ class BaseControllerTest extends TestCase
                 [
                     'type'         => 'article',
                     'id'           => $secondItem->id,
-                    'title'        => $secondItem->title,
-                    'description'  => $secondItem->description,
+                    'title'        => $faker->title,
+                    'description'  => $faker->name,
                     'fake_attr'    => 'attr',
                     'url'          => $secondItem->url,
                     'show_in_top'  => $secondItem->show_in_top,
@@ -110,19 +149,16 @@ class BaseControllerTest extends TestCase
             ],
         ];
 
-        try {
-            $this->baseController->updateBulk(\rjapitest\unit\extensions\request($data));
-        } catch (AttributesException $e) {
-            echo $e->getTraceAsString();
-        }
+        $resp = $this->baseController->updateBulk(\rjapitest\unit\extensions\request($data));
 
-        $this->assertInstanceOf(BaseController::class, $this->baseController);
+        $respJson = json_decode($resp->getContent(), true)['data'];
+        foreach ($data['data'] as $k => $v) {
+            $this->assertEquals($v['title'], $respJson[$k]['attributes']['title']);
+        }
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function it_deletes_bulk()
     {
@@ -146,31 +182,33 @@ class BaseControllerTest extends TestCase
             ],
         ];
 
-        $this->baseController->deleteBulk(\rjapitest\unit\extensions\request($data));
-        $this->assertInstanceOf(BaseController::class, $this->baseController);
+        $resp = $this->baseController->deleteBulk(\rjapitest\unit\extensions\request($data));
+        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @throws AttributesException
      */
     public function it_runs_index()
     {
-        $router = new Route(['GET'], '/v2/article?include=tag&data=["title", "description"]', function () {
+        $router = new Route(['GET'], '/' . self::API_VERSION . '/article?include=tag&data=["title", "description"]', function () {
         });
         $router->setAction(['controller' => 'ArticleController@index']);
         $this->baseController = new ArticleController($router);
 
-        $this->baseController->index(\rjapitest\unit\extensions\request());
-        $this->assertInstanceOf(BaseController::class, $this->baseController);
+        $req = new Request();
+        $req->initialize([
+            'include' => 'tag',
+        ]);
+        $resp = $this->baseController->index($req);
+
+        // @todo: Change simple 200 OK check to more complex tests
+        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @throws AttributesException
      */
     public function it_runs_view()
@@ -184,7 +222,12 @@ class BaseControllerTest extends TestCase
 
         $this->baseController = new ArticleController($router);
 
-        $this->baseController->view(\rjapitest\unit\extensions\request(), $item->id);
-        $this->assertInstanceOf(BaseController::class, $this->baseController);
+        $resp = $this->baseController->view(\rjapitest\unit\extensions\request(), $item->id);
+
+        // @todo: Change simple 200 OK check to more complex tests
+        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
     }
+
+    // @todo: create/update/delete
+    // @todo: relations/updateRelations/deleteRelations
 }
