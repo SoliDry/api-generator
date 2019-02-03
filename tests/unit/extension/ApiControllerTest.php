@@ -9,23 +9,8 @@ use Modules\V2\Http\Controllers\ArticleController;
 use rjapi\extension\BaseController;
 use rjapi\extension\JSONApiInterface;
 use rjapitest\_data\ArticleFixture;
+use rjapitest\_data\TopicFixture;
 use rjapitest\unit\TestCase;
-
-/**
- * This method is used not only here, but in constructor of BaseController
- * to retrieve headers etc
- *
- * @param array $json
- * @return Request
- */
-function request(array $json = [])
-{
-    $req = new Request();
-    $req->headers->set('Content-TYpe', 'application/json;ext=bulk');
-    $req->initialize([], [], [], [], [], [], json_encode($json));
-
-    return $req;
-}
 
 /**
  * Class ApiController
@@ -33,8 +18,10 @@ function request(array $json = [])
  *
  * @property BaseController baseController
  */
-class ApiController extends TestCase
+class ApiControllerTest extends TestCase
 {
+    private const RELATION = 'topic';
+
     private $baseController;
 
     public function setUp()
@@ -46,6 +33,7 @@ class ApiController extends TestCase
         $router               = new Route(['POST', 'GET'], '', function () {
         });
         $this->baseController = new ArticleController($router);
+
     }
 
     /**
@@ -88,7 +76,7 @@ class ApiController extends TestCase
 
         $this->baseController = new ArticleController($router);
 
-        $resp = $this->baseController->view(\rjapitest\unit\extensions\request(), $item->id);
+        $resp = $this->baseController->view($this->request(), $item->id);
 
         // @todo: Change simple 200 OK check to more complex tests
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
@@ -103,6 +91,8 @@ class ApiController extends TestCase
      */
     public function it_runs_create()
     {
+        $topic = TopicFixture::createAndGet();
+
         $router = new Route(['POST'], '/v2/article/', function () {
         });
         $router->setAction(['controller' => 'ArticleController@view']);
@@ -127,14 +117,14 @@ class ApiController extends TestCase
                 ],
                 'relationships' => [
                     'topic' => [
-                        'data' => ['type' => 'topic', 'id' => '2'],
-                    ]
-                ]
-            ]
+                        'data' => ['type' => 'topic', 'id' => $topic->id],
+                    ],
+                ],
+            ],
         ];
 
 
-        $req = request($reqData);
+        $req  = $this->request($reqData);
         $resp = $this->baseController->create($req);
 
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
@@ -155,11 +145,11 @@ class ApiController extends TestCase
      */
     public function it_runs_update(array $reqData)
     {
-        $faker   = Factory::create();
-        $id = $reqData['data']['attributes']['id'];
+        $faker                                  = Factory::create();
+        $id                                     = $reqData['data']['attributes']['id'];
         $reqData['data']['attributes']['title'] = $faker->title;
 
-        $req = request($reqData);
+        $req  = $this->request($reqData);
         $resp = $this->baseController->update($req, $id);
 
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
@@ -180,11 +170,104 @@ class ApiController extends TestCase
     {
         $id = $reqData['data']['attributes']['id'];
 
-        $req = request($reqData);
+        $req  = $this->request($reqData);
         $resp = $this->baseController->delete($req, $id);
 
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
-    // @todo: relations/create|updateRelations/deleteRelations
+    /**
+     * @test
+     */
+    public function it_creates_relations()
+    {
+        $topic   = TopicFixture::createAndGet();
+        $article = ArticleFixture::createAndGet();
+
+        $relation = 'topic';
+        $reqData  = [
+            'data' => [
+                'type'          => 'article',
+                'id'            => $article->id,
+                'relationships' => [
+                    $relation => [
+                        'data' => ['type' => $relation, 'id' => $topic->id],
+                    ]
+                ]
+            ]
+        ];
+
+        $req  = $this->request($reqData);
+        $resp = $this->baseController->createRelations($req, $article->id, $relation);
+
+        $respData = json_decode($resp->getContent(), true);
+        $this->assertEquals($respData['data']['relationships'][$relation]['data']['id'], $reqData['data']['relationships'][$relation]['data']['id']);
+
+        TopicFixture::truncate();
+
+        return $reqData;
+    }
+
+    /**
+     * @test
+     * @depends it_creates_relations
+     * @param array $reqData
+     * @return array
+     */
+    public function it_updates_relations(array $reqData) : array
+    {
+        $topic = TopicFixture::createAndGet();
+
+        $relation = 'topic';
+
+        $reqData['data']['relationships'][$relation]['data']['id'] = $topic->id;
+        $req                                                       = $this->request($reqData);
+        $resp                                                      = $this->baseController->updateRelations($req, $reqData['data']['id'], $relation);
+
+        $respData = json_decode($resp->getContent(), true);
+
+        $this->assertEquals($respData['data']['relationships'][$relation]['data']['id'], $reqData['data']['relationships'][$relation]['data']['id']);
+
+        return $reqData;
+    }
+
+    /**
+     * @test
+     * @depends it_updates_relations
+     * @param array $reqData
+     * @return array
+     */
+    public function it_gets_relations(array $reqData) : array
+    {
+        $req  = $this->request();
+        $resp = $this->baseController->relations($req, $reqData['data']['id'], self::RELATION);
+
+        $respData = json_decode($resp->getContent(), true);
+        $this->assertEquals($reqData['data']['relationships'][self::RELATION]['data']['id'], $respData['data']['id']);
+        $this->assertEquals($reqData['data']['relationships'][self::RELATION]['data']['type'], $respData['data']['type']);
+
+        return $reqData;
+    }
+
+    // @todo: deleteRelations
+//    /**
+//     * @test
+//     * @depends it_gets_relations
+//     * @param array $reqData
+//     */
+//    public function it_deletes_relation(array $reqData)
+//    {
+//        $req = $this->request([
+//            'data' => [
+//                [
+//                    'type' => self::RELATION,
+//                    'id'   => $reqData['data']['relationships'][self::RELATION]['data']['id'],
+//                ],
+//            ],
+//        ]);
+//
+//        $resp = $this->baseController->deleteRelations($req, $reqData['data']['id'], self::RELATION);
+//
+//        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+//    }
 }

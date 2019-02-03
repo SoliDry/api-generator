@@ -3,6 +3,7 @@
 namespace rjapitest\unit;
 
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
+use Illuminate\Http\Request;
 use rjapi\ApiGenerator;
 use rjapi\types\ConfigInterface;
 use rjapi\types\DirsInterface;
@@ -69,5 +70,21 @@ abstract class TestCase extends TestCaseLaravel
         $fp                = fopen($confFile, 'r+');
         fwrite($fp, $str);
         fclose($fp);
+    }
+
+    /**
+     * This method is used not only here, but in constructor of BaseController
+     * to retrieve headers etc
+     *
+     * @param array $json
+     * @return Request
+     */
+    protected function request(array $json = [])
+    {
+        $req = new Request();
+        $req->headers->set('Content-TYpe', 'application/json;ext=bulk');
+        $req->initialize([], [], [], [], [], [], json_encode($json));
+
+        return $req;
     }
 }

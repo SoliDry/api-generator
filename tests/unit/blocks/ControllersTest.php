@@ -2,10 +2,7 @@
 
 namespace rjapitest\unit\blocks;
 
-use Illuminate\Routing\Route;
-use Modules\V2\Http\Controllers\ArticleController;
 use rjapi\blocks\Controllers;
-use rjapi\extension\ApiController;
 use rjapi\ApiGenerator;
 use rjapi\types\ControllersInterface;
 use rjapi\types\DirsInterface;
@@ -30,19 +27,6 @@ class ControllersTest extends TestCase
         $data                = Yaml::parse(file_get_contents(__DIR__ . '/../../functional/oas/openapi.yaml'));
         $gen->types          = $data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         $this->controller    = new Controllers($gen);
-    }
-
-    /**
-     * @test
-     */
-    public function it_creates_entity()
-    {
-        $this->controller->createEntity('./tests/_output', 'ControllerTest');
-        $this->assertTrue(file_exists(self::DIR_OUTPUT . 'ArticleControllerTest.php'));
-        require_once __DIR__ . '/../../_output/ArticleControllerTest.php';
-        $articleController = new ArticleController(new Route(['POST', 'GET'], '', function () {
-        }));
-        $this->assertInstanceOf(ApiController::class, $articleController);
     }
 
     /**

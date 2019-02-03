@@ -4,7 +4,6 @@ namespace rjapitest\unit\extensions;
 
 
 use Faker\Factory;
-use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use Modules\V2\Entities\Article;
 use Modules\V2\Http\Controllers\ArticleController;
@@ -13,22 +12,6 @@ use rjapi\extension\BaseController;
 use rjapi\extension\JSONApiInterface;
 use rjapitest\_data\ArticleFixture;
 use rjapitest\unit\TestCase;
-
-/**
- * This method is used not only here, but in constructor of BaseController
- * to retrieve headers etc
- *
- * @param array $json
- * @return Request
- */
-function request(array $json = [])
-{
-    $req = new Request();
-    $req->headers->set('Content-TYpe', 'application/json;ext=bulk');
-    $req->initialize([], [], [], [], [], [], json_encode($json));
-
-    return $req;
-}
 
 /**
  * Class BaseControllerTest
@@ -97,7 +80,7 @@ class BaseControllerTest extends TestCase
     public function it_creates_bulk()
     {
         $data = $this->articleBulkProvider();
-        $resp = $this->baseController->createBulk(\rjapitest\unit\extensions\request($data));
+        $resp = $this->baseController->createBulk($this->request($data));
 
         $respJson = json_decode($resp->getContent(), true)['data'];
         foreach ($data['data'] as $k => $v) {
@@ -149,7 +132,7 @@ class BaseControllerTest extends TestCase
             ],
         ];
 
-        $resp = $this->baseController->updateBulk(\rjapitest\unit\extensions\request($data));
+        $resp = $this->baseController->updateBulk($this->request($data));
 
         $respJson = json_decode($resp->getContent(), true)['data'];
         foreach ($data['data'] as $k => $v) {
@@ -182,7 +165,7 @@ class BaseControllerTest extends TestCase
             ],
         ];
 
-        $resp = $this->baseController->deleteBulk(\rjapitest\unit\extensions\request($data));
+        $resp = $this->baseController->deleteBulk($this->request($data));
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 }

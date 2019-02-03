@@ -3,10 +3,12 @@
 namespace rjapitest\unit\extensions;
 
 
+use Faker\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redis;
 use Modules\V2\Entities\Article;
+use rjapi\extension\BaseModel;
 use rjapi\extension\CacheTrait;
 use rjapi\helpers\ConfigOptions;
 use rjapi\helpers\SqlOptions;
@@ -20,6 +22,7 @@ use rjapitest\unit\TestCase;
  *
  * @property ConfigOptions configOptions
  * @property SqlOptions sqlOptions
+ * @property Request req
  */
 class CacheTraitTest extends TestCase
 {
@@ -48,15 +51,16 @@ class CacheTraitTest extends TestCase
 
     /**
      * @test
+     * @throws \Exception
      */
     public function it_sets_and_gets_exp_val()
     {
         $val = $this->getStdCached($this->req, $this->sqlOptions);
-        $this->assertInstanceOf(Collection::class, $val);
-        $this->req->server->set('REQUEST_URI', 'foo=bar');
-        $this->sqlOptions->setId(0);
-        $val = $this->getStdCached($this->req, $this->sqlOptions);
-        $this->assertEmpty($val);
+        if (!$val instanceof BaseModel) {
+            $this->assertInstanceOf(Collection::class, $val);
+        } else {
+            $this->assertInstanceOf(BaseModel::class, $val);
+        }
     }
 
     /**

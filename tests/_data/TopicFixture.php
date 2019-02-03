@@ -2,6 +2,7 @@
 
 namespace rjapitest\_data;
 
+use Faker\Factory;
 use Modules\V2\Entities\Topic;
 
 class TopicFixture
@@ -11,8 +12,10 @@ class TopicFixture
      */
     public static function createAndGet() : Topic
     {
+        $faker = Factory::create();
+
         $user        = new Topic();
-        $user->title = 'Foo Bar Baz';
+        $user->title = $faker->title;
         $user->save();
 
         return $user;
@@ -24,5 +27,10 @@ class TopicFixture
     public static function delete($id) : void
     {
         Topic::destroy($id);
+    }
+
+    public static function truncate()
+    {
+        Topic::truncate();
     }
 }
