@@ -29,6 +29,7 @@ trait JWTTrait
                 ]
             );
         }
+
         $uniqId          = uniqid();
         /** @var \Illuminate\Database\Eloquent\Model $model */
         $model           = $this->getEntity($this->model->id);

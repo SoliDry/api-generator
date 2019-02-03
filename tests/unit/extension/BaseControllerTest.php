@@ -185,49 +185,4 @@ class BaseControllerTest extends TestCase
         $resp = $this->baseController->deleteBulk(\rjapitest\unit\extensions\request($data));
         $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
-
-    /**
-     * @test
-     * @throws AttributesException
-     */
-    public function it_runs_index()
-    {
-        $router = new Route(['GET'], '/' . self::API_VERSION . '/article?include=tag&data=["title", "description"]', function () {
-        });
-        $router->setAction(['controller' => 'ArticleController@index']);
-        $this->baseController = new ArticleController($router);
-
-        $req = new Request();
-        $req->initialize([
-            'include' => 'tag',
-        ]);
-        $resp = $this->baseController->index($req);
-
-        // @todo: Change simple 200 OK check to more complex tests
-        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
-    }
-
-    /**
-     * @test
-     * @throws AttributesException
-     */
-    public function it_runs_view()
-    {
-        $item = ArticleFixture::createAndGet();
-
-        $router = new Route(['GET'], '/v2/article/' . $item->id . '?include=tag&data=["title", "description"]', function () {
-        });
-        $router->setAction(['controller' => 'ArticleController@view']);
-        $this->assertTrue(is_string($item->id));
-
-        $this->baseController = new ArticleController($router);
-
-        $resp = $this->baseController->view(\rjapitest\unit\extensions\request(), $item->id);
-
-        // @todo: Change simple 200 OK check to more complex tests
-        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_OK);
-    }
-
-    // @todo: create/update/delete
-    // @todo: relations/updateRelations/deleteRelations
 }

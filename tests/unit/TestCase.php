@@ -16,7 +16,7 @@ use rjapi\types\PhpInterface;
  */
 abstract class TestCase extends TestCaseLaravel
 {
-    public const API_VERSION = 'v1';
+    public const API_VERSION = 'v2';
 
     public const CONFIG_KEY  = 'v2';
     public const MODULE_NAME = 'V2';
