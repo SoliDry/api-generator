@@ -4,6 +4,7 @@ namespace rjapi\extension;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Schema;
 use League\Fractal\Resource\Collection;
 use rjapi\blocks\FileManager;
 use rjapi\helpers\Classes;
@@ -126,13 +127,17 @@ trait BaseRelationsTrait
                             ],
                         ]
                     )->delete();
-                } else { // OneToOne/Many
-                    $relEntity = Classes::getModelEntity($ucEntity);
-                    $model     = $this->getModelEntities(
-                        $relEntity, [
-                            $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID, $id,
+                } else { // OneToOne/Many - note this is always updates one row related to entity e.g.:
+                    // find article by id and update tag_id or topic_id
+                    $entity = Classes::getModelEntity($this->entity);
+
+                    /** @var \Illuminate\Database\Eloquent\Builder $model */
+                    $model = $this->getModelEntities(
+                        $entity, [
+                            ApiInterface::RAML_ID, $id,
                         ]
                     );
+
                     $model->update([$relation . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID => 0]);
                 }
             }

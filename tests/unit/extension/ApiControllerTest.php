@@ -250,24 +250,24 @@ class ApiControllerTest extends TestCase
     }
 
     // @todo: deleteRelations
-//    /**
-//     * @test
-//     * @depends it_gets_relations
-//     * @param array $reqData
-//     */
-//    public function it_deletes_relation(array $reqData)
-//    {
-//        $req = $this->request([
-//            'data' => [
-//                [
-//                    'type' => self::RELATION,
-//                    'id'   => $reqData['data']['relationships'][self::RELATION]['data']['id'],
-//                ],
-//            ],
-//        ]);
-//
-//        $resp = $this->baseController->deleteRelations($req, $reqData['data']['id'], self::RELATION);
-//
-//        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
-//    }
+    /**
+     * @test
+     * @depends it_gets_relations
+     * @param array $reqData
+     */
+    public function it_deletes_relation(array $reqData)
+    {
+        $req = $this->request([
+            'data' => [
+                [
+                    'type' => self::RELATION,
+                    'id'   => $reqData['data']['relationships'][self::RELATION]['data']['id'],
+                ],
+            ],
+        ]);
+
+        $resp = $this->baseController->deleteRelations($req, $reqData['data']['id'], self::RELATION);
+
+        $this->assertEquals($resp->getStatusCode(), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+    }
 }
