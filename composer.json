@@ -1,7 +1,21 @@
 {
+    "name": "rjapi/api-generator",
     "description": "PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format",
     "type": "api-generator",
-    "name": "rjapi/api-generator",
+    "keywords": [
+        "json-api",
+        "jsonapi",
+        "openapi",
+        "open-api",
+        "generator",
+        "laravel",
+        "json",
+        "api"
+    ],
+    "homepage": "https://github.com/RJAPI/api-generator",
+    "support": {
+        "issues": "https://github.com/RJAPI/api-generator/issues"
+    },
     "license": "MIT",
     "authors": [
         {
@@ -11,10 +25,10 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "nwidart/laravel-modules": "2.4.*",
-        "league/fractal": ">=0.14",
         "lcobucci/jwt": "^3.2",
+        "league/fractal": "~0.14",
+        "nwidart/laravel-modules": "2.4.*",
+        "php": ">=7.0",
         "predis/predis": "^1.1",
         "raml-org/raml-php-parser": "^4.1"
     },
@@ -38,5 +52,8 @@
         "fzaninotto/faker": "^1.7"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    }
 }
