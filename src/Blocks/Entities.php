@@ -254,7 +254,10 @@ class Entities extends FormRequestModel
         $baseMapper     = BaseModel::class;
         $baseMapperName = Classes::getName($baseMapper);
 
-        $this->setUse(SoftDeletes::class);
+        if ($this->isSoftDelete()) {
+            $this->setUse(SoftDeletes::class);
+        }
+
         $this->setUse($baseMapper, false, true);
         $this->startClass($this->className, $baseMapperName);
         $this->setUseSoftDelete();
