@@ -1004,7 +1004,7 @@ with additional user-defined options to let developers choose another.
 However, HMAC SHA-256 is the most popular these days. 
 
 ### Caching
-RJAPI ships with caching ability (via Redis) out of the box, the only thing you need to do is to declare cache settings:
+API ships with caching ability (via Redis) out of the box, the only thing you need to do is to declare cache settings:
 ```yaml
   Redis:
     type: object
@@ -1626,9 +1626,9 @@ Although, if you need to totally rollback the state of a system - use `--rollbac
 
 ======================
 
-HTTP request/response examples can be found on WiKi page - https://github.com/RJAPI/api-generator/wiki
+HTTP request/response examples can be found on WiKi page - https://github.com/SoliDry/api-generator/wiki
 
-Laravel project example with generated files can be found here -  https://github.com/RJAPI/rjapi-laravel 
+Laravel project example with generated files can be found here -  https://github.com/SoliDry/rjapi-laravel 
 
 To get deep-into ```Open API``` specification - https://swagger.io/specification/
 

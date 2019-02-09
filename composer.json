@@ -1,5 +1,5 @@
 {
-    "name": "SoliDry/api-generator",
+    "name": "solidry/api-generator",
     "description": "PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format",
     "type": "api-generator",
     "keywords": [
