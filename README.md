@@ -1,9 +1,9 @@
 # api-generator
 PHP-code generator (based on OAS) for Laravel framework, with complete support of JSON-API data format  [![Tweet](http://jpillora.com/github-twitter-button/img/tweet.png)](https://twitter.com/intent/tweet?text=Generate%20api%20code%20for%20Laravel%20and%20json-api%20based%20on%20OAS%20&url=https://github.com/RJAPI/api-generator&hashtags=php,api,oas,raml,json-api,laravel,developers)
 
-[![Build Status](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/api-generator/build-status/master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/RJAPI/api-generator/?branch=master)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/RJAPI/api-generator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
+[![Build Status](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/SoliDry/api-generator/build-status/master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SoliDry/api-generator/?branch=master)
+[![Code Intelligence Status](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
