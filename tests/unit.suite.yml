@@ -1,9 +1,0 @@
-# Codeception Test Suite Configuration
-#
-# Suite for Unit (internal) tests.
-
-class_name: UnitTester
-modules:
-    enabled:
-        - Asserts
-        - \Helper\Unit

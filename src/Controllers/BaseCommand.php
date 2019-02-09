@@ -326,7 +326,7 @@ class BaseCommand extends Command
             foreach ($this->files as $file) {
                 $pathInfo = pathinfo($file);
                 $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
-                    . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['Extension'];
+                    . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
                 copy($file, $dest);
             }
         }
