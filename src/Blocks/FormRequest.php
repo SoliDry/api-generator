@@ -39,17 +39,27 @@ class FormRequest extends FormRequestModel
     ];
     private $className;
 
+    /**
+     * FormRequest constructor.
+     * @param BaseCommand $generator
+     */
     public function __construct(BaseCommand $generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
+    /**
+     * @param $generator
+     */
     public function setCodeState($generator)
     {
         $this->generator = $generator;
     }
 
+    /**
+     * @param null $relationTypes
+     */
     private function setProps($relationTypes = null)
     {
         $this->setAdditionalProps();
@@ -59,6 +69,9 @@ class FormRequest extends FormRequestModel
         $this->setRelationTypes($relationTypes);
     }
 
+    /**
+     *  Sets an additional props e.g.: id
+     */
     private function setAdditionalProps()
     {
         // additional props
@@ -69,15 +82,23 @@ class FormRequest extends FormRequestModel
         }
     }
 
+    /**
+     *  Sets props values
+     */
     private function setPropsContent()
     {
         $this->setComment(CustomsInterface::CUSTOM_TYPES_ATTRIBUTES);
-        foreach ($this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]]
-                 [ApiInterface::RAML_PROPS] as $propKey => $propVal) {
+
+        /** @var array $objectProps */
+        $objectProps = $this->generator->types[$this->generator->objectProps[ApiInterface::RAML_ATTRS]][ApiInterface::RAML_PROPS];
+        foreach ($objectProps as $propKey => $propVal) {
+
             if (is_array($propVal)) {
                 $this->createProperty($propKey, PhpInterface::PHP_MODIFIER_PUBLIC);
+
                 if (empty($propVal[ApiInterface::RAML_FACETS][ConfigInterface::BIT_MASK]) === false) {
                     $this->setComment(ConfigInterface::BIT_MASK);
+
                     foreach ($propVal[ApiInterface::RAML_FACETS][ConfigInterface::BIT_MASK] as $flag => $bit) {
                         $this->createProperty($flag, PhpInterface::PHP_MODIFIER_PUBLIC, $bit);
                     }
@@ -86,12 +107,17 @@ class FormRequest extends FormRequestModel
         }
     }
 
+    /**
+     * Sets relation types
+     *
+     * @param $relationTypes
+     */
     private function setRelationTypes($relationTypes)
     {
         // related props
         if ($relationTypes !== null) {
-            $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Relations' .
-                PHP_EOL;
+            $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::COMMENT . ' Relations' . PHP_EOL;
+
             foreach ($relationTypes as $attrKey => $attrVal) {
                 // determine attr
                 if ($attrKey !== ApiInterface::RAML_ID && $attrKey !== ApiInterface::RAML_TYPE) {
@@ -102,6 +128,9 @@ class FormRequest extends FormRequestModel
         }
     }
 
+    /**
+     *  Sets all rules for this FormRequest
+     */
     private function constructRules()
     {
         // Authorize method - defaults to false
@@ -124,6 +153,11 @@ class FormRequest extends FormRequestModel
         $this->endMethod();
     }
 
+    /**
+     * Sets all relations for Entity via FormRequests
+     *
+     * @param $relationTypes
+     */
     private function constructRelations($relationTypes)
     {
         $methodOptions = new MethodOptions();
@@ -224,6 +258,9 @@ class FormRequest extends FormRequestModel
         $this->setAfterMethods();
     }
 
+    /**
+     *  Creates an ApiRequestToken Requests class
+     */
     public function createAccessToken()
     {
         if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][ApiInterface::RAML_PROPS]
@@ -238,12 +275,16 @@ class FormRequest extends FormRequestModel
                 $fileForm, $this->sourceCode,
                 FileManager::isRegenerated($this->generator->options)
             );
+
             if ($isCreated) {
                 Console::out($fileForm . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);
             }
         }
     }
 
+    /**
+     *  Sets content for ApiRequestToken Requests class
+     */
     private function setAccessTokenContent()
     {
         $this->setTag();
@@ -266,6 +307,9 @@ class FormRequest extends FormRequestModel
         $this->endClass();
     }
 
+    /**
+     *  Sets content for ApiRequestToken Requests class handle() method
+     */
     private function setHandleMethodContent()
     {
         $this->setTabs(2);

@@ -52,6 +52,9 @@ class Config implements ConfigInterface
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
+    /**
+     *  Creates common config file
+     */
     public function create()
     {
         $this->setContent();
@@ -79,6 +82,12 @@ class Config implements ConfigInterface
         $this->closeRoot();
     }
 
+    /**
+     *  Sets query params e.g.:
+     *  - limit
+     *  - sort
+     *  - access
+     */
     private function setQueryParams()
     {
         if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][ApiInterface::RAML_PROPS]) === false) {
@@ -123,6 +132,8 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Sets all global config entities by crawling yaml config
+     *
      * @uses setFsmOptions
      * @uses setSpellOptions
      * @uses setBitMaskOptions

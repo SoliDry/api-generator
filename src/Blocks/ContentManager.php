@@ -66,6 +66,9 @@ trait ContentManager
         $this->sourceCode .= PHP_EOL . PhpInterface::OPEN_BRACE . PHP_EOL;
     }
 
+    /**
+     *  Ends class declaration
+     */
     protected function endClass() : void
     {
         $this->sourceCode .= PhpInterface::CLOSE_BRACE . PHP_EOL;
@@ -91,6 +94,8 @@ trait ContentManager
     }
 
     /**
+     * Sets return stmt for any generated method
+     *
      * @param string $value
      * @param bool $isString
      */
@@ -101,6 +106,11 @@ trait ContentManager
                 PhpInterface::DOUBLE_QUOTES . $value . PhpInterface::DOUBLE_QUOTES) . PhpInterface::SEMICOLON . PHP_EOL;
     }
 
+    /**
+     * Ends method declaration
+     *
+     * @param int $eolCnt
+     */
     protected function endMethod(int $eolCnt = 2) : void
     {
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::CLOSE_BRACE;
@@ -109,6 +119,9 @@ trait ContentManager
         }
     }
 
+    /**
+     *  Starts an array declaration in string notation
+     */
     protected function startArray() : void
     {
         $this->setTabs(2);
@@ -116,6 +129,9 @@ trait ContentManager
             PhpInterface::OPEN_BRACKET . PHP_EOL;
     }
 
+    /**
+     *  Ends an array declaration after values had been set
+     */
     protected function endArray() : void
     {
         $this->sourceCode .= PHP_EOL . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
@@ -284,6 +300,9 @@ trait ContentManager
             PhpInterface::SPACE . PhpInterface::QUOTES;
     }
 
+    /**
+     *  Close rules in FormRequest
+     */
     public function closeRule() : void
     {
         $this->sourceCode .= PhpInterface::QUOTES . PhpInterface::COMMA;
@@ -315,6 +334,13 @@ trait ContentManager
         }
     }
 
+    /**
+     * Gets Laravel <Entity> file
+     *
+     * @param string $basePath
+     * @param string $postFix
+     * @return string
+     */
     public function getEntityFile(string $basePath, string $postFix = '') : string
     {
         $file = $basePath . DIRECTORY_SEPARATOR . $this->className;

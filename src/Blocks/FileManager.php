@@ -78,6 +78,11 @@ class FileManager implements DirsInterface
         return $path;
     }
 
+    /**
+     * Creates Modules config file
+     *
+     * @param string $sourceCode
+     */
     public static function createModuleConfig(string $sourceCode)
     {
         self::createFile(

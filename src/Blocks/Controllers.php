@@ -10,6 +10,10 @@ use SoliDry\Types\ControllersInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class Controllers
+ * @package SoliDry\Blocks
+ */
 class Controllers implements ControllersInterface
 {
     use ContentManager;

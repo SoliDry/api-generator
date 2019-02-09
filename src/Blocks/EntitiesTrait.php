@@ -34,6 +34,13 @@ use SoliDry\Types\ApiInterface;
  */
 trait EntitiesTrait
 {
+    /**
+     * Gets form request entity fully qualified path
+     *
+     * @param string $version
+     * @param string $object
+     * @return string
+     */
     public function getFormRequestEntity(string $version, string $object) : string
     {
         return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
@@ -44,6 +51,9 @@ trait EntitiesTrait
             DefaultInterface::FORM_REQUEST_POSTFIX;
     }
 
+    /**
+     *  Sets all props/entities needed to process request
+     */
     protected function setEntities() : void
     {
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
@@ -55,6 +65,8 @@ trait EntitiesTrait
     }
 
     /**
+     * Save bulk transactionally, if there are some errors - rollback
+     *
      * @param array $jsonApiAttributes
      * @return ResourceAbstract
      * @throws \SoliDry\Exceptions\AttributesException
@@ -115,6 +127,8 @@ trait EntitiesTrait
     }
 
     /**
+     * Mutates/Updates a bulk by applying it to transaction/rollback procedure
+     *
      * @param array $jsonApiAttributes
      * @return ResourceAbstract
      * @throws \SoliDry\Exceptions\AttributesException
@@ -160,6 +174,8 @@ trait EntitiesTrait
     }
 
     /**
+     * Deltes bulk by applying it to transaction/rollback procedure
+     *
      * @param array $jsonApiAttributes
      */
     public function removeBulk(array $jsonApiAttributes) : void
@@ -212,6 +228,9 @@ trait EntitiesTrait
         return null;
     }
 
+    /**
+     * Sets use stmt for Soft Delete op on model Entity
+     */
     private function setUseSoftDelete() : void
     {
         if ($this->isSoftDelete()) {
@@ -219,6 +238,9 @@ trait EntitiesTrait
         }
     }
 
+    /**
+     * Sets property for Soft Delete op on model Entity
+     */
     private function setPropSoftDelete() : void
     {
         if ($this->isSoftDelete()) {
