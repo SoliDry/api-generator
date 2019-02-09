@@ -1,9 +1,9 @@
 <?php
 
-namespace rjapi\types;
+namespace SoliDry\Types;
 
 
-use rjapi\extension\JSONApiInterface;
+use SoliDry\Extension\JSONApiInterface;
 
 interface ErrorsInterface
 {
@@ -28,7 +28,7 @@ interface ErrorsInterface
     public const CONSOLE_ERRORS = [
         self::CODE_FOREIGN_KEY  => 'There must be references and on attributes for foreign key construction.',
         self::CODE_OPEN_API_KEY => 'There must be ' . ApiInterface::OPEN_API_KEY . ', ' . ApiInterface::API_SERVERS . ' document root fields',
-        self::CODE_CUSTOM_TYPES => 'At least these types must be declared: ' . CustomsInterface::CUSTOM_TYPES_ID
+        self::CODE_CUSTOM_TYPES => 'At least these Types must be declared: ' . CustomsInterface::CUSTOM_TYPES_ID
             . ', ' . CustomsInterface::CUSTOM_TYPES_TYPE . ', ' . CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM
             . ' as components -> schemas descendants',
     ];

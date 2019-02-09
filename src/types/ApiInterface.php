@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapi\types;
+namespace SoliDry\Types;
 
 interface ApiInterface
 {
@@ -14,7 +14,7 @@ interface ApiInterface
     public const API_COMPONENTS = 'components';
     public const API_SCHEMAS    = 'schemas';
 
-    // RAML types map to FW
+    // RAML Types map to FW
     public const RAML_TYPE_ARRAY    = 'array';
     public const RAML_TYPE_OBJECT   = 'object';
     public const RAML_TYPE_DATETIME = 'date';
@@ -49,7 +49,7 @@ interface ApiInterface
     public const RAML_KEY_REQUIRED    = 'required';
     public const RAML_KEY_DESCRIPTION = 'description';
     public const RAML_KEY_DEFAULT     = 'default';
-    public const RAML_KEY_TYPES       = 'types';
+    public const RAML_KEY_TYPES       = 'Types';
     public const RAML_KEY_USES        = 'uses';
 
     // RAML filters

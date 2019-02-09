@@ -1,6 +1,6 @@
 <?php
 
-namespace rjapitest\_data;
+namespace SoliDryTest\_data;
 
 use Faker\Factory;
 use Modules\V2\Entities\Topic;

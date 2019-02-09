@@ -1,11 +1,11 @@
 <?php
-namespace rjapitest;
+namespace SoliDryTest;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Routing\Route;
 use Modules\V1\Http\Controllers\ArticleController;
 use Modules\V1\Http\Controllers\DefaultController;
-use rjapi\ApiGenerator;
+use SoliDry\ApiGenerator;
 
 /**
  * Class ApiGeneratorTest

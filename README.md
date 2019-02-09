@@ -27,7 +27,7 @@ JSON API support turned on by default - see `Turn off JSON API support` section 
     * [Migrations](#user-content-migrations)
     * [Tests](#user-content-tests)
 * [Relationships](#user-content-relationships-particular-qualities)
-* [Bulk extension](#user-content-bulk-extension)
+* [Bulk Extension](#user-content-bulk-extension)
 * [Query parameters](#user-content-query-parameters)
 * [Security](#user-content-security)
     * [Static access token](#user-content-static-access-token)
@@ -50,7 +50,7 @@ composer create-project --prefer-dist laravel/laravel your_app
 
 then in your project directory run:
 ``` 
-composer require rjapi/api-generator
+composer require SoliDry/api-generator
 ```
 
 ### Laravel specific configuration
@@ -88,7 +88,7 @@ php artisan vendor:publish --provider="Nwidart\Modules\LaravelModulesServiceProv
 
 #### Autoloading
 
-By default controllers, entities or repositories are not loaded automatically. You can autoload your modules using `psr-4`. For example :
+By default Controllers, entities or repositories are not loaded automatically. You can autoload your modules using `psr-4`. For example :
 
 ```json
 {
@@ -169,15 +169,15 @@ uses:
   topics: oas/topic.yaml
 ```
 U can set multiple servers as well as multiple files into the main `openapi.yaml`, thus code will be generated for every server module e.g.: Modules/v2, Modules/v3, Modules/v4 
-and there will be other types from different files. 
+and there will be other Types from different files. 
 
-Basic and custom types are declared under
+Basic and custom Types are declared under
 ```yaml
 components:
   schemas:
 ``` 
 
-Types ``` ID, Type, DataObject/DataArray``` are special helper types - !required
+Types ``` ID, Type, DataObject/DataArray``` are special helper Types - !required
  
 You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - api-generator 
 will produce migrations, relations and models respectively. 
@@ -336,10 +336,10 @@ where no params were passed.
 
 Complete directory structure after generator will end up it`s work will be like:
 ```php
-Modules/{ModuleName}/Http/Controllers/ - contains controllers that extends the DefaultController (descendant of Laravel's Controller)
+Modules/{ModuleName}/Http/Controllers/ - contains Controllers that extends the DefaultController (descendant of Laravel's Controller)
 Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes)
 Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
-Modules/{ModuleName}/Http/routes.php - contains routings pointing to controllers with JSON API protocol support
+Modules/{ModuleName}/Http/routes.php - contains routings pointing to Controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
 
@@ -436,13 +436,13 @@ DefaultController example:
 <?php
 namespace Modules\V1\Http\Controllers;
 
-use rjapi\extension\BaseController;
+use SoliDry\Extension\BaseController;
 
 class DefaultController extends BaseController 
 {
 }
 ```
-To provide developer-based (user-space) implementation of certain logic for all controllers.
+To provide developer-based (user-space) implementation of certain logic for all Controllers.
 
 #### FormRequests
 Validation BaseFormRequest example:
@@ -450,7 +450,7 @@ Validation BaseFormRequest example:
 <?php
 namespace Modules\V2\Http\Requests;
 
-use rjapi\extension\BaseFormRequest;
+use SoliDry\Extension\BaseFormRequest;
 
 class ArticleFormRequest extends BaseFormRequest 
 {
@@ -512,7 +512,7 @@ BaseModel example:
 namespace Modules\V2\Entities;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use rjapi\extension\BaseModel;
+use SoliDry\Extension\BaseModel;
 
 class Article extends BaseModel 
 {
@@ -565,7 +565,7 @@ Route::group(['prefix' => 'v2', 'namespace' => 'Modules\\V2\\Http\\Controllers']
 });
 // <<<routes<<<
 ```
-As you may noticed there are relationships api-calls and bulk extension batch queries support.  
+As you may noticed there are relationships api-calls and bulk Extension batch queries support.  
 
 #### Migrations
 
@@ -762,7 +762,7 @@ return [
 ];
 ```
 
-### Bulk extension
+### Bulk Extension
 
 Multiple resources can be created by sending a POST request to a URL that represents a collection of resources.
 
@@ -907,7 +907,7 @@ As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` 
      * @var array
      */
     protected $routeMiddleware = [
-        'jwt' => \rjapi\extension\BaseJwt::class,    
+        'jwt' => \SoliDry\Extension\BaseJwt::class,    
 ```
 
 And just use this middleware in any requests U need defining 
@@ -1085,7 +1085,7 @@ Model example:
 namespace Modules\V2\Entities;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
-use rjapi\extension\BaseModel;
+use SoliDry\Extension\BaseModel;
 
 class Article extends BaseModel 
 {
@@ -1126,7 +1126,7 @@ If you are willing to disable json api specification mappings into Laravel appli
 <?php
 namespace Modules\V1\Http\Controllers;
 
-use rjapi\extension\BaseController;
+use SoliDry\Extension\BaseController;
 
 class DefaultController extends BaseController 
 {
@@ -1454,7 +1454,7 @@ class ArticleController extends DefaultController
 }
 ```
 There can be situations where you need to add workaround in particular method or init logic for all requests of that type index/view/create/update/delete, 
-it can be easily achieved by placing code in `DefaultController` the same way it is for any other controllers. The inheritance model made specifically for 
+it can be easily achieved by placing code in `DefaultController` the same way it is for any other Controllers. The inheritance model made specifically for 
 those purposes will gracefully perform any ops before/after etc. For instance: 
 ```php
 <?php
@@ -1462,7 +1462,7 @@ namespace Modules\V1\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use rjapi\extension\BaseController;
+use SoliDry\Extension\BaseController;
 
 class DefaultController extends BaseController 
 {
@@ -1500,7 +1500,7 @@ Example of regenerated FormRequest:
 <?php
 namespace Modules\V2\Http\Requests;
 
-use rjapi\extension\BaseFormRequest;
+use SoliDry\Extension\BaseFormRequest;
 
 class TagFormRequest extends BaseFormRequest
 {
@@ -1552,7 +1552,7 @@ The same is true for Eloquent model:
 <?php
 namespace Modules\V1\Entities;
 
-use rjapi\extension\BaseModel;
+use SoliDry\Extension\BaseModel;
 
 class Article extends BaseModel 
 {

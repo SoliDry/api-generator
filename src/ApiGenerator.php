@@ -1,7 +1,7 @@
 <?php
-namespace rjapi;
+namespace SoliDry;
 
-use rjapi\controllers\BaseCommand;
+use SoliDry\Controllers\BaseCommand;
 
 class ApiGenerator extends BaseCommand
 {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <coverage generated="1549220855">
   <project timestamp="1549220855">
-    <package name="rjapi">
+    <package name="SoliDry">
       <file name="/srv/raml-json-api/src/ApiGenerator.php">
-        <class name="rjapi\ApiGenerator" namespace="rjapi">
+        <class name="SoliDry\ApiGenerator" namespace="SoliDry">
           <metrics complexity="2" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="7" coveredelements="0"/>
         </class>
         <line num="35" type="method" name="handle" visibility="public" complexity="2" crap="6" count="0"/>
@@ -16,9 +16,9 @@
         <metrics loc="44" ncloc="31" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="7" coveredelements="0"/>
       </file>
     </package>
-    <package name="rjapi\blocks">
-      <file name="/srv/raml-json-api/src/blocks/Config.php">
-        <class name="rjapi\blocks\Config" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+    <package name="SoliDry\Blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Config.php">
+        <class name="SoliDry\Blocks\Config" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="50" methods="13" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="101" coveredstatements="100" elements="114" coveredelements="112"/>
         </class>
         <line num="49" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -137,8 +137,8 @@
         <line num="302" type="stmt" count="2"/>
         <metrics loc="302" ncloc="193" classes="1" methods="13" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="101" coveredstatements="100" elements="114" coveredelements="112"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/ConfigTrait.php">
-        <class name="ConfigTrait" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/ConfigTrait.php">
+        <class name="ConfigTrait" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="20" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="56" coveredstatements="56" elements="67" coveredelements="67"/>
         </class>
         <line num="22" type="method" name="openRoot" visibility="private" complexity="1" crap="1" count="2"/>
@@ -210,8 +210,8 @@
         <line num="174" type="stmt" count="2"/>
         <metrics loc="174" ncloc="110" classes="1" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="56" coveredstatements="56" elements="67" coveredelements="67"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/ContentManager.php">
-        <class name="ContentManager" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/ContentManager.php">
+        <class name="ContentManager" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="54" methods="31" coveredmethods="28" conditionals="0" coveredconditionals="0" statements="157" coveredstatements="151" elements="188" coveredelements="179"/>
         </class>
         <line num="25" type="method" name="setTag" visibility="protected" complexity="1" crap="1" count="8"/>
@@ -404,8 +404,8 @@
         <line num="421" type="stmt" count="1"/>
         <metrics loc="421" ncloc="287" classes="1" methods="31" coveredmethods="28" conditionals="0" coveredconditionals="0" statements="157" coveredstatements="151" elements="188" coveredelements="179"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Controllers.php">
-        <class name="rjapi\blocks\Controllers" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Controllers.php">
+        <class name="SoliDry\Blocks\Controllers" namespace="SoliDry\Blocks">
           <metrics complexity="5" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="29" elements="34" coveredelements="32"/>
         </class>
         <line num="27" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -444,8 +444,8 @@
         <line num="82" type="stmt" count="2"/>
         <metrics loc="82" ncloc="67" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="29" elements="34" coveredelements="32"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Entities.php">
-        <class name="rjapi\blocks\Entities" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/Entities.php">
+        <class name="SoliDry\Blocks\Entities" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="49" methods="16" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="190" coveredstatements="173" elements="206" coveredelements="185"/>
         </class>
         <line num="35" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
@@ -656,8 +656,8 @@
         <line num="374" type="stmt" count="0"/>
         <metrics loc="374" ncloc="299" classes="1" methods="16" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="190" coveredstatements="173" elements="206" coveredelements="185"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/EntitiesTrait.php">
-        <class name="EntitiesTrait" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/EntitiesTrait.php">
+        <class name="EntitiesTrait" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="28" methods="8" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="83" coveredstatements="64" elements="91" coveredelements="69"/>
         </class>
         <line num="37" type="method" name="getFormRequestEntity" visibility="public" complexity="1" crap="1" count="16"/>
@@ -753,8 +753,8 @@
         <line num="227" type="stmt" count="2"/>
         <metrics loc="227" ncloc="174" classes="1" methods="8" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="83" coveredstatements="64" elements="91" coveredelements="69"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/FileManager.php">
-        <class name="rjapi\blocks\FileManager" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/FileManager.php">
+        <class name="SoliDry\Blocks\FileManager" namespace="SoliDry\Blocks">
           <metrics complexity="14" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="24" elements="37" coveredelements="30"/>
         </class>
         <line num="26" type="method" name="createFile" visibility="public" complexity="3" crap="3" count="8"/>
@@ -796,8 +796,8 @@
         <line num="128" type="stmt" count="5"/>
         <metrics loc="129" ncloc="90" classes="1" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="24" elements="37" coveredelements="30"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/FormRequest.php">
-        <class name="rjapi\blocks\FormRequest" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/FormRequest.php">
+        <class name="SoliDry\Blocks\FormRequest" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="37" methods="14" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="166" coveredstatements="152" elements="180" coveredelements="162"/>
         </class>
         <line num="42" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
@@ -982,8 +982,8 @@
         <line num="301" type="stmt" count="2"/>
         <metrics loc="301" ncloc="262" classes="1" methods="14" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="166" coveredstatements="152" elements="180" coveredelements="162"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/FormRequestModel.php">
-        <class name="rjapi\blocks\FormRequestModel" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/FormRequestModel.php">
+        <class name="SoliDry\Blocks\FormRequestModel" namespace="SoliDry\Blocks">
           <metrics complexity="25" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="41" elements="49" coveredelements="47"/>
         </class>
         <line num="33" type="method" name="setPropertyFilters" visibility="protected" complexity="4" crap="4" count="3"/>
@@ -1037,8 +1037,8 @@
         <line num="144" type="stmt" count="3"/>
         <metrics loc="144" ncloc="114" classes="1" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="41" elements="49" coveredelements="47"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Migrations.php">
-        <class name="rjapi\blocks\Migrations" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Migrations.php">
+        <class name="SoliDry\Blocks\Migrations" namespace="SoliDry\Blocks">
           <metrics complexity="17" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="118" coveredstatements="92" elements="125" coveredelements="96"/>
         </class>
         <line num="28" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
@@ -1168,8 +1168,8 @@
         <line num="213" type="stmt" count="1"/>
         <metrics loc="213" ncloc="172" classes="1" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="118" coveredstatements="92" elements="125" coveredelements="96"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/MigrationsAbstract.php">
-        <class name="rjapi\blocks\MigrationsAbstract" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/MigrationsAbstract.php">
+        <class name="SoliDry\Blocks\MigrationsAbstract" namespace="SoliDry\Blocks">
           <metrics complexity="52" methods="10" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="110" coveredstatements="43" elements="120" coveredelements="46"/>
         </class>
         <line num="41" type="method" name="setRows" visibility="protected" complexity="6" crap="42" count="0"/>
@@ -1294,8 +1294,8 @@
         <line num="263" type="stmt" count="1"/>
         <metrics loc="263" ncloc="201" classes="1" methods="10" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="110" coveredstatements="43" elements="120" coveredelements="46"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/MigrationsTrait.php">
-        <class name="MigrationsTrait" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/MigrationsTrait.php">
+        <class name="MigrationsTrait" namespace="SoliDry\Blocks">
           <metrics complexity="34" methods="9" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="37" elements="81" coveredelements="41"/>
         </class>
         <line num="20" type="method" name="openSchema" visibility="public" complexity="1" crap="1" count="2"/>
@@ -1381,8 +1381,8 @@
         <line num="197" type="stmt" count="1"/>
         <metrics loc="197" ncloc="146" classes="1" methods="9" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="37" elements="81" coveredelements="41"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Module.php">
-        <class name="rjapi\blocks\Module" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Module.php">
+        <class name="SoliDry\Blocks\Module" namespace="SoliDry\Blocks">
           <metrics complexity="5" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="23" elements="29" coveredelements="26"/>
         </class>
         <line num="21" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
@@ -1416,8 +1416,8 @@
         <line num="58" type="stmt" count="1"/>
         <metrics loc="58" ncloc="57" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="23" elements="29" coveredelements="26"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Routes.php">
-        <class name="rjapi\blocks\Routes" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Routes.php">
+        <class name="SoliDry\Blocks\Routes" namespace="SoliDry\Blocks">
           <metrics complexity="10" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="52" elements="59" coveredelements="59"/>
         </class>
         <line num="23" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
@@ -1481,8 +1481,8 @@
         <line num="109" type="stmt" count="2"/>
         <metrics loc="109" ncloc="100" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="52" elements="59" coveredelements="59"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/RoutesTrait.php">
-        <class name="RoutesTrait" namespace="rjapi\blocks" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Blocks/RoutesTrait.php">
+        <class name="RoutesTrait" namespace="SoliDry\Blocks" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="10" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="49" elements="59" coveredelements="59"/>
         </class>
         <line num="25" type="method" name="openGroup" visibility="public" complexity="1" crap="1" count="2"/>
@@ -1546,8 +1546,8 @@
         <line num="148" type="stmt" count="2"/>
         <metrics loc="149" ncloc="102" classes="1" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="49" elements="59" coveredelements="59"/>
       </file>
-      <file name="/srv/raml-json-api/src/blocks/Tests.php">
-        <class name="rjapi\blocks\Tests" namespace="rjapi\blocks">
+      <file name="/srv/raml-json-api/src/Blocks/Tests.php">
+        <class name="SoliDry\Blocks\Tests" namespace="SoliDry\Blocks">
           <metrics complexity="34" methods="12" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="124" elements="137" coveredelements="135"/>
         </class>
         <line num="24" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
@@ -1690,9 +1690,9 @@
         <metrics loc="240" ncloc="209" classes="1" methods="12" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="124" elements="137" coveredelements="135"/>
       </file>
     </package>
-    <package name="rjapi\controllers">
-      <file name="/srv/raml-json-api/src/controllers/BaseCommand.php">
-        <class name="rjapi\controllers\BaseCommand" namespace="rjapi\controllers">
+    <package name="SoliDry\Controllers">
+      <file name="/srv/raml-json-api/src/Controllers/BaseCommand.php">
+        <class name="SoliDry\Controllers\BaseCommand" namespace="SoliDry\Controllers">
           <metrics complexity="51" methods="22" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="127" coveredstatements="89" elements="149" coveredelements="101"/>
         </class>
         <line num="79" type="method" name="actionIndex" visibility="public" complexity="2" crap="2.06" count="1"/>
@@ -1846,8 +1846,8 @@
         <line num="366" type="stmt" count="0"/>
         <metrics loc="367" ncloc="297" classes="1" methods="22" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="127" coveredstatements="89" elements="149" coveredelements="101"/>
       </file>
-      <file name="/srv/raml-json-api/src/controllers/GeneratorTrait.php">
-        <class name="GeneratorTrait" namespace="rjapi\controllers">
+      <file name="/srv/raml-json-api/src/Controllers/GeneratorTrait.php">
+        <class name="GeneratorTrait" namespace="SoliDry\Controllers">
           <metrics complexity="55" methods="17" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="157" coveredstatements="134" elements="174" coveredelements="146"/>
         </class>
         <line num="37" type="method" name="generateResources" visibility="private" complexity="3" crap="3.01" count="1"/>
@@ -2029,15 +2029,15 @@
         <metrics loc="398" ncloc="296" classes="1" methods="17" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="159" coveredstatements="136" elements="176" coveredelements="148"/>
       </file>
     </package>
-    <package name="rjapi\exceptions">
-      <file name="/srv/raml-json-api/src/exceptions/AttributesException.php">
-        <class name="rjapi\exceptions\AttributesException" namespace="rjapi\exceptions">
+    <package name="SoliDry\Exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/AttributesException.php">
+        <class name="SoliDry\Exceptions\AttributesException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/BaseException.php">
-        <class name="rjapi\exceptions\BaseException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/BaseException.php">
+        <class name="SoliDry\Exceptions\BaseException" namespace="SoliDry\Exceptions">
           <metrics complexity="3" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="9" elements="19" coveredelements="11"/>
         </class>
         <line num="11" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
@@ -2061,40 +2061,40 @@
         <line num="44" type="stmt" count="0"/>
         <metrics loc="50" ncloc="44" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="9" elements="19" coveredelements="11"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/DirectoryException.php">
-        <class name="rjapi\exceptions\DirectoryException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/DirectoryException.php">
+        <class name="SoliDry\Exceptions\DirectoryException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/HeadersException.php">
-        <class name="rjapi\exceptions\HeadersException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/HeadersException.php">
+        <class name="SoliDry\Exceptions\HeadersException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="8" ncloc="8" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/MethodNotFoundException.php">
-        <class name="rjapi\exceptions\MethodNotFoundException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/MethodNotFoundException.php">
+        <class name="SoliDry\Exceptions\MethodNotFoundException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/ModelException.php">
-        <class name="rjapi\exceptions\ModelException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/ModelException.php">
+        <class name="SoliDry\Exceptions\ModelException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/exceptions/SchemaException.php">
-        <class name="rjapi\exceptions\SchemaException" namespace="rjapi\exceptions">
+      <file name="/srv/raml-json-api/src/Exceptions/SchemaException.php">
+        <class name="SoliDry\Exceptions\SchemaException" namespace="SoliDry\Exceptions">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="5" ncloc="5" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
     </package>
-    <package name="rjapi\extension">
-      <file name="/srv/raml-json-api/src/extension/ApiController.php">
-        <class name="rjapi\extension\ApiController" namespace="rjapi\extension">
+    <package name="SoliDry\Extension">
+      <file name="/srv/raml-json-api/src/Extension/ApiController.php">
+        <class name="SoliDry\Extension\ApiController" namespace="SoliDry\Extension">
           <metrics complexity="38" methods="10" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="100" coveredstatements="75" elements="110" coveredelements="78"/>
         </class>
         <line num="62" type="method" name="__construct" visibility="public" complexity="3" crap="3.33" count="11"/>
@@ -2209,8 +2209,8 @@
         <line num="324" type="stmt" count="9"/>
         <metrics loc="325" ncloc="221" classes="1" methods="10" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="100" coveredstatements="75" elements="110" coveredelements="78"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseController.php">
-        <class name="rjapi\extension\BaseController" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BaseController.php">
+        <class name="SoliDry\Extension\BaseController" namespace="SoliDry\Extension">
           <metrics complexity="6" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="18" coveredelements="16"/>
         </class>
         <line num="22" type="method" name="__construct" visibility="public" complexity="3" crap="3.14" count="11"/>
@@ -2233,8 +2233,8 @@
         <line num="74" type="stmt" count="1"/>
         <metrics loc="75" ncloc="49" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="13" elements="18" coveredelements="16"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseFormRequest.php">
-        <class name="rjapi\extension\BaseFormRequest" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BaseFormRequest.php">
+        <class name="SoliDry\Extension\BaseFormRequest" namespace="SoliDry\Extension">
           <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="6" coveredelements="6"/>
         </class>
         <line num="17" type="method" name="handle" visibility="public" complexity="1" crap="1" count="1"/>
@@ -2245,8 +2245,8 @@
         <line num="29" type="stmt" count="1"/>
         <metrics loc="30" ncloc="24" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="6" coveredelements="6"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseJwt.php">
-        <class name="rjapi\extension\BaseJwt" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BaseJwt.php">
+        <class name="SoliDry\Extension\BaseJwt" namespace="SoliDry\Extension">
           <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="5" elements="9" coveredelements="5"/>
         </class>
         <line num="12" type="method" name="handle" visibility="public" complexity="4" crap="4.84" count="1"/>
@@ -2260,14 +2260,14 @@
         <line num="25" type="stmt" count="1"/>
         <metrics loc="26" ncloc="26" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="5" elements="9" coveredelements="5"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseModel.php">
-        <class name="rjapi\extension\BaseModel" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BaseModel.php">
+        <class name="SoliDry\Extension\BaseModel" namespace="SoliDry\Extension">
           <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
         </class>
         <metrics loc="7" ncloc="7" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseModelTrait.php">
-        <class name="BaseModelTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/BaseModelTrait.php">
+        <class name="BaseModelTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="23" methods="10" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="64" coveredstatements="60" elements="74" coveredelements="68"/>
         </class>
         <line num="27" type="method" name="getEntity" visibility="private" complexity="2" crap="2" count="10"/>
@@ -2346,8 +2346,8 @@
         <line num="198" type="stmt" count="1"/>
         <metrics loc="199" ncloc="129" classes="1" methods="10" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="64" coveredstatements="60" elements="74" coveredelements="68"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BaseRelationsTrait.php">
-        <class name="BaseRelationsTrait" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BaseRelationsTrait.php">
+        <class name="BaseRelationsTrait" namespace="SoliDry\Extension">
           <metrics complexity="26" methods="10" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="95" coveredstatements="44" elements="105" coveredelements="46"/>
         </class>
         <line num="30" type="method" name="relations" visibility="public" complexity="2" crap="2.03" count="1"/>
@@ -2457,8 +2457,8 @@
         <line num="263" type="stmt" count="0"/>
         <metrics loc="263" ncloc="171" classes="1" methods="10" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="95" coveredstatements="44" elements="105" coveredelements="46"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BitMask.php">
-        <class name="rjapi\extension\BitMask" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/BitMask.php">
+        <class name="SoliDry\Extension\BitMask" namespace="SoliDry\Extension">
           <metrics complexity="8" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="15" coveredelements="15"/>
         </class>
         <line num="18" type="method" name="__construct" visibility="public" complexity="2" crap="2" count="8"/>
@@ -2478,8 +2478,8 @@
         <line num="55" type="stmt" count="1"/>
         <metrics loc="56" ncloc="42" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="15" coveredelements="15"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/BitMaskTrait.php">
-        <class name="BitMaskTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/BitMaskTrait.php">
+        <class name="BitMaskTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="26" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="48" coveredstatements="48" elements="54" coveredelements="54"/>
         </class>
         <line num="20" type="method" name="anonymousFunction:20#46" complexity="3" crap="3" count="1"/>
@@ -2539,8 +2539,8 @@
         <line num="128" type="stmt" count="1"/>
         <metrics loc="128" ncloc="92" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="49" elements="55" coveredelements="55"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/CacheTrait.php">
-        <class name="CacheTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/CacheTrait.php">
+        <class name="CacheTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="21" methods="12" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="43" elements="63" coveredelements="50"/>
         </class>
         <line num="29" type="method" name="set" visibility="private" complexity="2" crap="2.15" count="4"/>
@@ -2608,8 +2608,8 @@
         <line num="194" type="stmt" count="3"/>
         <metrics loc="195" ncloc="131" classes="1" methods="12" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="43" elements="63" coveredelements="50"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/CustomSql.php">
-        <class name="rjapi\extension\CustomSql" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/CustomSql.php">
+        <class name="SoliDry\Extension\CustomSql" namespace="SoliDry\Extension">
           <metrics complexity="4" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="10" coveredelements="10"/>
         </class>
         <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="6"/>
@@ -2624,8 +2624,8 @@
         <line num="31" type="stmt" count="3"/>
         <metrics loc="32" ncloc="32" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="10" coveredelements="10"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/FsmTrait.php">
-        <class name="FsmTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/FsmTrait.php">
+        <class name="FsmTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="9" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="13" elements="25" coveredelements="13"/>
         </class>
         <line num="21" type="method" name="checkFsmCreate" visibility="protected" complexity="5" crap="8.90" count="1"/>
@@ -2655,8 +2655,8 @@
         <line num="73" type="stmt" count="1"/>
         <metrics loc="73" ncloc="52" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="13" elements="25" coveredelements="13"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/JWTTrait.php">
-        <class name="JWTTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/JWTTrait.php">
+        <class name="JWTTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="4" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="14" elements="22" coveredelements="14"/>
         </class>
         <line num="20" type="method" name="createJwtUser" visibility="protected" complexity="2" crap="2.06" count="1"/>
@@ -2683,8 +2683,8 @@
         <line num="62" type="stmt" count="1"/>
         <metrics loc="62" ncloc="47" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="14" elements="22" coveredelements="14"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/OptionsTrait.php">
-        <class name="OptionsTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/OptionsTrait.php">
+        <class name="OptionsTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="25" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="61" coveredstatements="61" elements="67" coveredelements="67"/>
         </class>
         <line num="34" type="method" name="setSqlOptions" visibility="private" complexity="7" crap="7" count="3"/>
@@ -2756,8 +2756,8 @@
         <line num="142" type="stmt" count="12"/>
         <metrics loc="142" ncloc="106" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="61" coveredstatements="61" elements="67" coveredelements="67"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/SpellCheck.php">
-        <class name="rjapi\extension\SpellCheck" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/SpellCheck.php">
+        <class name="SoliDry\Extension\SpellCheck" namespace="SoliDry\Extension">
           <metrics complexity="11" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="26" coveredelements="26"/>
         </class>
         <line num="21" type="method" name="__construct" visibility="public" complexity="4" crap="4" count="5"/>
@@ -2788,8 +2788,8 @@
         <line num="83" type="stmt" count="2"/>
         <metrics loc="84" ncloc="61" classes="1" methods="6" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="26" coveredelements="26"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/SpellCheckTrait.php">
-        <class name="SpellCheckTrait" namespace="rjapi\extension" fullPackage="rjapi" package="rjapi">
+      <file name="/srv/raml-json-api/src/Extension/SpellCheckTrait.php">
+        <class name="SpellCheckTrait" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
           <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
         </class>
         <line num="23" type="method" name="spellCheck" visibility="protected" complexity="3" crap="3.02" count="1"/>
@@ -2803,8 +2803,8 @@
         <line num="35" type="stmt" count="1"/>
         <metrics loc="36" ncloc="22" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
       </file>
-      <file name="/srv/raml-json-api/src/extension/StateMachine.php">
-        <class name="rjapi\extension\StateMachine" namespace="rjapi\extension">
+      <file name="/srv/raml-json-api/src/Extension/StateMachine.php">
+        <class name="SoliDry\Extension\StateMachine" namespace="SoliDry\Extension">
           <metrics complexity="14" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="19" elements="27" coveredelements="27"/>
         </class>
         <line num="22" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="6"/>
@@ -2837,12 +2837,12 @@
         <metrics loc="95" ncloc="66" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="19" elements="27" coveredelements="27"/>
       </file>
     </package>
-    <file name="/srv/raml-json-api/src/extension/JSONApiInterface.php">
+    <file name="/srv/raml-json-api/src/Extension/JSONApiInterface.php">
       <metrics loc="78" ncloc="74" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <package name="rjapi\helpers">
-      <file name="/srv/raml-json-api/src/helpers/Classes.php">
-        <class name="rjapi\helpers\Classes" namespace="rjapi\helpers">
+    <package name="SoliDry\Helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Classes.php">
+        <class name="SoliDry\Helpers\Classes" namespace="SoliDry\Helpers">
           <metrics complexity="5" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="13" elements="18" coveredelements="18"/>
         </class>
         <line num="14" type="method" name="getName" visibility="public" complexity="1" crap="1" count="6"/>
@@ -2865,8 +2865,8 @@
         <line num="68" type="stmt" count="14"/>
         <metrics loc="71" ncloc="45" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="13" elements="18" coveredelements="18"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/ConfigHelper.php">
-        <class name="rjapi\helpers\ConfigHelper" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/ConfigHelper.php">
+        <class name="SoliDry\Helpers\ConfigHelper" namespace="SoliDry\Helpers">
           <metrics complexity="8" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
         </class>
         <line num="19" type="method" name="getConfigKey" visibility="public" complexity="1" crap="1" count="38"/>
@@ -2887,8 +2887,8 @@
         <line num="50" type="stmt" count="33"/>
         <metrics loc="51" ncloc="51" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="12" elements="16" coveredelements="16"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/ConfigOptions.php">
-        <class name="rjapi\helpers\ConfigOptions" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/ConfigOptions.php">
+        <class name="SoliDry\Helpers\ConfigOptions" namespace="SoliDry\Helpers">
           <metrics complexity="30" methods="30" coveredmethods="30" conditionals="0" coveredconditionals="0" statements="45" coveredstatements="45" elements="75" coveredelements="75"/>
         </class>
         <line num="33" type="method" name="getQueryLimit" visibility="public" complexity="1" crap="1" count="1"/>
@@ -2968,8 +2968,8 @@
         <line num="265" type="stmt" count="15"/>
         <metrics loc="265" ncloc="166" classes="1" methods="30" coveredmethods="30" conditionals="0" coveredconditionals="0" statements="45" coveredstatements="45" elements="75" coveredelements="75"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Console.php">
-        <class name="rjapi\helpers\Console" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Console.php">
+        <class name="SoliDry\Helpers\Console" namespace="SoliDry\Helpers">
           <metrics complexity="3" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
         </class>
         <line num="26" type="method" name="out" visibility="public" complexity="3" crap="3" count="6"/>
@@ -2977,8 +2977,8 @@
         <line num="29" type="stmt" count="6"/>
         <metrics loc="29" ncloc="25" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="2" elements="3" coveredelements="3"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Errors.php">
-        <class name="rjapi\helpers\Errors" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Errors.php">
+        <class name="SoliDry\Helpers\Errors" namespace="SoliDry\Helpers">
           <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="0" elements="9" coveredelements="0"/>
         </class>
         <line num="9" type="method" name="getModelNotFound" visibility="public" complexity="1" crap="2" count="0"/>
@@ -2992,8 +2992,8 @@
         <line num="17" type="stmt" count="0"/>
         <metrics loc="17" ncloc="17" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="0" elements="9" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Json.php">
-        <class name="rjapi\helpers\Json" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Json.php">
+        <class name="SoliDry\Helpers\Json" namespace="SoliDry\Helpers">
           <metrics complexity="38" methods="14" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="68" coveredstatements="47" elements="82" coveredelements="55"/>
         </class>
         <line num="26" type="method" name="getAttributes" visibility="public" complexity="2" crap="2" count="3"/>
@@ -3080,8 +3080,8 @@
         <line num="255" type="stmt" count="0"/>
         <metrics loc="255" ncloc="169" classes="1" methods="14" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="68" coveredstatements="47" elements="82" coveredelements="55"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Jwt.php">
-        <class name="rjapi\helpers\Jwt" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Jwt.php">
+        <class name="SoliDry\Helpers\Jwt" namespace="SoliDry\Helpers">
           <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
         </class>
         <line num="22" type="method" name="create" visibility="public" complexity="1" crap="1" count="3"/>
@@ -3105,8 +3105,8 @@
         <line num="52" type="stmt" count="2"/>
         <metrics loc="53" ncloc="21" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="19" coveredelements="19"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/MethodOptions.php">
-        <class name="rjapi\helpers\MethodOptions" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/MethodOptions.php">
+        <class name="SoliDry\Helpers\MethodOptions" namespace="SoliDry\Helpers">
           <metrics complexity="10" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="15" elements="25" coveredelements="25"/>
         </class>
         <line num="18" type="method" name="getModifier" visibility="public" complexity="1" crap="1" count="5"/>
@@ -3136,8 +3136,8 @@
         <line num="93" type="stmt" count="3"/>
         <metrics loc="93" ncloc="63" classes="1" methods="10" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="15" elements="25" coveredelements="25"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Metrics.php">
-        <class name="rjapi\helpers\Metrics" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Metrics.php">
+        <class name="SoliDry\Helpers\Metrics" namespace="SoliDry\Helpers">
           <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
         </class>
         <line num="8" type="method" name="millitime" visibility="public" complexity="1" crap="1" count="4"/>
@@ -3146,8 +3146,8 @@
         <line num="15" type="stmt" count="4"/>
         <metrics loc="16" ncloc="12" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="3" elements="4" coveredelements="4"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/MigrationsHelper.php">
-        <class name="rjapi\helpers\MigrationsHelper" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/MigrationsHelper.php">
+        <class name="SoliDry\Helpers\MigrationsHelper" namespace="SoliDry\Helpers">
           <metrics complexity="3" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
         </class>
         <line num="11" type="method" name="getTableName" visibility="public" complexity="3" crap="3" count="34"/>
@@ -3160,8 +3160,8 @@
         <line num="25" type="stmt" count="34"/>
         <metrics loc="26" ncloc="24" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/Request.php">
-        <class name="rjapi\helpers\Request" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/Request.php">
+        <class name="SoliDry\Helpers\Request" namespace="SoliDry\Helpers">
           <metrics complexity="3" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="0" elements="15" coveredelements="0"/>
         </class>
         <line num="15" type="method" name="getSupportedExtensions" visibility="public" complexity="2" crap="6" count="0"/>
@@ -3181,8 +3181,8 @@
         <line num="38" type="stmt" count="0"/>
         <metrics loc="38" ncloc="29" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="0" elements="15" coveredelements="0"/>
       </file>
-      <file name="/srv/raml-json-api/src/helpers/SqlOptions.php">
-        <class name="rjapi\helpers\SqlOptions" namespace="rjapi\helpers">
+      <file name="/srv/raml-json-api/src/Helpers/SqlOptions.php">
+        <class name="SoliDry\Helpers\SqlOptions" namespace="SoliDry\Helpers">
           <metrics complexity="13" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="32" coveredelements="32"/>
         </class>
         <line num="19" type="method" name="getLimit" visibility="public" complexity="1" crap="1" count="5"/>
@@ -3220,9 +3220,9 @@
         <metrics loc="115" ncloc="77" classes="1" methods="12" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="20" coveredstatements="20" elements="32" coveredelements="32"/>
       </file>
     </package>
-    <package name="rjapi\transformers">
-      <file name="/srv/raml-json-api/src/transformers/DefaultTransformer.php">
-        <class name="rjapi\transformers\DefaultTransformer" namespace="rjapi\transformers">
+    <package name="SoliDry\Transformers">
+      <file name="/srv/raml-json-api/src/Transformers/DefaultTransformer.php">
+        <class name="SoliDry\Transformers\DefaultTransformer" namespace="SoliDry\Transformers">
           <metrics complexity="10" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="19" elements="28" coveredelements="20"/>
         </class>
         <line num="27" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="12"/>
@@ -3256,61 +3256,61 @@
         <metrics loc="83" ncloc="63" classes="1" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="19" elements="28" coveredelements="20"/>
       </file>
     </package>
-    <file name="/srv/raml-json-api/src/types/ApiInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ApiInterface.php">
       <metrics loc="64" ncloc="56" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/CommandsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/CommandsInterface.php">
       <metrics loc="11" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ConfigInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ConfigInterface.php">
       <metrics loc="49" ncloc="45" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ConsoleInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ConsoleInterface.php">
       <metrics loc="13" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ControllersInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ControllersInterface.php">
       <metrics loc="6" ncloc="6" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/CustomsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/CustomsInterface.php">
       <metrics loc="17" ncloc="17" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/DefaultInterface.php">
+    <file name="/srv/raml-json-api/src/Types/DefaultInterface.php">
       <metrics loc="28" ncloc="22" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/DirsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/DirsInterface.php">
       <metrics loc="22" ncloc="18" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ErrorsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ErrorsInterface.php">
       <metrics loc="34" ncloc="30" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/FromRequestInterface.php">
+    <file name="/srv/raml-json-api/src/Types/FromRequestInterface.php">
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/HTTPMethodsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/HTTPMethodsInterface.php">
       <metrics loc="15" ncloc="15" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/JwtInterface.php">
+    <file name="/srv/raml-json-api/src/Types/JwtInterface.php">
       <metrics loc="8" ncloc="8" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/MethodsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/MethodsInterface.php">
       <metrics loc="24" ncloc="16" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ModelsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ModelsInterface.php">
       <metrics loc="115" ncloc="87" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/ModulesInterface.php">
+    <file name="/srv/raml-json-api/src/Types/ModulesInterface.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/PhpInterface.php">
+    <file name="/srv/raml-json-api/src/Types/PhpInterface.php">
       <metrics loc="82" ncloc="78" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/RedisInterface.php">
+    <file name="/srv/raml-json-api/src/Types/RedisInterface.php">
       <metrics loc="9" ncloc="7" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/RoutesInterface.php">
+    <file name="/srv/raml-json-api/src/Types/RoutesInterface.php">
       <metrics loc="16" ncloc="16" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <file name="/srv/raml-json-api/src/types/TestsInterface.php">
+    <file name="/srv/raml-json-api/src/Types/TestsInterface.php">
       <metrics loc="22" ncloc="20" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <metrics files="76" loc="7850" ncloc="5881" classes="49" methods="389" coveredmethods="297" conditionals="0" coveredconditionals="0" statements="2513" coveredstatements="2086" elements="2902" coveredelements="2383"/>

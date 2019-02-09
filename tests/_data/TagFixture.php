@@ -1,5 +1,5 @@
 <?php
-namespace rjapitest\_data;
+namespace SoliDryTest\_data;
 
 use Modules\V2\Entities\Tag;
 

@@ -1225,7 +1225,7 @@ trait AcceptanceTesterActions
      *  * Only field *names* may be used, not CSS/XPath selectors nor field labels
      *  * If a field is sent to this function that does *not* exist on the page,
      *    it will silently be added to the HTTP request.  This is helpful for testing
-     *    some types of forms, but be aware that you will *not* get an exception
+     *    some Types of forms, but be aware that you will *not* get an exception
      *    like you would if you called `fillField()` or `selectOption()` with
      *    a missing field.
      *

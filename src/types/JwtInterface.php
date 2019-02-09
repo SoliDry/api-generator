@@ -1,5 +1,5 @@
 <?php
-namespace rjapi\types;
+namespace SoliDry\Types;
 
 
 interface JwtInterface
