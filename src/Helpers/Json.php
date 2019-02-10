@@ -113,6 +113,21 @@ class Json
     }
 
     /**
+     *
+     * @param array $errors
+     * @return string
+     */
+    public function getErrors(array $errors) : string
+    {
+        $arr[JSONApiInterface::CONTENT_ERRORS] = [];
+        if (empty($errors) === false) {
+            $arr[JSONApiInterface::CONTENT_ERRORS] = $errors;
+        }
+
+        return self::encode($arr, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
+    }
+
+    /**
      * Returns composition of relations
      *
      * @param Request $request

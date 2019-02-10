@@ -4,7 +4,6 @@ namespace SoliDry\Extension;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Schema;
 use League\Fractal\Resource\Collection;
 use SoliDry\Blocks\FileManager;
 use SoliDry\Helpers\Classes;
@@ -32,7 +31,8 @@ trait BaseRelationsTrait
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
-            Json::outputErrors((new Errors())->getModelNotFound($this->entity, $id));
+            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
         $resource = Json::getRelations($model->$relation, $relation);
@@ -87,7 +87,8 @@ trait BaseRelationsTrait
         $model           = $this->getEntity($id);
 
         if (empty($model)) {
-            Json::outputErrors((new Errors())->getModelNotFound($this->entity, $id));
+            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
         return $model;
