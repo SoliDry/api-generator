@@ -5,10 +5,14 @@ use SoliDry\Exceptions\AttributesException;
 use SoliDry\Types\ConfigInterface;
 use SoliDry\Types\ErrorsInterface;
 
+/**
+ * Class BitMask
+ * @package SoliDry\Extension
+ */
 class BitMask
 {
     private $entity    = [];
-    private $field     = null;
+    private $field;
     private $isEnabled;
 
     /**
@@ -50,6 +54,11 @@ class BitMask
         return $this->entity[$this->field][ConfigInterface::FLAGS];
     }
 
+    /**
+     * Whether mask should be hidden or not
+     *
+     * @return bool
+     */
     public function isHidden(): bool
     {
         return empty($this->entity[$this->field][ConfigInterface::HIDE_MASK]) ? false : true;

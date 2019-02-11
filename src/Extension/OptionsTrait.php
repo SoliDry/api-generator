@@ -80,6 +80,9 @@ trait OptionsTrait
         }
     }
 
+    /**
+     *  Sets cache options: xFetch, cacheBeta, time to live etc
+     */
     private function setCacheOpts() : void
     {
         $entityCache = ConfigHelper::getNestedParam(ConfigInterface::CACHE, strtolower($this->entity));

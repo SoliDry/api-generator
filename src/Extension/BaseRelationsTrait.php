@@ -15,6 +15,10 @@ use SoliDry\Types\DirsInterface;
 use SoliDry\Types\PhpInterface;
 use SoliDry\Types\ApiInterface;
 
+/**
+ * Trait BaseRelationsTrait
+ * @package SoliDry\Extension
+ */
 trait BaseRelationsTrait
 {
     use BaseModelTrait;

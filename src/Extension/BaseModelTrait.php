@@ -37,6 +37,12 @@ trait BaseModelTrait
         return $obj->first($data);
     }
 
+    /**
+     * Gets all or custom entities
+     *
+     * @param SqlOptions $sqlOptions
+     * @return \Illuminate\Support\Collection|mixed
+     */
     private function getEntities(SqlOptions $sqlOptions)
     {
         /** @var CustomSql $customSql */
@@ -116,6 +122,12 @@ trait BaseModelTrait
         return $obj->where($filter)->take($to)->skip($from)->get($data);
     }
 
+    /**
+     * Selects a collection of items based on custom sql
+     *
+     * @param CustomSql $customSql
+     * @return \Illuminate\Support\Collection
+     */
     private function getCustomSqlEntities(CustomSql $customSql)
     {
         $result     = DB::select($customSql->getQuery(), $customSql->getBindings());
@@ -129,6 +141,7 @@ trait BaseModelTrait
 
     /**
      * Collects all tree elements
+     *
      * @param SqlOptions $sqlOptions
      * @return Collection
      */
@@ -139,6 +152,7 @@ trait BaseModelTrait
 
     /**
      * Builds the tree based on children/parent axiom
+     *
      * @param Collection $data
      * @param int|string $id
      * @return array
@@ -160,6 +174,7 @@ trait BaseModelTrait
 
     /**
      * Collects all tree elements
+     *
      * @param SqlOptions $sqlOptions
      * @param int|string $id
      * @return array
@@ -171,6 +186,7 @@ trait BaseModelTrait
 
     /**
      * Builds the sub-tree for top most ancestor
+     *
      * @param Collection $data
      * @param int|string $searchId
      * @param int|string $id

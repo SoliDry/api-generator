@@ -7,6 +7,10 @@ use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\ConfigInterface;
 use SoliDry\Types\ErrorsInterface;
 
+/**
+ * Class StateMachine
+ * @package SoliDry\Extension
+ */
 class StateMachine
 {
     private $machine = [];

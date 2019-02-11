@@ -313,6 +313,13 @@ class ApiController extends Controller implements JSONApiInterface
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
     }
 
+    /**
+     * Prepares Response object to return with particular http response, headers and body
+     *
+     * @param string $json
+     * @param int $responseCode
+     * @return Response
+     */
     public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : Response
     {
         if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {

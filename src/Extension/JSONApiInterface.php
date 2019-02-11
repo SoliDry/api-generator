@@ -4,8 +4,13 @@ namespace SoliDry\Extension;
 
 use Illuminate\Http\Request;
 
+/**
+ * Interface JSONApiInterface
+ * @package SoliDry\Extension
+ */
 interface JSONApiInterface
 {
+    // all bulks methods available
     public const AVAILABLE_BULKS = [
         'createBulk',
         'updateBulk',
