@@ -16,6 +16,10 @@ use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Transformers\DefaultTransformer;
 
+/**
+ * Class Json
+ * @package SoliDry\Helpers
+ */
 class Json
 {
     /**

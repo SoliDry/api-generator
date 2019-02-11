@@ -11,6 +11,12 @@ use SoliDry\Extension\BaseModel;
 use SoliDry\Helpers\ConfigHelper;
 use SoliDry\Helpers\MigrationsHelper;
 
+/**
+ * Class DefaultTransformer
+ * transforms data into json-api reliable format for any abstract entities
+ *
+ * @package SoliDry\Transformers
+ */
 class DefaultTransformer extends TransformerAbstract
 {
     use EntitiesTrait;

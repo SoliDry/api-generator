@@ -8,6 +8,10 @@ use Lcobucci\JWT\Token;
 use Lcobucci\JWT\ValidationData;
 use SoliDry\Types\ConfigInterface;
 
+/**
+ * Class Jwt
+ * @package SoliDry\Helpers
+ */
 class Jwt
 {
     private const JWT_SECRETE_KEY = 'app.jwt_secret';

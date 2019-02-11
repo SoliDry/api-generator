@@ -4,6 +4,10 @@ namespace SoliDry\Helpers;
 
 use SoliDry\Types\ModelsInterface;
 
+/**
+ * Class SqlOptions
+ * @package SoliDry\Helpers
+ */
 class SqlOptions
 {
     public $id      = 0;

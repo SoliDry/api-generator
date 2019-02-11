@@ -4,6 +4,10 @@ namespace SoliDry\Helpers;
 
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class MethodOptions
+ * @package SoliDry\Helpers
+ */
 class MethodOptions
 {
     private $modifier = PhpInterface::PHP_MODIFIER_PUBLIC;

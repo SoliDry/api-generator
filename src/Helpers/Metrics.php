@@ -2,9 +2,15 @@
 
 namespace SoliDry\Helpers;
 
-
+/**
+ * Class Metrics
+ * @package SoliDry\Helpers
+ */
 class Metrics
 {
+    /**
+     * @return string
+     */
     public static function millitime()
     {
         $microtime = microtime();

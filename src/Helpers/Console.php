@@ -23,6 +23,12 @@ class Console
         self::COLOR_YELLOW => self::ANSI_COLOR_YELLOW,
     ];
 
+    /**
+     * Console output helper/beautifier
+     *
+     * @param string $str
+     * @param null $color
+     */
     public static function out(string $str, $color = null) : void
     {
         echo (($color === null) ? '' : self::$colorMaps[$color]) . $str . (($color === null) ? '' : self::ANSI_COLOR_RESET) . PHP_EOL;

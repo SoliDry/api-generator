@@ -8,6 +8,12 @@ use SoliDry\Types\ModelsInterface;
 use SoliDry\Types\ModulesInterface;
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class ConfigHelper
+ * helps get/set entities in application module config
+ *
+ * @package SoliDry\Helpers
+ */
 class ConfigHelper
 {
     private static $availableQueryParams = [
@@ -16,6 +22,9 @@ class ConfigHelper
         ModelsInterface::PARAM_SORT => ModelsInterface::DEFAULT_SORT,
     ];
 
+    /**
+     * @return string
+     */
     public static function getConfigKey(): string
     {
         $conf = config();
@@ -24,11 +33,18 @@ class ConfigHelper
         return end($arr);
     }
 
+    /**
+     * @return string
+     */
     public static function getModuleName(): string
     {
         return config(self::getConfigKey() . PhpInterface::DOT . ModulesInterface::KEY_NAME);
     }
 
+    /**
+     * @param string $param
+     * @return mixed|null
+     */
     public static function getQueryParam(string $param)
     {
         if (array_key_exists($param, self::$availableQueryParams)) {
@@ -40,6 +56,12 @@ class ConfigHelper
         return null;
     }
 
+    /**
+     * @param string $entity
+     * @param string $param
+     * @param bool $lower
+     * @return mixed|null
+     */
     public static function getNestedParam(string $entity, string $param, bool $lower = false)
     {
         if (true === $lower) {

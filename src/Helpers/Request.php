@@ -6,6 +6,10 @@ namespace SoliDry\Helpers;
 use SoliDry\Extension\JSONApiInterface;
 use Illuminate\Http\Request as Req;
 
+/**
+ * Class Request
+ * @package SoliDry\Helpers
+ */
 class Request
 {
     /**

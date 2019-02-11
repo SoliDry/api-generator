@@ -1,6 +1,10 @@
 <?php
 namespace SoliDry\Helpers;
 
+/**
+ * Class ConfigOptions
+ * @package SoliDry\Helpers
+ */
 class ConfigOptions
 {
     private $calledMethod = '';

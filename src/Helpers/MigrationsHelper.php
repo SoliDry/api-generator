@@ -4,10 +4,18 @@ namespace SoliDry\Helpers;
 
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class MigrationsHelper
+ * @package SoliDry\Helpers
+ */
 class MigrationsHelper
 {
     private const PATTERN_SPLIT_UC = '/(?=[A-Z])/';
 
+    /**
+     * @param string $objectName
+     * @return string
+     */
     public static function getTableName(string $objectName)
     {
         $table = '';
