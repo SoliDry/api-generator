@@ -1488,7 +1488,7 @@ In next chapter you'll know how to place custom code in Models/FormRequest prese
 It is an important feature to regenerate your code based on generated history types and the current state 
 of OpenApi document, which can be easily achieved by running: 
 ```sh  
-  php artisan api:generate oas/openapi.yaml --migrations --regenerate --merge=last
+  php artisan api:generate oas/openapi.yaml --migrations --merge=last
 ```  
 This command will merge the last state/snapshot of document from `.gen` directory 
 and the current document (in this case from `oas/openapi.yaml`), 
@@ -1545,7 +1545,7 @@ class TagFormRequest extends BaseFormRequest
     }
 } 
 ```
-As you can see all user content was preserved and merged with regenerated.
+As you can see all user content was preserved (by default) and merged with regenerated.
  
 The same is true for Eloquent model:
 ```php
@@ -1614,9 +1614,10 @@ class AddColumnLastNameToUser extends Migration
         });
     }
 
-} 
+}
 ``` 
-If you don't want to save history every time U running commands add `--no-history` option.  
+If you don't want to save history on every run add `--no-history` option.  
+If you need to regenerate Module as if it was generated from scratch - use `--regenerate` option.
 
 There are also more things you can do, about rewinding history: 
 - by passing option like this `--merge=9` generator will get back for 9 steps 
