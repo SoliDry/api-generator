@@ -3,6 +3,8 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 
 [![Build Status](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/build.png?b=master)](https://scrutinizer-ci.com/g/SoliDry/api-generator/build-status/master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/SoliDry/api-generator/?branch=master)
+[![Total Downloads](https://poser.pugx.org/solidry/api-generator/downloads)](https://packagist.org/packages/solidry/api-generator)
+[![Latest Stable Version](https://poser.pugx.org/solidry/api-generator/v/stable)](https://packagist.org/packages/solidry/api-generator)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
 [![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
