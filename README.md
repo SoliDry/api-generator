@@ -1490,12 +1490,31 @@ In next chapter you'll know how to place custom code in Models/FormRequest prese
 It is an important feature to regenerate your code based on generated history types and the current state 
 of OpenApi document, which can be easily achieved by running: 
 ```sh  
-  php artisan api:generate oas/openapi.yaml --migrations --merge=last
+  php artisan api:generate oas/openapi.yaml --migrations --regenerate --merge=last
 ```  
 This command will merge the last state/snapshot of document from `.gen` directory 
 and the current document (in this case from `oas/openapi.yaml`), 
 then creates files for models and FormRequest, merging it with user added content between generated props and methods.
 Moreover, it will add the new columns to newly created migration files with their indices.
+
+Controller state:
+```php
+<?php
+namespace Modules\V2\Http\Controllers;
+
+class ArticleController extends DefaultController 
+{
+    private $prop = 'foo';
+
+    // >>>props>>>
+    // <<<props<<<
+    
+    public function myMethod()
+    {
+        return true;
+    }
+}
+```
  
 Example of regenerated FormRequest:
 ```php
@@ -1545,9 +1564,10 @@ class TagFormRequest extends BaseFormRequest
     {
         return false;
     }
-} 
+}
 ```
-As you can see all user content was preserved (by default) and merged with regenerated.
+As you can see all user content was preserved and merged with regenerated. 
+Custom business logic content saves it's state when `--regenerate` option is present, either with or without other options. 
  
 The same is true for Eloquent model:
 ```php
@@ -1588,7 +1608,7 @@ class Article extends BaseModel
         return false;
     }
 } 
-``` 
+```
 
 Example of regenerated migration:
 ```php
@@ -1619,7 +1639,6 @@ class AddColumnLastNameToUser extends Migration
 }
 ``` 
 If you don't want to save history on every run add `--no-history` option.  
-If you need to regenerate Module as if it was generated from scratch - use `--regenerate` option.
 
 There are also more things you can do, about rewinding history: 
 - by passing option like this `--merge=9` generator will get back for 9 steps 
