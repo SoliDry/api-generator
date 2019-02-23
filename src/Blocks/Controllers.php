@@ -52,6 +52,13 @@ class Controllers implements ControllersInterface
         }
     }
 
+    private function resetContent()
+    {
+        $this->setBeforeProps($this->getEntityFile($this->generator->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX));
+        $this->setComment(DefaultInterface::PROPS_START, 0);
+        $this->setAfterProps();
+    }
+
     /**
      *  Sets *Controller content
      */
@@ -65,6 +72,11 @@ class Controllers implements ControllersInterface
             $this->className . DefaultInterface::CONTROLLER_POSTFIX,
             $this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX
         );
+
+        // set props comments to preserve user-land code on regen
+        $this->setComment(DefaultInterface::PROPS_START);
+        $this->setComment(DefaultInterface::PROPS_END);
+
         $this->endClass();
     }
 
