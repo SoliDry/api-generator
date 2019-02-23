@@ -44,10 +44,9 @@ trait GeneratorTrait
     private function generateResources(): void
     {
         $this->outputEntity();
-        $this->createControllers();
 
         // create controller
-        $this->createControllers();
+        $this->solveControllers();
 
         // create FormRequest
         $this->solveFormRequest();
@@ -80,7 +79,7 @@ trait GeneratorTrait
     private function mergeResources(): void
     {
         $this->outputEntity();
-        $this->createControllers();
+        $this->solveControllers();
 
         $this->solveFormRequest();
 
@@ -93,12 +92,30 @@ trait GeneratorTrait
         $this->createMigrations();
     }
 
+    /**
+     *  Creates Controllers and leaves those generated in case of merge
+     */
+    private function solveControllers(): void
+    {
+        $this->controllers = new Controllers($this);
+        $controllerPath = $this->formatControllersPath();
+        if (empty($this->options[ConsoleInterface::OPTION_REGENERATE]) === false
+            && file_exists($this->controllers->getEntityFile($controllerPath,
+                DefaultInterface::CONTROLLER_POSTFIX)) === true) {
+            $this->controllers->recreateEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
+        } else {
+            $this->controllers->createDefault();
+            $this->controllers->createEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
+        }
+    }
+
     private function solveFormRequest(): void
     {
         $this->forms = new FormRequest($this);
         $formRequestPath = $this->formatRequestsPath();
-        if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false
-            && file_exists($this->forms->getEntityFile($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX)) === true) {
+        if (empty($this->options[ConsoleInterface::OPTION_REGENERATE]) === false
+            && file_exists($this->forms->getEntityFile($formRequestPath,
+                DefaultInterface::FORM_REQUEST_POSTFIX)) === true) {
             $this->forms->recreateEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
         } else {
             $this->forms->createEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
@@ -128,16 +145,6 @@ trait GeneratorTrait
             '===============' . PhpInterface::SPACE . $this->objectName
             . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
         );
-    }
-
-    /**
-     *  Creates Controllers and leaves those generated in case of merge
-     */
-    private function createControllers(): void
-    {
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
     }
 
     /**
@@ -201,7 +208,8 @@ trait GeneratorTrait
         $path = DirsInterface::GEN_DIR . DIRECTORY_SEPARATOR . $this->genDir . DIRECTORY_SEPARATOR;
 
         if (is_dir($path) === false) {
-            throw new DirectoryException('The directory: ' . $path . ' was not found.', ErrorsInterface::CODE_DIR_NOT_FOUND);
+            throw new DirectoryException('The directory: ' . $path . ' was not found.',
+                ErrorsInterface::CODE_DIR_NOT_FOUND);
         }
 
         $files = glob($path . $time . '*');
@@ -303,7 +311,7 @@ trait GeneratorTrait
             foreach ($files as $file) {
                 if (($pos = strpos($file, ApiInterface::OPEN_API_KEY)) !== false) {
                     $lastFiles[] = $file;
-                    $content = Yaml::parse(file_get_contents($this->formatGenPathByDir() .$file));
+                    $content = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
                     if (empty($content[ApiInterface::RAML_KEY_USES]) === false) {
                         foreach ($content[ApiInterface::RAML_KEY_USES] as $subFile) {
                             $lastFiles[] = substr($file, 0, $pos) . basename($subFile);
@@ -359,6 +367,7 @@ trait GeneratorTrait
     /**
      * Compares attributes for current and previous history and sets the diffTypes prop
      * to process additional migrations creation
+     *
      * @param array $attrsCurrent Current attributes
      * @param array $attrsHistory History attributes
      */
