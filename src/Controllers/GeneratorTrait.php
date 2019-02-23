@@ -20,8 +20,14 @@ use SoliDry\Types\PhpInterface;
 use SoliDry\Types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Trait GeneratorTrait
+ *
+ * @package SoliDry\Controllers
+ */
 trait GeneratorTrait
 {
+    // all generated entities/resources
     private $forms;
     private $mappers;
     private $routes;
@@ -29,6 +35,7 @@ trait GeneratorTrait
     private $controllers;
     private $tests;
 
+    // gen dir found in history
     private $genDir;
 
     /**
@@ -40,19 +47,13 @@ trait GeneratorTrait
         $this->createControllers();
 
         // create controller
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
+        $this->createControllers();
 
         // create FormRequest
-        $this->forms = new FormRequest($this);
-        $this->forms->createEntity($this->formatRequestsPath(), DefaultInterface::FORM_REQUEST_POSTFIX);
-        $this->forms->createAccessToken();
+        $this->solveFormRequest();
 
         // create entities/models
-        $this->mappers = new Entities($this);
-        $this->mappers->createPivot();
-        $this->mappers->createEntity($this->formatEntitiesPath());
+        $this->solveEntities();
 
         // create routes
         $this->routes = new Routes($this);
@@ -81,29 +82,44 @@ trait GeneratorTrait
         $this->outputEntity();
         $this->createControllers();
 
-        $this->forms = new FormRequest($this);
-        $formRequestPath = $this->formatRequestsPath();
-        if (true === file_exists($this->forms->getEntityFile($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX))) {
-            $this->forms->recreateEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
-        } else {
-            $this->forms->createEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
-        }
+        $this->solveFormRequest();
 
-        // create entities/models
-        $this->mappers = new Entities($this);
-        $this->mappers->createPivot();
-        $entitiesPath = $this->formatEntitiesPath();
-        if (true === file_exists($this->forms->getEntityFile($entitiesPath))) {
-            $this->mappers->recreateEntity($entitiesPath);
-        } else {
-            $this->mappers->createEntity($entitiesPath);
-        }
+        $this->solveEntities();
 
         // create routes
         $this->routes = new Routes($this);
         $this->routes->create();
 
         $this->createMigrations();
+    }
+
+    private function solveFormRequest(): void
+    {
+        $this->forms = new FormRequest($this);
+        $formRequestPath = $this->formatRequestsPath();
+        if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false
+            && file_exists($this->forms->getEntityFile($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX)) === true) {
+            $this->forms->recreateEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
+        } else {
+            $this->forms->createEntity($formRequestPath, DefaultInterface::FORM_REQUEST_POSTFIX);
+        }
+    }
+
+    /**
+     *  Decide whether to generate new Entities or mutate existing
+     */
+    private function solveEntities(): void
+    {
+        // create entities/models
+        $this->mappers = new Entities($this);
+        $this->mappers->createPivot();
+        $entitiesPath = $this->formatEntitiesPath();
+        if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false
+            && file_exists($this->forms->getEntityFile($entitiesPath)) === true) {
+            $this->mappers->recreateEntity($entitiesPath);
+        } else {
+            $this->mappers->createEntity($entitiesPath);
+        }
     }
 
     private function outputEntity(): void
