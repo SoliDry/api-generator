@@ -44,10 +44,9 @@ trait GeneratorTrait
     private function generateResources(): void
     {
         $this->outputEntity();
-        $this->createControllers();
 
         // create controller
-        $this->createControllers();
+        $this->solveControllers();
 
         // create FormRequest
         $this->solveFormRequest();
@@ -80,7 +79,7 @@ trait GeneratorTrait
     private function mergeResources(): void
     {
         $this->outputEntity();
-        $this->createControllers();
+        $this->solveControllers();
 
         $this->solveFormRequest();
 
@@ -91,6 +90,16 @@ trait GeneratorTrait
         $this->routes->create();
 
         $this->createMigrations();
+    }
+
+    /**
+     *  Creates Controllers and leaves those generated in case of merge
+     */
+    private function solveControllers(): void
+    {
+        $this->controllers = new Controllers($this);
+        $this->controllers->createDefault();
+        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
     }
 
     private function solveFormRequest(): void
@@ -128,16 +137,6 @@ trait GeneratorTrait
             '===============' . PhpInterface::SPACE . $this->objectName
             . PhpInterface::SPACE . DirsInterface::ENTITIES_DIR
         );
-    }
-
-    /**
-     *  Creates Controllers and leaves those generated in case of merge
-     */
-    private function createControllers(): void
-    {
-        $this->controllers = new Controllers($this);
-        $this->controllers->createDefault();
-        $this->controllers->createEntity($this->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX);
     }
 
     /**
