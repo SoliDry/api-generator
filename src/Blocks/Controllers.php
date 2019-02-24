@@ -94,6 +94,11 @@ class Controllers implements ControllersInterface
 
         $this->setUse($baseFullMapper, false, true);
         $this->startClass($this->generator->defaultController . DefaultInterface::CONTROLLER_POSTFIX, $baseMapperName);
+
+        // set props comments to preserve user-land code on regen
+        $this->setComment(DefaultInterface::PROPS_START);
+        $this->setComment(DefaultInterface::PROPS_END);
+
         $this->endClass();
     }
 }
