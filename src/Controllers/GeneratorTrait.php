@@ -97,9 +97,11 @@ trait GeneratorTrait
     {
         $this->controllers = new Controllers($this);
         $controllerPath = $this->formatControllersPath();
+
         if (empty($this->options[ConsoleInterface::OPTION_REGENERATE]) === false
             && file_exists($this->controllers->getEntityFile($controllerPath,
                 DefaultInterface::CONTROLLER_POSTFIX)) === true) {
+
             $this->controllers->recreateEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
         } else {
             $this->controllers->createDefault();
@@ -111,6 +113,7 @@ trait GeneratorTrait
     {
         $this->forms = new FormRequest($this);
         $formRequestPath = $this->formatRequestsPath();
+
         if (empty($this->options[ConsoleInterface::OPTION_REGENERATE]) === false
             && file_exists($this->forms->getEntityFile($formRequestPath,
                 DefaultInterface::FORM_REQUEST_POSTFIX)) === true) {
@@ -129,6 +132,7 @@ trait GeneratorTrait
         $this->mappers = new Entities($this);
         $this->mappers->createPivot();
         $entitiesPath = $this->formatEntitiesPath();
+
         if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false
             && file_exists($this->forms->getEntityFile($entitiesPath)) === true) {
             $this->mappers->recreateEntity($entitiesPath);
