@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use SoliDry\Exceptions\DirectoryException;
 use SoliDry\Helpers\ConfigHelper;
 use SoliDry\ApiGenerator;
+use SoliDry\Types\ApiInterface;
 use SoliDry\Types\ConsoleInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModulesInterface;
@@ -68,8 +69,12 @@ class FileManager implements DirsInterface
     public static function getModulePath(Command $obj, bool $http = false) : string
     {
         /** @var ApiGenerator $obj */
-        $path =
-            $obj->modulesDir . PhpInterface::SLASH . strtoupper($obj->version) . PhpInterface::SLASH;
+        $path = $obj->modulesDir . PhpInterface::SLASH . strtoupper($obj->version) . PhpInterface::SLASH;
+        if ($obj->version === ApiInterface::DEFAULT_VERSION)
+        {
+            $path = ApiInterface::DEFAULT_VERSION . PhpInterface::SLASH;
+        }
+
         if($http === true)
         {
             $path .= $obj->httpDir . PhpInterface::SLASH;

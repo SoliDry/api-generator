@@ -32,10 +32,16 @@ trait ContentManager
      */
     protected function setNamespace(string $postfix) : void
     {
-        $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
-            $this->generator->modulesDir . PhpInterface::BACKSLASH .
-            strtoupper($this->generator->version) .
-            PhpInterface::BACKSLASH . $postfix . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
+        if ($this->generator->version) {
+            $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
+                ApiInterface::DEFAULT_VERSION . PhpInterface::BACKSLASH . $postfix .
+                PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
+        } else {
+            $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
+                $this->generator->modulesDir . PhpInterface::BACKSLASH .
+                strtoupper($this->generator->version) .
+                PhpInterface::BACKSLASH . $postfix . PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
+        }
     }
 
     /**

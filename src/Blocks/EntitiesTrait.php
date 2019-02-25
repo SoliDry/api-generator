@@ -43,6 +43,12 @@ trait EntitiesTrait
      */
     public function getFormRequestEntity(string $version, string $object) : string
     {
+        if ($version === ApiInterface::DEFAULT_VERSION) {
+            return ucfirst(ApiInterface::DEFAULT_VERSION) . PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
+                PhpInterface::BACKSLASH . DirsInterface::FORM_REQUEST_DIR . PhpInterface::BACKSLASH .
+                $object . DefaultInterface::FORM_REQUEST_POSTFIX;
+        }
+
         return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
             PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
             PhpInterface::BACKSLASH .

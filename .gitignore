@@ -8,8 +8,8 @@ artisan
 config/
 routes/
 storage/
+database/
 /oas/
-/raml/
 .env
 .gen/
 *_create*_table.php

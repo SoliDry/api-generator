@@ -160,8 +160,11 @@ class BaseCommand extends Command
             $this->isMerge = true;
         }
 
-        $this->generateModule();
-        $this->generateConfig();
+        if ($this->version !== ApiInterface::DEFAULT_VERSION) { // generate modules structure
+            $this->generateModule();
+            $this->generateConfig();
+        }
+
         $this->generate();
     }
 
@@ -257,9 +260,13 @@ class BaseCommand extends Command
 
     public function formatMigrationsPath() : string
     {
+        $dbDir = DirsInterface::DATABASE_DIR;
+        if ($this->version === ApiInterface::DEFAULT_VERSION) {
+            $dbDir = strtolower(DirsInterface::DATABASE_DIR);
+        }
+
         /** @var Command $this */
-        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
-            . $this->migrationsDir . PhpInterface::SLASH;
+        return FileManager::getModulePath($this) . $dbDir . PhpInterface::SLASH . $this->migrationsDir . PhpInterface::SLASH;
     }
 
     public function formatConfigPath()
