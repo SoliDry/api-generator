@@ -113,6 +113,11 @@ class BaseCommand extends Command
         }
     }
 
+    /**
+     * Main input point of generator
+     *
+     * @throws DirectoryException
+     */
     private function generateOpenApi()
     {
         $this->appDir         = DirsInterface::APPLICATION_DIR;
@@ -127,6 +132,7 @@ class BaseCommand extends Command
             $vars          = $server[ApiInterface::API_VARS];
             $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
 
+            $this->createDirs();
             if (env('APP_ENV') === 'dev') { // for test env based on .env
                 $this->options = [
                     ConsoleInterface::OPTION_REGENERATE => 1,
@@ -260,17 +266,22 @@ class BaseCommand extends Command
 
     public function formatMigrationsPath() : string
     {
-        $dbDir = DirsInterface::DATABASE_DIR;
         if ($this->version === ApiInterface::DEFAULT_VERSION) {
-            $dbDir = strtolower(DirsInterface::DATABASE_DIR);
+            return strtolower(DirsInterface::DATABASE_DIR) . PhpInterface::SLASH
+                . $this->migrationsDir . PhpInterface::SLASH;
         }
 
         /** @var Command $this */
-        return FileManager::getModulePath($this) . $dbDir . PhpInterface::SLASH . $this->migrationsDir . PhpInterface::SLASH;
+        return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
+            . $this->migrationsDir . PhpInterface::SLASH;
     }
 
     public function formatConfigPath()
     {
+        if ($this->version === ApiInterface::DEFAULT_VERSION) {
+            return strtolower(DirsInterface::MODULE_CONFIG_DIR) . PhpInterface::SLASH;
+        }
+
         return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
     }
 
