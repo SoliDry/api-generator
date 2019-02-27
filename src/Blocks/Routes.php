@@ -6,6 +6,7 @@ use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\Console;
 use SoliDry\ApiGenerator;
+use SoliDry\Types\ApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
 use SoliDry\Types\RoutesInterface;
@@ -35,8 +36,12 @@ class Routes
     {
         $this->setRoutes();
         $isCreated = false;
-        $file      = FileManager::getModulePath($this->generator, true) .
-            RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
+
+        $file = RoutesInterface::ROUTES_APP_PATH;
+        if ($this->generator->version !== ApiInterface::DEFAULT_VERSION) {
+            $file = FileManager::getModulePath($this->generator, true) .
+                RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
+        }
 
         // TODO: fix this behaviour - collect data 1-st for ex.
         if ($this->generator->routesCreated === 0 || file_exists($file) === false) {
