@@ -132,7 +132,10 @@ class BaseCommand extends Command
             $vars          = $server[ApiInterface::API_VARS];
             $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
 
-            $this->createDirs();
+            if ($this->version === ApiInterface::DEFAULT_VERSION) {
+                $this->createDirs();
+            }
+
             if (env('APP_ENV') === 'dev') { // for test env based on .env
                 $this->options = [
                     ConsoleInterface::OPTION_REGENERATE => 1,
