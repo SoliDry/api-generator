@@ -62,7 +62,7 @@ class Routes
         $this->setTag();
         $this->setComment(DefaultInterface::ROUTES_START, 0);
         $this->setComment($this->className . ' routes', 0);
-        $this->openGroup($this->generator->version);
+        $this->openGroup();
 
         // create bulk api-calls
         $this->setBulkRoutes();

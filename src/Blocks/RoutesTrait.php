@@ -2,6 +2,7 @@
 
 namespace SoliDry\Blocks;
 
+use SoliDry\Controllers\BaseCommand;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Types\DefaultInterface;
@@ -15,15 +16,24 @@ use SoliDry\Types\RoutesInterface;
  * Trait RoutesTrait
  * @package SoliDry\Blocks
  *
- * @property Routes generator
+ * @property BaseCommand generator
  */
 trait RoutesTrait
 {
     /**
      * @param string $version
      */
-    public function openGroup(string $version) : void
+    public function openGroup() : void
     {
+        $versionPrefix = $this->generator->version;
+        $versionNamespace = DirsInterface::MODULES_DIR .
+            PhpInterface::BACKSLASH . PhpInterface::BACKSLASH
+            . strtoupper($this->generator->version);
+        if ($this->generator->version === ApiInterface::DEFAULT_VERSION) {
+            $versionPrefix = ApiInterface::API_PREFIX;
+            $versionNamespace = ucfirst(ApiInterface::DEFAULT_VERSION);
+        }
+
         $this->sourceCode .= RoutesInterface::CLASS_ROUTE . PhpInterface::DOUBLE_COLON
             . RoutesInterface::METHOD_GROUP . PhpInterface::OPEN_PARENTHESES
             . PhpInterface::OPEN_BRACKET
@@ -31,15 +41,13 @@ trait RoutesTrait
             PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
             PhpInterface::SPACE
-            . PhpInterface::QUOTES . $version . PhpInterface::QUOTES
+            . PhpInterface::QUOTES . $versionPrefix . PhpInterface::QUOTES
             . PhpInterface::COMMA . PhpInterface::SPACE .
             PhpInterface::QUOTES
             . PhpInterface::PHP_NAMESPACE . PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
             . PhpInterface::SPACE . PhpInterface::QUOTES .
-            DirsInterface::MODULES_DIR .
-            PhpInterface::BACKSLASH . PhpInterface::BACKSLASH .
-            strtoupper($this->generator->version)
+            $versionNamespace
             . PhpInterface::BACKSLASH . PhpInterface::BACKSLASH .
             DirsInterface::HTTP_DIR
             . PhpInterface::BACKSLASH . PhpInterface::BACKSLASH .
