@@ -17,7 +17,9 @@ abstract class MigrationsAbstract
 {
     use ContentManager, MigrationsTrait;
 
-    public const PATTERN_TIME = 'd_m_Y_Hi';
+    public static $counter = 10;
+
+    public const PATTERN_TIME = 'Y_m_d_Hi';
 
     private $signedIntergerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
@@ -247,11 +249,14 @@ abstract class MigrationsAbstract
 
     /**
      * Creates migration file with time mask
+     *
      * @param string $migrationName
      */
     protected function createMigrationFile(string $migrationName): void
     {
-        $migrationMask = date(self::PATTERN_TIME) . random_int(10, 99);
+        $migrationMask = date(self::PATTERN_TIME) . self::$counter;
+
+        self::$counter += 2; // 2-step pace for pivots
         $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
             $migrationName . PhpInterface::PHP_EXT;
 

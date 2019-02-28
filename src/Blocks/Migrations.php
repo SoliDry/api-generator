@@ -18,6 +18,7 @@ use SoliDry\Types\PhpInterface;
 class Migrations extends MigrationsAbstract
 {
     use EntitiesTrait;
+
     /** @var BaseCommand $generator */
     protected $generator;
     protected $sourceCode = '';
@@ -86,12 +87,14 @@ class Migrations extends MigrationsAbstract
                 if(file_exists($entityFile))
                 {
                     $this->setPivotContent($relationEntity);
-                    $migrationMask = date(self::PATTERN_TIME) . random_int(10, 99);
+
+                    $migrationMask = date(self::PATTERN_TIME) . (self::$counter + 1);
                     $migrationName = ModelsInterface::MIGRATION_CREATE . PhpInterface::UNDERSCORE
                                      . $this->tableName
                                      . PhpInterface::UNDERSCORE .
                                      MigrationsHelper::getTableName($relationEntity) .
                                      PhpInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
+
                     if(FileManager::migrationNotExists($this->generator, $migrationName))
                     {
                         $file = $this->generator->formatMigrationsPath() . $migrationMask
