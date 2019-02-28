@@ -32,9 +32,9 @@ trait ContentManager
      */
     protected function setNamespace(string $postfix) : void
     {
-        if ($this->generator->version) {
+        if ($this->generator->version === ApiInterface::DEFAULT_VERSION) {
             $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
-                ApiInterface::DEFAULT_VERSION . PhpInterface::BACKSLASH . $postfix .
+                ucfirst(ApiInterface::DEFAULT_VERSION) . PhpInterface::BACKSLASH . $postfix .
                 PhpInterface::SEMICOLON . PHP_EOL . PHP_EOL;
         } else {
             $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
