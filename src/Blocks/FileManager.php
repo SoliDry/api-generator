@@ -60,6 +60,8 @@ class FileManager implements DirsInterface
     }
 
     /**
+     * Constructs base module path
+     *
      * @param Command $obj
      *
      * @param bool    $http
@@ -70,10 +72,6 @@ class FileManager implements DirsInterface
     {
         /** @var ApiGenerator $obj */
         $path = $obj->modulesDir . PhpInterface::SLASH . strtoupper($obj->version) . PhpInterface::SLASH;
-        if ($obj->version === ApiInterface::DEFAULT_VERSION)
-        {
-            $path = ApiInterface::DEFAULT_VERSION . PhpInterface::SLASH;
-        }
 
         if($http === true)
         {

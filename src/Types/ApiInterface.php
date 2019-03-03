@@ -2,13 +2,16 @@
 
 namespace SoliDry\Types;
 
+/**
+ * Interface ApiInterface is the general purpose storage for OAS specific constants
+ *
+ * @package SoliDry\Types
+ */
 interface ApiInterface
 {
     public const OPEN_API_KEY    = 'openapi';
     public const API_SERVERS     = 'servers';
     public const API_INFO        = 'info';
-    public const DEFAULT_VERSION = 'app';
-    public const API_PREFIX      = 'api';
 
     public const API_VARS       = 'variables';
     public const API_BASE_PATH  = 'basePath';

@@ -116,7 +116,7 @@ class BaseCommand extends Command
     /**
      * Main input point of generator
      *
-     * @throws DirectoryException
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      */
     private function generateOpenApi()
     {
@@ -131,10 +131,6 @@ class BaseCommand extends Command
         foreach ($this->data[ApiInterface::API_SERVERS] as $server) {
             $vars          = $server[ApiInterface::API_VARS];
             $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
-
-            if ($this->version === ApiInterface::DEFAULT_VERSION) {
-                $this->createDirs();
-            }
 
             if (env('APP_ENV') === 'dev') { // for test env based on .env
                 $this->options = [
@@ -161,6 +157,8 @@ class BaseCommand extends Command
 
     /**
      *  Main generator method - the sequence of methods execution is crucial
+     *
+     * @throws \Symfony\Component\Yaml\Exception\ParseException
      */
     private function runGenerator()
     {
@@ -169,10 +167,8 @@ class BaseCommand extends Command
             $this->isMerge = true;
         }
 
-        if ($this->version !== ApiInterface::DEFAULT_VERSION) { // generate modules structure
-            $this->generateModule();
-            $this->generateConfig();
-        }
+        $this->generateModule();
+        $this->generateConfig();
 
         $this->generate();
     }
@@ -269,11 +265,6 @@ class BaseCommand extends Command
 
     public function formatMigrationsPath() : string
     {
-        if ($this->version === ApiInterface::DEFAULT_VERSION) {
-            return strtolower(DirsInterface::DATABASE_DIR) . PhpInterface::SLASH
-                . $this->migrationsDir . PhpInterface::SLASH;
-        }
-
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
             . $this->migrationsDir . PhpInterface::SLASH;
@@ -281,10 +272,6 @@ class BaseCommand extends Command
 
     public function formatConfigPath()
     {
-        if ($this->version === ApiInterface::DEFAULT_VERSION) {
-            return strtolower(DirsInterface::MODULE_CONFIG_DIR) . PhpInterface::SLASH;
-        }
-
         return FileManager::getModulePath($this) . DirsInterface::MODULE_CONFIG_DIR . PhpInterface::SLASH;
     }
 

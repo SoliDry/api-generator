@@ -25,14 +25,9 @@ trait RoutesTrait
      */
     public function openGroup() : void
     {
-        $versionPrefix = $this->generator->version;
         $versionNamespace = DirsInterface::MODULES_DIR .
             PhpInterface::BACKSLASH . PhpInterface::BACKSLASH
             . strtoupper($this->generator->version);
-        if ($this->generator->version === ApiInterface::DEFAULT_VERSION) {
-            $versionPrefix = ApiInterface::API_PREFIX;
-            $versionNamespace = ucfirst(ApiInterface::DEFAULT_VERSION);
-        }
 
         $this->sourceCode .= RoutesInterface::CLASS_ROUTE . PhpInterface::DOUBLE_COLON
             . RoutesInterface::METHOD_GROUP . PhpInterface::OPEN_PARENTHESES
@@ -41,7 +36,7 @@ trait RoutesTrait
             PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW .
             PhpInterface::SPACE
-            . PhpInterface::QUOTES . $versionPrefix . PhpInterface::QUOTES
+            . PhpInterface::QUOTES . $this->generator->version . PhpInterface::QUOTES
             . PhpInterface::COMMA . PhpInterface::SPACE .
             PhpInterface::QUOTES
             . PhpInterface::PHP_NAMESPACE . PhpInterface::QUOTES

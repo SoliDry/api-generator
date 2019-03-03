@@ -13,10 +13,11 @@ use SoliDry\Types\RoutesInterface;
 
 class Routes
 {
+
     use ContentManager, RoutesTrait;
 
     /** @var ApiGenerator $generator */
-    private   $generator;
+    private $generator;
     protected $sourceCode = '';
 
     private $className;
@@ -27,21 +28,18 @@ class Routes
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
-    public function setCodeState($generator) : void
+    public function setCodeState($generator): void
     {
         $this->generator = $generator;
     }
 
-    public function create() : void
+    public function create(): void
     {
         $this->setRoutes();
         $isCreated = false;
 
-        $file = RoutesInterface::ROUTES_APP_PATH;
-        if ($this->generator->version !== ApiInterface::DEFAULT_VERSION) {
-            $file = FileManager::getModulePath($this->generator, true) .
-                RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
-        }
+        $file = FileManager::getModulePath($this->generator, true) .
+            RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
 
         // TODO: fix this behaviour - collect data 1-st for ex.
         if ($this->generator->routesCreated === 0 || file_exists($file) === false) {
@@ -57,7 +55,7 @@ class Routes
         }
     }
 
-    private function setRoutes() : void
+    private function setRoutes(): void
     {
         $this->setTag();
         $this->setComment(DefaultInterface::ROUTES_START, 0);
@@ -76,7 +74,7 @@ class Routes
         $this->setComment(DefaultInterface::ROUTES_END, 0);
     }
 
-    private function setBulkRoutes() : void
+    private function setBulkRoutes(): void
     {
         $this->setComment('bulk routes');
 
@@ -88,28 +86,38 @@ class Routes
             $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE_BULK));
     }
 
-    private function setBasicRoutes() : void
+    private function setBasicRoutes(): void
     {
         $this->setComment('basic routes');
 
-        $this->setRoute(RoutesInterface::METHOD_OPTIONS, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_OPTIONS));
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_INDEX));
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeIdUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_VIEW));
-        $this->setRoute(RoutesInterface::METHOD_POST, $this->composeObjectUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE));
-        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->composeIdUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_UPDATE));
-        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->composeIdUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE));
+        $this->setRoute(RoutesInterface::METHOD_OPTIONS, $this->composeObjectUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_OPTIONS));
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeObjectUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_INDEX));
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeIdUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_VIEW));
+        $this->setRoute(RoutesInterface::METHOD_POST, $this->composeObjectUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE));
+        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->composeIdUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_UPDATE));
+        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->composeIdUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE));
     }
 
-    private function setRelationsRoutes() : void
+    private function setRelationsRoutes(): void
     {
         $this->setComment('relation routes');
 
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATIONS));
-        $this->setRoute(RoutesInterface::METHOD_POST, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE
-            . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
-        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_UPDATE
-            . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
-        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->composeRelationsUri(), $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE
-            . ucfirst (JSONApiInterface::URI_METHOD_RELATIONS)));
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelationsUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATIONS));
+        $this->setRoute(RoutesInterface::METHOD_POST, $this->composeRelationsUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE
+                . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
+        $this->setRoute(RoutesInterface::METHOD_PATCH, $this->composeRelationsUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_UPDATE
+                . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
+        $this->setRoute(RoutesInterface::METHOD_DELETE, $this->composeRelationsUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_DELETE
+                . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));
     }
 }
