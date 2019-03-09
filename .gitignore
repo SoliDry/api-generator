@@ -15,3 +15,4 @@ database/
 *_create*_table.php
 tests/functional/*Cest.php
 composer.lock
+infection.json.dist
