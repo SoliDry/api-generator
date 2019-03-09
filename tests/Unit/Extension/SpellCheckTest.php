@@ -30,7 +30,7 @@ class SpellCheckTest extends TestCase
     /**
      *
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->spellCheck = new SpellCheck(self::ENTITY);

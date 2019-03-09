@@ -17,7 +17,7 @@ class CustomSqlTest extends TestCase
 {
     private $customSql;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->createConfig();

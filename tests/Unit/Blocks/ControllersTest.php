@@ -15,7 +15,7 @@ class ControllersTest extends TestCase
     /** @var Controllers $controller */
     private $controller;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $gen                 = new ApiGenerator();

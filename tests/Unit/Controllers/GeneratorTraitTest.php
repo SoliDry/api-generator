@@ -26,7 +26,7 @@ class GeneratorTraitTest extends TestCase
 
     private $options;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->options = [ // merge last option

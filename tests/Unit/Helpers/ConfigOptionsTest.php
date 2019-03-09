@@ -13,7 +13,7 @@ class ConfigOptionsTest extends TestCase
 {
     private $configOptions;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->configOptions = new ConfigOptions();

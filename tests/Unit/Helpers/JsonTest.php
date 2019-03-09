@@ -27,7 +27,7 @@ class JsonTest extends TestCase
     /** @var PHPUnit_Framework_MockObject_MockObject | BaseModel baseFormRequest */
     private $baseModel = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->baseModel       = new Article();

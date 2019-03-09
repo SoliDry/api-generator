@@ -17,7 +17,7 @@ class MethodOptionsTest extends TestCase
 {
     private $methodOptions;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->methodOptions = new MethodOptions();

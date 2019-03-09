@@ -21,7 +21,7 @@ class StateMachineTest extends TestCase
     private $stateMachine;
     private $entity;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->entity       = 'article';

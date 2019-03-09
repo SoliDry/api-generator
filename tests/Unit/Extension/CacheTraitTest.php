@@ -37,7 +37,7 @@ class CacheTraitTest extends TestCase
     private $req;
     private $item;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->configOptions = new ConfigOptions();
@@ -85,7 +85,7 @@ class CacheTraitTest extends TestCase
         return ArticleFixture::createAndGet();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         ArticleFixture::delete($this->item->id);
         Redis::flushall();

@@ -22,7 +22,7 @@ class DefaultTransformerTest extends TestCase
 {
     private $transformer;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $middleware        = new ArticleFormRequest();

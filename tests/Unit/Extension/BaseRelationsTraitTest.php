@@ -20,7 +20,7 @@ class BaseRelationsTraitTest extends TestCase
     private $topic;
     private $modelEntity;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->article = ArticleFixture::createAndGet();
@@ -48,7 +48,7 @@ class BaseRelationsTraitTest extends TestCase
         $this->assertEquals($this->topic->id, $article->topic_id);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         ArticleFixture::delete($this->article->id);
         TopicFixture::delete($this->topic->id);

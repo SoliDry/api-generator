@@ -23,7 +23,7 @@ class ConfigTest extends TestCase
     private $gen;
     private $config;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->gen                 = new ApiGenerator();

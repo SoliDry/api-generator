@@ -13,7 +13,7 @@ use SoliDryTest\Unit\TestCase;
 
 class JwtTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $_SERVER['HTTP_HOST'] = 'example.com';

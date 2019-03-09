@@ -28,7 +28,7 @@ class EntitiesTest extends TestCase
     /**
      * @throws \ReflectionException
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         /** @var ApiGenerator $gen */

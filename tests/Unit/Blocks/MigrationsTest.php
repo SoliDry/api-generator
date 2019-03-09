@@ -24,10 +24,7 @@ class MigrationsTest extends TestCase
     private $migrations;
     private $gen;
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         /** @var ApiGenerator|PHPUnit_Framework_MockObject_MockObject $gen */

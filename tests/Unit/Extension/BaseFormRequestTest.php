@@ -19,7 +19,7 @@ class BaseFormRequestTest extends TestCase
 {
     private $baseFormRequest;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->baseFormRequest = new BaseFormRequest();
