@@ -22,7 +22,7 @@ class SqlOptionsTest extends TestCase
 {
     private $sqlOptions;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->sqlOptions = new SqlOptions();

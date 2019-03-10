@@ -24,7 +24,7 @@ class BitMaskTraitTest extends TestCase
     private $user;
     private $model;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->bitMask = new BitMask([
@@ -118,7 +118,7 @@ class BitMaskTraitTest extends TestCase
         $this->assertEquals(16, $this->model->permissions);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         UserFixture::delete($this->user->id);
         UserFixture::delete($this->users[0]->id);

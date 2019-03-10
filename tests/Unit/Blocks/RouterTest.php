@@ -22,7 +22,7 @@ class RouterTest extends TestCase
     private $gen;
     private $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->gen                 = new ApiGenerator();

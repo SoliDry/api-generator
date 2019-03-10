@@ -14,7 +14,7 @@ class BaseCommandTest extends TestCase
 {
     private $baseCommand;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->baseCommand = new BaseCommand();

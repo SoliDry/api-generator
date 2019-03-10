@@ -22,7 +22,7 @@ class ConfigHelperTest extends TestCase
         'expires' => 3600,
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
     }

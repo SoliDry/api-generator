@@ -16,3 +16,4 @@ database/
 tests/functional/*Cest.php
 composer.lock
 infection.json.dist
+infection-log.txt

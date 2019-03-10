@@ -24,7 +24,7 @@ class BaseModelTraitTest extends TestCase
     private $customSql;
     private $isTree = false;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->article = ArticleFixture::createAndGet();
@@ -88,7 +88,7 @@ class BaseModelTraitTest extends TestCase
         $this->assertInstanceOf(Builder::class, $articles);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         ArticleFixture::delete($this->article->id);
         parent::tearDown();

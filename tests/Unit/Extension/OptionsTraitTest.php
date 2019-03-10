@@ -23,7 +23,7 @@ class OptionsTraitTest extends TestCase
     private $configOptions;
     private $entity;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->entity = 'article'; // test cache etc

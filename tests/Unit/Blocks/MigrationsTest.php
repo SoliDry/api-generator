@@ -3,11 +3,13 @@
 namespace SoliDryTest\Unit\Blocks;
 
 use PHPUnit_Framework_MockObject_MockObject;
+use SoliDry\Blocks\FileManager;
 use SoliDry\Blocks\MigrationsAbstract;
 use SoliDry\ApiGenerator;
 use SoliDry\Types\ConsoleInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ApiInterface;
+use SoliDry\Types\PhpInterface;
 use SoliDryTest\Unit\TestCase;
 use SoliDry\Blocks\Migrations;
 use Symfony\Component\Yaml\Yaml;
@@ -24,10 +26,7 @@ class MigrationsTest extends TestCase
     private $migrations;
     private $gen;
 
-    /**
-     * @throws \ReflectionException
-     */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         /** @var ApiGenerator|PHPUnit_Framework_MockObject_MockObject $gen */
@@ -64,6 +63,40 @@ class MigrationsTest extends TestCase
         $this->assertInstanceOf(MigrationsAbstract::class, $this->migrations);
         $this->migrations->create();
         $this->migrations->createPivot();
+    }
+
+    /**
+     * This test creates a new entity to force setContent method
+     *
+     * @test
+     */
+    public function it_creates_new_entity()
+    {
+        $from = '';
+        $to = '';
+
+        // intentionally del migration file to recreate a new one
+        $path  = FileManager::getModulePath($this->gen) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
+            . $this->gen->migrationsDir . PhpInterface::SLASH;
+        $file  = $path . PhpInterface::ASTERISK . 'create_' . strtolower($this->gen->objectName) . PhpInterface::ASTERISK
+            . PhpInterface::PHP_EXT;
+        $files = glob($file);
+
+        if (empty($files) === false) {
+            $from = $files[0];
+            $to = str_replace('_create', '_create_cp', $files[0]);
+            copy($from, $to);
+            unlink($from);
+        }
+
+        $this->migrations->setCodeState($this->gen);
+        $this->assertInstanceOf(MigrationsAbstract::class, $this->migrations);
+        $this->migrations->create();
+
+        if (empty($files) === false) {
+            copy($to, $from);
+            unlink($to);
+        }
     }
 
     /**

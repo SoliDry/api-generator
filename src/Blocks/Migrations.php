@@ -48,12 +48,13 @@ class Migrations extends MigrationsAbstract
                          PhpInterface::UNDERSCORE . ModelsInterface::MIGRATION_TABLE;
         $attrKey = $this->generator->objectName . CustomsInterface::CUSTOM_TYPES_ATTRIBUTES;
 
-        $isFileExist = FileManager::migrationNotExists($this->generator, $migrationName);
-        $isAdding = (true === $this->generator->isMerge && empty($this->generator->diffTypes[$attrKey]) === false);
-        if(true === $isFileExist)
+        $isFileNonExistent = FileManager::migrationNotExists($this->generator, $migrationName);
+        $isAdding = ($this->generator->isMerge === true && empty($this->generator->diffTypes[$attrKey]) === false);
+
+        if($isFileNonExistent === true)
         {
             $this->setContent();
-        } else if (true === $isAdding) {
+        } else if ($isAdding === true) {
             $migrationName = str_replace(ModelsInterface::MIGRATION_TABLE_PTTRN, $this->tableName,
                 ModelsInterface::MIGRATION_ADD_COLUMN);
             // file exists and it is merge op - add columns/indices for this table
@@ -61,7 +62,8 @@ class Migrations extends MigrationsAbstract
             $migrationName = str_replace(ModelsInterface::MIGRATION_COLUMN_PTTRN, $columnName, $migrationName);
             $this->resetContent($this->generator->diffTypes[$attrKey], $columnName);
         }
-        if (true === $isFileExist || true === $isAdding) {
+
+        if ($isFileNonExistent === true || $isAdding === true) {
             $this->createMigrationFile($migrationName);
         }
     }

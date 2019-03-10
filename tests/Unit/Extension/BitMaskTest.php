@@ -16,7 +16,7 @@ class BitMaskTest extends TestCase
     private const FIELD = 'permissions';
     private $bitMask;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         $this->bitMask = new BitMask([

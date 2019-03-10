@@ -5,6 +5,7 @@ namespace SoliDryTest\Unit;
 use Illuminate\Foundation\Testing\TestCase as TestCaseLaravel;
 use Illuminate\Http\Request;
 use SoliDry\ApiGenerator;
+use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Types\ConfigInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\JwtInterface;
@@ -82,7 +83,7 @@ abstract class TestCase extends TestCaseLaravel
     protected function request(array $json = [])
     {
         $req = new Request();
-        $req->headers->set('Content-TYpe', 'application/json;ext=bulk');
+        $req->headers->set(JSONApiInterface::CONTENT_TYPE_KEY, 'application/json;ext=bulk');
         $req->initialize([], [], [], [], [], [], json_encode($json));
 
         return $req;
