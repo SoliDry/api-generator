@@ -1646,7 +1646,15 @@ There are also more things you can do, about rewinding history:
 
 Although, if you need to totally rollback the state of a system - use `--rollback` option, with the same keys as in merge. 
 
-======================
+==== Infection code coverage ====
+
+Metrics:
+
+     Mutation Score Indicator (MSI): 81%
+     Mutation Code Coverage: 86%
+     Covered Code MSI: 93%
+         
+==========
 
 HTTP request/response examples can be found on WiKi page - https://github.com/SoliDry/api-generator/wiki
 
