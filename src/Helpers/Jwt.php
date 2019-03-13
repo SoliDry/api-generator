@@ -18,10 +18,12 @@ class Jwt
 
     /**
      * Fulfills the token with data and signs it with key
+     *
      * @param int $uid
      * @param string $generatedId
      *
      * @return string
+     * @throws \BadMethodCallException
      */
     public static function create(int $uid, string $generatedId) : string
     {
@@ -40,10 +42,13 @@ class Jwt
 
     /**
      * Verifies token data and key
+     *
      * @param Token $token
      * @param string $generatedId
      *
      * @return bool
+     * @throws \BadMethodCallException
+     * @throws \OutOfBoundsException
      */
     public static function verify(Token $token, string $generatedId)
     {

@@ -2,6 +2,11 @@
 
 namespace SoliDry\Helpers;
 
+/**
+ * Class Console - provides primitive console operations
+ *
+ * @package SoliDry\Helpers
+ */
 class Console
 {
     // actions

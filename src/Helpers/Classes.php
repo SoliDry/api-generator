@@ -6,10 +6,12 @@ use SoliDry\Types\PhpInterface;
 
 class Classes
 {
+
     /**
      * @param string $class
      *
      * @return string
+     * @throws \ReflectionException
      */
     public static function getName(string $class): string
     {
@@ -22,6 +24,7 @@ class Classes
      * @param $object
      *
      * @return string
+     * @throws \ReflectionException
      */
     public static function getObjectName($object): string
     {
