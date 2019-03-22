@@ -6,7 +6,6 @@ use Illuminate\Console\Command;
 use SoliDry\Exceptions\DirectoryException;
 use SoliDry\Helpers\ConfigHelper;
 use SoliDry\ApiGenerator;
-use SoliDry\Types\ApiInterface;
 use SoliDry\Types\ConsoleInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModulesInterface;

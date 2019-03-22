@@ -213,12 +213,24 @@ trait ContentManager
     }
 
     /**
+     * Sets an amount of tabs to source code
      * @param int $amount
      */
     protected function setTabs(int $amount = 1): void
     {
         for ($i = $amount; $i > 0; --$i) {
             $this->sourceCode .= PhpInterface::TAB_PSR4;
+        }
+    }
+
+    /**
+     * Sets an amount of backslashes to source code
+     * @param int $amount
+     */
+    protected function setBackslashes(int $amount = 1): void
+    {
+        for ($i = $amount; $i > 0; --$i) {
+            $this->sourceCode .= PhpInterface::BACKSLASH;
         }
     }
 

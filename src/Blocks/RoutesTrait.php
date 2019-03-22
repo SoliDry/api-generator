@@ -25,7 +25,7 @@ trait RoutesTrait
      */
     public function openGroup() : void
     {
-        $versionNamespace = DirsInterface::MODULES_DIR .
+        $versionNamespace =  DirsInterface::MODULES_DIR .
             PhpInterface::BACKSLASH . PhpInterface::BACKSLASH
             . strtoupper($this->generator->version);
 
@@ -41,12 +41,16 @@ trait RoutesTrait
             PhpInterface::QUOTES
             . PhpInterface::PHP_NAMESPACE . PhpInterface::QUOTES
             . PhpInterface::SPACE . PhpInterface::DOUBLE_ARROW
-            . PhpInterface::SPACE . PhpInterface::QUOTES .
-            $versionNamespace
-            . PhpInterface::BACKSLASH . PhpInterface::BACKSLASH .
-            DirsInterface::HTTP_DIR
-            . PhpInterface::BACKSLASH . PhpInterface::BACKSLASH .
-            DirsInterface::CONTROLLERS_DIR . PhpInterface::QUOTES
+            . PhpInterface::SPACE . PhpInterface::QUOTES;
+
+            $this->setBackslashes(2);
+            $this->sourceCode .= $versionNamespace;
+
+            $this->setBackslashes(2);
+            $this->sourceCode .= DirsInterface::HTTP_DIR;
+
+            $this->setBackslashes(2);
+            $this->sourceCode .= DirsInterface::CONTROLLERS_DIR . PhpInterface::QUOTES
             . PhpInterface::CLOSE_BRACKET . PhpInterface::COMMA
             . PhpInterface::SPACE . PhpInterface::PHP_FUNCTION .
             PhpInterface::OPEN_PARENTHESES

@@ -13,8 +13,6 @@ interface RoutesInterface
     public const METHOD_DELETE  = 'delete';
     public const METHOD_OPTIONS = 'options';
 
-    public const ROUTES_FILE_NAME = 'routes';
-
-    // std routes path for laravel/lumen
-    public const ROUTES_APP_PATH = 'routes/web.php';
+    public const ROUTES_DIR = 'Routes';
+    public const ROUTES_FILE_NAME = 'web';
 }

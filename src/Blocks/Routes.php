@@ -38,8 +38,8 @@ class Routes
         $this->setRoutes();
         $isCreated = false;
 
-        $file = FileManager::getModulePath($this->generator, true) .
-            RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
+        $file = FileManager::getModulePath($this->generator) .
+            RoutesInterface::ROUTES_DIR . DIRECTORY_SEPARATOR . RoutesInterface::ROUTES_FILE_NAME . PhpInterface::PHP_EXT;
 
         // TODO: fix this behaviour - collect data 1-st for ex.
         if ($this->generator->routesCreated === 0 || file_exists($file) === false) {
