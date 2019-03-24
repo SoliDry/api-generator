@@ -89,7 +89,8 @@ in particular: directories for modular app, Controllers/FormRequests/Models+Pivo
 Routes (JSON API compatible) and even migrations to help you create RDBMS structure.
  
 ```oas/openapi.yaml``` - file in oas directory in the root of your project, 
-which should be prepared before or you may wish to just try by copying an example from ``` tests/functional/oas/openapi.yaml```
+which should be prepared before or you may wish to just try by copying an example from 
+``` cp -R vendor/solidry/api-generator/tests/functional/oas/ oas/``` and probably rewrite it for your needs.
 
 Options:
 
