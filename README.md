@@ -54,7 +54,7 @@ then in your project directory run:
 ``` 
 composer require SoliDry/api-generator
 ```
-It will automatically register package ServiceProvider by adding console command `api:generate` (you should see it when running `php artisan`) 
+It will automatically register Laravel ServiceProvider by adding console command `api:generate` (you should see it when running `php artisan`) 
 and also publish laravel-modules providers.
 
 #### Autoloading
