@@ -1628,7 +1628,7 @@ Metrics:
 
 HTTP request/response examples can be found on WiKi page - https://github.com/SoliDry/api-generator/wiki
 
-Laravel project example with generated files can be found here -  https://github.com/SoliDry/rjapi-laravel 
+Laravel project example with generated files can be found here -  https://github.com/SoliDry/laravel-api
 
 To get deep-into ```Open API``` specification - https://swagger.io/specification/
 
