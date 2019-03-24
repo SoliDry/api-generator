@@ -62,5 +62,8 @@
                 "SoliDry\\LaravelApiServiceProvider"
             ]
         }
+    },
+    "scripts": {
+        "post-package-install": "php artisan vendor:publish --provider=\"Nwidart\\Modules\\LaravelModulesServiceProvider\""
     }
 }
