@@ -16,7 +16,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 JSON API support turned on by default - see `Turn off JSON API support` section bellow 
 
 * [Installation](#user-content-installation-via-composer)
-    * [Configuration](#user-content-laravel-specific-configuration)
+    * [Configuration](#user-content-autoloading)
     * [Running generator](#user-content-running-generator)
     * [Docker repo](#user-content-docker-repository)
 * [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
@@ -54,28 +54,13 @@ then in your project directory run:
 ``` 
 composer require SoliDry/api-generator
 ```
-
-### Laravel specific configuration
-
-Add command to ```$commands``` array in ```app/Console/Kernel.php```
-```php
-protected $commands = [
-    ApiGenerator::class,
-];
-```
-
-#### Add Service Provider
-
-Publish the package's configuration file by running:
-
-```
-php artisan vendor:publish --provider="Nwidart\Modules\LaravelModulesServiceProvider"
-```
+It will automatically register package ServiceProvider by adding console command `api:generate` (you should see it when running `php artisan`) 
+and also publish laravel-modules providers.
 
 #### Autoloading
 
-By default Controllers, entities or repositories are not loaded automatically. You can autoload your modules using `psr-4`. For example :
-
+By default Controllers, entities or repositories are not loaded automatically. You can autoload your modules using `psr-4`. 
+For example :
 ```json
 {
   "autoload": {
