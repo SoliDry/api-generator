@@ -66,23 +66,7 @@ protected $commands = [
 
 #### Add Service Provider
 
-Next add the following service provider in `config/app.php`.
-
-```php
-'providers' => [
-  Nwidart\Modules\LaravelModulesServiceProvider::class,
-],
-```
-
-Next, add the following aliases to `aliases` array in the same file.
-
-```php
-'aliases' => [
-  'Module' => Nwidart\Modules\Facades\Module::class,
-],
-```
-
-Next publish the package's configuration file by running :
+Publish the package's configuration file by running:
 
 ```
 php artisan vendor:publish --provider="Nwidart\Modules\LaravelModulesServiceProvider"
@@ -341,7 +325,7 @@ Complete directory structure after generator will end up it`s work will be like:
 Modules/{ModuleName}/Http/Controllers/ - contains Controllers that extends the DefaultController (descendant of Laravel's Controller)
 Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes)
 Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
-Modules/{ModuleName}/Http/routes.php - contains routings pointing to Controllers with JSON API protocol support
+Modules/{ModuleName}/Routes/web.php - contains routings pointing to Controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
 
@@ -543,7 +527,7 @@ class Article extends BaseModel
 
 #### Routes
 
-Routes will be created in ```/Modules/{ModuleName}/Http/routes.php``` file, for every entity defined in yaml:
+Routes will be created in ```/Modules/{ModuleName}/Routes/web.php``` file, for every entity defined in yaml:
 ```php
 // >>>routes>>>
 // Article routes
@@ -912,8 +896,8 @@ As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` 
         'jwt' => \SoliDry\Extension\BaseJwt::class,    
 ```
 
-And just use this middleware in any requests U need defining 
-it in ```Modules/{ModuleName}/Http/routes.php```, ex: 
+And just use this middleware in any requests u need defining 
+it in ```Modules/{ModuleName}/Routes/web.php```, ex: 
 
 To declare JWT check only for one specific route: 
 ```php
