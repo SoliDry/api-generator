@@ -14,5 +14,5 @@ interface RoutesInterface
     public const METHOD_OPTIONS = 'options';
 
     public const ROUTES_DIR = 'Routes';
-    public const ROUTES_FILE_NAME = 'web';
+    public const ROUTES_FILE_NAME = 'api';
 }
