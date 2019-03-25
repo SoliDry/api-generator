@@ -50,10 +50,10 @@ composer create-project --prefer-dist laravel/laravel your_app
 
 then in your project directory run:
 ``` 
-composer require SoliDry/api-generator
+composer require solidry/api-generator
 ```
 It will automatically register Laravel ServiceProvider by adding console command `api:generate` (you should see it when running `php artisan`) 
-and also publish laravel-modules providers.
+and also publish "laravel-modules" providers.
 
 #### Autoloading
 
@@ -104,14 +104,15 @@ After that u can see the following dirs and files module structure in your proje
 ![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Docker repository
-Another way of installing and playing with api-generator (in sandbox fashion) is via public docker repo:
+Another way of installing and playing with api-generator (in sandbox fashion) is via https://github.com/SoliDry/laravel-api.
+Clone repository and run:
 ```bash
-docker pull zeusakm/ubuntuforapi
+docker-compose up -d
 ```
 
-There will be pre-installed Laravel 5.5.* application in `/var/www/api-generator` + php7.1/php7.1-fpm/nginx/mysql (with migrated tables) etc.
+You can see `Dockerfile` and `docker-compose.yml` files there.
 
-We'll be glad to any contribution for docker repository.
+PS Any contributions to build a better containers are welcome.
 
 ### Open API Types and Declarations
 OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
