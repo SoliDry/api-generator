@@ -11,9 +11,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 
 ![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
 ![alt Laravel logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/laravel-logo-white.png)
-![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png)
-
-JSON API support turned on by default - see `Turn off JSON API support` section bellow 
+![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png) 
 
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
@@ -303,7 +301,7 @@ To set default values for GET query parameters - set QueryParams like this:
         description: sha1 example
         default: db7329d5a3f381875ea6ce7e28fe1ea536d0acaf        
 ```
-it will be used on requests similar to: ```http://example.com/v1/article?include=tag``` 
+it will be used on requests similar to: ```http://example.com/api/v1/article?include=tag``` 
 where no params were passed.  
 
 Complete directory structure after generator will end up it`s work will be like:
@@ -311,7 +309,7 @@ Complete directory structure after generator will end up it`s work will be like:
 Modules/{ModuleName}/Http/Controllers/ - contains Controllers that extends the DefaultController (descendant of Laravel's Controller)
 Modules/{ModuleName}/Http/FormRequest/ - contains forms that extends the BaseFormRequest (descendant of Laravel's FormRequest) and validates input attributes (that were previously defined as *Attributes)
 Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (descendant of Laravel's Model) and maps attributes to RDBMS
-Modules/{ModuleName}/Routes/web.php - contains routings pointing to Controllers with JSON API protocol support
+Modules/{ModuleName}/Routes/api.php - contains routings pointing to Controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
 
@@ -513,7 +511,7 @@ class Article extends BaseModel
 
 #### Routes
 
-Routes will be created in ```/Modules/{ModuleName}/Routes/web.php``` file, for every entity defined in yaml:
+Routes will be created in ```/Modules/{ModuleName}/Routes/api.php``` file, for every entity defined in yaml:
 ```php
 // >>>routes>>>
 // Article routes
@@ -683,23 +681,23 @@ Generator will independently detect all relationships between entities.
 You may want to use additional query parameters to fetch includes 
 and/or pagination, for instance:
 ```php
-http://example.com/v1/article?include=tag&page=2&limit=10&sort=asc
+http://example.com/api/v1/article?include=tag&page=2&limit=10&sort=asc
 ```
 
 You may not wish to drag all the attributes/fields: 
 ```php
-http://example.com/v1/article/1?include=tag&data=["title", "description"]
+http://example.com/api/v1/article/1?include=tag&data=["title", "description"]
 ```
 Note: data array items MUST be set in double quotes.
 
 or you may want to ORDER BY several columns in different directions:
 ```php
-http://example.com/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
+http://example.com/api/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
 ```
 
 Also, you have an ability to filter results this way:
 ```php
-http://example.com/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
+http://example.com/api/v1/article?include=tag&filter=[["updated_at", ">", "2017-01-03 12:13:13"], ["updated_at", "<", "2017-01-03 12:13:15"]]
 ```
 those arrays will be put to Laravel where clause and accordingly protected by param bindings. 
 
@@ -883,7 +881,7 @@ As for any standard Laravel middleware register it in ```app/Http/Kernel.php``` 
 ```
 
 And just use this middleware in any requests u need defining 
-it in ```Modules/{ModuleName}/Routes/web.php```, ex: 
+it in ```Modules/{ModuleName}/Routes/api.php```, ex: 
 
 To declare JWT check only for one specific route: 
 ```php
@@ -895,7 +893,7 @@ To declare JWT check for routes group:
 Route::group(['middleware' => 'jwt', 
 ```
 JWT will be created on POST and updated on PATCH request to the entity you've been created, 
-for instance, if you send POST request to ```http://example.com/v1/user``` with the following content:
+for instance, if you send POST request to ```http://example.com/api/v1/user``` with the following content:
 ```json
 {
   "data": {
@@ -938,7 +936,7 @@ Note if JWT ```enabled=true```, password will be hashed with ```password_hash```
 Do not bother with ```"password": null,``` attribute it is unset before output for safety.
 You can add additional checks on password or other fields ex.: length, strength etc in Model on befor/afterSave events.
 
-An example for JWT refresh - ```http://example.com/v1/user/4```:
+An example for JWT refresh - ```http://example.com/api/v1/user/4```:
  
 ```json
 {
@@ -968,7 +966,7 @@ Response:
 
 Regular request with JWT will look like:
 ```
-http://example.com/v1/article?include=tag&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODVmYmM0NjUyN2MifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NWZiYzQ2NTI3YyIsImlhdCI6MTQ4NTE3NTc0OCwibmJmIjoxNDg1MTc1ODA4LCJleHAiOjE0ODUxNzkzNDgsInVpZCI6M30.js5_Fe5tFDfeK88KJJpSEpVO6rYBOG0UFAaVvlYYxcw
+http://example.com/api/v1/article?include=tag&jwt=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImp0aSI6IjU4ODVmYmM0NjUyN2MifQ.eyJpc3MiOiJsYXJhdmVsLmxvYyIsImF1ZCI6ImxhcmF2ZWwubG9jIiwianRpIjoiNTg4NWZiYzQ2NTI3YyIsImlhdCI6MTQ4NTE3NTc0OCwibmJmIjoxNDg1MTc1ODA4LCJleHAiOjE0ODUxNzkzNDgsInVpZCI6M30.js5_Fe5tFDfeK88KJJpSEpVO6rYBOG0UFAaVvlYYxcw
 ```
  
 The algorithm to sign the token is HS256, it can be changed in future releases 
@@ -1022,7 +1020,7 @@ Generated config output will look similar to:
 All specific settings including host/port/password, replication, clusters etc can be easily configured via Laravel standard Redis cache settings.
 Read more on this here - [Redis Laravel configuration](https://laravel.com/docs/5.6/redis#configuration)
 
-After cache settings configured - `index` and `view` requests (ex.: `/v1/article/1?include=tag&data=["title", "description"]` or `/v1/article?include=tag&filter=...`) 
+After cache settings configured - `index` and `view` requests (ex.: `/api/v1/article/1?include=tag&data=["title", "description"]` or `/api/v1/article?include=tag&filter=...`) 
 will put resulting data into cache with hashed key of a specified uri, thus providing a unique key=value storage mechanism.
 
 In Redis db instance you'll see serialized objects with keys like:
@@ -1193,7 +1191,7 @@ Meta data response example:
 
 Children elements stuck in every parent's `children` property array and it is empty if there are none.      
 
-To get a sub-trees of a top most ancestors - simply execute GET request for the item, ex.: `http://example.com/v1/menu/1`.
+To get a sub-trees of a top most ancestors - simply execute GET request for the item, ex.: `http://example.com/api/v1/menu/1`.
 See wiki page for real-world examples with Postman.
 
 ### Finite-state machine
