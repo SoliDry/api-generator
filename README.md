@@ -101,6 +101,7 @@ The output will look something like this:
 ![Console output](https://github.com/RJAPI/api-generator/blob/master/tests/images/Console_generator_output.png)
 
 After that u can see the following dirs and files module structure in your project:
+
 ![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Docker repository
