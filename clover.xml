@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1553927975">
-  <project timestamp="1553927975">
+<coverage generated="1553932041">
+  <project timestamp="1553932041">
     <package name="SoliDry">
       <file name="/Users/arthur/www/raml-json-api/src/ApiGenerator.php">
         <class name="ApiGenerator" namespace="SoliDry">
@@ -2068,11 +2068,11 @@
       </file>
       <file name="/Users/arthur/www/raml-json-api/src/Exceptions/BaseException.php">
         <class name="BaseException" namespace="SoliDry\Exceptions">
-          <metrics complexity="3" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="9" elements="19" coveredelements="11"/>
+          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="19" coveredelements="19"/>
         </class>
-        <line num="11" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="13" type="stmt" count="4"/>
-        <line num="14" type="stmt" count="4"/>
+        <line num="11" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="13" type="stmt" count="5"/>
+        <line num="14" type="stmt" count="5"/>
         <line num="16" type="method" name="__toString" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="18" type="stmt" count="1"/>
         <line num="19" type="stmt" count="1"/>
@@ -2081,15 +2081,15 @@
         <line num="22" type="stmt" count="1"/>
         <line num="23" type="stmt" count="1"/>
         <line num="24" type="stmt" count="1"/>
-        <line num="33" type="method" name="render" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="35" type="stmt" count="0"/>
-        <line num="39" type="stmt" count="0"/>
-        <line num="40" type="stmt" count="0"/>
-        <line num="41" type="stmt" count="0"/>
-        <line num="42" type="stmt" count="0"/>
-        <line num="43" type="stmt" count="0"/>
-        <line num="44" type="stmt" count="0"/>
-        <metrics loc="50" ncloc="44" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="9" elements="19" coveredelements="11"/>
+        <line num="33" type="method" name="render" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="35" type="stmt" count="1"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="40" type="stmt" count="1"/>
+        <line num="41" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="1"/>
+        <line num="44" type="stmt" count="1"/>
+        <metrics loc="50" ncloc="44" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="19" coveredelements="19"/>
       </file>
       <file name="/Users/arthur/www/raml-json-api/src/Exceptions/DirectoryException.php">
         <class name="DirectoryException" namespace="SoliDry\Exceptions">
@@ -2627,17 +2627,17 @@
         <line num="166" type="stmt" count="1"/>
         <line num="167" type="stmt" count="1"/>
         <line num="168" type="stmt" count="1"/>
-        <line num="175" type="method" name="rnd" visibility="public" complexity="1" crap="1" count="3"/>
-        <line num="177" type="stmt" count="3"/>
-        <line num="179" type="stmt" count="3"/>
-        <line num="189" type="method" name="xFetch" visibility="private" complexity="1" crap="1" count="3"/>
-        <line num="191" type="stmt" count="3"/>
+        <line num="176" type="method" name="rnd" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="178" type="stmt" count="3"/>
+        <line num="180" type="stmt" count="3"/>
+        <line num="190" type="method" name="xFetch" visibility="private" complexity="1" crap="1" count="3"/>
         <line num="192" type="stmt" count="3"/>
         <line num="193" type="stmt" count="3"/>
         <line num="194" type="stmt" count="3"/>
         <line num="195" type="stmt" count="3"/>
-        <line num="197" type="stmt" count="3"/>
-        <metrics loc="198" ncloc="134" classes="1" methods="12" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="43" elements="63" coveredelements="50"/>
+        <line num="196" type="stmt" count="3"/>
+        <line num="198" type="stmt" count="3"/>
+        <metrics loc="199" ncloc="134" classes="1" methods="12" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="43" elements="63" coveredelements="50"/>
       </file>
       <file name="/Users/arthur/www/raml-json-api/src/Extension/CustomSql.php">
         <class name="CustomSql" namespace="SoliDry\Extension" fullPackage="SoliDry" package="SoliDry">
@@ -3359,6 +3359,6 @@
     <file name="/Users/arthur/www/raml-json-api/src/Types/TestsInterface.php">
       <metrics loc="22" ncloc="20" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
-    <metrics files="79" loc="8363" ncloc="6027" classes="52" methods="397" coveredmethods="305" conditionals="0" coveredconditionals="0" statements="2531" coveredstatements="2202" elements="2928" coveredelements="2507"/>
+    <metrics files="79" loc="8364" ncloc="6027" classes="52" methods="397" coveredmethods="306" conditionals="0" coveredconditionals="0" statements="2531" coveredstatements="2209" elements="2928" coveredelements="2515"/>
   </project>
 </coverage>
