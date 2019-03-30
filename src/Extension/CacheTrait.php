@@ -29,7 +29,7 @@ trait CacheTrait
     private function set(string $key, $val, int $ttl = 0)
     {
         if ($ttl > 0) {
-            return Redis::set($key, $this->ser($val), 'EX', now()->addSeconds($ttl));
+            return Redis::set($key, $this->ser($val), 'EX', $ttl);
         }
 
         return Redis::set($key, $this->ser($val));
@@ -129,7 +129,7 @@ trait CacheTrait
         $delta = (Metrics::millitime() - $start) / 1000;
         $this->set($hashKey, $items, $ttl);
 
-        Redis::set($this->getDeltaKey($hashKey), now()->addSeconds($delta));
+        Redis::set($this->getDeltaKey($hashKey), $delta);
         return $items;
     }
 
@@ -171,6 +171,7 @@ trait CacheTrait
 
     /**
      * @return float
+     * @throws \Exception
      */
     public static function rnd() : float
     {
