@@ -6,7 +6,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 [![Total Downloads](https://poser.pugx.org/solidry/api-generator/downloads)](https://packagist.org/packages/solidry/api-generator)
 [![Latest Stable Version](https://poser.pugx.org/solidry/api-generator/v/stable)](https://packagist.org/packages/solidry/api-generator)
 [![Code Intelligence Status](https://scrutinizer-ci.com/g/SoliDry/api-generator/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-[![codecov](https://codecov.io/gh/RJAPI/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/RJAPI/api-generator)
+[![codecov](https://codecov.io/gh/SoliDry/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/SoliDry/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 ![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
@@ -108,7 +108,21 @@ class Handler extends ExceptionHandler
     }
 }
 ```
-As you may noticed it returns `Illuminate\Http\JsonResponse` Laravel object to output data appropriately.
+As you may noticed it returns `Illuminate\Http\JsonResponse` Laravel object to output data appropriately e.g.:
+```php
+{
+  "errors": [
+    {
+      "code": 0,
+      "message": "",
+      "file": "/vendor/laravel/framework/src/Illuminate/Routing/RouteCollection.php",
+      "line": 179,
+      "uri": "http://laravel.loc/api/v2/articl",
+      "meta": "#0 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(634): Illuminate\\Routing\\RouteCollection->match(Object(Illuminate\\Http\\Request))\n#1 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->findRoute(Object(Illuminate\\Http\\Request))\n#2 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))\n#3 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))\n#4 /vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))\n#5 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))\n#6 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#7 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))\n#8 /public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))\n#9 {main}"
+    }
+  ]
+}
+```
 
 ### Running generator
 
