@@ -17,6 +17,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
     * [Configuration](#user-content-autoloading)
     * [Running generator](#user-content-running-generator)
     * [Docker repo](#user-content-docker-repository)
+    * [Optional settings](#user-content-docker-optional-settings)
 * [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
@@ -74,6 +75,40 @@ refresh changes by running:
 ```
 composer dump-autoload
 ```
+
+#### Optional settings
+
+To provide Json API compatible error handler one can add `ErrorHandler` trait to `app/Exceptions/Handler` class 
+and return `return $this->renderJsonApi($request, $exception);` from standard Laravel `render` method, 
+complete example of `Handler` class will look something like this:
+```php
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use SoliDry\Exceptions\ErrorHandler;
+
+class Handler extends ExceptionHandler
+{
+    use ErrorHandler; 
+    
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception $exception
+     * @return JsonResponse
+     */
+    public function render($request, Exception $exception): JsonResponse
+    {
+        return $this->renderJsonApi($request, $exception); // method you should call to return json-api response
+    }
+}
+```
+As you may noticed it returns `Illuminate\Http\JsonResponse` Laravel object to output data appropriately.
 
 ### Running generator
 
