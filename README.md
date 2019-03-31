@@ -15,9 +15,9 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
+    * [Optional settings](#user-content-optional-settings)
     * [Running generator](#user-content-running-generator)
-    * [Docker repo](#user-content-docker-repository)
-    * [Optional settings](#user-content-docker-optional-settings)
+    * [Docker repo](#user-content-docker-repository)   
 * [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
@@ -121,6 +121,32 @@ As you may noticed it returns `Illuminate\Http\JsonResponse` Laravel object to o
       "meta": "#0 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(634): Illuminate\\Routing\\RouteCollection->match(Object(Illuminate\\Http\\Request))\n#1 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(623): Illuminate\\Routing\\Router->findRoute(Object(Illuminate\\Http\\Request))\n#2 /vendor/laravel/framework/src/Illuminate/Routing/Router.php(612): Illuminate\\Routing\\Router->dispatchToRoute(Object(Illuminate\\Http\\Request))\n#3 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(176): Illuminate\\Routing\\Router->dispatch(Object(Illuminate\\Http\\Request))\n#4 /vendor/laravel/framework/src/Illuminate/Routing/Pipeline.php(30): Illuminate\\Foundation\\Http\\Kernel->Illuminate\\Foundation\\Http\\{closure}(Object(Illuminate\\Http\\Request))\n#5 /vendor/laravel/framework/src/Illuminate/Pipeline/Pipeline.php(104): Illuminate\\Routing\\Pipeline->Illuminate\\Routing\\{closure}(Object(Illuminate\\Http\\Request))\n#6 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(151): Illuminate\\Pipeline\\Pipeline->then(Object(Closure))\n#7 /vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php(116): Illuminate\\Foundation\\Http\\Kernel->sendRequestThroughRouter(Object(Illuminate\\Http\\Request))\n#8 /public/index.php(55): Illuminate\\Foundation\\Http\\Kernel->handle(Object(Illuminate\\Http\\Request))\n#9 {main}"
     }
   ]
+}
+```
+
+The default Laravel installation has an `api` prefix for API routes. 
+If you want to access generated json api routes via their prefix first ex.: `/v2/article` or `/myshop/basket`, 
+you will need to remove the prefix from the `mapApiRoutes()` method in your  `RouteServiceProvider`.
+  
+```php
+<?php
+
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+
+class RouteServiceProvider extends ServiceProvider
+{
+    // ...
+
+    protected function mapApiRoutes()
+    {
+        // Route::prefix('api') // you don't need prefixes then
+        Route::middleware('api')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/api.php'));
+    }
 }
 ```
 
