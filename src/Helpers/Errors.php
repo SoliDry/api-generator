@@ -6,16 +6,18 @@ use SoliDry\Extension\JSONApiInterface;
 
 /**
  * Class Errors
+ *
  * @package SoliDry\Helpers
  */
 class Errors
 {
+
     /**
      * @param string $entity
      * @param $id
      * @return array
      */
-    public function getModelNotFound(string $entity, $id) : array
+    public function getModelNotFound(string $entity, $id): array
     {
         return [
             [

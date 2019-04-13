@@ -3,9 +3,13 @@
 namespace SoliDry\Blocks;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use League\Fractal\Resource\Collection as FractalCollection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use League\Fractal\Resource\ResourceAbstract;
+use SoliDry\Exceptions\ErrorHandler;
 use SoliDry\Extension\ApiController;
 use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Extension\BaseModel;
@@ -13,7 +17,9 @@ use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper as conf;
 use SoliDry\Helpers\ConfigOptions;
+use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
+use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModelsInterface;
@@ -34,6 +40,8 @@ use SoliDry\Types\ApiInterface;
  */
 trait EntitiesTrait
 {
+    use ErrorHandler;
+
     /**
      * Gets form request entity fully qualified path
      *
@@ -176,10 +184,15 @@ trait EntitiesTrait
     /**
      * Deltes bulk by applying it to transaction/rollback procedure
      *
-     * @param array $jsonApiAttributes
+     * @param Request $request
+     * @return Response
+     * @throws \LogicException
      */
-    public function removeBulk(array $jsonApiAttributes) : void
+    public function removeBulk(Request $request) : Response
     {
+        $json              = Json::decode($request->getContent());
+        $jsonApiAttributes = Json::getBulkAttributes($json);
+
         try {
             DB::beginTransaction();
 
@@ -188,14 +201,11 @@ trait EntitiesTrait
 
                 if ($model === null) {
                     DB::rollBack();
-                    Json::outputErrors(
-                        [
-                            [
-                                JSONApiInterface::ERROR_TITLE => 'There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID],
-                                JSONApiInterface::ERROR_DETAIL => 'There is no such id: ' . $jsonObject[JSONApiInterface::CONTENT_ID] . ' or model was already deleted - transaction has been rolled back.'
-                            ],
-                        ]
-                    );
+
+                    return (new JsonApiResponse())->getResponse(
+                        (new Json())->getErrors(
+                            (new Errors())->getModelNotFound($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID]))
+                        , JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
                 }
 
                 $model->delete();
@@ -203,9 +213,13 @@ trait EntitiesTrait
 
             DB::commit();
         } catch (\PDOException $e) {
-            echo $e->getTraceAsString();
             DB::rollBack();
+
+            return $this->getErrorResponse($request, $e);
         }
+
+        return (new JsonApiResponse())->getResponse(Json::prepareSerializedData(
+            new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -230,6 +244,8 @@ trait EntitiesTrait
 
     /**
      * Sets use stmt for Soft Delete op on model Entity
+     *
+     * @throws \ReflectionException
      */
     private function setUseSoftDelete() : void
     {

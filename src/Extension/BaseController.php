@@ -66,11 +66,6 @@ class BaseController extends ApiController
      */
     public function deleteBulk(Request $request) : Response
     {
-        $json              = Json::decode($request->getContent());
-        $jsonApiAttributes = Json::getBulkAttributes($json);
-
-        $this->removeBulk($jsonApiAttributes);
-
-        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->removeBulk($request);
     }
 }

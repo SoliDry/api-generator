@@ -9,6 +9,7 @@ use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Blocks\EntitiesTrait;
+use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Types\HTTPMethodsInterface;
 use SoliDry\Types\JwtInterface;
 use SoliDry\Types\ModelsInterface;
@@ -322,12 +323,6 @@ class ApiController extends Controller implements JSONApiInterface
      */
     public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : Response
     {
-        if ($responseCode === JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT) {
-            // ! it is important to pass empty string here, otherwise there will be Exception from ResponseFactory
-            // seems like a bug in Laravel - either don't have time to report them and don't like their PR rules
-            return response('')->withHeaders(JSONApiInterface::STANDARD_HEADERS)->setStatusCode($responseCode);
-        }
-
-        return response($json)->withHeaders(JSONApiInterface::STANDARD_HEADERS)->setStatusCode($responseCode);
+        return (new JsonApiResponse())->getResponse($json, $responseCode);
     }
 }

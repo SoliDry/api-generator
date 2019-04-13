@@ -8,6 +8,13 @@ use SoliDry\Helpers\Json;
 
 class BaseException extends \Exception
 {
+
+    /**
+     * BaseException constructor.
+     *
+     * @param $message
+     * @param int $code
+     */
     public function __construct($message, $code = 0)
     {
         parent::__construct($message, $code);
@@ -16,12 +23,12 @@ class BaseException extends \Exception
     public function __toString()
     {
         parent::__toString();
-        return Json::outputErrors([
+        return (new Json)->getErrors([
             'code'    => $this->getCode(),
             'message' => $this->getMessage(),
             'file'    => $this->getFile(),
             'line'    => $this->getLine(),
-        ], true);
+        ]);
     }
 
     /**

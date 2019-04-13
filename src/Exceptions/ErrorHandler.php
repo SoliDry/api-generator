@@ -6,6 +6,7 @@ namespace SoliDry\Exceptions;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use SoliDry\Extension\JSONApiInterface;
 
 trait ErrorHandler
@@ -33,6 +34,29 @@ trait ErrorHandler
                 ]
             ]
         );
+    }
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @param Exception $e
+     * @return Response
+     */
+    public function getErrorResponse($request, Exception $e) : Response
+    {
+        return response(response()->json(
+            [
+                JSONApiInterface::CONTENT_ERRORS => [
+                    [
+                        'code'    => $e->getCode(),
+                        'message' => $e->getMessage(),
+                        'file'    => $e->getFile(),
+                        'line'    => $e->getLine(),
+                        'uri'     => $request->getUri(),
+                        'meta'    => $e->getTraceAsString(),
+                    ],
+                ]
+            ]
+        )->content());
     }
 
     /**
