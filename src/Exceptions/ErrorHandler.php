@@ -8,6 +8,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use SoliDry\Extension\JSONApiInterface;
+use SoliDry\Helpers\Json;
 
 trait ErrorHandler
 {
@@ -37,13 +38,16 @@ trait ErrorHandler
     }
 
     /**
+     * Gets error from any Request and *Exception
+     *
      * @param \Illuminate\Http\Request $request
      * @param Exception $e
      * @return Response
+     * @throws \InvalidArgumentException
      */
     public function getErrorResponse($request, Exception $e) : Response
     {
-        return response(response()->json(
+        return response(Json::encode(
             [
                 JSONApiInterface::CONTENT_ERRORS => [
                     [
@@ -56,7 +60,7 @@ trait ErrorHandler
                     ],
                 ]
             ]
-        )->content());
+        ))->withHeaders(JSONApiInterface::STANDARD_HEADERS)->setStatusCode(JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
     }
 
     /**
