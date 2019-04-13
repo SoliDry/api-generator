@@ -8,7 +8,6 @@ use Illuminate\Http\Response;
 use League\Fractal\Resource\Collection as FractalCollection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
-use League\Fractal\Resource\ResourceAbstract;
 use SoliDry\Exceptions\ErrorHandler;
 use SoliDry\Extension\ApiController;
 use SoliDry\Extension\BaseFormRequest;
@@ -75,14 +74,19 @@ trait EntitiesTrait
     /**
      * Save bulk transactionally, if there are some errors - rollback
      *
-     * @param array $jsonApiAttributes
-     * @return ResourceAbstract
+     * @param Request $request
+     * @return Response
+     * @throws \InvalidArgumentException
      * @throws \SoliDry\Exceptions\AttributesException
+     * @throws \LogicException
      */
-    protected function saveBulk(array $jsonApiAttributes) : ResourceAbstract
+    protected function saveBulk(Request $request) : Response
     {
         $meta       = [];
         $collection = new Collection();
+
+        $json              = Json::decode($request->getContent());
+        $jsonApiAttributes = Json::getBulkAttributes($json);
 
         try {
             DB::beginTransaction();
@@ -115,6 +119,7 @@ trait EntitiesTrait
 
                 $collection->push($this->model);
                 $this->model->save();
+
                 // jwt
                 if ($this->configOptions->getIsJwtAction() === true) {
                     $this->createJwtUser(); // !!! model is overridden
@@ -125,26 +130,35 @@ trait EntitiesTrait
                     $this->model = $this->setFlagsCreate();
                 }
             }
+
             DB::commit();
         } catch (\PDOException $e) {
-            echo $e->getTraceAsString();
             DB::rollBack();
+
+            return $this->getErrorResponse($request, $e);
         }
 
-        return Json::getResource($this->formRequest, $collection, $this->entity, true, $meta);
+        return $this->getResponse(Json::prepareSerializedData(
+            Json::getResource($this->formRequest, $collection, $this->entity, true, $meta)),
+            JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
      * Mutates/Updates a bulk by applying it to transaction/rollback procedure
      *
-     * @param array $jsonApiAttributes
-     * @return ResourceAbstract
+     * @param Request $request
+     * @return Response
+     * @throws \InvalidArgumentException
      * @throws \SoliDry\Exceptions\AttributesException
+     * @throws \LogicException
      */
-    protected function mutateBulk(array $jsonApiAttributes) : ResourceAbstract
+    protected function mutateBulk(Request $request) : Response
     {
         $meta       = [];
         $collection = new Collection();
+
+        $json              = Json::decode($request->getContent());
+        $jsonApiAttributes = Json::getBulkAttributes($json);
 
         try {
             DB::beginTransaction();
@@ -174,11 +188,12 @@ trait EntitiesTrait
             }
             DB::commit();
         } catch (\PDOException $e) {
-            echo $e->getTraceAsString();
             DB::rollBack();
+
+            return $this->getErrorResponse($request, $e);
         }
 
-        return Json::getResource($this->formRequest, $collection, $this->entity, true, $meta);
+        return $this->getResponse(Json::prepareSerializedData(Json::getResource($this->formRequest, $collection, $this->entity, true, $meta)));
     }
 
     /**
@@ -204,8 +219,8 @@ trait EntitiesTrait
 
                     return (new JsonApiResponse())->getResponse(
                         (new Json())->getErrors(
-                            (new Errors())->getModelNotFound($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID]))
-                        , JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+                            (new Errors())->getModelNotFound($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID])),
+                        JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
                 }
 
                 $model->delete();

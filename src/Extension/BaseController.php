@@ -5,9 +5,7 @@ namespace SoliDry\Extension;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Route;
-use League\Fractal\Resource\Collection;
 use SoliDry\Exceptions\HeadersException;
-use SoliDry\Helpers\Json;
 use SoliDry\Helpers\Request as RequestHelper;
 use SoliDry\Types\ErrorsInterface;
 
@@ -32,14 +30,13 @@ class BaseController extends ApiController
      *
      * @param Request $request
      * @return Response
+     * @throws \LogicException
+     * @throws \InvalidArgumentException
      * @throws \SoliDry\Exceptions\AttributesException
      */
     public function createBulk(Request $request) : Response
     {
-        $json              = Json::decode($request->getContent());
-        $jsonApiAttributes = Json::getBulkAttributes($json);
-
-        return $this->getResponse(Json::prepareSerializedData($this->saveBulk($jsonApiAttributes)), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->saveBulk($request);
     }
 
     /**
@@ -47,14 +44,13 @@ class BaseController extends ApiController
      *
      * @param Request $request
      * @return Response
+     * @throws \InvalidArgumentException
+     * @throws \LogicException
      * @throws \SoliDry\Exceptions\AttributesException
      */
     public function updateBulk(Request $request) : Response
     {
-        $json              = Json::decode($request->getContent());
-        $jsonApiAttributes = Json::getBulkAttributes($json);
-
-        return $this->getResponse(Json::prepareSerializedData($this->mutateBulk($jsonApiAttributes)));
+        return $this->mutateBulk($request);
     }
 
     /**
