@@ -1,0 +1,129 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Articles",
+        "description": "This api provides access to articles",
+        "version": "v3"
+    },
+    "servers": [
+        {
+            "url": "https://{environment}.example.com:{port}/{basePath}",
+            "description": "Production server",
+            "variables": {
+                "environment": {
+                    "default": "api",
+                    "description": "An api for devices at Google dot com"
+                },
+                "basePath": {
+                    "default": "v3"
+                },
+                "port": {
+                    "enum": [
+                        "80",
+                        "443"
+                    ],
+                    "default": "80"
+                }
+            }
+        }
+    ],
+    "uses": {
+        "topics": "oas/topic.json"
+    },
+    "components": {
+        "schemas": {
+            "ID": {
+                "type": "integer",
+                "required": true,
+                "maximum": 20
+            },
+            "SID": {
+                "type": "string",
+                "required": true,
+                "maxLength": 128
+            },
+            "Type": {
+                "type": "string",
+                "required": true,
+                "minLength": 1,
+                "maxLength": 255
+            },
+            "DataObject": {
+                "type": "object",
+                "required": true
+            },
+            "DataArray": {
+                "type": "array",
+                "required": true
+            },
+            "RelationshipsDataItem": {
+                "type": "object",
+                "properties": {
+                    "id": "ID",
+                    "type": "Type"
+                }
+            },
+            "RelationshipsDataItemSID": {
+                "type": "object",
+                "properties": {
+                    "id": "SID",
+                    "type": "Type"
+                }
+            },
+            "Redis": {
+                "type": "object"
+            },
+            "TagRelationships": {
+                "description": "Tag relationship description",
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "DataArray",
+                        "items": {
+                            "type": "RelationshipsDataItem"
+                        }
+                    }
+                }
+            },
+            "TagAttributes": {
+                "description": "Tag attributes",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 3
+                    }
+                }
+            },
+            "Tag": {
+                "type": "object",
+                "properties": {
+                    "type": "Type",
+                    "id": "ID",
+                    "attributes": "TagAttributes",
+                    "relationships": {
+                        "type": "ArticleRelationships[]"
+                    },
+                    "cache": {
+                        "type": "Redis",
+                        "properties": {
+                            "stampede_xfetch": {
+                                "type": "boolean",
+                                "default": true
+                            },
+                            "stampede_beta": {
+                                "type": "number",
+                                "default": 1.1
+                            },
+                            "ttl": {
+                                "type": "integer",
+                                "default": 3600
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
