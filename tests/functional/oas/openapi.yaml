@@ -1,5 +1,8 @@
 openapi: 3.0.1
-info: This api provides access to articles
+info:
+  title: Articles
+  description: This api provides access to articles
+  version: v3
 servers:
 - url: https://{environment}.example.com:{port}/{basePath}
   description: Production server
