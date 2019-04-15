@@ -161,7 +161,7 @@
                         "minLength": 16,
                         "maxLength": 255,
                         "facets": {
-                            "index" : {
+                            "index": {
                                 "idx_url": "unique"
                             }
                         }
@@ -173,13 +173,28 @@
                     },
                     "status": {
                         "description": "The state of an article",
-                        "enum": ["draft", "published", "postponed", "archived"],
+                        "enum": [
+                            "draft",
+                            "published",
+                            "postponed",
+                            "archived"
+                        ],
                         "facets": {
                             "state_machine": {
-                                "initial": ["draft"],
-                                "draft": ["published"]
-                                "published": ["archived", "postponed"]
-                                "postponed": ["published", "archived"]
+                                "initial": [
+                                    "draft"
+                                ],
+                                "draft": [
+                                    "published"
+                                ]
+                                "published": [
+                                    "archived",
+                                    "postponed"
+                                ]
+                                "postponed": [
+                                    "published",
+                                    "archived"
+                                ]
                                 "archived": []
                             }
                         }
@@ -284,6 +299,102 @@
                         "description": "sha1 example",
                         "default": "db7329d5a3f381875ea6ce7e28fe1ea536d0acaf"
                     }
+                }
+            },
+            "UserAttributes": {
+                "type": "object",
+                "properties": {
+                    "first_name": {
+                        "required": true,
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 256
+                    },
+                    "last_name": {
+                        "required": false,
+                        "type": "string",
+                        "minLength": 16,
+                        "maxLength": 256,
+                        "facets": {
+                            "composite_index": {
+                                "index": [
+                                    "first_name",
+                                    "last_name"
+                                ]
+                            }
+                        }
+                    },
+                    "password": {
+                        "description": "user password to refresh JWT (encrypted with password_hash)",
+                        "required": true,
+                        "type": "string",
+                        "maxLength": 255
+                    },
+                    "jwt": {
+                        "description": "Special field to run JWT Auth via requests",
+                        "required": true,
+                        "type": "string",
+                        "maxLength": 512,
+                        "default": " "
+                    },
+                    "permissions": {
+                        "type": "integer",
+                        "required": false,
+                        "maximum": 20,
+                        "facets": {
+                            "bit_mask": {
+                                "publisher": 1,
+                                "editor": 2,
+                                "manager": 4,
+                                "photo_reporter": 8,
+                                "admin": 16
+                            }
+                        }
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "type": "Type",
+                    "id": "ID",
+                    "attributes": "UserAttributes"
+                }
+            },
+            "Trees": {
+                "type": "object",
+                "properties": {
+                    "menu": {
+                        "type": "boolean",
+                        "default": true
+                    }
+                }
+            },
+            "MenuAttributes": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "required": true,
+                        "type": "string"
+                    },
+                    "rfc": {
+                        "type": "string",
+                        "default": "/"
+                    },
+                    "parent_id": {
+                        "description": "mandatory field for building trees",
+                        "type": "integer",
+                        "maximum": 10,
+                        "default": 0
+                    }
+                }
+            },
+            "Menu": {
+                "type": "object",
+                "properties": {
+                    "type": "Type",
+                    "id": "ID",
+                    "attributes": "MenuAttributes"
                 }
             }
         }
