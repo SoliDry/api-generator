@@ -1,0 +1,96 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Articles",
+        "description": "This api provides access to articles",
+        "version": "v3"
+    },
+    "servers": [
+        {
+            "url": "https://{environment}.example.com:{port}/{basePath}",
+            "description": "Production server",
+            "variables": {
+                "environment": {
+                    "default": "api",
+                    "description": "An api for devices at Google dot com"
+                },
+                "basePath": {
+                    "default": "v3"
+                },
+                "port": {
+                    "enum": [
+                        "80",
+                        "443"
+                    ],
+                    "default": "80"
+                }
+            }
+        }
+    ],
+    "components": {
+        "schemas": {
+            "ID": {
+                "type": "integer",
+                "required": true,
+                "maximum": 20
+            },
+            "SID": {
+                "type": "string",
+                "required": true,
+                "maxLength": 128
+            },
+            "Type": {
+                "type": "string",
+                "required": true,
+                "minLength": 1,
+                "maxLength": 255
+            },
+            "DataObject": {
+                "type": "object",
+                "required": true
+            },
+            "DataArray": {
+                "type": "array",
+                "required": true
+            },
+            "RelationshipsDataItem": {
+                "type": "object",
+                "properties": {
+                    "id": "ID",
+                    "type": "Type"
+                }
+            },
+            "ArticleRelationships": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "DataArray",
+                        "items": {
+                            "type": "RelationshipsDataItem"
+                        }
+                    }
+                }
+            },
+            "TopicAttributes": {
+                "description": "Article attributes description",
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "required": true,
+                        "minLength": 16,
+                        "maxLength": 256
+                    }
+                }
+            },
+            "Topic": {
+                "type": "object",
+                "properties": {
+                    "type": "Type",
+                    "id": "ID",
+                    "attributes": "TopicAttributes"
+                }
+            }
+        }
+    }
+}
