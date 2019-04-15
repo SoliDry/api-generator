@@ -99,7 +99,7 @@ class BaseCommand extends Command
 
     private function setParser($files)
     {
-        $filename = empty($files[0]) ? $files : $files[0];
+        $filename = is_array($files) ? $files[0] : $files;
         $ext = pathinfo($filename, PATHINFO_EXTENSION);
 
         $this->parser = ($ext === 'json') ? Json::class : Yaml::class;
