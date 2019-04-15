@@ -165,6 +165,8 @@ Routes (JSON API compatible) and even migrations to help you create RDBMS struct
 which should be prepared before or you may wish to just try by copying an example from 
 ``` cp -R vendor/solidry/api-generator/tests/functional/oas/ oas/``` and probably rewrite it for your needs.
 
+You can also use `.json` ext/format to produce the same results if required or more convenient for your environment.  
+
 Options:
 
 ```--migrations``` is an option to create migrations (create_entityName_table) for every entity + pivots if there are ManyToMany relationships.
@@ -216,6 +218,43 @@ servers:
 uses:
   topics: oas/topic.yaml
 ```
+
+or in json:
+```json
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "Articles",
+        "description": "This api provides access to articles",
+        "version": "v3"
+    },
+    "servers": [
+        {
+            "url": "https://{environment}.example.com:{port}/{basePath}",
+            "description": "Production server",
+            "variables": {
+                "environment": {
+                    "default": "api",
+                    "description": "An api for devices at Google dot com"
+                },
+                "basePath": {
+                    "default": "v3"
+                },
+                "port": {
+                    "enum": [
+                        "80",
+                        "443"
+                    ],
+                    "default": "80"
+                }
+            }
+        }
+    ],
+    "uses": {
+        "topics": "oas/topic.json"
+    }
+}
+```
 U can set multiple servers as well as multiple files into the main `openapi.yaml`, thus code will be generated for every server module e.g.: Modules/v2, Modules/v3, Modules/v4 
 and there will be other Types from different files. 
 
@@ -225,6 +264,11 @@ components:
   schemas:
 ``` 
 
+or in json:
+```json
+"components": {
+    "schemas": {
+```
 Types ``` ID, Type, DataObject/DataArray``` are special helper Types - !required
  
 You can easily add `string` IDs to entities you'd like for example `SID` can be placed in `Article` entity like that `id: SID` - api-generator 
@@ -252,6 +296,34 @@ will produce migrations, relations and models respectively.
     required: true
 ```
 
+or in json:
+```json
+    "ID": {
+        "type": "integer",
+        "required": true,
+        "maximum": 20
+    },
+    "SID": {
+        "type": "string",
+        "required": true,
+        "maxLength": 128
+    },
+    "Type": {
+        "type": "string",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 255
+    },
+    "DataObject": {
+        "type": "object",
+        "required": true
+    },
+    "DataArray": {
+        "type": "array",
+        "required": true
+    }
+```
+
 Special data type ``` RelationshipsDataItem ``` - !required
 ```yaml
   RelationshipsDataItem:
@@ -259,6 +331,17 @@ Special data type ``` RelationshipsDataItem ``` - !required
     properties:
       id: ID
       type: Type
+```
+
+or in json:
+```json
+    "RelationshipsDataItem": {
+        "type": "object",
+        "properties": {
+            "id": "ID",
+            "type": "Type"
+        }
+    }
 ```
 defined in every relationship custom type
 
@@ -315,6 +398,106 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
         maximum: 9
         format: double     
 ```
+or in json:
+```json
+    "ArticleAttributes": {
+        "description": "Article attributes description",
+        "type": "object",
+        "properties": {
+            "title": {
+                "type": "string",
+                "required": true,
+                "minLength": 16,
+                "maxLength": 256
+            },
+            "description": {
+                "required": true,
+                "type": "string",
+                "minLength": 32,
+                "maxLength": 1024,
+                "facets": {
+                    "spell_check": true,
+                    "spell_language": "en"
+                }
+            },
+            "url": {
+                "required": false,
+                "type": "string",
+                "minLength": 16,
+                "maxLength": 255,
+                "facets": {
+                    "index": {
+                        "idx_url": "unique"
+                    }
+                }
+            },
+            "show_in_top": {
+                "description": "Show at the top of main page",
+                "required": false,
+                "type": "boolean"
+            },
+            "status": {
+                "description": "The state of an article",
+                "enum": [
+                    "draft",
+                    "published",
+                    "postponed",
+                    "archived"
+                ],
+                "facets": {
+                    "state_machine": {
+                        "initial": [
+                            "draft"
+                        ],
+                        "draft": [
+                            "published"
+                        ],
+                        "published": [
+                            "archived",
+                            "postponed"
+                        ],
+                        "postponed": [
+                            "published",
+                            "archived"
+                        ],
+                        "archived": []
+                    }
+                }
+            },
+            "topic_id": {
+                "description": "ManyToOne Topic relationship",
+                "required": true,
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 6,
+                "facets": {
+                    "index": {
+                        "idx_fk_topic_id": "foreign",
+                        "references": "id",
+                        "on": "topic",
+                        "onDelete": "cascade",
+                        "onUpdate": "cascade"
+                    }
+                }
+            },
+            "rate": {
+                "type": "number",
+                "minimum": 3,
+                "maximum": 9,
+                "format": "double"
+            },
+            "date_posted": {
+                "type": "date-only"
+            },
+            "time_to_live": {
+                "type": "time-only"
+            },
+            "deleted_at": {
+                "type": "datetime"
+            }
+        }
+    }
+```
 
 Relationships custom type definition semantics ```*Relationships```
 ```yaml
@@ -328,6 +511,21 @@ Relationships custom type definition semantics ```*Relationships```
           type: RelationshipsDataItem
 ```
 
+```json
+    "TagRelationships": {
+        "description": "Tag relationship description",
+        "type": "object",
+        "properties": {
+            "data": {
+                "type": "DataArray",
+                "items": {
+                    "type": "RelationshipsDataItem"
+                }
+            }
+        }
+    }
+```
+
 Complete composite Object looks like this: 
 ```yaml
   Article:
@@ -338,6 +536,20 @@ Complete composite Object looks like this:
       attributes: ArticleAttributes
       relationships:
         type: TagRelationships[] | TopicRelationships     
+```
+
+```json
+    "Article": {
+        "type": "object",
+        "properties": {
+            "type": "Type",
+            "id": "SID",
+            "attributes": "ArticleAttributes",
+            "relationships": {
+                "type": "TagRelationships[] | TopicRelationships"
+            }
+        }
+    }
 ```
 That is all that api-generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
