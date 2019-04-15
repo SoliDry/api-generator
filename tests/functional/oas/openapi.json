@@ -186,15 +186,15 @@
                                 ],
                                 "draft": [
                                     "published"
-                                ]
+                                ],
                                 "published": [
                                     "archived",
                                     "postponed"
-                                ]
+                                ],
                                 "postponed": [
                                     "published",
                                     "archived"
-                                ]
+                                ],
                                 "archived": []
                             }
                         }
