@@ -214,9 +214,18 @@ class Json
      * @param mixed $json
      * @return mixed
      */
-    public static function decode($json)
+    public static function decode(string $json): array
     {
         return json_decode($json, true);
+    }
+
+    /**
+     * @param string $json
+     * @return array
+     */
+    public static function parse(string $json): array
+    {
+        return self::decode($json);
     }
 
     /**

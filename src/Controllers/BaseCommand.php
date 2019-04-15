@@ -8,6 +8,7 @@ use SoliDry\Blocks\FileManager;
 use SoliDry\Blocks\Module;
 use SoliDry\Exceptions\DirectoryException;
 use SoliDry\Exceptions\SchemaException;
+use SoliDry\Helpers\Json;
 use SoliDry\Types\ConsoleInterface;
 use SoliDry\Types\CustomsInterface;
 use SoliDry\Types\DirsInterface;
@@ -18,39 +19,40 @@ use Symfony\Component\Yaml\Yaml;
 
 class BaseCommand extends Command
 {
+
     use GeneratorTrait;
 
     // dirs
-    public $rootDir        = '';
-    public $appDir         = '';
-    public $modulesDir     = '';
-    public $httpDir        = '';
+    public $rootDir = '';
+    public $appDir = '';
+    public $modulesDir = '';
+    public $httpDir = '';
     public $controllersDir = '';
     public $formRequestDir = '';
-    public $entitiesDir    = '';
-    public $migrationsDir  = '';
+    public $entitiesDir = '';
+    public $migrationsDir = '';
 
     public $version;
-    public $objectName        = '';
+    public $objectName = '';
     public $defaultController = 'Default';
     public $uriNamedParams;
     public $force;
-    public $customTypes       = [
+    public $customTypes = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
 
-    public  $types          = [];
-    public  $currentTypes   = [];
-    public  $historyTypes   = [];
-    public  $mergedTypes    = [];
-    public  $diffTypes      = [];
-    public  $objectProps    = [];
-    public  $generatedFiles = [];
-    public  $relationships  = [];
-    private $files          = [];
+    public $types = [];
+    public $currentTypes = [];
+    public $historyTypes = [];
+    public $mergedTypes = [];
+    public $diffTypes = [];
+    public $objectProps = [];
+    public $generatedFiles = [];
+    public $relationships = [];
+    private $files = [];
 
     public $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
@@ -69,6 +71,9 @@ class BaseCommand extends Command
 
     public $isRollback = false;
 
+    // parser class
+    private $parser = Yaml::class;
+
     /**
      * Generates api components for OAS
      *
@@ -78,34 +83,54 @@ class BaseCommand extends Command
      */
     public function actionIndex($files)
     {
-        if ($this->isRollback) {
-            $this->files = $files;
-            $this->data = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $files[0]));
-        } else {
-            $this->files[] = $files;
-            $this->data = Yaml::parse(file_get_contents($files));
-        }
+        $this->setParser($files);
+        $this->parse($files);
 
         $this->validate();
         $this->generateOpenApi();
     }
 
+    private function setParser($files)
+    {
+        $filename = empty($files[0]) ? $files : $files[0];
+        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+
+        $this->parser = ($ext === 'json') ? Json::class : Yaml::class;
+    }
+
+    /**
+     * @param $files
+     */
+    private function parse($files)
+    {
+        if ($this->isRollback) {
+            $this->files = $files;
+            $this->data = $this->parser::parse(file_get_contents($this->formatGenPathByDir() . $files[0]));
+        } else {
+            $this->files[] = $files;
+            $this->data = $this->parser::parse(file_get_contents($files));
+        }
+    }
+
     /**
      * Validates OAS + Custom fields
+     *
      * @throws SchemaException
      */
     private function validate()
     {
         // required yaml fields will be thrown as Exceptions
         if (empty($this->data[ApiInterface::OPEN_API_KEY])) {
-            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_OPEN_API_KEY], ErrorsInterface::CODE_OPEN_API_KEY);
+            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_OPEN_API_KEY],
+                ErrorsInterface::CODE_OPEN_API_KEY);
         }
 
         $schemas = $this->data[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
         if (empty($schemas[CustomsInterface::CUSTOM_TYPES_ID])
             || empty($schemas[CustomsInterface::CUSTOM_TYPES_TYPE])
             || empty($schemas[CustomsInterface::CUSTOM_RELATIONSHIPS_DATA_ITEM])) {
-            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_CUSTOM_TYPES], ErrorsInterface::CODE_CUSTOM_TYPES);
+            throw new SchemaException(ErrorsInterface::CONSOLE_ERRORS[ErrorsInterface::CODE_CUSTOM_TYPES],
+                ErrorsInterface::CODE_CUSTOM_TYPES);
         }
 
         if (empty($this->data[ApiInterface::API_INFO])) {
@@ -120,16 +145,16 @@ class BaseCommand extends Command
      */
     private function generateOpenApi()
     {
-        $this->appDir         = DirsInterface::APPLICATION_DIR;
+        $this->appDir = DirsInterface::APPLICATION_DIR;
         $this->controllersDir = DirsInterface::CONTROLLERS_DIR;
-        $this->entitiesDir    = DirsInterface::ENTITIES_DIR;
-        $this->modulesDir     = DirsInterface::MODULES_DIR;
-        $this->httpDir        = DirsInterface::HTTP_DIR;
+        $this->entitiesDir = DirsInterface::ENTITIES_DIR;
+        $this->modulesDir = DirsInterface::MODULES_DIR;
+        $this->httpDir = DirsInterface::HTTP_DIR;
         $this->formRequestDir = DirsInterface::FORM_REQUEST_DIR;
-        $this->migrationsDir  = DirsInterface::MIGRATIONS_DIR;
+        $this->migrationsDir = DirsInterface::MIGRATIONS_DIR;
 
         foreach ($this->data[ApiInterface::API_SERVERS] as $server) {
-            $vars          = $server[ApiInterface::API_VARS];
+            $vars = $server[ApiInterface::API_VARS];
             $this->version = $vars[ApiInterface::API_BASE_PATH][ApiInterface::API_DEFAULT];
 
             if (env('APP_ENV') === 'dev') { // for test env based on .env
@@ -245,25 +270,25 @@ class BaseCommand extends Command
         FileManager::createPath($this->formatMigrationsPath());
     }
 
-    public function formatControllersPath() : string
+    public function formatControllersPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->controllersDir;
     }
 
-    public function formatRequestsPath() : string
+    public function formatRequestsPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this, true) . $this->formRequestDir;
     }
 
-    public function formatEntitiesPath() : string
+    public function formatEntitiesPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . $this->entitiesDir;
     }
 
-    public function formatMigrationsPath() : string
+    public function formatMigrationsPath(): string
     {
         /** @var Command $this */
         return FileManager::getModulePath($this) . DirsInterface::DATABASE_DIR . PhpInterface::SLASH
@@ -309,15 +334,15 @@ class BaseCommand extends Command
         if (empty($this->data[ApiInterface::RAML_KEY_USES]) === false) {
             if ($this->isRollback) {
                 foreach ($this->files as $file) {
-                    $fileData    = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
+                    $fileData = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
                     $this->types += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                 }
             } else {
                 $files = $this->data[ApiInterface::RAML_KEY_USES];
                 foreach ($files as $file) {
                     $this->files[] = $file;
-                    $fileData      = Yaml::parse(file_get_contents($file));
-                    $this->types   += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
+                    $fileData = Yaml::parse(file_get_contents($file));
+                    $this->types += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                 }
             }
         }
@@ -333,7 +358,7 @@ class BaseCommand extends Command
             FileManager::createPath($this->formatGenPath());
             foreach ($this->files as $file) {
                 $pathInfo = pathinfo($file);
-                $dest     = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
+                $dest = $this->formatGenPath() . date('His') . PhpInterface::UNDERSCORE
                     . $pathInfo['filename'] . PhpInterface::DOT . $pathInfo['extension'];
                 copy($file, $dest);
             }
