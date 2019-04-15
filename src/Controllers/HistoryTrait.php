@@ -170,7 +170,7 @@ trait HistoryTrait
             foreach ($files as $file) {
                 if (($pos = strpos($file, ApiInterface::OPEN_API_KEY)) !== false) {
                     $lastFiles[] = $file;
-                    $content = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
+                    $content = $this->parser::parse(file_get_contents($this->formatGenPathByDir() . $file));
                     if (empty($content[ApiInterface::RAML_KEY_USES]) === false) {
                         foreach ($content[ApiInterface::RAML_KEY_USES] as $subFile) {
                             $lastFiles[] = substr($file, 0, $pos) . basename($subFile);
@@ -203,8 +203,8 @@ trait HistoryTrait
             foreach ($inputFiles as $inFile) {
 
                 if (mb_strpos($file, basename($inFile), null, PhpInterface::ENCODING_UTF8) !== false) {
-                    $dataCurrent = Yaml::parse(file_get_contents($inFile));
-                    $dataHistory = Yaml::parse(file_get_contents($path . $file));
+                    $dataCurrent = $this->parser::parse(file_get_contents($inFile));
+                    $dataHistory = $this->parser::parse(file_get_contents($path . $file));
 
                     $this->currentTypes = $dataCurrent[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                     $this->historyTypes = $dataHistory[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];

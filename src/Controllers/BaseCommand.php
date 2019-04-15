@@ -17,6 +17,13 @@ use SoliDry\Types\PhpInterface;
 use SoliDry\Types\ApiInterface;
 use Symfony\Component\Yaml\Yaml;
 
+/**
+ * Class BaseCommand
+ *
+ * @package SoliDry\Controllers
+ *
+ * @property Yaml|Json parser
+ */
 class BaseCommand extends Command
 {
 
@@ -334,14 +341,14 @@ class BaseCommand extends Command
         if (empty($this->data[ApiInterface::RAML_KEY_USES]) === false) {
             if ($this->isRollback) {
                 foreach ($this->files as $file) {
-                    $fileData = Yaml::parse(file_get_contents($this->formatGenPathByDir() . $file));
+                    $fileData = $this->parser::parse(file_get_contents($this->formatGenPathByDir() . $file));
                     $this->types += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                 }
             } else {
                 $files = $this->data[ApiInterface::RAML_KEY_USES];
                 foreach ($files as $file) {
                     $this->files[] = $file;
-                    $fileData = Yaml::parse(file_get_contents($file));
+                    $fileData = $this->parser::parse(file_get_contents($file));
                     $this->types += $fileData[ApiInterface::API_COMPONENTS][ApiInterface::API_SCHEMAS];
                 }
             }
