@@ -15,6 +15,7 @@ use SoliDry\Types\ApiInterface;
 use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Transformers\DefaultTransformer;
+use SoliDry\Types\RoutesInterface;
 
 /**
  * Class Json
@@ -189,14 +190,22 @@ class Json
             ]);
         }
 
-        $host    = $_SERVER['HTTP_HOST'];
-        $manager = new Manager();
+        $parsedUrl = parse_url(url()->current());
+        $explodedPath = explode('/', $parsedUrl['path']);
 
+        $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+        if ($explodedPath[1] === RoutesInterface::ROUTES_FILE_NAME) {
+            $baseUrl .= '/' . $explodedPath[1] . '/' . $explodedPath[2];
+        } else {
+            $baseUrl .= '/' . $explodedPath[1];
+        }
+
+        $manager = new Manager();
         if (isset($_GET['include'])) {
             $manager->parseIncludes($_GET['include']);
         }
 
-        $manager->setSerializer(new JsonApiSerializer($host));
+        $manager->setSerializer(new JsonApiSerializer($baseUrl));
         return self::getSelectedData($manager->createData($resource)->toJson(), $data);
     }
 
