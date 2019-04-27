@@ -14,7 +14,6 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 ![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png) 
 
 * [Demo on YouTube](https://youtu.be/kFXVq4CGkEU)
-
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
     * [Optional settings](#user-content-optional-settings)
