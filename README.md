@@ -13,6 +13,8 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 ![alt Laravel logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/laravel-logo-white.png)
 ![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png) 
 
+* [Demo on YouTube](https://youtu.be/kFXVq4CGkEU)
+
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
     * [Optional settings](#user-content-optional-settings)
@@ -54,7 +56,7 @@ then in your project directory run:
 composer require solidry/api-generator
 ```
 It will automatically register Laravel ServiceProvider by adding console command `api:generate` (you should see it when running `php artisan`) 
-and also publish "laravel-modules" providers.
+and also publish "laravel-modules" provider.
 
 #### Autoloading
 
