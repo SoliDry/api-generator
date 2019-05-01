@@ -15,6 +15,7 @@ use SoliDry\Helpers\SqlOptions;
  * @package SoliDry\Extension
  *
  * @property ApiController modelEntity
+ * @property CustomSql customSql
  */
 trait BaseModelTrait
 {
@@ -26,14 +27,16 @@ trait BaseModelTrait
      */
     private function getEntity($id, array $data = ModelsInterface::DEFAULT_DATA)
     {
-        $obj = call_user_func_array(
+        $obj = \call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [ApiInterface::RAML_ID, $id]
         );
+
         if ($data[0] !== PhpInterface::ASTERISK) {
             // add id to output it in json-api entity
             $data[] = ModelsInterface::ID;
         }
+
         return $obj->first($data);
     }
 
@@ -49,6 +52,7 @@ trait BaseModelTrait
         if ($this->customSql->isEnabled()) {
             return $this->getCustomSqlEntities($this->customSql);
         }
+
         return $this->getAllEntities($sqlOptions);
     }
 
@@ -60,7 +64,7 @@ trait BaseModelTrait
      */
     private function getModelEntity($modelEntity, $id)
     {
-        $obj = call_user_func_array(
+        $obj = \call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, [ApiInterface::RAML_ID, $id]
         );
@@ -76,7 +80,7 @@ trait BaseModelTrait
      */
     private function getModelEntities($modelEntity, array $params)
     {
-        return call_user_func_array(
+        return \call_user_func_array(
             PhpInterface::BACKSLASH . $modelEntity . PhpInterface::DOUBLE_COLON
             . ModelsInterface::MODEL_METHOD_WHERE, $params
         );
@@ -110,12 +114,14 @@ trait BaseModelTrait
         }
         $from = ($limit * $page) - $limit;
         $to   = $limit * $page;
+
         /** @var Builder $obj */
-        $obj = call_user_func_array(
+        $obj = \call_user_func_array(
             PhpInterface::BACKSLASH . $this->modelEntity . PhpInterface::DOUBLE_COLON .
             ModelsInterface::MODEL_METHOD_ORDER_BY,
             $defaultOrder
         );
+
         // it can be empty if nothing more then 1st passed
         $obj->order = $order;
 
@@ -128,7 +134,7 @@ trait BaseModelTrait
      * @param CustomSql $customSql
      * @return \Illuminate\Support\Collection
      */
-    private function getCustomSqlEntities(CustomSql $customSql)
+    private function getCustomSqlEntities(CustomSql $customSql): \Illuminate\Support\Collection
     {
         $result     = DB::select($customSql->getQuery(), $customSql->getBindings());
         $collection = [];
@@ -157,7 +163,7 @@ trait BaseModelTrait
      * @param int|string $id
      * @return array
      */
-    private function buildTree(Collection $data, $id = 0)
+    private function buildTree(Collection $data, $id = 0): array
     {
         $tree = [];
         foreach ($data as $k => $child) {

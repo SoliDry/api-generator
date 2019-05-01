@@ -40,11 +40,13 @@ trait OptionsTrait
             $request->input(ModelsInterface::PARAM_LIMIT);
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort :
             $request->input(ModelsInterface::PARAM_SORT);
+
         $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
             : Json::decode($request->input(ModelsInterface::PARAM_DATA));
         $orderBy = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [ApiInterface::RAML_ID => $sort]
             : Json::decode($request->input(ModelsInterface::PARAM_ORDER_BY));
         $filter = ($request->input(ModelsInterface::PARAM_FILTER) === null) ? [] : Json::decode($request->input(ModelsInterface::PARAM_FILTER));
+
         $sqlOptions->setLimit($limit);
         $sqlOptions->setPage($page);
         $sqlOptions->setData($data);
@@ -67,14 +69,18 @@ trait OptionsTrait
         if ($this->configOptions->getJwtIsEnabled() === true && $this->configOptions->getJwtTable() === MigrationsHelper::getTableName($this->entity)) {// if jwt enabled=true and tables are equal
             $this->configOptions->setIsJwtAction(true);
         }
+
         $this->setOptionsOnNotDelete($calledMethod);
+
         // set those only for create/update
         $this->setOptionsOnCreateUpdate($calledMethod);
+
         // set those only for index
-        if ($calledMethod === JSONApiInterface::URI_METHOD_INDEX) {
+        if ($calledMethod === JSONApiInterface::URI_METHOD_INDEX || $calledMethod === JSONApiInterface::URI_METHOD_VIEW) {
             $this->customSql = new CustomSql($this->entity);
             $this->setCacheOpts();
         }
+
         if ($calledMethod === JSONApiInterface::URI_METHOD_VIEW) {
             $this->setCacheOpts();
         }
@@ -91,9 +97,11 @@ trait OptionsTrait
             if (empty($entityCache[ConfigInterface::CACHE_STAMPEDE_XFETCH]) === false) {
                 $this->configOptions->setIsXFetch($entityCache[ConfigInterface::CACHE_STAMPEDE_XFETCH]);
             }
+
             if (empty($entityCache[ConfigInterface::CACHE_STAMPEDE_BETA]) === false) {
                 $this->configOptions->setCacheBeta($entityCache[ConfigInterface::CACHE_STAMPEDE_BETA]);
             }
+
             if (empty($entityCache[ConfigInterface::CACHE_TTL]) === false) {
                 $this->configOptions->setCacheTtl($entityCache[ConfigInterface::CACHE_TTL]);
             }
@@ -125,6 +133,7 @@ trait OptionsTrait
             if ($stateMachine !== null) {
                 $this->configOptions->setStateMachine(true);
             }
+
             // spell check if enabled
             $spellCheck = ConfigHelper::getNestedParam(ConfigInterface::SPELL_CHECK, MigrationsHelper::getTableName($this->entity));
             if ($spellCheck !== null) {
