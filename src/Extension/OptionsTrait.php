@@ -80,10 +80,6 @@ trait OptionsTrait
             $this->customSql = new CustomSql($this->entity);
             $this->setCacheOpts();
         }
-
-        if ($calledMethod === JSONApiInterface::URI_METHOD_VIEW) {
-            $this->setCacheOpts();
-        }
     }
 
     /**
