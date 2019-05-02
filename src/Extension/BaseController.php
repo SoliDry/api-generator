@@ -20,7 +20,7 @@ class BaseController extends ApiController
     public function __construct(Route $route)
     {
         parent::__construct($route);
-        if (in_array($route->getActionMethod(), self::AVAILABLE_BULKS, true) && RequestHelper::isExt(request(), self::EXT_BULK) === false) {
+        if (\in_array($route->getActionMethod(), self::AVAILABLE_BULKS, true) && RequestHelper::isExt(request(), self::EXT_BULK) === false) {
             throw new HeadersException(ErrorsInterface::JSON_API_ERRORS[ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR], ErrorsInterface::HTTP_CODE_BULK_EXT_ERROR);
         }
     }

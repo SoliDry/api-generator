@@ -15,7 +15,7 @@ use SoliDry\Types\ApiInterface;
 use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Transformers\DefaultTransformer;
-use SoliDry\Types\RoutesInterface;
+use SoliDry\Helpers\Request as Req;
 
 /**
  * Class Json
@@ -73,7 +73,7 @@ class Json
     {
         $jsonArr = [];
         if ($relations instanceof \Illuminate\Database\Eloquent\Collection) {
-            $cnt = count($relations);
+            $cnt = \count($relations);
             if ($cnt > 1) {
                 foreach ($relations as $v) {
                     $attrs     = $v->getAttributes();
@@ -178,6 +178,8 @@ class Json
     }
 
     /**
+     * Prepares data to output in json-api format
+     *
      * @param ResourceInterface $resource
      * @param array $data
      * @return string
@@ -190,26 +192,18 @@ class Json
             ]);
         }
 
-        $parsedUrl = parse_url(url()->current());
-        $explodedPath = explode('/', $parsedUrl['path']);
-
-        $baseUrl = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-        if ($explodedPath[1] === RoutesInterface::ROUTES_FILE_NAME) {
-            $baseUrl .= '/' . $explodedPath[1] . '/' . $explodedPath[2];
-        } else {
-            $baseUrl .= '/' . $explodedPath[1];
-        }
-
         $manager = new Manager();
         if (isset($_GET['include'])) {
             $manager->parseIncludes($_GET['include']);
         }
 
-        $manager->setSerializer(new JsonApiSerializer($baseUrl));
+        $manager->setSerializer(new JsonApiSerializer((new Req())->getBasePath()));
         return self::getSelectedData($manager->createData($resource)->toJson(), $data);
     }
 
     /**
+     * Encoder array -> json
+     *
      * @param array $array
      * @param int $opts
      * @return string
@@ -220,6 +214,8 @@ class Json
     }
 
     /**
+     * Decoder json -> array
+     *
      * @param mixed $json
      * @return mixed
      */
@@ -229,6 +225,8 @@ class Json
     }
 
     /**
+     * This method is wrapper over decode to let polymorfism happen between raml/json parsers
+     *
      * @param string $json
      * @return array
      */
@@ -238,6 +236,8 @@ class Json
     }
 
     /**
+     * Gets data only with those elements of object/array that should be provided as output
+     *
      * @param string $json
      * @param array $data
      * @return string
@@ -261,6 +261,7 @@ class Json
     }
 
     /**
+     * Unsets objects from array that shouldn't be provided as output
      *
      * @param array &$json
      * @param array $data
@@ -268,9 +269,9 @@ class Json
     private static function unsetArray(array &$json, array $data) : void
     {
         foreach ($json as &$jsonObject) {
-            foreach ($jsonObject as &$v) {
-                foreach ($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
-                    if (in_array($key, $data) === false) {
+            foreach ((array)$jsonObject as &$v) {
+                foreach ((array)$v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
+                    if (\in_array($key, $data, true) === false) {
                         unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
                     }
                 }
@@ -279,13 +280,15 @@ class Json
     }
 
     /**
+     * Unsets objects that shouldn't be provided as output
+     *
      * @param array $json
      * @param array $data
      */
     private static function unsetObject(array &$json, array $data) : void
     {
-        foreach ($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
-            if (in_array($k, $data) === false) {
+        foreach ((array)$json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
+            if (\in_array($k, $data, true) === false) {
                 unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
             }
         }
