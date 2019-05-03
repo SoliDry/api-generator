@@ -68,7 +68,7 @@ trait BaseRelationsTrait
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
         $relFormRequest = new $formRequestEntity();
 
-        $resource = Json::getResource($relFormRequest, $model->$relation, $this->entity, true);
+        $resource = Json::getResource($relFormRequest, $model->$relation, $relEntity, true);
         return $this->getResponse(Json::prepareSerializedData($resource, $data));
     }
 
