@@ -138,7 +138,7 @@ class ApiController extends Controller implements JSONApiInterface
     {
         $meta       = [];
         $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
-            : json_decode(urldecode($request->input(ModelsInterface::PARAM_DATA)), true);
+            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
         $sqlOptions = $this->setSqlOptions($request);
         $sqlOptions->setId($id);
         $sqlOptions->setData($data);

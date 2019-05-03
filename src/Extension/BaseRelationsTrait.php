@@ -12,8 +12,10 @@ use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\DirsInterface;
+use SoliDry\Types\ModelsInterface;
 use SoliDry\Types\PhpInterface;
 use SoliDry\Types\ApiInterface;
+use SoliDry\Helpers\ConfigHelper as conf;
 
 /**
  * Trait BaseRelationsTrait
@@ -41,6 +43,33 @@ trait BaseRelationsTrait
 
         $resource = Json::getRelations($model->$relation, $relation);
         return $this->getResponse(Json::prepareSerializedRelations($request, $resource));
+    }
+
+    /**
+     * GET the fully represented relationships of this particular Entity
+     *
+     * @param Request $request
+     * @param int|string $id
+     * @param string $relation
+     * @return Response
+     */
+    public function related(Request $request, $id, string $relation) : Response
+    {
+        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
+
+        $model = $this->getEntity($id);
+        if (empty($model)) {
+            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+        }
+
+        $relEntity = ucfirst($relation);
+        $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
+        $relFormRequest = new $formRequestEntity();
+
+        $resource = Json::getResource($relFormRequest, $model->$relation, $this->entity, true);
+        return $this->getResponse(Json::prepareSerializedData($resource, $data));
     }
 
     /**

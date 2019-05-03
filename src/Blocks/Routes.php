@@ -6,7 +6,6 @@ use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\Console;
 use SoliDry\ApiGenerator;
-use SoliDry\Types\ApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
 use SoliDry\Types\RoutesInterface;
@@ -108,8 +107,13 @@ class Routes
     {
         $this->setComment('relation routes');
 
+        // getters
         $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelationsUri(),
             $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATIONS));
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelatedUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATED));
+
+        // mutators
         $this->setRoute(RoutesInterface::METHOD_POST, $this->composeRelationsUri(),
             $this->composeEndPoint(JSONApiInterface::URI_METHOD_CREATE
                 . ucfirst(JSONApiInterface::URI_METHOD_RELATIONS)));

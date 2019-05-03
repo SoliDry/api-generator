@@ -91,6 +91,12 @@ trait RoutesTrait
             . ModelsInterface::MODEL_METHOD_RELATIONS . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
     }
 
+    private function composeRelatedUri() : string
+    {
+        return $this->composeRelationsBaseUri() . PhpInterface::SLASH . PhpInterface::OPEN_BRACE
+            . JSONApiInterface::URI_METHOD_RELATED . PhpInterface::CLOSE_BRACE . PhpInterface::QUOTES;
+    }
+
     /**
      * @return string
      */
