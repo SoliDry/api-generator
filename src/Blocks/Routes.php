@@ -108,10 +108,10 @@ class Routes
         $this->setComment('relation routes');
 
         // getters
-        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelationsUri(),
-            $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATIONS));
         $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelatedUri(),
             $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATED));
+        $this->setRoute(RoutesInterface::METHOD_GET, $this->composeRelationsUri(),
+            $this->composeEndPoint(JSONApiInterface::URI_METHOD_RELATIONS));
 
         // mutators
         $this->setRoute(RoutesInterface::METHOD_POST, $this->composeRelationsUri(),
