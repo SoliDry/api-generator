@@ -16,6 +16,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 * [Getting started Demo](https://youtu.be/kFXVq4CGkEU)
 * [CRUD Demo](https://youtu.be/eYVqn-VecQI)
 * [Relation links Demo](https://youtu.be/DPvhiFOzoWE)
+* [Migrations Demo](https://youtu.be/gfbdRZhFHn4)
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
     * [Optional settings](#user-content-optional-settings)
@@ -301,30 +302,30 @@ will produce migrations, relations and models respectively.
 
 or in json:
 ```json
-    "ID": {
-        "type": "integer",
-        "required": true,
-        "maximum": 20
-    },
-    "SID": {
-        "type": "string",
-        "required": true,
-        "maxLength": 128
-    },
-    "Type": {
-        "type": "string",
-        "required": true,
-        "minLength": 1,
-        "maxLength": 255
-    },
-    "DataObject": {
-        "type": "object",
-        "required": true
-    },
-    "DataArray": {
-        "type": "array",
-        "required": true
-    }
+"ID": {
+    "type": "integer",
+    "required": true,
+    "maximum": 20
+},
+"SID": {
+    "type": "string",
+    "required": true,
+    "maxLength": 128
+},
+"Type": {
+    "type": "string",
+    "required": true,
+    "minLength": 1,
+    "maxLength": 255
+},
+"DataObject": {
+    "type": "object",
+    "required": true
+},
+"DataArray": {
+    "type": "array",
+    "required": true
+}
 ```
 
 Special data type ``` RelationshipsDataItem ``` - !required
@@ -338,13 +339,13 @@ Special data type ``` RelationshipsDataItem ``` - !required
 
 or in json:
 ```json
-    "RelationshipsDataItem": {
-        "type": "object",
-        "properties": {
-            "id": "ID",
-            "type": "Type"
-        }
+"RelationshipsDataItem": {
+    "type": "object",
+    "properties": {
+        "id": "ID",
+        "type": "Type"
     }
+}
 ```
 defined in every relationship custom type
 
@@ -403,103 +404,103 @@ Attributes ```*Attributes``` are defined for every custom Object ex.:
 ```
 or in json:
 ```json
-    "ArticleAttributes": {
-        "description": "Article attributes description",
-        "type": "object",
-        "properties": {
-            "title": {
-                "type": "string",
-                "required": true,
-                "minLength": 16,
-                "maxLength": 256
-            },
-            "description": {
-                "required": true,
-                "type": "string",
-                "minLength": 32,
-                "maxLength": 1024,
-                "facets": {
-                    "spell_check": true,
-                    "spell_language": "en"
-                }
-            },
-            "url": {
-                "required": false,
-                "type": "string",
-                "minLength": 16,
-                "maxLength": 255,
-                "facets": {
-                    "index": {
-                        "idx_url": "unique"
-                    }
-                }
-            },
-            "show_in_top": {
-                "description": "Show at the top of main page",
-                "required": false,
-                "type": "boolean"
-            },
-            "status": {
-                "description": "The state of an article",
-                "enum": [
-                    "draft",
-                    "published",
-                    "postponed",
-                    "archived"
-                ],
-                "facets": {
-                    "state_machine": {
-                        "initial": [
-                            "draft"
-                        ],
-                        "draft": [
-                            "published"
-                        ],
-                        "published": [
-                            "archived",
-                            "postponed"
-                        ],
-                        "postponed": [
-                            "published",
-                            "archived"
-                        ],
-                        "archived": []
-                    }
-                }
-            },
-            "topic_id": {
-                "description": "ManyToOne Topic relationship",
-                "required": true,
-                "type": "integer",
-                "minimum": 1,
-                "maximum": 6,
-                "facets": {
-                    "index": {
-                        "idx_fk_topic_id": "foreign",
-                        "references": "id",
-                        "on": "topic",
-                        "onDelete": "cascade",
-                        "onUpdate": "cascade"
-                    }
-                }
-            },
-            "rate": {
-                "type": "number",
-                "minimum": 3,
-                "maximum": 9,
-                "format": "double"
-            },
-            "date_posted": {
-                "type": "date-only"
-            },
-            "time_to_live": {
-                "type": "time-only"
-            },
-            "deleted_at": {
-                "type": "datetime"
+"ArticleAttributes": {
+    "description": "Article attributes description",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string",
+            "required": true,
+            "minLength": 16,
+            "maxLength": 256
+        },
+        "description": {
+            "required": true,
+            "type": "string",
+            "minLength": 32,
+            "maxLength": 1024,
+            "facets": {
+                "spell_check": true,
+                "spell_language": "en"
             }
+        },
+        "url": {
+            "required": false,
+            "type": "string",
+            "minLength": 16,
+            "maxLength": 255,
+            "facets": {
+                "index": {
+                    "idx_url": "unique"
+                }
+            }
+        },
+        "show_in_top": {
+            "description": "Show at the top of main page",
+            "required": false,
+            "type": "boolean"
+        },
+        "status": {
+            "description": "The state of an article",
+            "enum": [
+                "draft",
+                "published",
+                "postponed",
+                "archived"
+            ],
+            "facets": {
+                "state_machine": {
+                    "initial": [
+                        "draft"
+                    ],
+                    "draft": [
+                        "published"
+                    ],
+                    "published": [
+                        "archived",
+                        "postponed"
+                    ],
+                    "postponed": [
+                        "published",
+                        "archived"
+                    ],
+                    "archived": []
+                }
+            }
+        },
+        "topic_id": {
+            "description": "ManyToOne Topic relationship",
+            "required": true,
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6,
+            "facets": {
+                "index": {
+                    "idx_fk_topic_id": "foreign",
+                    "references": "id",
+                    "on": "topic",
+                    "onDelete": "cascade",
+                    "onUpdate": "cascade"
+                }
+            }
+        },
+        "rate": {
+            "type": "number",
+            "minimum": 3,
+            "maximum": 9,
+            "format": "double"
+        },
+        "date_posted": {
+            "type": "date-only"
+        },
+        "time_to_live": {
+            "type": "time-only"
+        },
+        "deleted_at": {
+            "type": "datetime"
         }
     }
+}
 ```
 
 Relationships custom type definition semantics ```*Relationships```
@@ -515,18 +516,18 @@ Relationships custom type definition semantics ```*Relationships```
 ```
 
 ```json
-    "TagRelationships": {
-        "description": "Tag relationship description",
-        "type": "object",
-        "properties": {
-            "data": {
-                "type": "DataArray",
-                "items": {
-                    "type": "RelationshipsDataItem"
-                }
+"TagRelationships": {
+    "description": "Tag relationship description",
+    "type": "object",
+    "properties": {
+        "data": {
+            "type": "DataArray",
+            "items": {
+                "type": "RelationshipsDataItem"
             }
         }
     }
+}
 ```
 
 Complete composite Object looks like this: 
@@ -542,17 +543,17 @@ Complete composite Object looks like this:
 ```
 
 ```json
-    "Article": {
-        "type": "object",
-        "properties": {
-            "type": "Type",
-            "id": "SID",
-            "attributes": "ArticleAttributes",
-            "relationships": {
-                "type": "TagRelationships[] | TopicRelationships"
-            }
+"Article": {
+    "type": "object",
+    "properties": {
+        "type": "Type",
+        "id": "SID",
+        "attributes": "ArticleAttributes",
+        "relationships": {
+            "type": "TagRelationships[] | TopicRelationships"
         }
     }
+}
 ```
 That is all that api-generator needs to provide code structure that just works out-fo-the-box within Laravel framework, 
 where may any business logic be applied.
