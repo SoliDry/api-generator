@@ -975,7 +975,7 @@ Generator will independently detect all relationships between entities.
 You may want to use additional query parameters to fetch includes 
 and/or pagination, for instance:
 ```php
-http://example.com/api/v1/article?include=tag&page=2&limit=10&sort=asc
+http://example.com/api/v1/article?include=tag,topic&page=2&limit=10&sort=asc
 ```
 
 You may not wish to drag all the attributes/fields: 
