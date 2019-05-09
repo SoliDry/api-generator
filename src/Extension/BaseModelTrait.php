@@ -100,8 +100,10 @@ trait BaseModelTrait
         $data         = $sqlOptions->getData();
         $orderBy      = $sqlOptions->getOrderBy();
         $filter       = $sqlOptions->getFilter();
+
         $defaultOrder = [];
         $order        = [];
+
         $first        = true;
         foreach ($orderBy as $column => $value) {
             if ($first === true) {

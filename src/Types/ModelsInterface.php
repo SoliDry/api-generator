@@ -27,6 +27,8 @@ interface ModelsInterface
     public const DIRECTION               = 'direction';
     public const PARENT_ID               = 'parent_id';
 
+    public const COUNT                   = 'count';
+
     // Methods
     public const MODEL_METHOD_ALL      = 'all';
     public const MODEL_METHOD_WHERE    = 'where';
