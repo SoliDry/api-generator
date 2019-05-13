@@ -159,8 +159,8 @@ trait OptionsTrait
      */
     private function setMetaPageInfo(array &$meta, SqlOptions $sqlOptions, int $count): void
     {
-        $meta[ModelsInterface::PARAM_PAGE] = $sqlOptions->getPage();
-        $meta[ModelsInterface::PARAM_LIMIT] = $sqlOptions->getLimit();
-        $meta[ModelsInterface::COUNT] = $count;
+        $meta[JSONApiInterface::PAGINATION][ModelsInterface::PARAM_PAGE] = $sqlOptions->getPage();
+        $meta[JSONApiInterface::PAGINATION][ModelsInterface::PARAM_LIMIT] = $sqlOptions->getLimit();
+        $meta[JSONApiInterface::PAGINATION][ModelsInterface::COUNT] = $count;
     }
 }

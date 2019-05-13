@@ -63,6 +63,7 @@ interface JSONApiInterface
     public const CONTENT_ERRORS     = 'errors';
     public const CONTENT_ATTRIBUTES = 'attributes';
     public const META_TREE          = 'tree';
+    public const PAGINATION         = 'pagination';
 
     public const EXIT_STATUS_SUCCESS = 0;
     public const EXIT_STATUS_ERROR   = 1;
