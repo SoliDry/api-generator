@@ -2,6 +2,7 @@
 
 namespace SoliDry\Helpers;
 
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use League\Fractal\Manager;
@@ -169,7 +170,9 @@ class Json
                 $collection->setMeta($meta);
             }
 
-            $collection->setPaginator(new IlluminatePaginatorAdapter($model));
+            if ($model instanceof LengthAwarePaginator) { // only for paginator
+                $collection->setPaginator(new IlluminatePaginatorAdapter($model));
+            }
 
             return $collection;
         }
