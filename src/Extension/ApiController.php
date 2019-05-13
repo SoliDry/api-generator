@@ -124,9 +124,6 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsIndex($pages);
         }
 
-        // set meta info on page, limit, count
-        //$this->setMetaPageInfo($meta, $sqlOptions, \count($items));
-
         $resource = Json::getResource($this->formRequest, $pages, $this->entity, true, $meta);
         return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
     }

@@ -148,19 +148,4 @@ trait OptionsTrait
         $this->defaultSort = ConfigHelper::getQueryParam(ModelsInterface::PARAM_SORT);
         $this->isTree = ConfigHelper::getNestedParam(ConfigInterface::TREES, $this->entity, true);
     }
-
-    /**
-     * Sets meta page info requested with index http request
-     * for page, limit, count
-     *
-     * @param array $meta
-     * @param SqlOptions $sqlOptions
-     * @param int $count
-     */
-    private function setMetaPageInfo(array &$meta, SqlOptions $sqlOptions, int $count): void
-    {
-        $meta[ModelsInterface::PARAM_PAGE] = $sqlOptions->getPage();
-        $meta[ModelsInterface::PARAM_LIMIT] = $sqlOptions->getLimit();
-        $meta[ModelsInterface::COUNT] = $count;
-    }
 }
