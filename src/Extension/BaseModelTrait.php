@@ -19,6 +19,16 @@ use SoliDry\Helpers\SqlOptions;
  */
 trait BaseModelTrait
 {
+    private $pagination = false;
+
+    /**
+     * @param bool $pagination
+     */
+    public function setPagination(bool $pagination): void
+    {
+        $this->pagination = $pagination;
+    }
+
     /**
      * @param int|string $id
      * @param array $data
@@ -126,6 +136,10 @@ trait BaseModelTrait
 
         // it can be empty if nothing more then 1st passed
         $obj->order = $order;
+
+        if ($this->pagination === true) {
+            return $obj->where($filter)->paginate($limit, $data, 'page', $page);
+        }
 
         return $obj->where($filter)->take($to)->skip($from)->get($data);
     }

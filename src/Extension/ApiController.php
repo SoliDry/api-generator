@@ -112,20 +112,22 @@ class ApiController extends Controller implements JSONApiInterface
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree->toArray()];
         }
 
+        $this->setPagination(true);
+        /** @var \Illuminate\Contracts\Pagination\LengthAwarePaginator $pages */
         if ($this->configOptions->isCached()) {
-            $items = $this->getCached($request, $sqlOptions);
+            $pages = $this->getCached($request, $sqlOptions);
         } else {
-            $items = $this->getEntities($sqlOptions);
+            $pages = $this->getEntities($sqlOptions);
         }
 
-        if (true === $this->configOptions->isBitMask()) {
-            $this->setFlagsIndex($items);
+        if ($this->configOptions->isBitMask() === true) {
+            $this->setFlagsIndex($pages);
         }
 
         // set meta info on page, limit, count
-        $this->setMetaPageInfo($meta, $sqlOptions, \count($items));
+        //$this->setMetaPageInfo($meta, $sqlOptions, \count($items));
 
-        $resource = Json::getResource($this->formRequest, $items, $this->entity, true, $meta);
+        $resource = Json::getResource($this->formRequest, $pages, $this->entity, true, $meta);
         return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
     }
 
