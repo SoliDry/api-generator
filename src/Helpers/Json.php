@@ -5,6 +5,7 @@ namespace SoliDry\Helpers;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use League\Fractal\Manager;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Resource\ResourceInterface;
@@ -167,6 +168,8 @@ class Json
             if (empty($meta) === false) {
                 $collection->setMeta($meta);
             }
+
+            $collection->setPaginator(new IlluminatePaginatorAdapter($model));
 
             return $collection;
         }
