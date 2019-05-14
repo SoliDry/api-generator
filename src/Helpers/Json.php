@@ -275,10 +275,12 @@ class Json
     private static function unsetArray(array &$json, array $data) : void
     {
         foreach ($json as &$jsonObject) {
-            foreach ((array)$jsonObject as &$v) {
-                foreach ((array)$v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
-                    if (\in_array($key, $data, true) === false) {
-                        unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
+            foreach ($jsonObject as &$v) {
+                if (empty($v[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) { // can be any of meta/link
+                    foreach ($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
+                        if (\in_array($key, $data, true) === false) {
+                            unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
+                        }
                     }
                 }
             }
@@ -293,9 +295,13 @@ class Json
      */
     private static function unsetObject(array &$json, array $data) : void
     {
-        foreach ((array)$json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
-            if (\in_array($k, $data, true) === false) {
-                unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
+        if (empty($json[JSONApiInterface::CONTENT_DATA]) === false
+            && empty($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES]) === false) {
+
+            foreach ($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
+                if (\in_array($k, $data, true) === false) {
+                    unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
+                }
             }
         }
     }
