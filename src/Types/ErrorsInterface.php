@@ -12,11 +12,13 @@ interface ErrorsInterface
     public const HTTP_CODE_FSM_ATTR       = 121;
     public const HTTP_CODE_FSM_INIT_ATTR  = 122;
     public const HTTP_CODE_FSM_FLAGS      = 123;
+    public const HTTP_PARAM_LIMIT         = 124;
 
     public const JSON_API_ERRORS = [
         self::HTTP_CODE_BULK_EXT_ERROR => 'There is no ' . JSONApiInterface::EXT_BULK . ' value in ' . JSONApiInterface::EXT . ' key of ' . JSONApiInterface::CONTENT_TYPE_KEY . ' header',
         self::HTTP_CODE_FSM_ATTR       => 'There should be "states" element filled in with FSM.',
         self::HTTP_CODE_FSM_FLAGS      => 'Flags should be preset for bit mask.',
+        self::HTTP_PARAM_LIMIT         => 'Page limit can`t be > 1000, try to set less value per page',
     ];
 
     // console errors

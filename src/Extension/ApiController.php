@@ -145,7 +145,7 @@ class ApiController extends Controller implements JSONApiInterface
         $sqlOptions->setId($id);
         $sqlOptions->setData($data);
 
-        if (true === $this->isTree) {
+        if ($this->isTree === true) {
             $tree = $this->getSubTreeEntities($sqlOptions, $id);
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree];
         }
@@ -156,7 +156,7 @@ class ApiController extends Controller implements JSONApiInterface
             $item = $this->getEntity($id, $data);
         }
 
-        if (true === $this->configOptions->isBitMask()) {
+        if ($this->configOptions->isBitMask() === true) {
             $this->setFlagsView($item);
         }
 

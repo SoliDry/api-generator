@@ -3,12 +3,14 @@
 namespace SoliDry\Extension;
 
 use Illuminate\Http\Request;
+use SoliDry\Exceptions\AttributesException;
 use SoliDry\Helpers\ConfigHelper;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Helpers\SqlOptions;
 use SoliDry\Types\ConfigInterface;
+use SoliDry\Types\ErrorsInterface;
 use SoliDry\Types\ModelsInterface;
 use SoliDry\Types\ApiInterface;
 
@@ -38,6 +40,11 @@ trait OptionsTrait
             $request->input(ModelsInterface::PARAM_PAGE);
         $limit = ($request->input(ModelsInterface::PARAM_LIMIT) === null) ? $this->defaultLimit :
             $request->input(ModelsInterface::PARAM_LIMIT);
+
+        if ($limit > ModelsInterface::MAX_LIMIT) {
+            throw new AttributesException(ErrorsInterface::JSON_API_ERRORS[ErrorsInterface::HTTP_PARAM_LIMIT], ErrorsInterface::HTTP_PARAM_LIMIT);
+        }
+
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort :
             $request->input(ModelsInterface::PARAM_SORT);
 

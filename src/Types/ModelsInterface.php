@@ -10,6 +10,7 @@ interface ModelsInterface
     public const LARAVEL_MIGRATION_CLASS = 'Migration';
     public const LARAVEL_PROPERTY_TABLE  = 'table';
     public const DEFAULT_LIMIT           = 20;
+    public const MAX_LIMIT               = 1000;
     public const DEFAULT_PAGE            = 1;
     public const DEFAULT_SORT            = self::SQL_DESC;
     public const DEFAULT_DATA            = ['*']; // means get all fields
@@ -27,7 +28,7 @@ interface ModelsInterface
     public const DIRECTION               = 'direction';
     public const PARENT_ID               = 'parent_id';
 
-    public const COUNT                   = 'count';
+    public const COUNT = 'count';
 
     // Methods
     public const MODEL_METHOD_ALL      = 'all';
