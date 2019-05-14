@@ -107,7 +107,7 @@ class ApiController extends Controller implements JSONApiInterface
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
-        if (true === $this->isTree) {
+        if ($this->isTree === true) {
             $tree = $this->getAllTreeEntities($sqlOptions);
             $meta = [strtolower($this->entity) . PhpInterface::UNDERSCORE . JSONApiInterface::META_TREE => $tree->toArray()];
         }
@@ -196,7 +196,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         // set bit mask
-        if (true === $this->configOptions->isBitMask()) {
+        if ($this->configOptions->isBitMask() === true) {
             $this->setMaskCreate($jsonApiAttributes);
         }
         $this->model->save();
@@ -207,7 +207,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         // set bit mask from model -> response
-        if (true === $this->configOptions->isBitMask()) {
+        if ($this->configOptions->isBitMask() === true) {
             $this->model = $this->setFlagsCreate();
         }
 
@@ -249,7 +249,7 @@ class ApiController extends Controller implements JSONApiInterface
         $this->setRelationships($json, $model->id, true);
 
         // set bit mask
-        if (true === $this->configOptions->isBitMask()) {
+        if ($this->configOptions->isBitMask() === true) {
             $this->setFlagsUpdate($model);
         }
 
@@ -283,7 +283,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         // set bit mask
-        if (true === $this->configOptions->isBitMask()) {
+        if ($this->configOptions->isBitMask() === true) {
             $this->setMaskUpdate($model, $jsonApiAttributes);
         }
     }

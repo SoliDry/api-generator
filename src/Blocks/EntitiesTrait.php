@@ -113,7 +113,7 @@ trait EntitiesTrait
                 }
 
                 // set bit mask
-                if (true === $this->configOptions->isBitMask()) {
+                if ($this->configOptions->isBitMask() === true) {
                     $this->setMaskCreate($jsonObject);
                 }
 
@@ -126,7 +126,7 @@ trait EntitiesTrait
                 }
 
                 // set bit mask from model -> response
-                if (true === $this->configOptions->isBitMask()) {
+                if ($this->configOptions->isBitMask() === true) {
                     $this->model = $this->setFlagsCreate();
                 }
             }
@@ -181,7 +181,7 @@ trait EntitiesTrait
                 $model->save();
 
                 // set bit mask
-                if (true === $this->configOptions->isBitMask()) {
+                if ($this->configOptions->isBitMask() === true) {
                     $this->setFlagsUpdate($model);
                 }
 

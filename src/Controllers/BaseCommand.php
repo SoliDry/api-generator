@@ -231,13 +231,13 @@ class BaseCommand extends Command
      * @param string $objName
      * @param array $objData
      */
-    private function processObjectData(string $objName, array $objData)
+    private function processObjectData(string $objName, array $objData): void
     {
         foreach ($objData as $k => $v) {
             if ($k === ApiInterface::RAML_PROPS) { // process props
                 $this->setObjectName($objName);
                 $this->setObjectProps($v);
-                if (true === $this->isMerge) {
+                if ($this->isMerge === true) {
                     $this->mergeResources();
                 } else {
                     $this->generateResources();
@@ -246,13 +246,13 @@ class BaseCommand extends Command
         }
     }
 
-    private function generateModule()
+    private function generateModule(): void
     {
         $module = new Module($this);
         $module->create();
     }
 
-    private function generateConfig()
+    private function generateConfig(): void
     {
         $module = new Config($this);
         $module->create();
@@ -261,7 +261,7 @@ class BaseCommand extends Command
     /**
      * @throws \SoliDry\Exceptions\DirectoryException
      */
-    public function createDirs()
+    public function createDirs(): void
     {
         // create modules dir
         FileManager::createPath(FileManager::getModulePath($this));

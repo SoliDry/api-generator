@@ -62,7 +62,7 @@ trait MigrationsTrait
         $this->sourceCode .= PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4 . PhpInterface::TAB_PSR4
             . PhpInterface::DOLLAR_SIGN . ModelsInterface::MIGRATION_TABLE
             . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES;
-        if (true === $quoteProperty) {
+        if ($quoteProperty === true) {
             $this->sourceCode .= PhpInterface::QUOTES . $property . PhpInterface::QUOTES;
         } else { // smth like array
             $this->sourceCode .= $property;

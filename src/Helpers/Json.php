@@ -112,7 +112,7 @@ class Json
         }
         // errors and codes must be clear with readable json
         $encoded = self::encode($arr, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
-        if (false === $return && env('APP_ENV') !== 'dev') {
+        if ($return === false && env('APP_ENV') !== 'dev') {
             echo $encoded;
             exit(JSONApiInterface::EXIT_STATUS_ERROR);
         }

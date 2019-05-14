@@ -222,13 +222,13 @@ trait BaseModelTrait
             if ($searchId === $child->id) {
                 $isParentFound = true;
             }
-            if ($child->parent_id === $id && true === $isParentFound) { // child found
+            if ($child->parent_id === $id && $isParentFound === true) { // child found
                 // clear found children to free stack
                 unset($data[$k]);
                 $child->children = $this->buildSubTree($data, $searchId, $child->id, $isParentFound);
                 $tree[]          = $child;
             }
-            if (true === $isParentFound && 0 === $id) {
+            if ($isParentFound === true && 0 === $id) {
                 return $tree;
             }
         }

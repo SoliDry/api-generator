@@ -60,9 +60,9 @@ trait BitMaskTrait
         $flags = $this->bitMask->getFlags();
         foreach($flags as $flag => $fVal) {
             if (isset($jsonProps[$flag])) {
-                if (true === (bool) $jsonProps[$flag]) {
+                if ((bool) $jsonProps[$flag] === true) {
                     $this->model->$field |= $fVal;
-                } else if (false === (bool) $jsonProps[$flag]) {
+                } else if ((bool) $jsonProps[$flag] === false) {
                     $this->model->$field &= ~$fVal;
                 }
             }
@@ -100,9 +100,9 @@ trait BitMaskTrait
         $flags = $this->bitMask->getFlags();
         foreach($flags as $flag => $fVal) {
             if (isset($jsonProps[$flag])) {
-                if (true === (bool) $jsonProps[$flag]) {
+                if ((bool) $jsonProps[$flag] === true) {
                     $model->$field |= $fVal;
-                } else if (false === (bool) $jsonProps[$flag]) {
+                } else if ((bool) $jsonProps[$flag] === false) {
                     $model->$field &= ~$fVal;
                 }
             }

@@ -22,13 +22,14 @@ trait SpellCheckTrait
      */
     protected function spellCheck(array $jsonProps) : array
     {
-        if (false === extension_loaded(PhpInterface::PHP_EXTENSION_PSPELL)) {
+        if (extension_loaded(PhpInterface::PHP_EXTENSION_PSPELL) === false) {
             return [ConfigInterface::SPELL_CHECK => 'php-pspell library has not been installed on Your system.'];
         }
+
         $arr        = [];
         $spellCheck = new SpellCheck($this->entity);
         $field      = $spellCheck->getField();
-        if (true === $spellCheck->isEnabled()) {
+        if ($spellCheck->isEnabled() === true) {
             $arr = $spellCheck->check($jsonProps[$field]);
         }
 

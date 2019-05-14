@@ -138,7 +138,7 @@ class Entities extends FormRequestModel
         $file = $this->generator->formatEntitiesPath() .
             PhpInterface::SLASH .
             $this->className . Classes::getClassName($ucEntity) . PhpInterface::PHP_EXT;
-        if (true === $this->generator->isMerge) {
+        if ($this->generator->isMerge === true) {
             $this->resetPivotContent($ucEntity, $file);
         } else {
             $this->setPivotContent($ucEntity);

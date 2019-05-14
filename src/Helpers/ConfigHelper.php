@@ -64,7 +64,7 @@ class ConfigHelper
      */
     public static function getNestedParam(string $entity, string $param, bool $lower = false)
     {
-        if (true === $lower) {
+        if ($lower === true) {
             $param = strtolower($param);
         }
         $params = config(self::getConfigKey() . PhpInterface::DOT . $entity);
