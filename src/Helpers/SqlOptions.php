@@ -2,11 +2,14 @@
 
 namespace SoliDry\Helpers;
 
+use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Types\ModelsInterface;
 
 /**
  * Class SqlOptions
  * @package SoliDry\Helpers
+ *
+ * @property BaseFormRequest formRequest
  */
 class SqlOptions
 {
@@ -16,6 +19,7 @@ class SqlOptions
     public $orderBy = [];
     public $data    = ModelsInterface::DEFAULT_DATA;
     public $filter  = [];
+    public $formRequest;
 
     /**
      * @return int
@@ -80,9 +84,20 @@ class SqlOptions
     {
         // id must be there anyway
         $this->data = $data;
-        if(in_array(ModelsInterface::ID, $this->data) === false)
+        if(\in_array(ModelsInterface::ID, $this->data, true) === false)
         {
             $this->data[] = ModelsInterface::ID;
+        }
+
+        // this fix cases where oneToMany/oneToOne relationships need binding by entity_id
+        $rules = $this->formRequest->rules();
+        foreach ($rules as $key => $val) {
+
+            if (mb_strpos($key, '_id') !== false) {
+                if (\in_array($key, $this->data, true) === false) {
+                    $this->data[] = $key;
+                }
+            }
         }
     }
 
@@ -116,5 +131,13 @@ class SqlOptions
     public function setId($id) : void
     {
         $this->id = $id;
+    }
+
+    /**
+     * @param BaseFormRequest $formRequest
+     */
+    public function setFormRequest(BaseFormRequest $formRequest): void
+    {
+        $this->formRequest = $formRequest;
     }
 }

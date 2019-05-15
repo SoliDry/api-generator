@@ -30,8 +30,10 @@ trait OptionsTrait
 
     /**
      * Sets SqlOptions params
+     *
      * @param Request $request
      * @return SqlOptions
+     * @throws \SoliDry\Exceptions\AttributesException
      */
     private function setSqlOptions(Request $request) : SqlOptions
     {
@@ -54,6 +56,7 @@ trait OptionsTrait
             : Json::decode($request->input(ModelsInterface::PARAM_ORDER_BY));
         $filter = ($request->input(ModelsInterface::PARAM_FILTER) === null) ? [] : Json::decode($request->input(ModelsInterface::PARAM_FILTER));
 
+        $sqlOptions->setFormRequest($this->formRequest);
         $sqlOptions->setLimit($limit);
         $sqlOptions->setPage($page);
         $sqlOptions->setData($data);
