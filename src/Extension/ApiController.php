@@ -12,7 +12,6 @@ use SoliDry\Blocks\EntitiesTrait;
 use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Types\HTTPMethodsInterface;
 use SoliDry\Types\JwtInterface;
-use SoliDry\Types\ModelsInterface;
 use SoliDry\Helpers\Json;
 use SoliDry\Types\PhpInterface;
 
@@ -139,11 +138,9 @@ class ApiController extends Controller implements JSONApiInterface
     public function view(Request $request, $id) : Response
     {
         $meta       = [];
-        $data       = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
-            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
         $sqlOptions = $this->setSqlOptions($request);
         $sqlOptions->setId($id);
-        $sqlOptions->setData($data);
+        $data = $sqlOptions->getData();
 
         if ($this->isTree === true) {
             $tree = $this->getSubTreeEntities($sqlOptions, $id);

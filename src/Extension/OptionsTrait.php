@@ -50,8 +50,8 @@ trait OptionsTrait
         $sort = ($request->input(ModelsInterface::PARAM_SORT) === null) ? $this->defaultSort :
             $request->input(ModelsInterface::PARAM_SORT);
 
-        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
-            : Json::decode($request->input(ModelsInterface::PARAM_DATA));
+        $data = ($request->input(ModelsInterface::PARAM_DATA) === NULL) ? ModelsInterface::DEFAULT_DATA
+            : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
         $orderBy = ($request->input(ModelsInterface::PARAM_ORDER_BY) === null) ? [ApiInterface::RAML_ID => $sort]
             : Json::decode($request->input(ModelsInterface::PARAM_ORDER_BY));
         $filter = ($request->input(ModelsInterface::PARAM_FILTER) === null) ? [] : Json::decode($request->input(ModelsInterface::PARAM_FILTER));
