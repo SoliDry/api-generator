@@ -39,7 +39,7 @@ class JsonTest extends TestCase
      */
     public function it_gets_resource_collection()
     {
-        $resource = Json::getResource($this->baseFormRequest, $this->baseModel, Article::class, true);
+        $resource = (new Json())->setIsCollection(true)->getResource($this->baseFormRequest, $this->baseModel, Article::class);
         $this->assertInstanceOf(Collection::class, $resource);
     }
 
@@ -48,7 +48,7 @@ class JsonTest extends TestCase
      */
     public function it_gets_resource_item()
     {
-        $resource = Json::getResource($this->baseFormRequest, $this->baseModel, Article::class);
+        $resource = (new Json())->getResource($this->baseFormRequest, $this->baseModel, Article::class);
         $this->assertInstanceOf(Item::class, $resource);
     }
 

@@ -20,6 +20,8 @@ use SoliDry\Helpers\ConfigHelper as conf;
 /**
  * Trait BaseRelationsTrait
  * @package SoliDry\Extension
+ *
+ * @property Json json
  */
 trait BaseRelationsTrait
 {
@@ -68,8 +70,8 @@ trait BaseRelationsTrait
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
         $relFormRequest = new $formRequestEntity();
 
-        $resource = Json::getResource($relFormRequest, $model->$relation, $relEntity,
-            $model->$relation instanceof  \Illuminate\Database\Eloquent\Collection);
+        $this->json->setIsCollection($model->$relation instanceof  \Illuminate\Database\Eloquent\Collection);
+        $resource = $this->json->getResource($relFormRequest, $model->$relation, $relEntity);
         return $this->getResponse(Json::prepareSerializedData($resource, $data));
     }
 
@@ -84,7 +86,7 @@ trait BaseRelationsTrait
     public function createRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = Json::getResource($this->formRequest, $model, $this->entity);
+        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
         return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
@@ -100,7 +102,7 @@ trait BaseRelationsTrait
     public function updateRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = Json::getResource($this->formRequest, $model, $this->entity);
+        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
         return $this->getResponse(Json::prepareSerializedData($resource));
     }

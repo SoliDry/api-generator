@@ -23,48 +23,10 @@ use SoliDry\Helpers\Request as Req;
  * Class Json
  * @package SoliDry\Helpers
  */
-class Json
+class Json extends JsonAbstract
 {
-    /**
-     * @param array $jsonApiArr
-     *
-     * @return array
-     */
-    public static function getAttributes(array $jsonApiArr) : array
-    {
-        return empty($jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_ATTRS]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_ATTRS];
-    }
-
-    /**
-     * Returns an array of bulk attributes for each element
-     *
-     * @param array $jsonApiArr
-     * @return array
-     */
-    public static function getBulkAttributes(array $jsonApiArr) : array
-    {
-        return empty($jsonApiArr[ApiInterface::RAML_DATA]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA];
-    }
-
-    /**
-     * @param array $jsonApiArr
-     *
-     * @return array
-     */
-    public static function getRelationships(array $jsonApiArr) : array
-    {
-        return empty($jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_RELATIONSHIPS]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA][ApiInterface::RAML_RELATIONSHIPS];
-    }
-
-    /**
-     * @param array $jsonApiArr
-     *
-     * @return array
-     */
-    public static function getData(array $jsonApiArr) : array
-    {
-        return empty($jsonApiArr[ApiInterface::RAML_DATA]) ? [] : $jsonApiArr[ApiInterface::RAML_DATA];
-    }
+    private $isCollection = false;
+    private $meta = [];
 
     /**
      * @param $relations      \Illuminate\Database\Eloquent\Collection
@@ -156,18 +118,16 @@ class Json
      * @param BaseFormRequest $formRequest
      * @param                 $model
      * @param string $entity
-     * @param bool $isCollection
      *
-     * @param array $meta
      * @return Collection|Item
      */
-    public static function getResource(BaseFormRequest $formRequest, $model, string $entity, bool $isCollection = false, array $meta = [])
+    public function getResource(BaseFormRequest $formRequest, $model, string $entity)
     {
         $transformer = new DefaultTransformer($formRequest);
-        if ($isCollection === true) {
+        if ($this->isCollection === true) {
             $collection = new Collection($model, $transformer, strtolower($entity));
-            if (empty($meta) === false) {
-                $collection->setMeta($meta);
+            if (empty($this->meta) === false) {
+                $collection->setMeta($this->meta);
             }
 
             if ($model instanceof LengthAwarePaginator) { // only for paginator
@@ -178,7 +138,7 @@ class Json
         }
 
         $item = new Item($model, $transformer, strtolower($entity));
-        $item->setMeta($meta);
+        $item->setMeta($this->meta);
 
         return $item;
     }
@@ -205,40 +165,6 @@ class Json
 
         $manager->setSerializer(new JsonApiSerializer((new Req())->getBasePath()));
         return self::getSelectedData($manager->createData($resource)->toJson(), $data);
-    }
-
-    /**
-     * Encoder array -> json
-     *
-     * @param array $array
-     * @param int $opts
-     * @return string
-     */
-    public static function encode(array $array, int $opts = 0)
-    {
-        return json_encode($array, $opts);
-    }
-
-    /**
-     * Decoder json -> array
-     *
-     * @param mixed $json
-     * @return mixed
-     */
-    public static function decode(string $json): array
-    {
-        return json_decode($json, true);
-    }
-
-    /**
-     * This method is wrapper over decode to let polymorfism happen between raml/json parsers
-     *
-     * @param string $json
-     * @return array
-     */
-    public static function parse(string $json): array
-    {
-        return self::decode($json);
     }
 
     /**
@@ -304,5 +230,27 @@ class Json
                 }
             }
         }
+    }
+
+    /**
+     * @param bool $isCollection
+     * @return Json
+     */
+    public function setIsCollection(bool $isCollection): Json
+    {
+        $this->isCollection = $isCollection;
+
+        return $this;
+    }
+
+    /**
+     * @param array $meta
+     * @return Json
+     */
+    public function setMeta(array $meta): Json
+    {
+        $this->meta = $meta;
+
+        return $this;
     }
 }

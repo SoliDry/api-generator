@@ -45,6 +45,9 @@ class ApiController extends Controller implements JSONApiInterface
     /** @var BitMask $bitMask */
     private $bitMask;
 
+    /** @var Json $json */
+    private $json;
+
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
         JSONApiInterface::URI_METHOD_VIEW,
@@ -77,6 +80,7 @@ class ApiController extends Controller implements JSONApiInterface
                 ]
             );
         }
+
         $this->setEntities();
         $this->setDefaults();
         $this->setConfigOptions($calledMethod);
@@ -123,7 +127,8 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsIndex($pages);
         }
 
-        $resource = Json::getResource($this->formRequest, $pages, $this->entity, true, $meta);
+        $resource = $this->json->setIsCollection(true)->setMeta($meta)
+            ->getResource($this->formRequest, $pages, $this->entity);
         return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
     }
 
@@ -157,7 +162,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsView($item);
         }
 
-        $resource = Json::getResource($this->formRequest, $item, $this->entity, false, $meta);
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $item, $this->entity);
         return $this->getResponse(Json::prepareSerializedData($resource,  $data));
     }
 
@@ -209,7 +214,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $this->setRelationships($json, $this->model->id);
-        $resource = Json::getResource($this->formRequest, $this->model, $this->entity, false, $meta);
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $this->model, $this->entity);
         return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
@@ -250,7 +255,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsUpdate($model);
         }
 
-        $resource = Json::getResource($this->formRequest, $model, $this->entity, false, $meta);
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $model, $this->entity);
         return $this->getResponse(Json::prepareSerializedData($resource));
     }
 

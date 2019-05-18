@@ -35,7 +35,7 @@ use SoliDry\Types\ApiInterface;
  * @property BaseModel model
  * @property ApiController modelEntity
  * @property ConfigOptions configOptions
- *
+ * @property Json json
  */
 trait EntitiesTrait
 {
@@ -63,6 +63,7 @@ trait EntitiesTrait
      */
     protected function setEntities() : void
     {
+        $this->json = new Json();
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
         $this->formRequest = new $formRequestEntity();
@@ -138,9 +139,10 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        return $this->getResponse(Json::prepareSerializedData(
-            Json::getResource($this->formRequest, $collection, $this->entity, true, $meta)),
-            JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        $resource = $this->json->setIsCollection(true)
+            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
 
     /**
@@ -193,7 +195,10 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        return $this->getResponse(Json::prepareSerializedData(Json::getResource($this->formRequest, $collection, $this->entity, true, $meta)));
+        $resource = $this->json->setIsCollection(true)
+            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource));
     }
 
     /**
