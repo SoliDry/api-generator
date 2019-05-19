@@ -200,12 +200,17 @@ class Json extends JsonAbstract
      */
     private static function unsetArray(array &$json, array $data) : void
     {
-        foreach ($json as &$jsonObject) {
-            foreach ($jsonObject as &$v) {
-                if (empty($v[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) { // can be any of meta/link
-                    foreach ($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
-                        if (\in_array($key, $data, true) === false) {
-                            unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
+        foreach ($json as $type => &$jsonObject) {
+
+            if ($type === ApiInterface::RAML_DATA) { // unset only data->attributes fields
+                foreach ($jsonObject as &$v) {
+
+                    if (empty($v[JSONApiInterface::CONTENT_ATTRIBUTES]) === false) { // can be any of meta/link
+                        foreach ($v[JSONApiInterface::CONTENT_ATTRIBUTES] as $key => $attr) {
+
+                            if (\in_array($key, $data, true) === false) {
+                                unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
+                            }
                         }
                     }
                 }
