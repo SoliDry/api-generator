@@ -2,6 +2,7 @@
 
 namespace SoliDry\Blocks;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -60,16 +61,25 @@ trait EntitiesTrait
 
     /**
      *  Sets all props/entities needed to process request
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \ReflectionException
      */
     protected function setEntities() : void
     {
-        $this->json = new Json();
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
+
         $this->formRequest = new $formRequestEntity();
         $this->props       = get_object_vars($this->formRequest);
+
         $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model       = new $this->modelEntity();
+
+        $container = Container::getInstance();
+        $this->response = $container->make(\SoliDry\Helpers\Response::class);
+        $this->response->setFormRequest($this->formRequest);
+        $this->response->setEntity($this->entity);
     }
 
     /**

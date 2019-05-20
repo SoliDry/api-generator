@@ -2,7 +2,6 @@
 
 namespace SoliDry\Extension;
 
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -10,11 +9,20 @@ use League\Fractal\Resource\Collection;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Blocks\EntitiesTrait;
 use SoliDry\Helpers\JsonApiResponse;
+use SoliDry\Helpers\Response;
+use Illuminate\Http\Response as IlluminateResponse;
 use SoliDry\Types\HTTPMethodsInterface;
 use SoliDry\Types\JwtInterface;
 use SoliDry\Helpers\Json;
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class ApiController
+ *
+ * @package SoliDry\Extension
+ *
+ * @property Response response
+ */
 class ApiController extends Controller implements JSONApiInterface
 {
     use BaseRelationsTrait,
@@ -45,8 +53,7 @@ class ApiController extends Controller implements JSONApiInterface
     /** @var BitMask $bitMask */
     private $bitMask;
 
-    /** @var Json $json */
-    private $json;
+    private $response;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -61,6 +68,8 @@ class ApiController extends Controller implements JSONApiInterface
      * BaseControllerTrait constructor.
      *
      * @param Route $route
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \ReflectionException
      */
     public function __construct(Route $route)
     {
@@ -103,10 +112,10 @@ class ApiController extends Controller implements JSONApiInterface
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function index(Request $request) : Response
+    public function index(Request $request) : IlluminateResponse
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
@@ -127,9 +136,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsIndex($pages);
         }
 
-        $resource = $this->json->setIsCollection(true)->setMeta($meta)
-            ->getResource($this->formRequest, $pages, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
+        return $this->response->setSqlOptions($sqlOptions)->getIndexResponse($pages, $meta);
     }
 
     /**
@@ -137,10 +144,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function view(Request $request, $id) : Response
+    public function view(Request $request, $id) : IlluminateResponse
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
@@ -162,8 +169,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsView($item);
         }
 
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $item, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource,  $data));
+        return $this->response->setSqlOptions($sqlOptions)->getViewResponse($item, $meta);
     }
 
     /**
@@ -214,6 +220,7 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $this->setRelationships($json, $this->model->id);
+
         $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $this->model, $this->entity);
         return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
     }
