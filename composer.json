@@ -30,7 +30,7 @@
         "lcobucci/jwt": "^3.2",
         "league/fractal": "~0.14",
         "nwidart/laravel-modules": ">=3.1",
-        "php": ">=7.0",
+        "php": ">=7.1",
         "predis/predis": "^1.1",
         "raml-org/raml-php-parser": "^4.1"
     },
