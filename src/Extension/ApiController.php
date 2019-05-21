@@ -9,7 +9,7 @@ use League\Fractal\Resource\Collection;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Blocks\EntitiesTrait;
 use SoliDry\Helpers\JsonApiResponse;
-use SoliDry\Helpers\Response;
+use SoliDry\Containers\Response;
 use Illuminate\Http\Response as IlluminateResponse;
 use SoliDry\Types\HTTPMethodsInterface;
 use SoliDry\Types\JwtInterface;
@@ -136,7 +136,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsIndex($pages);
         }
 
-        return $this->response->setSqlOptions($sqlOptions)->getIndexResponse($pages, $meta);
+        return $this->response->setSqlOptions($sqlOptions)->get($pages, $meta);
     }
 
     /**
@@ -169,17 +169,17 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsView($item);
         }
 
-        return $this->response->setSqlOptions($sqlOptions)->getViewResponse($item, $meta);
+        return $this->response->setSqlOptions($sqlOptions)->get($item, $meta);
     }
 
     /**
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function create(Request $request) : Response
+    public function create(Request $request) : IlluminateResponse
     {
         $meta              = [];
         $json              = Json::decode($request->getContent());
@@ -221,8 +221,7 @@ class ApiController extends Controller implements JSONApiInterface
 
         $this->setRelationships($json, $this->model->id);
 
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $this->model, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->response->get($this->model, $meta);
     }
 
     /**
@@ -230,10 +229,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function update(Request $request, $id) : Response
+    public function update(Request $request, $id) : IlluminateResponse
     {
         $meta = [];
 
@@ -262,8 +261,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsUpdate($model);
         }
 
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $model, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($model, $meta);
     }
 
     /**
@@ -302,16 +300,16 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      */
-    public function delete(Request $request, $id) : Response
+    public function delete(Request $request, $id) : IlluminateResponse
     {
         $model = $this->getEntity($id);
         if ($model !== null) {
             $model->delete();
         }
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -330,9 +328,9 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param string $json
      * @param int $responseCode
-     * @return Response
+     * @return IlluminateResponse
      */
-    public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : Response
+    public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : IlluminateResponse
     {
         return (new JsonApiResponse())->getResponse($json, $responseCode);
     }

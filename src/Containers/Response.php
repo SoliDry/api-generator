@@ -1,9 +1,13 @@
 <?php
 
-namespace SoliDry\Helpers;
+namespace SoliDry\Containers;
 
 use Illuminate\Database\Eloquent\Collection;
 use SoliDry\Extension\JSONApiInterface;
+use SoliDry\Helpers\Json;
+use SoliDry\Helpers\JsonApiResponse;
+use SoliDry\Helpers\SqlOptions;
+use League\Fractal\Resource\Collection as FractalCollection;
 
 /**
  * Class Response
@@ -18,10 +22,16 @@ class Response
     private $formRequest;
     private $entity;
     private $sqlOptions;
+    private $method;
 
     public function __construct(Json $json)
     {
         $this->json = $json;
+    }
+
+    public function get($data, array $meta)
+    {
+        return $this->{'get' . ucfirst($this->method)}($data, $meta);
     }
 
     /**
@@ -29,7 +39,7 @@ class Response
      * @param array $meta
      * @return \Illuminate\Http\Response
      */
-    public function getIndexResponse($data, array $meta): \Illuminate\Http\Response
+    public function getIndex($data, array $meta): \Illuminate\Http\Response
     {
         $resource = $this->json->setIsCollection(true)->setMeta($meta)
             ->getResource($this->formRequest, $data, $this->entity);
@@ -42,11 +52,35 @@ class Response
      * @param array $meta
      * @return \Illuminate\Http\Response
      */
-    public function getViewResponse($data, array $meta): \Illuminate\Http\Response
+    public function getView($data, array $meta): \Illuminate\Http\Response
     {
         $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
 
         return $this->getResponse(Json::prepareSerializedData($resource,  $this->sqlOptions->getData()));
+    }
+
+    /**
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getCreate($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+    }
+
+    /**
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getUpdate($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource));
     }
 
     /**
@@ -92,5 +126,13 @@ class Response
     public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : \Illuminate\Http\Response
     {
         return (new JsonApiResponse())->getResponse($json, $responseCode);
+    }
+
+    /**
+     * @param string $method
+     */
+    public function setMethod(string $method): void
+    {
+        $this->method = $method;
     }
 }
