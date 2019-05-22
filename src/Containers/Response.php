@@ -5,6 +5,7 @@ namespace SoliDry\Containers;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use SoliDry\Extension\JSONApiInterface;
+use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Helpers\SqlOptions;
@@ -20,14 +21,17 @@ use League\Fractal\Resource\Collection as FractalCollection;
 class Response
 {
     private $json;
+    private $errors;
+
     private $formRequest;
     private $entity;
     private $sqlOptions;
     private $method;
 
-    public function __construct(Json $json)
+    public function __construct(Json $json, Errors $errors)
     {
         $this->json = $json;
+        $this->errors = $errors;
     }
 
     public function get($data, array $meta)
@@ -177,6 +181,19 @@ class Response
     {
         return $this->getResponse(Json::prepareSerializedData(
             new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+    }
+
+    /**
+     * Gets an output for model not found error
+     *
+     * @param string $entity
+     * @param $id
+     * @return \Illuminate\Http\Response
+     */
+    public function getModelNotFoundError(string $entity, $id): \Illuminate\Http\Response
+    {
+        return $this->getResponse($this->json->getErrors($this->errors->getModelNotFound($entity, $id)),
+            JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
     }
 
     /**

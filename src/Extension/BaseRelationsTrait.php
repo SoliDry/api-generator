@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 use SoliDry\Blocks\FileManager;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper;
-use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\DirsInterface;
@@ -39,8 +38,7 @@ trait BaseRelationsTrait
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
         return $this->response->getRelations($model->$relation, $relation, $request);
@@ -61,8 +59,7 @@ trait BaseRelationsTrait
 
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
         $relEntity = ucfirst($relation);
@@ -120,8 +117,7 @@ trait BaseRelationsTrait
         $model           = $this->getEntity($id);
 
         if (empty($model)) {
-            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
         return $model;
