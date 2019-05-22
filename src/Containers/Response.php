@@ -137,6 +137,48 @@ class Response
         return $this->getResponse(Json::prepareSerializedData(new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
+
+    /**
+     * Gets an output for createBulk
+     *
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getCreateBulk($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setIsCollection(true)
+            ->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+    }
+
+    /**
+     * Gets an output for updateBulk
+     *
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getUpdateBulk($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setIsCollection(true)
+            ->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource));
+    }
+
+    /**
+     * Gets an output for removeBulk
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function removeBulk(): \Illuminate\Http\Response
+    {
+        return $this->getResponse(Json::prepareSerializedData(
+            new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+    }
+
     /**
      * @param mixed $formRequest
      * @return Response

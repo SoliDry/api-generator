@@ -6,7 +6,6 @@ use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Fractal\Resource\Collection as FractalCollection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use SoliDry\Exceptions\ErrorHandler;
@@ -37,6 +36,7 @@ use SoliDry\Types\ApiInterface;
  * @property ApiController modelEntity
  * @property ConfigOptions configOptions
  * @property Json json
+ * @property \SoliDry\Containers\Response response
  */
 trait EntitiesTrait
 {
@@ -77,7 +77,7 @@ trait EntitiesTrait
         $this->model       = new $this->modelEntity();
 
         $container = Container::getInstance();
-        $this->response = $container->make(\SoliDry\Helpers\Response::class);
+        $this->response = $container->make(\SoliDry\Containers\Response::class);
         $this->response->setFormRequest($this->formRequest);
         $this->response->setEntity($this->entity);
     }
@@ -149,10 +149,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        $resource = $this->json->setIsCollection(true)
-            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
-
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->response->get($collection, $meta);
     }
 
     /**
@@ -205,10 +202,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        $resource = $this->json->setIsCollection(true)
-            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
-
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($collection, $meta);
     }
 
     /**
@@ -248,8 +242,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        return (new JsonApiResponse())->getResponse(Json::prepareSerializedData(
-            new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->removeBulk();
     }
 
     /**
