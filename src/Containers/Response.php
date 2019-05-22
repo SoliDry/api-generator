@@ -3,6 +3,7 @@
 namespace SoliDry\Containers;
 
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\JsonApiResponse;
@@ -81,6 +82,59 @@ class Response
         $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
 
         return $this->getResponse(Json::prepareSerializedData($resource));
+    }
+
+    /**
+     * Gets an output for relations
+     *
+     * @param $relationModel
+     * @param string $entity
+     * @param Request $request
+     * @return \Illuminate\Http\Response
+     */
+    public function getRelations($relationModel, string $entity, Request $request): \Illuminate\Http\Response
+    {
+        $resource = Json::getRelations($relationModel, $entity);
+
+        return $this->getResponse(Json::prepareSerializedRelations($request, $resource));
+    }
+
+    /**
+     * Gets an output for createRelations
+     *
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getCreateRelations($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+    }
+
+    /**
+     * Gets an output for updateRelations
+     *
+     * @param $data
+     * @param array $meta
+     * @return \Illuminate\Http\Response
+     */
+    public function getUpdateRelations($data, array $meta): \Illuminate\Http\Response
+    {
+        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $data, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource));
+    }
+
+    /**
+     * Gets an output for deleteRelations
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getDeleteRelations():  \Illuminate\Http\Response
+    {
+        return $this->getResponse(Json::prepareSerializedData(new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**

@@ -4,7 +4,6 @@ namespace SoliDry\Extension;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Fractal\Resource\Collection;
 use SoliDry\Blocks\FileManager;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper;
@@ -22,6 +21,7 @@ use SoliDry\Helpers\ConfigHelper as conf;
  * @package SoliDry\Extension
  *
  * @property Json json
+ * @property \SoliDry\Containers\Response response
  */
 trait BaseRelationsTrait
 {
@@ -43,8 +43,7 @@ trait BaseRelationsTrait
                 JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
-        $resource = Json::getRelations($model->$relation, $relation);
-        return $this->getResponse(Json::prepareSerializedRelations($request, $resource));
+        return $this->response->getRelations($model->$relation, $relation, $request);
     }
 
     /**
@@ -86,9 +85,8 @@ trait BaseRelationsTrait
     public function createRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->response->get($model, []);
     }
 
     /**
@@ -102,9 +100,8 @@ trait BaseRelationsTrait
     public function updateRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($model, []);
     }
 
     /**
@@ -180,7 +177,7 @@ trait BaseRelationsTrait
             }
         }
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->getDeleteRelations();
     }
 
     /**
