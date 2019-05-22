@@ -8,7 +8,6 @@ use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Blocks\EntitiesTrait;
-use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Containers\Response;
 use Illuminate\Http\Response as IlluminateResponse;
 use SoliDry\Types\HTTPMethodsInterface;
@@ -321,17 +320,5 @@ class ApiController extends Controller implements JSONApiInterface
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
-    }
-
-    /**
-     * Prepares Response object to return with particular http response, headers and body
-     *
-     * @param string $json
-     * @param int $responseCode
-     * @return IlluminateResponse
-     */
-    public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : IlluminateResponse
-    {
-        return (new JsonApiResponse())->getResponse($json, $responseCode);
     }
 }

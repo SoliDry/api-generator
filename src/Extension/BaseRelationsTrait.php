@@ -39,7 +39,7 @@ trait BaseRelationsTrait
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
                 JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
@@ -61,7 +61,7 @@ trait BaseRelationsTrait
 
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
                 JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
@@ -71,7 +71,7 @@ trait BaseRelationsTrait
 
         $this->json->setIsCollection($model->$relation instanceof  \Illuminate\Database\Eloquent\Collection);
         $resource = $this->json->getResource($relFormRequest, $model->$relation, $relEntity);
-        return $this->getResponse(Json::prepareSerializedData($resource, $data));
+        return $this->response->getResponse(Json::prepareSerializedData($resource, $data));
     }
 
     /**
@@ -120,7 +120,7 @@ trait BaseRelationsTrait
         $model           = $this->getEntity($id);
 
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
+            return $this->response->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
                 JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
         }
 
