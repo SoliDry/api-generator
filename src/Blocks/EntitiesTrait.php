@@ -16,9 +16,7 @@ use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper as conf;
 use SoliDry\Helpers\ConfigOptions;
-use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
-use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModelsInterface;
@@ -88,7 +86,6 @@ trait EntitiesTrait
      * @param Request $request
      * @return Response
      * @throws \InvalidArgumentException
-     * @throws \SoliDry\Exceptions\AttributesException
      * @throws \LogicException
      */
     protected function saveBulk(Request $request) : Response
@@ -226,10 +223,7 @@ trait EntitiesTrait
                 if ($model === null) {
                     DB::rollBack();
 
-                    return (new JsonApiResponse())->getResponse(
-                        (new Json())->getErrors(
-                            (new Errors())->getModelNotFound($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID])),
-                        JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+                    return $this->response->getModelNotFoundError($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID]);
                 }
 
                 $model->delete();
