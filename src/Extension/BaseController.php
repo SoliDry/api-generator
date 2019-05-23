@@ -14,8 +14,11 @@ class BaseController extends ApiController
 
     /**
      * BaseController constructor.
+     *
      * @param Route $route
      * @throws HeadersException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \ReflectionException
      */
     public function __construct(Route $route)
     {
