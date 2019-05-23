@@ -66,9 +66,10 @@ trait BaseRelationsTrait
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
         $relFormRequest = new $formRequestEntity();
 
-        $this->json->setIsCollection($model->$relation instanceof  \Illuminate\Database\Eloquent\Collection);
-        $resource = $this->json->getResource($relFormRequest, $model->$relation, $relEntity);
-        return $this->response->getResponse(Json::prepareSerializedData($resource, $data));
+        $this->response->setFormRequest($relFormRequest);
+        $this->response->setEntity($relEntity);
+
+        return $this->response->getRelated($model->$relation, $data);
     }
 
     /**

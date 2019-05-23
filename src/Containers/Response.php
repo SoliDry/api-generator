@@ -4,6 +4,7 @@ namespace SoliDry\Containers;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use SoliDry\Extension\BaseFormRequest;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
@@ -181,6 +182,21 @@ class Response
     {
         return $this->getResponse(Json::prepareSerializedData(
             new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+    }
+
+    /**
+     * Gets an output for related
+     *
+     * @param BaseFormRequest $relationData
+     * @param $data
+     * @return \Illuminate\Http\Response
+     */
+    public function getRelated($relationData, $data): \Illuminate\Http\Response
+    {
+        $this->json->setIsCollection($relationData instanceof  Collection);
+        $resource = $this->json->getResource($this->formRequest, $relationData, $this->entity);
+
+        return $this->getResponse(Json::prepareSerializedData($resource, $data));
     }
 
     /**
