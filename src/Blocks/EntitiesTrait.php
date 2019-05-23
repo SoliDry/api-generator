@@ -2,10 +2,10 @@
 
 namespace SoliDry\Blocks;
 
+use Illuminate\Container\Container;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Fractal\Resource\Collection as FractalCollection;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use SoliDry\Exceptions\ErrorHandler;
@@ -16,9 +16,7 @@ use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper as conf;
 use SoliDry\Helpers\ConfigOptions;
-use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
-use SoliDry\Helpers\JsonApiResponse;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModelsInterface;
@@ -36,6 +34,7 @@ use SoliDry\Types\ApiInterface;
  * @property ApiController modelEntity
  * @property ConfigOptions configOptions
  * @property Json json
+ * @property \SoliDry\Containers\Response response
  */
 trait EntitiesTrait
 {
@@ -60,16 +59,25 @@ trait EntitiesTrait
 
     /**
      *  Sets all props/entities needed to process request
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \ReflectionException
      */
     protected function setEntities() : void
     {
-        $this->json = new Json();
         $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
+
         $this->formRequest = new $formRequestEntity();
         $this->props       = get_object_vars($this->formRequest);
+
         $this->modelEntity = Classes::getModelEntity($this->entity);
         $this->model       = new $this->modelEntity();
+
+        $container = Container::getInstance();
+        $this->response = $container->make(\SoliDry\Containers\Response::class);
+        $this->response->setFormRequest($this->formRequest);
+        $this->response->setEntity($this->entity);
     }
 
     /**
@@ -78,7 +86,6 @@ trait EntitiesTrait
      * @param Request $request
      * @return Response
      * @throws \InvalidArgumentException
-     * @throws \SoliDry\Exceptions\AttributesException
      * @throws \LogicException
      */
     protected function saveBulk(Request $request) : Response
@@ -139,10 +146,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        $resource = $this->json->setIsCollection(true)
-            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
-
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->response->get($collection, $meta);
     }
 
     /**
@@ -195,10 +199,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        $resource = $this->json->setIsCollection(true)
-            ->setMeta($meta)->getResource($this->formRequest, $collection, $this->entity);
-
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($collection, $meta);
     }
 
     /**
@@ -222,10 +223,7 @@ trait EntitiesTrait
                 if ($model === null) {
                     DB::rollBack();
 
-                    return (new JsonApiResponse())->getResponse(
-                        (new Json())->getErrors(
-                            (new Errors())->getModelNotFound($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID])),
-                        JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+                    return $this->response->getModelNotFoundError($this->modelEntity, $jsonObject[JSONApiInterface::CONTENT_ID]);
                 }
 
                 $model->delete();
@@ -238,8 +236,7 @@ trait EntitiesTrait
             return $this->getErrorResponse($request, $e);
         }
 
-        return (new JsonApiResponse())->getResponse(Json::prepareSerializedData(
-            new FractalCollection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->removeBulk();
     }
 
     /**

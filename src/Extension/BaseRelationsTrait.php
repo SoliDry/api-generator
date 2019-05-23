@@ -4,11 +4,9 @@ namespace SoliDry\Extension;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use League\Fractal\Resource\Collection;
 use SoliDry\Blocks\FileManager;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\ConfigHelper;
-use SoliDry\Helpers\Errors;
 use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\DirsInterface;
@@ -22,6 +20,7 @@ use SoliDry\Helpers\ConfigHelper as conf;
  * @package SoliDry\Extension
  *
  * @property Json json
+ * @property \SoliDry\Containers\Response response
  */
 trait BaseRelationsTrait
 {
@@ -39,12 +38,10 @@ trait BaseRelationsTrait
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
-        $resource = Json::getRelations($model->$relation, $relation);
-        return $this->getResponse(Json::prepareSerializedRelations($request, $resource));
+        return $this->response->getRelations($model->$relation, $relation, $request);
     }
 
     /**
@@ -62,17 +59,17 @@ trait BaseRelationsTrait
 
         $model = $this->getEntity($id);
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
         $relEntity = ucfirst($relation);
         $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
         $relFormRequest = new $formRequestEntity();
 
-        $this->json->setIsCollection($model->$relation instanceof  \Illuminate\Database\Eloquent\Collection);
-        $resource = $this->json->getResource($relFormRequest, $model->$relation, $relEntity);
-        return $this->getResponse(Json::prepareSerializedData($resource, $data));
+        $this->response->setFormRequest($relFormRequest);
+        $this->response->setEntity($relEntity);
+
+        return $this->response->getRelated($model->$relation, $data);
     }
 
     /**
@@ -86,9 +83,8 @@ trait BaseRelationsTrait
     public function createRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+        return $this->response->get($model, []);
     }
 
     /**
@@ -102,9 +98,8 @@ trait BaseRelationsTrait
     public function updateRelations(Request $request, $id, string $relation) : Response
     {
         $model    = $this->presetRelations($request, $id, $relation);
-        $resource = $this->json->getResource($this->formRequest, $model, $this->entity);
 
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($model, []);
     }
 
     /**
@@ -123,8 +118,7 @@ trait BaseRelationsTrait
         $model           = $this->getEntity($id);
 
         if (empty($model)) {
-            return $this->getResponse((new Json())->getErrors((new Errors())->getModelNotFound($this->entity, $id)),
-                JSONApiInterface::HTTP_RESPONSE_CODE_NOT_FOUND);
+            return $this->response->getModelNotFoundError($this->entity, $id);
         }
 
         return $model;
@@ -180,7 +174,7 @@ trait BaseRelationsTrait
             }
         }
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->getDeleteRelations();
     }
 
     /**
