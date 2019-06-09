@@ -5,7 +5,6 @@ namespace SoliDry\Blocks;
 use SoliDry\Extension\BaseController;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\Console;
-use SoliDry\ApiGenerator;
 use SoliDry\Types\ControllersInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
@@ -14,26 +13,8 @@ use SoliDry\Types\PhpInterface;
  * Class Controllers
  * @package SoliDry\Blocks
  */
-class Controllers implements ControllersInterface
+class Controllers extends Documentation implements ControllersInterface
 {
-    use ContentManager;
-
-    /** @var ApiGenerator generator */
-    private $generator;
-    private $sourceCode = '';
-    private $className;
-
-    /**
-     * Controllers constructor.
-     *
-     * @param ApiGenerator $generator
-     */
-    public function __construct($generator)
-    {
-        $this->generator = $generator;
-        $this->className = Classes::getClassName($this->generator->objectName);
-    }
-
     /**
      * Creates the DefaultController and outputs path to the console
      */
@@ -45,6 +26,7 @@ class Controllers implements ControllersInterface
             . $this->generator->defaultController
             . DefaultInterface::CONTROLLER_POSTFIX
             . PhpInterface::PHP_EXT;
+
         $isCreated = FileManager::createFile($fileController, $this->sourceCode);
         if($isCreated)
         {
@@ -52,7 +34,7 @@ class Controllers implements ControllersInterface
         }
     }
 
-    private function resetContent()
+    protected function resetContent()
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatControllersPath(), DefaultInterface::CONTROLLER_POSTFIX));
         $this->setComment(DefaultInterface::PROPS_START, 0);
@@ -62,7 +44,7 @@ class Controllers implements ControllersInterface
     /**
      *  Sets *Controller content
      */
-    private function setContent()
+    protected function setContent()
     {
         $this->setTag();
         $this->setNamespace(
@@ -98,6 +80,8 @@ class Controllers implements ControllersInterface
         // set props comments to preserve user-land code on regen
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
+
+        $this->setDefaultDocs();
 
         $this->endClass();
     }

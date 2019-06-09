@@ -4,7 +4,6 @@ namespace SoliDry\Blocks;
 
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Helpers\Console;
-use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MethodOptions;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
@@ -210,6 +209,35 @@ trait ContentManager
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::COMMENT
             . PhpInterface::SPACE . $comment . PHP_EOL;
+    }
+
+    /**
+     * @param int $tabs
+     */
+    protected function openComment(int $tabs = 1): void
+    {
+        $this->sourceCode .= $this->setTabs($tabs) .  PhpInterface::SLASH
+            . PhpInterface::ASTERISK . PhpInterface::ASTERISK . PHP_EOL;
+    }
+
+    /**
+     * @param int $tabs
+     */
+    protected function closeComment(int $tabs = 1): void
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::ASTERISK
+            .  PhpInterface::SLASH . PHP_EOL;
+    }
+
+    /**
+     * @param string $comment
+     * @param int $tabs
+     * @param int $afterTabs
+     */
+    protected function setStarredComment(string $comment, int $tabs = 1, int $afterTabs = 0): void
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::ASTERISK
+            . PhpInterface::SPACE . $this->setTabs($afterTabs) . $comment . PHP_EOL;
     }
 
     /**
@@ -419,7 +447,7 @@ trait ContentManager
      *
      * @param string $entityFile
      */
-    private function setBeforeProps(string $entityFile): void
+    protected function setBeforeProps(string $entityFile): void
     {
         $this->resourceCode = file_get_contents($entityFile);
         $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, NULL, PhpInterface::ENCODING_UTF8) - 3;
@@ -431,7 +459,7 @@ trait ContentManager
      *
      * @param string $till
      */
-    private function setAfterProps($till = NULL): void
+    protected function setAfterProps($till = NULL): void
     {
         $start = $this->setTabs() . mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, NULL,
                 PhpInterface::ENCODING_UTF8) - 3;
