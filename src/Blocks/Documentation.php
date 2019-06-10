@@ -134,7 +134,53 @@ abstract class Documentation
         $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
             . MethodsInterface::INDEX . '",', 1, 1);
 
+        $this->setStarredComment('tags="{"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
+        // define params
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="include",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="page",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="limit",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="sort",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="data",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="filter",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('in="query",', 1, 2);
+        $this->setStarredComment('name="order_by",', 1, 2);
+        $this->setStarredComment('required=false,', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
     }
 
     private function setView()

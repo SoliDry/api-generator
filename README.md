@@ -986,7 +986,7 @@ Note: data array items MUST be set in double quotes.
 
 or you may want to ORDER BY several columns in different directions:
 ```php
-http://example.com/api/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
+http://example.com/api/v1/article?include=tag&order_by={"title":"asc", "created_at":"desc"}
 ```
 
 Also, you have an ability to filter results this way:
