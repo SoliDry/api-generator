@@ -126,6 +126,8 @@ abstract class Documentation
 
     private function setIndex()
     {
+        $this->openComment();
+
         $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
@@ -185,10 +187,14 @@ abstract class Documentation
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
     }
 
     private function setView()
     {
+        $this->openComment();
+
         $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
@@ -198,10 +204,14 @@ abstract class Documentation
             . MethodsInterface::VIEW . '",', 1, 1);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->closeComment();
     }
 
     private function setCreate()
     {
+        $this->openComment();
+
         $this->setStarredComment(DocumentationInterface::OA_POST . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
@@ -211,10 +221,14 @@ abstract class Documentation
             . MethodsInterface::CREATE . '",', 1, 1);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->closeComment();
     }
 
     private function setUpdate()
     {
+        $this->openComment();
+
         $this->setStarredComment(DocumentationInterface::OA_PATCH . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
@@ -224,10 +238,14 @@ abstract class Documentation
             . MethodsInterface::UPDATE . '",', 1, 1);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->closeComment();
     }
 
     private function setDelete()
     {
+        $this->openComment();
+
         $this->setStarredComment(DocumentationInterface::OA_DELETE . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
@@ -237,5 +255,7 @@ abstract class Documentation
             . MethodsInterface::DELETE . '",', 1, 1);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->closeComment();
     }
 }
