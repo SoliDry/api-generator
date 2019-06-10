@@ -61,11 +61,6 @@ abstract class Documentation
                 1, 1);
         }
 
-        if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_DESCRIPTION]) === false) {
-            $this->setStarredComment('description="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_DESCRIPTION] . '",',
-                1, 1);
-        }
-
         // generate contact info
         $this->setStarredComment(DocumentationInterface::OA_CONTACT . PhpInterface::OPEN_PARENTHESES,
             1, 1);

@@ -236,8 +236,13 @@ trait ContentManager
      */
     protected function setStarredComment(string $comment, int $tabs = 1, int $afterTabs = 0): void
     {
-        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::ASTERISK
-            . PhpInterface::SPACE . $this->setTabs($afterTabs) . $comment . PHP_EOL;
+        $this->setTabs($tabs);
+        $this->sourceCode .=  PhpInterface::ASTERISK
+            . PhpInterface::SPACE;
+
+        $this->setTabs($afterTabs);
+
+        $this->sourceCode .= $comment . PHP_EOL;
     }
 
     /**
