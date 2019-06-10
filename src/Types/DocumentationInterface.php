@@ -6,11 +6,13 @@ namespace SoliDry\Types;
 interface DocumentationInterface
 {
 
-    public const OA_INFO   = '@OA\Info';
-    public const OA_GET    = '@OA\Get';
-    public const OA_POST   = '@OA\Post';
-    public const OA_PATCH  = '@OA\Patch';
-    public const OA_DELETE = '@OA\Delete';
+    public const OA_INFO    = '@OA\Info';
+    public const OA_CONTACT = '@OA\Contact';
+    public const OA_LICENSE = '@OA\License';
+    public const OA_GET     = '@OA\Get';
+    public const OA_POST    = '@OA\Post';
+    public const OA_PATCH   = '@OA\Patch';
+    public const OA_DELETE  = '@OA\Delete';
 
 
     public const OA_PARAMETER    = '@OA\Parameter';
