@@ -59,6 +59,8 @@ class Controllers extends Documentation implements ControllersInterface
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
 
+        $this->setControllersDocs();
+
         $this->endClass();
     }
 

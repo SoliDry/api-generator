@@ -8,6 +8,7 @@ use SoliDry\Helpers\Classes;
 use SoliDry\Types\ApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DocumentationInterface;
+use SoliDry\Types\MethodsInterface;
 use SoliDry\Types\PhpInterface;
 
 /**
@@ -101,5 +102,90 @@ abstract class Documentation
         $this->closeComment();
 
         $this->setComment(DefaultInterface::METHOD_END);
+    }
+
+    /**
+     *  Sets doc comments for every controller
+     */
+    protected function setControllersDocs(): void
+    {
+        $this->setComment(DefaultInterface::METHOD_START);
+
+        $this->setIndex();
+
+        $this->setView();
+
+        $this->setCreate();
+
+        $this->setUpdate();
+
+        $this->setDelete();
+
+        $this->setComment(DefaultInterface::METHOD_END);
+    }
+
+    private function setIndex()
+    {
+        $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . '",', 1, 1);
+
+        $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
+            . MethodsInterface::INDEX . '",', 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+    }
+
+    private function setView()
+    {
+        $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
+
+        $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
+            . MethodsInterface::VIEW . '",', 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+    }
+
+    private function setCreate()
+    {
+        $this->setStarredComment(DocumentationInterface::OA_POST . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . '",', 1, 1);
+
+        $this->setStarredComment('summary="Create ' . $this->generator->objectName . ' source for '
+            . MethodsInterface::CREATE . '",', 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+    }
+
+    private function setUpdate()
+    {
+        $this->setStarredComment(DocumentationInterface::OA_PATCH . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . '",', 1, 1);
+
+        $this->setStarredComment('summary="Update ' . $this->generator->objectName . ' source for '
+            . MethodsInterface::UPDATE . '",', 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+    }
+
+    private function setDelete()
+    {
+        $this->setStarredComment(DocumentationInterface::OA_DELETE . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . '",', 1, 1);
+
+        $this->setStarredComment('summary="Delete ' . $this->generator->objectName . ' source for '
+            . MethodsInterface::DELETE . '",', 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
     }
 }
