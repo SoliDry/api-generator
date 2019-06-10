@@ -180,6 +180,10 @@ abstract class Documentation
         $this->setStarredComment('required=false,', 1, 2);
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
+        $this->setStarredComment(DocumentationInterface::OA_RESPONSE . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        $this->setStarredComment('response=200', 1, 2);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
     }
 
