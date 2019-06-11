@@ -22,7 +22,8 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
     * [Optional settings](#user-content-optional-settings)
     * [Running generator](#user-content-running-generator)
     * [Docker repo](#user-content-docker-repository)   
-* [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
+* [Open API Types and Declarations](#user-content-open-api-types-and-declarations)
+* [Open API Docs generator](#user-content-open-api-docs-generator)    
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
     * [Controllers](#user-content-controllers)
@@ -606,6 +607,133 @@ Modules/{ModuleName}/Entities/ - contains mappers that extends the BaseModel (de
 Modules/{ModuleName}/Routes/api.php - contains routings pointing to Controllers with JSON API protocol support
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
+
+### Open API Docs generator
+
+OAS *Controllers based documentation is generated out of the box, thus you don't need 
+to create it manually let's see a couple examples:
+
+![OAS API docs generated](https://github.com/RJAPI/api-generator/blob/master/tests/images/API_docs_gen.png)
+
+One can ask - but how this can be done? there is no magic just look into your generated controllers 
+and see that there are pre-generated annotations for every method e.g.:
+```php
+<?php
+namespace Modules\V3\Http\Controllers;
+
+class ArticleController extends DefaultController 
+{
+    // >>>props>>>
+    // <<<props<<<
+    // >>>methods>>>
+    /**
+    * @OA\Get(
+    *     path="/v3/article",
+    *     summary="Get Articles ",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="include",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="page",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="limit",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="sort",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="data",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="filter",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="order_by",
+    *         required=false,
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Get(
+    *     path="/v3/article/{id}",
+    *     summary="Get Article",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="include",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="page",
+    *         required=false,
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Post(
+    *     path="/v3/article",
+    *     summary="Create Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Patch(
+    *     path="/v3/article/{id}",
+    *     summary="Update Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Delete(
+    *     path="/v3/article/{id}",
+    *     summary="Delete Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    // <<<methods<<<
+}
+``` 
 
 ### Generated files content
 
