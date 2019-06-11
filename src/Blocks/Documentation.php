@@ -47,6 +47,26 @@ abstract class Documentation
         // generate basic info
         $this->setStarredComment(DocumentationInterface::OA_INFO . PhpInterface::OPEN_PARENTHESES);
 
+        $this->setInfoParams();
+
+        // generate contact info
+        $this->setContactInfo();
+
+        // generate license info
+        $this->setLicenseInfo();
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
+
+        $this->setComment(DefaultInterface::METHOD_END);
+    }
+
+    /**
+     *  Sets info params - title, version, description
+     */
+    private function setInfoParams(): void
+    {
         if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_TITLE]) === false) {
             $this->setStarredComment('title="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_TITLE] . '",',
                 1, 1);
@@ -61,8 +81,34 @@ abstract class Documentation
             $this->setStarredComment('description="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_DESCRIPTION] . '",',
                 1, 1);
         }
+    }
 
-        // generate contact info
+    /**
+     *  Sets license info - name, url
+     */
+    private function setLicenseInfo(): void
+    {
+        $this->setStarredComment(DocumentationInterface::OA_LICENSE . PhpInterface::OPEN_PARENTHESES,
+            1, 1);
+
+        if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_NAME]) === false) {
+            $this->setStarredComment('name="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_NAME] . '",',
+                1, 2);
+        }
+
+        if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_URL]) === false) {
+            $this->setStarredComment('url="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_URL] . '",',
+                1, 2);
+        }
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
+    }
+
+    /**
+     *  Sets contact info - email, name, url
+     */
+    private function setContactInfo(): void
+    {
         $this->setStarredComment(DocumentationInterface::OA_CONTACT . PhpInterface::OPEN_PARENTHESES,
             1, 1);
 
@@ -81,29 +127,7 @@ abstract class Documentation
                 1, 2);
         }
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
-
-        // generate license info
-        $this->setStarredComment(DocumentationInterface::OA_LICENSE . PhpInterface::OPEN_PARENTHESES,
-            1, 1);
-
-        if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_NAME]) === false) {
-            $this->setStarredComment('name="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_NAME] . '",',
-                1, 2);
-        }
-
-        if (empty($this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_URL]) === false) {
-            $this->setStarredComment('url="' . $this->generator->data[ApiInterface::API_INFO][ApiInterface::API_LICENSE][ApiInterface::API_URL] . '",',
-                1, 2);
-        }
-
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
-
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
-
-        $this->closeComment();
-
-        $this->setComment(DefaultInterface::METHOD_END);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
     }
 
     /**
