@@ -99,6 +99,8 @@ abstract class Documentation
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
         $this->closeComment();
 
         $this->setComment(DefaultInterface::METHOD_END);
@@ -319,7 +321,7 @@ abstract class Documentation
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
     }
 
     /**
@@ -332,6 +334,6 @@ abstract class Documentation
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
     }
 }
