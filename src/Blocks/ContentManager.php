@@ -216,7 +216,7 @@ trait ContentManager
      */
     protected function openComment(int $tabs = 1): void
     {
-        $this->sourceCode .= $this->setTabs($tabs) .  PhpInterface::SLASH
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::SLASH
             . PhpInterface::ASTERISK . PhpInterface::ASTERISK . PHP_EOL;
     }
 
@@ -226,7 +226,7 @@ trait ContentManager
     protected function closeComment(int $tabs = 1): void
     {
         $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::ASTERISK
-            .  PhpInterface::SLASH . PHP_EOL;
+            . PhpInterface::SLASH . PHP_EOL;
     }
 
     /**
@@ -237,7 +237,7 @@ trait ContentManager
     protected function setStarredComment(string $comment, int $tabs = 1, int $afterTabs = 0): void
     {
         $this->setTabs($tabs);
-        $this->sourceCode .=  PhpInterface::ASTERISK
+        $this->sourceCode .= PhpInterface::ASTERISK
             . PhpInterface::SPACE;
 
         $this->setTabs($afterTabs);
@@ -247,6 +247,7 @@ trait ContentManager
 
     /**
      * Sets an amount of tabs to source code
+     *
      * @param int $amount
      */
     protected function setTabs(int $amount = 1): void
@@ -258,6 +259,7 @@ trait ContentManager
 
     /**
      * Sets an amount of backslashes to source code
+     *
      * @param int $amount
      */
     protected function setBackslashes(int $amount = 1): void
@@ -499,5 +501,17 @@ trait ContentManager
             . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
             . $this->getMethodParamsToPass($params, $arrayToJson)
             . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
+    }
+
+    /**
+     * Sets n new lines
+     *
+     * @param int $numLines
+     */
+    protected function setNewLines(int $numLines = 1): void
+    {
+        for ($i = $numLines; $i > 0; --$i) {
+            $this->sourceCode .= PHP_EOL;
+        }
     }
 }

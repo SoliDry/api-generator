@@ -124,7 +124,7 @@ abstract class Documentation
         $this->setComment(DefaultInterface::METHOD_END);
     }
 
-    private function setIndex()
+    private function setIndex(): void
     {
         $this->openComment();
 
@@ -190,9 +190,10 @@ abstract class Documentation
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
         $this->closeComment();
+        $this->setNewLines();
     }
 
-    private function setView()
+    private function setView(): void
     {
         $this->openComment();
 
@@ -224,9 +225,10 @@ abstract class Documentation
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
         $this->closeComment();
+        $this->setNewLines();
     }
 
-    private function setCreate()
+    private function setCreate(): void
     {
         $this->openComment();
 
@@ -246,9 +248,10 @@ abstract class Documentation
         ]);
 
         $this->closeComment();
+        $this->setNewLines();
     }
 
-    private function setUpdate()
+    private function setUpdate(): void
     {
         $this->openComment();
 
@@ -268,9 +271,10 @@ abstract class Documentation
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
         $this->closeComment();
+        $this->setNewLines();
     }
 
-    private function setDelete()
+    private function setDelete(): void
     {
         $this->openComment();
 
@@ -290,6 +294,7 @@ abstract class Documentation
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
         $this->closeComment();
+        $this->setNewLines();
     }
 
     /**
