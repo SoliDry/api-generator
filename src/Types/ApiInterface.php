@@ -9,9 +9,19 @@ namespace SoliDry\Types;
  */
 interface ApiInterface
 {
-    public const OPEN_API_KEY    = 'openapi';
-    public const API_SERVERS     = 'servers';
-    public const API_INFO        = 'info';
+
+    public const OPEN_API_KEY         = 'openapi';
+    public const API_SERVERS          = 'servers';
+    public const API_INFO             = 'info';
+    public const API_TITLE            = 'title';
+    public const API_VERSION          = 'version';
+    public const API_DESCRIPTION      = 'description';
+    public const API_CONTACT          = 'contact';
+    public const API_NAME             = 'name';
+    public const API_URL              = 'url';
+    public const API_EMAIL            = 'email';
+    public const API_LICENSE          = 'license';
+    public const API_TERMS_OF_SERVICE = 'termsOfService';
 
     public const API_VARS       = 'variables';
     public const API_BASE_PATH  = 'basePath';
