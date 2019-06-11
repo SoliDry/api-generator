@@ -19,6 +19,7 @@ interface DocumentationInterface
     public const OA_SCHEMA       = '@OA\Schema';
     public const OA_REQUEST_BODY = '@OA\RequestBody';
     public const OA_RESPONSE     = '@OA\Response';
+    public const OA_JSON_CONTENT = '@OA\JsonContent';
 
     public const PATH        = 'path';
     public const SUMMARY     = 'summary';

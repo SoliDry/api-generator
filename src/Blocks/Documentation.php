@@ -136,7 +136,7 @@ abstract class Documentation
         $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
             . MethodsInterface::INDEX . '",', 1, 1);
 
-        $this->setStarredComment('tags="{"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         // define params
@@ -205,6 +205,9 @@ abstract class Documentation
         $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
             . MethodsInterface::VIEW . '",', 1, 1);
 
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
         $this->setParameter([
             'in'       => '"query"',
             'name'     => '"include"',
@@ -222,7 +225,7 @@ abstract class Documentation
             'description' => '""',
         ]);
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
         $this->closeComment();
         $this->setNewLines();
@@ -240,12 +243,15 @@ abstract class Documentation
         $this->setStarredComment('summary="Create ' . $this->generator->objectName . ' source for '
             . MethodsInterface::CREATE . '",', 1, 1);
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
 
         $this->setResponse([
             'response'    => '200',
             'description' => '""',
         ]);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
         $this->closeComment();
         $this->setNewLines();
@@ -263,12 +269,15 @@ abstract class Documentation
         $this->setStarredComment('summary="Update ' . $this->generator->objectName . ' source for '
             . MethodsInterface::UPDATE . '",', 1, 1);
 
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
         $this->setResponse([
             'response'    => '200',
             'description' => '""',
         ]);
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
         $this->closeComment();
         $this->setNewLines();
@@ -286,12 +295,15 @@ abstract class Documentation
         $this->setStarredComment('summary="Delete ' . $this->generator->objectName . ' source for '
             . MethodsInterface::DELETE . '",', 1, 1);
 
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
         $this->setResponse([
             'response'    => '200',
             'description' => '""',
         ]);
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
         $this->closeComment();
         $this->setNewLines();
@@ -307,7 +319,7 @@ abstract class Documentation
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
 
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
     }
 
     /**
@@ -319,6 +331,7 @@ abstract class Documentation
         foreach ($paramValues as $key => $val) {
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
     }
 }
