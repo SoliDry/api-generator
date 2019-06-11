@@ -140,51 +140,52 @@ abstract class Documentation
             . '"},', 1, 1);
 
         // define params
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="include",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"include"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="page",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"page"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="limit",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"limit"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="sort",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"sort"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="data",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"data"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="filter",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"filter"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('in="query",', 1, 2);
-        $this->setStarredComment('name="order_by",', 1, 2);
-        $this->setStarredComment('required=false,', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"order_by"',
+            'required' => 'false',
+        ]);
 
-        $this->setStarredComment(DocumentationInterface::OA_RESPONSE . PhpInterface::OPEN_PARENTHESES, 1, 1);
-        $this->setStarredComment('response=200', 1, 2);
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
 
@@ -202,6 +203,23 @@ abstract class Documentation
 
         $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' source for '
             . MethodsInterface::VIEW . '",', 1, 1);
+
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"include"',
+            'required' => 'false',
+        ]);
+
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"page"',
+            'required' => 'false',
+        ]);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
@@ -222,6 +240,11 @@ abstract class Documentation
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
         $this->closeComment();
     }
 
@@ -232,10 +255,15 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_PATCH . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . '",', 1, 1);
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
 
         $this->setStarredComment('summary="Update ' . $this->generator->objectName . ' source for '
             . MethodsInterface::UPDATE . '",', 1, 1);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
@@ -249,13 +277,43 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_DELETE . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . '",', 1, 1);
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
 
         $this->setStarredComment('summary="Delete ' . $this->generator->objectName . ' source for '
             . MethodsInterface::DELETE . '",', 1, 1);
 
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
 
         $this->closeComment();
+    }
+
+    /**
+     * @param array $paramValues
+     */
+    private function setParameter(array $paramValues): void
+    {
+        $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        foreach ($paramValues as $key => $val) {
+            $this->setStarredComment($key . '=' . $val . ',', 1, 2);
+        }
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
+    }
+
+    /**
+     * @param array $paramValues
+     */
+    private function setResponse(array $paramValues): void
+    {
+        $this->setStarredComment(DocumentationInterface::OA_RESPONSE . PhpInterface::OPEN_PARENTHESES, 1, 1);
+        foreach ($paramValues as $key => $val) {
+            $this->setStarredComment($key . '=' . $val . ',', 1, 2);
+        }
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES, 1, 1);
     }
 }
