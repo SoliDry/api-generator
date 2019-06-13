@@ -9,9 +9,9 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 [![codecov](https://codecov.io/gh/SoliDry/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/SoliDry/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
-![alt Laravel logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/laravel-logo-white.png)
-![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png) 
+![alt OAS logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/OpenAPI_Logo_Pantone-1.png)
+![alt Laravel logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/laravel-logo-white.png)
+![alt JSON API logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/jsonapi.png) 
 
 * [Getting started Demo](https://youtu.be/kFXVq4CGkEU)
 * [CRUD Demo](https://youtu.be/eYVqn-VecQI)
@@ -181,11 +181,11 @@ By default generated files preserved to prevent overwriting of added/modified co
 
 The output will look something like this:
 
-![Console output](https://github.com/RJAPI/api-generator/blob/master/tests/images/Console_generator_output.png)
+![Console output](https://github.com/SoliDry/laravel-api/blob/master/tests/images/Console_generator_output.png)
 
 After that u can see the following dirs and files module structure in your project:
 
-![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
+![Dirs and files](https://github.com/SoliDry/laravel-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Docker repository
 Another way of installing and playing with api-generator (in sandbox fashion) is via https://github.com/SoliDry/laravel-api.
@@ -613,7 +613,7 @@ Modules/{ModuleName}/Database/Migrations/ - contains migrations created with opt
 OAS *Controllers based documentation is generated out of the box, thus you don't need 
 to create it manually let's see a couple examples:
 
-![OAS API docs generated](https://github.com/RJAPI/api-generator/blob/master/tests/images/API_docs_gen.png)
+![OAS API docs generated](https://github.com/SoliDry/laravel-api/blob/master/tests/images/API_docs_gen.png)
 
 One can ask - but how this can be done? there is no magic just look into your generated controllers 
 and see that there are pre-generated annotations for every method e.g.:
