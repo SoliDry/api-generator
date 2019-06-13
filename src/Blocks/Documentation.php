@@ -174,7 +174,7 @@ abstract class Documentation
             'in'       => '"query"',
             'name'     => '"page"',
             'required' => 'false',
-        ]);
+        ], 'integer');
 
         $this->setParameter([
             'in'       => '"query"',
@@ -239,7 +239,7 @@ abstract class Documentation
 
         $this->setParameter([
             'in'       => '"query"',
-            'name'     => '"page"',
+            'name'     => '"data"',
             'required' => 'false',
         ]);
 
@@ -330,19 +330,40 @@ abstract class Documentation
     }
 
     /**
+     * Sets any params of methods
+     *
      * @param array $paramValues
+     * @param string $schemaType
      */
-    private function setParameter(array $paramValues): void
+    private function setParameter(array $paramValues, string $schemaType = 'string'): void
     {
         $this->setStarredComment(DocumentationInterface::OA_PARAMETER . PhpInterface::OPEN_PARENTHESES, 1, 1);
         foreach ($paramValues as $key => $val) {
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
 
+        $this->setSchema($schemaType);
+
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
     }
 
     /**
+     * Sets the parameter schema
+     *
+     * @param string $schemaType
+     */
+    private function setSchema(string $schemaType): void
+    {
+        $this->setStarredComment(DocumentationInterface::OA_SCHEMA . PhpInterface::OPEN_PARENTHESES, 1, 2);
+
+        $this->setStarredComment('type="' . $schemaType . '",', 1, 3);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 2);
+    }
+
+    /**
+     * Sets any response of method
+     *
      * @param array $paramValues
      */
     private function setResponse(array $paramValues): void
