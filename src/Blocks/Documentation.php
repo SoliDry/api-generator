@@ -37,7 +37,7 @@ abstract class Documentation
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
-    protected function setDefaultDocs()
+    protected function setDefaultDocs(): void
     {
         $this->setComment(DefaultInterface::METHOD_START);
 
@@ -146,9 +146,14 @@ abstract class Documentation
 
         $this->setDelete();
 
+        $this->setRelated();
+
         $this->setComment(DefaultInterface::METHOD_END);
     }
 
+    /**
+     * Sets OAS documentation for an index method
+     */
     private function setIndex(): void
     {
         $this->openComment();
@@ -180,7 +185,7 @@ abstract class Documentation
             'in'       => '"query"',
             'name'     => '"limit"',
             'required' => 'false',
-        ]);
+        ], 'integer');
 
         $this->setParameter([
             'in'       => '"query"',
@@ -217,6 +222,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a view method
+     */
     private function setView(): void
     {
         $this->openComment();
@@ -254,6 +262,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a create method
+     */
     private function setCreate(): void
     {
         $this->openComment();
@@ -279,6 +290,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for an update method
+     */
     private function setUpdate(): void
     {
         $this->openComment();
@@ -304,6 +318,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a delete method
+     */
     private function setDelete(): void
     {
         $this->openComment();
@@ -317,6 +334,40 @@ abstract class Documentation
 
         $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
+        $this->setNewLines();
+    }
+
+    /**
+     *  Sets OAS documentation for a related method
+     */
+    private function setRelated(): void
+    {
+        $this->openComment();
+
+        $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/{related}",', 1, 1);
+
+        $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' related objects",', 1, 1);
+
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
+        $this->setParameter([
+            'in'       => '"query"',
+            'name'     => '"data"',
+            'required' => 'false',
+        ]);
 
         $this->setResponse([
             'response'    => '200',
