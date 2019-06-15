@@ -1,8 +1,9 @@
 <?php
 
-namespace SoliDry\Blocks;
+namespace SoliDry\Documentation;
 
 use SoliDry\ApiGenerator;
+use SoliDry\Blocks\ContentManager;
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Helpers\Classes;
 use SoliDry\Types\ApiInterface;
@@ -20,7 +21,7 @@ use SoliDry\Types\PhpInterface;
 abstract class Documentation
 {
 
-    use ContentManager;
+    use ContentManager, RelationsDoc;
 
     protected $generator;
     protected $sourceCode = '';
@@ -147,6 +148,8 @@ abstract class Documentation
         $this->setDelete();
 
         $this->setRelated();
+
+        $this->setRelations();
 
         $this->setComment(DefaultInterface::METHOD_END);
     }
@@ -334,40 +337,6 @@ abstract class Documentation
 
         $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
-
-        $this->setResponse([
-            'response'    => '200',
-            'description' => '""',
-        ]);
-
-        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
-
-        $this->closeComment();
-        $this->setNewLines();
-    }
-
-    /**
-     *  Sets OAS documentation for a related method
-     */
-    private function setRelated(): void
-    {
-        $this->openComment();
-
-        $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
-
-        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/{related}",', 1, 1);
-
-        $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' related objects",', 1, 1);
-
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
-            . '"},', 1, 1);
-
-        $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"data"',
-            'required' => 'false',
-        ]);
 
         $this->setResponse([
             'response'    => '200',

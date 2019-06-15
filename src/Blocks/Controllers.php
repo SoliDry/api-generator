@@ -2,6 +2,7 @@
 
 namespace SoliDry\Blocks;
 
+use SoliDry\Documentation\Documentation;
 use SoliDry\Extension\BaseController;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\Console;
@@ -15,8 +16,11 @@ use SoliDry\Types\PhpInterface;
  */
 class Controllers extends Documentation implements ControllersInterface
 {
+
     /**
      * Creates the DefaultController and outputs path to the console
+     *
+     * @throws \ReflectionException
      */
     public function createDefault(): void
     {
@@ -66,6 +70,8 @@ class Controllers extends Documentation implements ControllersInterface
 
     /**
      *  Sets the DefaultController content
+     *
+     * @throws \ReflectionException
      */
     private function setDefaultContent()
     {
