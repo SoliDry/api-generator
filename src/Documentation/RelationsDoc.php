@@ -64,7 +64,7 @@ trait RelationsDoc
         $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/{related}",', 1, 1);
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/relationships/{relations}",', 1, 1);
 
         $this->setStarredComment('summary="Get ' . $this->generator->objectName . ' relations objects",', 1, 1);
 
