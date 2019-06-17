@@ -99,4 +99,88 @@ trait RelationsDoc
         $this->closeComment();
         $this->setNewLines();
     }
+
+    /**
+     *  Sets OAS documentation for creating relation method
+     */
+    private function setCreateRelation(): void
+    {
+        $this->openComment();
+
+        $this->setStarredComment(DocumentationInterface::OA_POST . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/relationships/{relations}",', 1, 1);
+
+        $this->setStarredComment('summary="Create ' . $this->generator->objectName . ' relation object",', 1, 1);
+
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
+        $this->setNewLines();
+    }
+
+    /**
+     *  Sets OAS documentation for updating relation method
+     */
+    private function setUpdateRelation(): void
+    {
+        $this->openComment();
+
+        $this->setStarredComment(DocumentationInterface::OA_PATCH . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/relationships/{relations}",', 1, 1);
+
+        $this->setStarredComment('summary="Update ' . $this->generator->objectName . ' relation object",', 1, 1);
+
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
+        $this->setNewLines();
+    }
+
+    /**
+     *  Sets OAS documentation for deleting relation method
+     */
+    private function setDeleteRelation(): void
+    {
+        $this->openComment();
+
+        $this->setStarredComment(DocumentationInterface::OA_DELETE . PhpInterface::OPEN_PARENTHESES);
+
+        $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
+            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}/relationships/{relations}",', 1, 1);
+
+        $this->setStarredComment('summary="Delete ' . $this->generator->objectName . ' relation object",', 1, 1);
+
+        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+            . '"},', 1, 1);
+
+        $this->setResponse([
+            'response'    => '200',
+            'description' => '""',
+        ]);
+
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
+
+        $this->closeComment();
+        $this->setNewLines();
+    }
 }

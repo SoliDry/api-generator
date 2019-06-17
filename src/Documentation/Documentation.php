@@ -151,6 +151,12 @@ abstract class Documentation
 
         $this->setRelations();
 
+        $this->setCreateRelation();
+
+        $this->setUpdateRelation();
+
+        $this->setDeleteRelation();
+
         $this->setComment(DefaultInterface::METHOD_END);
     }
 
