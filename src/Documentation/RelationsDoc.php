@@ -117,6 +117,18 @@ trait RelationsDoc
         $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"id"',
+            'required' => 'true',
+        ]);
+
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"relations"',
+            'required' => 'true',
+        ]);
+
         $this->setResponse([
             'response'    => '200',
             'description' => '""',
@@ -145,6 +157,18 @@ trait RelationsDoc
         $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"id"',
+            'required' => 'true',
+        ]);
+
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"relations"',
+            'required' => 'true',
+        ]);
+
         $this->setResponse([
             'response'    => '200',
             'description' => '""',
@@ -172,6 +196,18 @@ trait RelationsDoc
 
         $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
+
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"id"',
+            'required' => 'true',
+        ]);
+
+        $this->setParameter([
+            'in'       => '"path"',
+            'name'     => '"relations"',
+            'required' => 'true',
+        ]);
 
         $this->setResponse([
             'response'    => '200',
