@@ -2,6 +2,7 @@
 
 namespace SoliDry\Documentation;
 
+use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DocumentationInterface;
 use SoliDry\Types\PhpInterface;
@@ -44,7 +45,7 @@ trait RelationsDoc
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -90,7 +91,7 @@ trait RelationsDoc
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -130,7 +131,7 @@ trait RelationsDoc
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
             'description' => '""',
         ]);
 
@@ -170,7 +171,7 @@ trait RelationsDoc
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -210,7 +211,7 @@ trait RelationsDoc
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
             'description' => '""',
         ]);
 

@@ -2,12 +2,14 @@
 
 namespace SoliDry\Documentation;
 
+use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DocumentationInterface;
 use SoliDry\Types\PhpInterface;
 
 trait BulksDoc
 {
+
     /**
      *  Sets OAS documentation for a bulk create method
      */
@@ -26,7 +28,7 @@ trait BulksDoc
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
             'description' => '""',
         ]);
 
@@ -54,7 +56,7 @@ trait BulksDoc
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -82,7 +84,7 @@ trait BulksDoc
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
             'description' => '""',
         ]);
 

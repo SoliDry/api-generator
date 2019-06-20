@@ -5,6 +5,7 @@ namespace SoliDry\Documentation;
 use SoliDry\ApiGenerator;
 use SoliDry\Blocks\ContentManager;
 use SoliDry\Controllers\BaseCommand;
+use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
 use SoliDry\Types\ApiInterface;
 use SoliDry\Types\DefaultInterface;
@@ -227,7 +228,7 @@ abstract class Documentation
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -267,7 +268,7 @@ abstract class Documentation
         ]);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -295,7 +296,7 @@ abstract class Documentation
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
             'description' => '""',
         ]);
 
@@ -323,7 +324,7 @@ abstract class Documentation
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '""',
         ]);
 
@@ -351,7 +352,7 @@ abstract class Documentation
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '200',
+            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
             'description' => '""',
         ]);
 

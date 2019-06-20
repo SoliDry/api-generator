@@ -29,12 +29,32 @@ class Response
     private $sqlOptions;
     private $method;
 
+    /**
+     * Response constructor.
+     *
+     * @param Json $json
+     * @param Errors $errors
+     */
     public function __construct(Json $json, Errors $errors)
     {
         $this->json = $json;
         $this->errors = $errors;
     }
 
+    /**
+     * @uses getIndex
+     * @uses getView
+     * @uses getCreate
+     * @uses getUpdate
+     * @uses getCreateRelations
+     * @uses getUpdateRelations
+     * @uses getUpdateBulk
+     * @uses getCreateBulk
+     *
+     * @param $data
+     * @param array $meta
+     * @return mixed
+     */
     public function get($data, array $meta)
     {
         return $this->{'get' . ucfirst($this->method)}($data, $meta);

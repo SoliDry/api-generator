@@ -17,6 +17,7 @@ use SoliDry\Helpers\ConfigHelper as conf;
 
 /**
  * Trait BaseRelationsTrait
+ *
  * @package SoliDry\Extension
  *
  * @property Json json
@@ -34,7 +35,7 @@ trait BaseRelationsTrait
      * @param string $relation
      * @return Response
      */
-    public function relations(Request $request, $id, string $relation) : Response
+    public function relations(Request $request, $id, string $relation): Response
     {
         $model = $this->getEntity($id);
         if (empty($model)) {
@@ -52,9 +53,9 @@ trait BaseRelationsTrait
      * @param string $relation
      * @return Response
      */
-    public function related(Request $request, $id, string $relation) : Response
+    public function related(Request $request, $id, string $relation): Response
     {
-        $data = ($request->input(ModelsInterface::PARAM_DATA) === null) ? ModelsInterface::DEFAULT_DATA
+        $data = ($request->input(ModelsInterface::PARAM_DATA) === NULL) ? ModelsInterface::DEFAULT_DATA
             : Json::decode(urldecode($request->input(ModelsInterface::PARAM_DATA)));
 
         $model = $this->getEntity($id);
@@ -63,7 +64,7 @@ trait BaseRelationsTrait
         }
 
         $relEntity = ucfirst($relation);
-        $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
+        $formRequestEntity = $this->getFormRequestEntity(conf::getModuleName(), $relEntity);
         $relFormRequest = new $formRequestEntity();
 
         $this->response->setFormRequest($relFormRequest);
@@ -80,9 +81,9 @@ trait BaseRelationsTrait
      * @param string $relation
      * @return Response
      */
-    public function createRelations(Request $request, $id, string $relation) : Response
+    public function createRelations(Request $request, $id, string $relation): Response
     {
-        $model    = $this->presetRelations($request, $id, $relation);
+        $model = $this->presetRelations($request, $id, $relation);
 
         return $this->response->get($model, []);
     }
@@ -95,9 +96,9 @@ trait BaseRelationsTrait
      * @param string $relation
      * @return Response
      */
-    public function updateRelations(Request $request, $id, string $relation) : Response
+    public function updateRelations(Request $request, $id, string $relation): Response
     {
-        $model    = $this->presetRelations($request, $id, $relation);
+        $model = $this->presetRelations($request, $id, $relation);
 
         return $this->response->get($model, []);
     }
@@ -115,7 +116,7 @@ trait BaseRelationsTrait
 
         // set include for relations
         $_GET['include'] = $relation;
-        $model           = $this->getEntity($id);
+        $model = $this->getEntity($id);
 
         if (empty($model)) {
             return $this->response->getModelNotFoundError($this->entity, $id);
@@ -128,13 +129,13 @@ trait BaseRelationsTrait
      * DELETE relationships for specific entity id
      *
      * @param Request $request JSON API formatted string
-     * @param int|string $id int id of an entity
+     * @param int|string $id   int id of an entity
      * @param string $relation
      * @return Response
      */
-    public function deleteRelations(Request $request, $id, string $relation) : Response
+    public function deleteRelations(Request $request, $id, string $relation): Response
     {
-        $json        = Json::decode($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiRels = Json::getData($json);
         if (empty($jsonApiRels) === false) {
             $lowEntity = strtolower($this->entity);
@@ -142,7 +143,7 @@ trait BaseRelationsTrait
                 $rId = $val[ApiInterface::RAML_ID];
                 // if pivot file exists then save
                 $ucEntity = ucfirst($relation);
-                $file     = DirsInterface::MODULES_DIR . PhpInterface::SLASH
+                $file = DirsInterface::MODULES_DIR . PhpInterface::SLASH
                     . ConfigHelper::getModuleName() . PhpInterface::SLASH .
                     DirsInterface::ENTITIES_DIR . PhpInterface::SLASH .
                     $this->entity . $ucEntity . PhpInterface::PHP_EXT;
@@ -165,7 +166,8 @@ trait BaseRelationsTrait
                     /** @var \Illuminate\Database\Eloquent\Builder $model */
                     $model = $this->getModelEntities(
                         $entity, [
-                            ApiInterface::RAML_ID, $id,
+                            ApiInterface::RAML_ID,
+                            $id,
                         ]
                     );
 
@@ -182,7 +184,7 @@ trait BaseRelationsTrait
      * @param int|string $eId
      * @param bool $isRemovable
      */
-    protected function setRelationships(array $json, $eId, bool $isRemovable = false) : void
+    protected function setRelationships(array $json, $eId, bool $isRemovable = false): void
     {
         $jsonApiRels = Json::getRelationships($json);
         if (empty($jsonApiRels) === false) {
@@ -208,17 +210,17 @@ trait BaseRelationsTrait
      * @param int|string $rId
      * @param bool $isRemovable
      */
-    private function saveRelationship($entity, $eId, $rId, bool $isRemovable = false) : void
+    private function saveRelationship($entity, $eId, $rId, bool $isRemovable = false): void
     {
-        $ucEntity  = Classes::getClassName($entity);
+        $ucEntity = Classes::getClassName($entity);
         $lowEntity = MigrationsHelper::getTableName($this->entity);
         // if pivot file exists then save
-        $filePivot          = FileManager::getPivotFile($this->entity, $ucEntity);
-        $filePivotInverse   = FileManager::getPivotFile($ucEntity, $this->entity);
-        $pivotExists        = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivot);
+        $filePivot = FileManager::getPivotFile($this->entity, $ucEntity);
+        $filePivotInverse = FileManager::getPivotFile($ucEntity, $this->entity);
+        $pivotExists = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivot);
         $pivotInverseExists = file_exists(PhpInterface::SYSTEM_UPDIR . $filePivotInverse);
         if ($pivotExists === true || $pivotInverseExists === true) { // ManyToMany rel
-            $pivotEntity = null;
+            $pivotEntity = NULL;
 
             if ($pivotExists) {
                 $pivotEntity = Classes::getModelEntity($this->entity . $ucEntity);
@@ -242,7 +244,7 @@ trait BaseRelationsTrait
      * @param string $lowEntity
      * @param int|string $eId
      */
-    private function clearPivotBeforeSave(string $pivotEntity, string $lowEntity, $eId) : void
+    private function clearPivotBeforeSave(string $pivotEntity, string $lowEntity, $eId): void
     {
         if ($this->relsRemoved === false) {
             // clean up old links
@@ -261,36 +263,38 @@ trait BaseRelationsTrait
      * @param int|string $eId
      * @param int|string $rId
      */
-    private function savePivot(string $pivotEntity, string $lowEntity, string $entity, $eId, $rId) : void
+    private function savePivot(string $pivotEntity, string $lowEntity, string $entity, $eId, $rId): void
     {
-        $pivot                                                                  = new $pivotEntity();
-        $pivot->{$entity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID}    = $rId;
+        $pivot = new $pivotEntity();
+        $pivot->{$entity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $rId;
         $pivot->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $eId;
         $pivot->save();
     }
 
     /**
      * Saves model with related id from linked table full duplex
+     *
      * @param string $ucEntity
      * @param string $lowEntity
      * @param int|string $eId
      * @param int|string $rId
      */
-    private function saveModel(string $ucEntity, string $lowEntity, $eId, $rId) : void
+    private function saveModel(string $ucEntity, string $lowEntity, $eId, $rId): void
     {
         $relEntity = Classes::getModelEntity($ucEntity);
-        $model     = $this->getModelEntity($relEntity, $rId);
+        $model = $this->getModelEntity($relEntity, $rId);
 
         // swap table and field trying to find rels with inverse
         if (!property_exists($model, $lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID)) {
-            $ucTmp     = $ucEntity;
-            $ucEntity  = ucfirst($lowEntity);
+            $ucTmp = $ucEntity;
+            $ucEntity = ucfirst($lowEntity);
             $relEntity = Classes::getModelEntity($ucEntity);
-            $model     = $this->getModelEntity($relEntity, $eId);
+            $model = $this->getModelEntity($relEntity, $eId);
             $lowEntity = strtolower($ucTmp);
 
             $model->{$lowEntity . PhpInterface::UNDERSCORE . ApiInterface::RAML_ID} = $rId;
             $model->save();
+
             return;
         }
 
