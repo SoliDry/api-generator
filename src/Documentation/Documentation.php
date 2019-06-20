@@ -21,7 +21,7 @@ use SoliDry\Types\PhpInterface;
 abstract class Documentation
 {
 
-    use ContentManager, RelationsDoc;
+    use ContentManager, RelationsDoc, BulksDoc;
 
     protected $generator;
     protected $sourceCode = '';
@@ -156,6 +156,12 @@ abstract class Documentation
         $this->setUpdateRelation();
 
         $this->setDeleteRelation();
+
+        $this->setCreateBulk();
+
+        $this->setUpdateBulk();
+
+        $this->setDeleteBulk();
 
         $this->setComment(DefaultInterface::METHOD_END);
     }
