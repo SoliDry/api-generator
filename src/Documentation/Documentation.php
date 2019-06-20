@@ -1,8 +1,9 @@
 <?php
 
-namespace SoliDry\Blocks;
+namespace SoliDry\Documentation;
 
 use SoliDry\ApiGenerator;
+use SoliDry\Blocks\ContentManager;
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Helpers\Classes;
 use SoliDry\Types\ApiInterface;
@@ -20,7 +21,7 @@ use SoliDry\Types\PhpInterface;
 abstract class Documentation
 {
 
-    use ContentManager;
+    use ContentManager, RelationsDoc;
 
     protected $generator;
     protected $sourceCode = '';
@@ -37,7 +38,7 @@ abstract class Documentation
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
-    protected function setDefaultDocs()
+    protected function setDefaultDocs(): void
     {
         $this->setComment(DefaultInterface::METHOD_START);
 
@@ -146,9 +147,22 @@ abstract class Documentation
 
         $this->setDelete();
 
+        $this->setRelated();
+
+        $this->setRelations();
+
+        $this->setCreateRelation();
+
+        $this->setUpdateRelation();
+
+        $this->setDeleteRelation();
+
         $this->setComment(DefaultInterface::METHOD_END);
     }
 
+    /**
+     * Sets OAS documentation for an index method
+     */
     private function setIndex(): void
     {
         $this->openComment();
@@ -180,7 +194,7 @@ abstract class Documentation
             'in'       => '"query"',
             'name'     => '"limit"',
             'required' => 'false',
-        ]);
+        ], 'integer');
 
         $this->setParameter([
             'in'       => '"query"',
@@ -217,6 +231,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a view method
+     */
     private function setView(): void
     {
         $this->openComment();
@@ -254,6 +271,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a create method
+     */
     private function setCreate(): void
     {
         $this->openComment();
@@ -279,6 +299,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for an update method
+     */
     private function setUpdate(): void
     {
         $this->openComment();
@@ -304,6 +327,9 @@ abstract class Documentation
         $this->setNewLines();
     }
 
+    /**
+     * Sets OAS documentation for a delete method
+     */
     private function setDelete(): void
     {
         $this->openComment();
