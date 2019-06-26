@@ -2,19 +2,26 @@
 
 namespace SoliDry\Extension;
 
-use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 use League\Fractal\Resource\Collection;
 use SoliDry\Helpers\ConfigOptions;
 use SoliDry\Blocks\EntitiesTrait;
-use SoliDry\Helpers\JsonApiResponse;
+use SoliDry\Containers\Response;
+use Illuminate\Http\Response as IlluminateResponse;
 use SoliDry\Types\HTTPMethodsInterface;
 use SoliDry\Types\JwtInterface;
 use SoliDry\Helpers\Json;
 use SoliDry\Types\PhpInterface;
 
+/**
+ * Class ApiController
+ *
+ * @package SoliDry\Extension
+ *
+ * @property Response response
+ */
 class ApiController extends Controller implements JSONApiInterface
 {
     use BaseRelationsTrait,
@@ -45,8 +52,7 @@ class ApiController extends Controller implements JSONApiInterface
     /** @var BitMask $bitMask */
     private $bitMask;
 
-    /** @var Json $json */
-    private $json;
+    private $response;
 
     private $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
@@ -61,6 +67,8 @@ class ApiController extends Controller implements JSONApiInterface
      * BaseControllerTrait constructor.
      *
      * @param Route $route
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \ReflectionException
      */
     public function __construct(Route $route)
     {
@@ -103,10 +111,10 @@ class ApiController extends Controller implements JSONApiInterface
      * GET Output all entries for this Entity with page/limit pagination support
      *
      * @param Request $request
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function index(Request $request) : Response
+    public function index(Request $request) : IlluminateResponse
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
@@ -127,9 +135,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsIndex($pages);
         }
 
-        $resource = $this->json->setIsCollection(true)->setMeta($meta)
-            ->getResource($this->formRequest, $pages, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource, $sqlOptions->getData()));
+        return $this->response->setSqlOptions($sqlOptions)->get($pages, $meta);
     }
 
     /**
@@ -137,10 +143,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function view(Request $request, $id) : Response
+    public function view(Request $request, $id) : IlluminateResponse
     {
         $meta       = [];
         $sqlOptions = $this->setSqlOptions($request);
@@ -162,18 +168,17 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsView($item);
         }
 
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $item, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource,  $data));
+        return $this->response->setSqlOptions($sqlOptions)->get($item, $meta);
     }
 
     /**
      * POST Creates one entry specified by all input fields in $request
      *
      * @param Request $request
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function create(Request $request) : Response
+    public function create(Request $request) : IlluminateResponse
     {
         $meta              = [];
         $json              = Json::decode($request->getContent());
@@ -214,8 +219,8 @@ class ApiController extends Controller implements JSONApiInterface
         }
 
         $this->setRelationships($json, $this->model->id);
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $this->model, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource), JSONApiInterface::HTTP_RESPONSE_CODE_CREATED);
+
+        return $this->response->get($this->model, $meta);
     }
 
     /**
@@ -223,10 +228,10 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      * @throws \SoliDry\Exceptions\AttributesException
      */
-    public function update(Request $request, $id) : Response
+    public function update(Request $request, $id) : IlluminateResponse
     {
         $meta = [];
 
@@ -255,8 +260,7 @@ class ApiController extends Controller implements JSONApiInterface
             $this->setFlagsUpdate($model);
         }
 
-        $resource = $this->json->setMeta($meta)->getResource($this->formRequest, $model, $this->entity);
-        return $this->getResponse(Json::prepareSerializedData($resource));
+        return $this->response->get($model, $meta);
     }
 
     /**
@@ -295,16 +299,16 @@ class ApiController extends Controller implements JSONApiInterface
      *
      * @param Request $request
      * @param int|string $id
-     * @return Response
+     * @return IlluminateResponse
      */
-    public function delete(Request $request, $id) : Response
+    public function delete(Request $request, $id) : IlluminateResponse
     {
         $model = $this->getEntity($id);
         if ($model !== null) {
             $model->delete();
         }
 
-        return $this->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
+        return $this->response->getResponse(Json::prepareSerializedData(new Collection()), JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT);
     }
 
     /**
@@ -316,17 +320,5 @@ class ApiController extends Controller implements JSONApiInterface
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_CREATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_UPDATE . $ucRelations;
         $this->jsonApiMethods[] = JSONApiInterface::URI_METHOD_DELETE . $ucRelations;
-    }
-
-    /**
-     * Prepares Response object to return with particular http response, headers and body
-     *
-     * @param string $json
-     * @param int $responseCode
-     * @return Response
-     */
-    public function getResponse(string $json, int $responseCode = JSONApiInterface::HTTP_RESPONSE_CODE_OK) : Response
-    {
-        return (new JsonApiResponse())->getResponse($json, $responseCode);
     }
 }

@@ -25,12 +25,13 @@
         }
     ],
     "require": {
+        "php": ">=7.1",
         "ext-json": "*",
         "ext-pdo": "*",
+        "illuminate/container": "^5.8",
         "lcobucci/jwt": "^3.2",
         "league/fractal": "~0.14",
         "nwidart/laravel-modules": ">=3.1",
-        "php": ">=7.1",
         "predis/predis": "^1.1",
         "raml-org/raml-php-parser": "^4.1"
     },
@@ -47,11 +48,12 @@
         }
     },
     "require-dev": {
-        "laravel/framework": ">=5.3",
-        "phpunit/phpunit": ">=6.5",
-        "mockery/mockery": "~1.0",
         "codeception/codeception": "^2.4",
-        "fzaninotto/faker": "^1.7"
+        "darkaonline/l5-swagger": "5.8.*",
+        "fzaninotto/faker": "^1.7",
+        "laravel/framework": ">=5.3",
+        "mockery/mockery": "~1.0",
+        "phpunit/phpunit": ">=6.5"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -4,7 +4,6 @@ namespace SoliDry\Blocks;
 
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Helpers\Console;
-use SoliDry\Helpers\Json;
 use SoliDry\Helpers\MethodOptions;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
@@ -213,7 +212,42 @@ trait ContentManager
     }
 
     /**
+     * @param int $tabs
+     */
+    protected function openComment(int $tabs = 1): void
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::SLASH
+            . PhpInterface::ASTERISK . PhpInterface::ASTERISK . PHP_EOL;
+    }
+
+    /**
+     * @param int $tabs
+     */
+    protected function closeComment(int $tabs = 1): void
+    {
+        $this->sourceCode .= $this->setTabs($tabs) . PhpInterface::ASTERISK
+            . PhpInterface::SLASH . PHP_EOL;
+    }
+
+    /**
+     * @param string $comment
+     * @param int $tabs
+     * @param int $afterTabs
+     */
+    protected function setStarredComment(string $comment, int $tabs = 1, int $afterTabs = 0): void
+    {
+        $this->setTabs($tabs);
+        $this->sourceCode .= PhpInterface::ASTERISK
+            . PhpInterface::SPACE;
+
+        $this->setTabs($afterTabs);
+
+        $this->sourceCode .= $comment . PHP_EOL;
+    }
+
+    /**
      * Sets an amount of tabs to source code
+     *
      * @param int $amount
      */
     protected function setTabs(int $amount = 1): void
@@ -225,6 +259,7 @@ trait ContentManager
 
     /**
      * Sets an amount of backslashes to source code
+     *
      * @param int $amount
      */
     protected function setBackslashes(int $amount = 1): void
@@ -419,7 +454,7 @@ trait ContentManager
      *
      * @param string $entityFile
      */
-    private function setBeforeProps(string $entityFile): void
+    protected function setBeforeProps(string $entityFile): void
     {
         $this->resourceCode = file_get_contents($entityFile);
         $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, NULL, PhpInterface::ENCODING_UTF8) - 3;
@@ -431,7 +466,7 @@ trait ContentManager
      *
      * @param string $till
      */
-    private function setAfterProps($till = NULL): void
+    protected function setAfterProps($till = NULL): void
     {
         $start = $this->setTabs() . mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, NULL,
                 PhpInterface::ENCODING_UTF8) - 3;
@@ -466,5 +501,17 @@ trait ContentManager
             . PhpInterface::ARROW . $method . PhpInterface::OPEN_PARENTHESES
             . $this->getMethodParamsToPass($params, $arrayToJson)
             . PhpInterface::CLOSE_PARENTHESES . PhpInterface::SEMICOLON . PHP_EOL;
+    }
+
+    /**
+     * Sets n new lines
+     *
+     * @param int $numLines
+     */
+    protected function setNewLines(int $numLines = 1): void
+    {
+        for ($i = $numLines; $i > 0; --$i) {
+            $this->sourceCode .= PHP_EOL;
+        }
     }
 }

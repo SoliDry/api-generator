@@ -9,9 +9,9 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 [![codecov](https://codecov.io/gh/SoliDry/api-generator/branch/master/graph/badge.svg)](https://codecov.io/gh/SoliDry/api-generator)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-![alt OAS logo](https://github.com/RJAPI/api-generator/blob/develop/tests/images/OpenAPI_Logo_Pantone-1.png)
-![alt Laravel logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/laravel-logo-white.png)
-![alt JSON API logo](https://github.com/RJAPI/api-generator/blob/master/tests/images/jsonapi.png) 
+![alt OAS logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/OpenAPI_Logo_Pantone-1.png)
+![alt Laravel logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/laravel-logo-white.png)
+![alt JSON API logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/jsonapi.png) 
 
 * [Getting started Demo](https://youtu.be/kFXVq4CGkEU)
 * [CRUD Demo](https://youtu.be/eYVqn-VecQI)
@@ -22,7 +22,8 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
     * [Optional settings](#user-content-optional-settings)
     * [Running generator](#user-content-running-generator)
     * [Docker repo](#user-content-docker-repository)   
-* [Open API Types and Declarations](#user-content-open-api-types-and-declarations)    
+* [Open API Types and Declarations](#user-content-open-api-types-and-declarations)
+* [Open API Docs generator](#user-content-open-api-docs-generator)    
 * [Generated files content](#user-content-generated-files-content)
     * [Module Config](#user-content-module-config)
     * [Controllers](#user-content-controllers)
@@ -180,11 +181,11 @@ By default generated files preserved to prevent overwriting of added/modified co
 
 The output will look something like this:
 
-![Console output](https://github.com/RJAPI/api-generator/blob/master/tests/images/Console_generator_output.png)
+![Console output](https://github.com/SoliDry/laravel-api/blob/master/tests/images/Console_generator_output.png)
 
 After that u can see the following dirs and files module structure in your project:
 
-![Dirs and files](https://github.com/RJAPI/api-generator/blob/master/tests/images/Dirs_and_files_module_structure.png)
+![Dirs and files](https://github.com/SoliDry/laravel-api/blob/master/tests/images/Dirs_and_files_module_structure.png)
 
 ### Docker repository
 Another way of installing and playing with api-generator (in sandbox fashion) is via https://github.com/SoliDry/laravel-api.
@@ -607,6 +608,133 @@ Modules/{ModuleName}/Routes/api.php - contains routings pointing to Controllers 
 Modules/{ModuleName}/Database/Migrations/ - contains migrations created with option --migrations
 ```
 
+### Open API Docs generator
+
+OAS *Controllers based documentation is generated out of the box, thus you don't need 
+to create it manually let's see a couple examples:
+
+![OAS API docs generated](https://github.com/SoliDry/laravel-api/blob/master/tests/images/API_docs_gen.png)
+
+One can ask - but how this can be done? there is no magic just look into your generated controllers 
+and see that there are pre-generated annotations for every method e.g.:
+```php
+<?php
+namespace Modules\V3\Http\Controllers;
+
+class ArticleController extends DefaultController 
+{
+    // >>>props>>>
+    // <<<props<<<
+    // >>>methods>>>
+    /**
+    * @OA\Get(
+    *     path="/v3/article",
+    *     summary="Get Articles ",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="include",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="page",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="limit",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="sort",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="data",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="filter",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="order_by",
+    *         required=false,
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Get(
+    *     path="/v3/article/{id}",
+    *     summary="Get Article",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="include",
+    *         required=false,
+    *     ),
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="page",
+    *         required=false,
+    *     ),
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Post(
+    *     path="/v3/article",
+    *     summary="Create Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Patch(
+    *     path="/v3/article/{id}",
+    *     summary="Update Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Delete(
+    *     path="/v3/article/{id}",
+    *     summary="Delete Article",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response=200,
+    *         description="",
+    *     ),
+    * )
+    */
+
+    // <<<methods<<<
+}
+``` 
+
 ### Generated files content
 
 #### Module Config
@@ -986,7 +1114,7 @@ Note: data array items MUST be set in double quotes.
 
 or you may want to ORDER BY several columns in different directions:
 ```php
-http://example.com/api/v1/article/1?include=tag&order_by={"title":"asc", "created_at":"desc"}
+http://example.com/api/v1/article?include=tag&order_by={"title":"asc", "created_at":"desc"}
 ```
 
 Also, you have an ability to filter results this way:

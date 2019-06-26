@@ -72,6 +72,8 @@ trait OptionsTrait
      */
     private function setConfigOptions(string $calledMethod) : void
     {
+        $this->response->setMethod($calledMethod);
+
         $this->configOptions = new ConfigOptions();
         $this->configOptions->setCalledMethod($calledMethod);
         $this->configOptions->setJwtIsEnabled(ConfigHelper::getNestedParam(ConfigInterface::JWT, ConfigInterface::ENABLED));
