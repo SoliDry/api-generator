@@ -64,7 +64,7 @@ class Controllers extends Documentation implements ControllersInterface
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
 
-        if (empty($this->generator->options[ConsoleInterface::OPTION_REGENERATE])) {
+        if (empty($this->generator->options[ConsoleInterface::OPTION_NO_DOCS])) {
             $this->setControllersDocs();
         }
 
@@ -92,7 +92,7 @@ class Controllers extends Documentation implements ControllersInterface
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
 
-        if (empty($this->generator->options[ConsoleInterface::OPTION_REGENERATE])) {
+        if (empty($this->generator->options[ConsoleInterface::OPTION_NO_DOCS])) {
             $this->setDefaultDocs();
         }
 
