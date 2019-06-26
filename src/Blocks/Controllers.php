@@ -6,6 +6,7 @@ use SoliDry\Documentation\Documentation;
 use SoliDry\Extension\BaseController;
 use SoliDry\Helpers\Classes;
 use SoliDry\Helpers\Console;
+use SoliDry\Types\ConsoleInterface;
 use SoliDry\Types\ControllersInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\PhpInterface;
@@ -63,7 +64,9 @@ class Controllers extends Documentation implements ControllersInterface
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
 
-        $this->setControllersDocs();
+        if (empty($this->generator->options[ConsoleInterface::OPTION_REGENERATE])) {
+            $this->setControllersDocs();
+        }
 
         $this->endClass();
     }
@@ -89,7 +92,9 @@ class Controllers extends Documentation implements ControllersInterface
         $this->setComment(DefaultInterface::PROPS_START);
         $this->setComment(DefaultInterface::PROPS_END);
 
-        $this->setDefaultDocs();
+        if (empty($this->generator->options[ConsoleInterface::OPTION_REGENERATE])) {
+            $this->setDefaultDocs();
+        }
 
         $this->endClass();
     }
