@@ -615,8 +615,9 @@ to create it manually let's see a couple examples:
 
 ![OAS API docs generated](https://github.com/SoliDry/laravel-api/blob/master/tests/images/API_docs_gen.png)
 
-One can ask - but how this can be done? there is no magic just look into your generated controllers 
-and see that there are pre-generated annotations for every method e.g.:
+All generated methods (when expanded) will look like this:
+![OAS API docs generated all methods](https://github.com/SoliDry/laravel-api/blob/master/tests/images/API_docs_gen_all.png)
+There is no magic in it at all - just look into your generated controllers there are pre-generated annotations for every method e.g.:
 ```php
 <?php
 namespace Modules\V3\Http\Controllers;
@@ -635,39 +636,60 @@ class ArticleController extends DefaultController
     *         in="query",
     *         name="include",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="page",
     *         required=false,
+    *         @OA\Schema(
+    *             type="integer",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="limit",
     *         required=false,
+    *         @OA\Schema(
+    *             type="integer",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="sort",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="data",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="filter",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
     *         name="order_by",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Response(
-    *         response=200,
+    *         response="200",
     *         description="",
     *     ),
     * )
@@ -682,14 +704,20 @@ class ArticleController extends DefaultController
     *         in="query",
     *         name="include",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Parameter(
     *         in="query",
-    *         name="page",
+    *         name="data",
     *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
     *     ),
     *     @OA\Response(
-    *         response=200,
+    *         response="200",
     *         description="",
     *     ),
     * )
@@ -701,7 +729,7 @@ class ArticleController extends DefaultController
     *     summary="Create Article",
     *     tags={"ArticleController"},
     *     @OA\Response(
-    *         response=200,
+    *         response="201",
     *         description="",
     *     ),
     * )
@@ -713,7 +741,7 @@ class ArticleController extends DefaultController
     *     summary="Update Article",
     *     tags={"ArticleController"},
     *     @OA\Response(
-    *         response=200,
+    *         response="200",
     *         description="",
     *     ),
     * )
@@ -725,7 +753,199 @@ class ArticleController extends DefaultController
     *     summary="Delete Article",
     *     tags={"ArticleController"},
     *     @OA\Response(
-    *         response=200,
+    *         response="204",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Get(
+    *     path="/v3/article/{id}/{related}",
+    *     summary="Get Article related objects",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="data",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="related",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response="200",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Get(
+    *     path="/v3/article/{id}/relationships/{relations}",
+    *     summary="Get Article relations objects",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="query",
+    *         name="data",
+    *         required=false,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="relations",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response="200",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Post(
+    *     path="/v3/article/{id}/relationships/{relations}",
+    *     summary="Create Article relation object",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="relations",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response="201",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Patch(
+    *     path="/v3/article/{id}/relationships/{relations}",
+    *     summary="Update Article relation object",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="relations",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response="200",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Delete(
+    *     path="/v3/article/{id}/relationships/{relations}",
+    *     summary="Delete Article relation object",
+    *     tags={"ArticleController"},
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="id",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Parameter(
+    *         in="path",
+    *         name="relations",
+    *         required=true,
+    *         @OA\Schema(
+    *             type="string",
+    *         ),
+    *     ),
+    *     @OA\Response(
+    *         response="204",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Post(
+    *     path="/v3/article/bulk",
+    *     summary="Create Article bulk",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response="201",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Patch(
+    *     path="/v3/article/bulk",
+    *     summary="Update Article bulk",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response="200",
+    *         description="",
+    *     ),
+    * )
+    */
+
+    /**
+    * @OA\Delete(
+    *     path="/v3/article/bulk",
+    *     summary="Delete Article bulk",
+    *     tags={"ArticleController"},
+    *     @OA\Response(
+    *         response="204",
     *         description="",
     *     ),
     * )
