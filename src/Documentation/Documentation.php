@@ -24,6 +24,8 @@ abstract class Documentation
 
     use ContentManager, RelationsDoc, BulksDoc;
 
+    public const SUCCESSFUL_OPERATION = 'successful operation';
+
     protected $generator;
     protected $sourceCode = '';
     protected $className;
@@ -229,7 +231,7 @@ abstract class Documentation
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -269,7 +271,7 @@ abstract class Documentation
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -297,7 +299,7 @@ abstract class Documentation
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -325,7 +327,7 @@ abstract class Documentation
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -353,7 +355,7 @@ abstract class Documentation
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -405,6 +407,11 @@ abstract class Documentation
         foreach ($paramValues as $key => $val) {
             $this->setStarredComment($key . '=' . $val . ',', 1, 2);
         }
+
+        // set media type
+        $this->setStarredComment(DocumentationInterface::OA_MEDIA_TYPE, 1, 2);
+        $this->setStarredComment('mediaType="' . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE . '"', 1, 3);
+        $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 2);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);
     }

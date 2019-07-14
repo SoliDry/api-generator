@@ -29,7 +29,7 @@ trait BulksDoc
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -57,7 +57,7 @@ trait BulksDoc
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
@@ -85,7 +85,7 @@ trait BulksDoc
 
         $this->setResponse([
             'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
-            'description' => '""',
+            'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES);
