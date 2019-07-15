@@ -22,7 +22,6 @@ interface JSONApiInterface
     public const EXT              = 'ext';
     public const EXT_BULK         = 'bulk';
 
-    public const HEADER_CONTENT_TYPE       = 'Content-Type: ';
     public const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json; supported-ext="bulk"';
     public const STANDARD_HEADERS          = [
         self::CONTENT_TYPE_KEY => self::HEADER_CONTENT_TYPE_VALUE,
