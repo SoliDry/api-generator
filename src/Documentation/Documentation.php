@@ -410,7 +410,7 @@ abstract class Documentation
 
         // set media type
         $this->setStarredComment(DocumentationInterface::OA_MEDIA_TYPE . PhpInterface::OPEN_PARENTHESES, 1, 2);
-        $this->setStarredComment('mediaType=\'' . JSONApiInterface::HEADER_CONTENT_TYPE_VALUE . '\'', 1, 3);
+        $this->setStarredComment('mediaType="' . JSONApiInterface::HEADER_APP_VND_API_JSON . '"', 1, 3);
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 2);
 
         $this->setStarredComment(PhpInterface::CLOSE_PARENTHESES . PhpInterface::COMMA, 1, 1);

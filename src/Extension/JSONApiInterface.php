@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 /**
  * Interface JSONApiInterface
+ *
  * @package SoliDry\Extension
  */
 interface JSONApiInterface
@@ -22,6 +23,7 @@ interface JSONApiInterface
     public const EXT              = 'ext';
     public const EXT_BULK         = 'bulk';
 
+    public const HEADER_APP_VND_API_JSON   = 'application/vnd.api+json';
     public const HEADER_CONTENT_TYPE_VALUE = 'application/vnd.api+json; supported-ext="bulk"';
     public const STANDARD_HEADERS          = [
         self::CONTENT_TYPE_KEY => self::HEADER_CONTENT_TYPE_VALUE,
