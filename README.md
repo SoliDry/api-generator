@@ -17,6 +17,7 @@ PHP-code generator (based on OAS) for Laravel framework, with complete support o
 * [CRUD Demo](https://youtu.be/eYVqn-VecQI)
 * [Relation links Demo](https://youtu.be/DPvhiFOzoWE)
 * [Migrations Demo](https://youtu.be/gfbdRZhFHn4)
+* [API docs Demo](https://youtu.be/JAn5vQbDuHY)
 * [Installation](#user-content-installation-via-composer)
     * [Configuration](#user-content-autoloading)
     * [Optional settings](#user-content-optional-settings)
