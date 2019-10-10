@@ -139,9 +139,7 @@ trait CacheTrait
      */
     private function getKeyHash(Request $request) : string
     {
-        $qStr = $request->getQueryString();
-
-        return $this->configOptions->getCalledMethod() . PhpInterface::COLON . md5($qStr);
+        return $this->configOptions->getCalledMethod() . PhpInterface::COLON . md5($request->getRequestUri());
     }
 
     /**
