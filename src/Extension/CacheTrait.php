@@ -94,7 +94,7 @@ trait CacheTrait
         $hashKey   = $this->getKeyHash($request);
         $delta     = Redis::get($this->getDeltaKey($hashKey));
         $ttl       = $this->configOptions->getCacheTtl();
-        $recompute = $this->xFetch((float)$delta, $ttl);
+        $recompute = $this->xFetch((float)$delta, Redis::ttl($hashKey));
         if ($delta === null || $recompute === true) {
             return $this->recompute($sqlOptions, $hashKey, $ttl);
         }
