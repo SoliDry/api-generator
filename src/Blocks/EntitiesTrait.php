@@ -47,7 +47,7 @@ trait EntitiesTrait
      * @param string $object
      * @return string
      */
-    public function getFormRequestEntity(string $version, string $object) : string
+    public function getFormRequestEntity(string $version, string $object): string
     {
         return DirsInterface::MODULES_DIR . PhpInterface::BACKSLASH . strtoupper($version) .
             PhpInterface::BACKSLASH . DirsInterface::HTTP_DIR .
@@ -63,16 +63,16 @@ trait EntitiesTrait
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
      * @throws \ReflectionException
      */
-    protected function setEntities() : void
+    protected function setEntities(): void
     {
-        $this->entity      = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
-        $formRequestEntity  = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
+        $this->entity = Classes::cutEntity(Classes::getObjectName($this), DefaultInterface::CONTROLLER_POSTFIX);
+        $formRequestEntity = $this->getFormRequestEntity(conf::getModuleName(), $this->entity);
 
         $this->formRequest = new $formRequestEntity();
-        $this->props       = get_object_vars($this->formRequest);
+        $this->props = get_object_vars($this->formRequest);
 
         $this->modelEntity = Classes::getModelEntity($this->entity);
-        $this->model       = new $this->modelEntity();
+        $this->model = new $this->modelEntity();
 
         $container = Container::getInstance();
         $this->response = $container->make(\SoliDry\Containers\Response::class);
@@ -88,12 +88,12 @@ trait EntitiesTrait
      * @throws \InvalidArgumentException
      * @throws \LogicException
      */
-    protected function saveBulk(Request $request) : Response
+    protected function saveBulk(Request $request): Response
     {
-        $meta       = [];
+        $meta = [];
         $collection = new Collection();
 
-        $json              = Json::decode($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
         try {
@@ -158,12 +158,12 @@ trait EntitiesTrait
      * @throws \SoliDry\Exceptions\AttributesException
      * @throws \LogicException
      */
-    protected function mutateBulk(Request $request) : Response
+    protected function mutateBulk(Request $request): Response
     {
-        $meta       = [];
+        $meta = [];
         $collection = new Collection();
 
-        $json              = Json::decode($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
         try {
@@ -209,9 +209,9 @@ trait EntitiesTrait
      * @return Response
      * @throws \LogicException
      */
-    public function removeBulk(Request $request) : Response
+    public function removeBulk(Request $request): Response
     {
-        $json              = Json::decode($request->getContent());
+        $json = Json::decode($request->getContent());
         $jsonApiAttributes = Json::getBulkAttributes($json);
 
         try {
@@ -248,7 +248,7 @@ trait EntitiesTrait
     private function getRelationType(string $objectName)
     {
         if (empty($this->generator->types[$objectName][ApiInterface::RAML_PROPS]
-                  [ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]) === false
+            [ApiInterface::RAML_RELATIONSHIPS][ApiInterface::RAML_TYPE]) === false
         ) {
             return trim(
                 $this->generator->types[$objectName][ApiInterface::RAML_PROPS]
@@ -264,7 +264,7 @@ trait EntitiesTrait
      *
      * @throws \ReflectionException
      */
-    private function setUseSoftDelete() : void
+    private function setUseSoftDelete(): void
     {
         if ($this->isSoftDelete()) {
             $this->setUse(Classes::getObjectName(SoftDeletes::class), true, true);
@@ -274,7 +274,7 @@ trait EntitiesTrait
     /**
      * Sets property for Soft Delete op on model Entity
      */
-    private function setPropSoftDelete() : void
+    private function setPropSoftDelete(): void
     {
         if ($this->isSoftDelete()) {
             $this->createPropertyArray(ModelsInterface::PROPERTY_DATES, PhpInterface::PHP_MODIFIER_PROTECTED, [ModelsInterface::COLUMN_DEL_AT]);

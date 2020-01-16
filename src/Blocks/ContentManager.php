@@ -54,11 +54,11 @@ trait ContentManager
      * @param string $name
      * @param null $extends
      */
-    protected function startClass(string $name, $extends = NULL): void
+    protected function startClass(string $name, $extends = null): void
     {
         $this->sourceCode .= PhpInterface::PHP_CLASS . PhpInterface::SPACE . $name
             . PhpInterface::SPACE;
-        if ($extends !== NULL) {
+        if ($extends !== null) {
             $this->sourceCode .=
                 PhpInterface::PHP_EXTENDS
                 . PhpInterface::SPACE . $extends . PhpInterface::SPACE;
@@ -163,7 +163,8 @@ trait ContentManager
         string $modifier,
         $value = PhpInterface::PHP_TYPES_NULL,
         bool $isString = false
-    ): void {
+    ): void
+    {
         if ($value === PhpInterface::PHP_TYPES_NULL) { // drop null assignments as they are already nullable by default
             $this->sourceCode .= PhpInterface::TAB_PSR4 . $modifier . PhpInterface::SPACE . PhpInterface::DOLLAR_SIGN .
                 $prop . PhpInterface::SEMICOLON . PHP_EOL;
@@ -362,8 +363,8 @@ trait ContentManager
     }
 
     /**
-     * @uses \SoliDry\Blocks\Controllers::setContent
-     * @uses \SoliDry\Blocks\Config::setContent
+     * @param string $basePath
+     * @param string $postFix
      * @uses \SoliDry\Blocks\Migrations::setContent
      * @uses \SoliDry\Blocks\Entities::setContent
      * @uses \SoliDry\Blocks\FormRequest::setContent
@@ -371,8 +372,8 @@ trait ContentManager
      *
      * Creates entities like *Controller, *FormRequest, BaseModel entities etc
      *
-     * @param string $basePath
-     * @param string $postFix
+     * @uses \SoliDry\Blocks\Controllers::setContent
+     * @uses \SoliDry\Blocks\Config::setContent
      */
     public function createEntity(string $basePath, string $postFix = ''): void
     {
@@ -457,7 +458,7 @@ trait ContentManager
     protected function setBeforeProps(string $entityFile): void
     {
         $this->resourceCode = file_get_contents($entityFile);
-        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, NULL, PhpInterface::ENCODING_UTF8) - 3;
+        $end = mb_strpos($this->resourceCode, DefaultInterface::PROPS_START, null, PhpInterface::ENCODING_UTF8) - 3;
         $this->sourceCode = mb_substr($this->resourceCode, 0, $end, PhpInterface::ENCODING_UTF8);
     }
 
@@ -466,14 +467,14 @@ trait ContentManager
      *
      * @param string $till
      */
-    protected function setAfterProps($till = NULL): void
+    protected function setAfterProps($till = null): void
     {
-        $start = $this->setTabs() . mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, NULL,
-                PhpInterface::ENCODING_UTF8) - 3;
-        if ($till === NULL) {
-            $this->sourceCode .= mb_substr($this->resourceCode, $start, NULL, PhpInterface::ENCODING_UTF8);
+        $start = $this->setTabs() . (mb_strpos($this->resourceCode, DefaultInterface::PROPS_END, null,
+                    PhpInterface::ENCODING_UTF8) - 3);
+        if ($till === null) {
+            $this->sourceCode .= mb_substr($this->resourceCode, $start, null, PhpInterface::ENCODING_UTF8);
         } else {
-            $end = mb_strpos($this->resourceCode, $till, NULL, PhpInterface::ENCODING_UTF8) - 3;
+            $end = mb_strpos($this->resourceCode, $till, null, PhpInterface::ENCODING_UTF8) - 3;
             $this->sourceCode .= mb_substr($this->resourceCode, $start, $end - $start, PhpInterface::ENCODING_UTF8);
         }
     }
@@ -483,8 +484,8 @@ trait ContentManager
      */
     private function setAfterMethods(): void
     {
-        $start = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, NULL, PhpInterface::ENCODING_UTF8) - 3;
-        $this->sourceCode .= $this->setTabs() . mb_substr($this->resourceCode, $start, NULL,
+        $start = mb_strpos($this->resourceCode, DefaultInterface::METHOD_END, null, PhpInterface::ENCODING_UTF8) - 3;
+        $this->sourceCode .= $this->setTabs() . mb_substr($this->resourceCode, $start, null,
                 PhpInterface::ENCODING_UTF8);
     }
 
