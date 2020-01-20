@@ -131,8 +131,9 @@ class Entities extends FormRequestModel
 
     /**
      * @param string $ucEntity
+     * @throws \ReflectionException
      */
-    public function setPivot(string $ucEntity)
+    public function setPivot(string $ucEntity): void
     {
         $file = $this->generator->formatEntitiesPath() .
             PhpInterface::SLASH .
@@ -181,8 +182,9 @@ class Entities extends FormRequestModel
      * @param string $current current entity relations
      * @param string $related entities from raml file based on relations method array
      * @param string $relationEntity
+     * @throws \ReflectionException
      */
-    private function createPivotClass(string $current, string $related, string $relationEntity)
+    private function createPivotClass(string $current, string $related, string $relationEntity): void
     {
         $ucEntitty   = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
@@ -207,7 +209,7 @@ class Entities extends FormRequestModel
      * @param string $method
      * @param \string[] ...$args
      */
-    private function setRelation(string $entity, string $method, string ...$args)
+    private function setRelation(string $entity, string $method, string ...$args): void
     {
         $methodOptions = new MethodOptions();
         $methodOptions->setName($entity);
@@ -223,7 +225,7 @@ class Entities extends FormRequestModel
      * @param \string[] ...$args
      * @return string
      */
-    private function getRelationReturn(string $entity, string $method, array $args)
+    private function getRelationReturn(string $entity, string $method, array $args): string
     {
         $toReturn = PhpInterface::DOLLAR_SIGN . PhpInterface::PHP_THIS
             . PhpInterface::ARROW . $method
@@ -244,7 +246,7 @@ class Entities extends FormRequestModel
     /**
      * Sets entity content to $sourceCode
      */
-    private function setContent()
+    private function setContent(): void
     {
         $this->setTag();
         $this->setNamespace(
@@ -297,7 +299,7 @@ class Entities extends FormRequestModel
     /**
      * Sets entity content to $sourceCode
      */
-    private function resetContent()
+    private function resetContent(): void
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatEntitiesPath()));
         $this->setComment(DefaultInterface::PROPS_START, 0);
@@ -322,8 +324,9 @@ class Entities extends FormRequestModel
     /**
      *  Sets pivot entity content to $sourceCode
      * @param string $ucEntity an entity upper case first name
+     * @throws \ReflectionException
      */
-    private function setPivotContent(string $ucEntity)
+    private function setPivotContent(string $ucEntity): void
     {
         $this->setTag();
         $this->setNamespace(

@@ -9,6 +9,7 @@ use SoliDry\Helpers\Console;
 use SoliDry\Helpers\MethodOptions;
 use SoliDry\ApiGenerator;
 use SoliDry\Helpers\Classes;
+use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\ConfigInterface;
 use SoliDry\Types\CustomsInterface;
 use SoliDry\Types\DefaultInterface;
@@ -29,8 +30,8 @@ class FormRequest extends FormRequestModel
 {
     use ContentManager;
 
-    protected $sourceCode    = '';
-    protected $resourceCode  = '';
+    protected $sourceCode = '';
+    protected $resourceCode = '';
     protected $generator;
     private $additionalProps = [
         'id' => [
@@ -72,7 +73,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets an additional props e.g.: id
      */
-    private function setAdditionalProps()
+    private function setAdditionalProps(): void
     {
         // additional props
         if (!empty($this->additionalProps)) {
@@ -85,7 +86,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets props values
      */
-    private function setPropsContent()
+    private function setPropsContent(): void
     {
         $this->setComment(CustomsInterface::CUSTOM_TYPES_ATTRIBUTES);
 
@@ -112,7 +113,7 @@ class FormRequest extends FormRequestModel
      *
      * @param $relationTypes
      */
-    private function setRelationTypes($relationTypes)
+    private function setRelationTypes($relationTypes): void
     {
         // related props
         if ($relationTypes !== null) {
@@ -131,7 +132,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets all rules for this FormRequest
      */
-    private function constructRules()
+    private function constructRules(): void
     {
         // Authorize method - defaults to false
         $methodOptions = new MethodOptions();
@@ -158,7 +159,7 @@ class FormRequest extends FormRequestModel
      *
      * @param $relationTypes
      */
-    private function constructRelations($relationTypes)
+    private function constructRelations($relationTypes): void
     {
         $methodOptions = new MethodOptions();
         $methodOptions->setName(MethodsInterface::RELATIONS);
@@ -172,7 +173,7 @@ class FormRequest extends FormRequestModel
 
             $rels = explode(PhpInterface::PIPE, str_replace('[]', '', $rel));
             foreach ($rels as $k => $rel) {
-                $this->setRelations(strtolower(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
+                $this->setRelations(MigrationsHelper::getTableName(trim(str_replace(CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS, '', $rel))));
                 if (empty($rels[$k + 1]) === false) {
                     $this->sourceCode .= PHP_EOL;
                 }
@@ -185,18 +186,16 @@ class FormRequest extends FormRequestModel
     /**
      * @param $relationTypes
      */
-    private function setRelations($relationTypes)
+    private function setRelations($relationTypes): void
     {
         $this->setTabs(3);
-        $this->sourceCode .= PhpInterface::QUOTES . $relationTypes .
-            PhpInterface::QUOTES
-            . PhpInterface::COMMA;
+        $this->sourceCode .= PhpInterface::QUOTES . $relationTypes . PhpInterface::QUOTES . PhpInterface::COMMA;
     }
 
     /**
      *  Sets content of *FormRequest
      */
-    private function setContent()
+    private function setContent(): void
     {
         $this->setTag();
         $this->setNamespace(
@@ -235,7 +234,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets content of *FormRequest
      */
-    private function resetContent()
+    private function resetContent(): void
     {
         $this->setBeforeProps($this->getEntityFile($this->generator->formatRequestsPath(),
             DefaultInterface::FORM_REQUEST_POSTFIX));
@@ -261,13 +260,13 @@ class FormRequest extends FormRequestModel
     /**
      *  Creates an ApiRequestToken Requests class
      */
-    public function createAccessToken()
+    public function createAccessToken(): void
     {
         if (empty($this->generator->types[CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS][ApiInterface::RAML_PROPS]
-                  [JSONApiInterface::PARAM_ACCESS_TOKEN][ApiInterface::RAML_KEY_DEFAULT]) === false
+            [JSONApiInterface::PARAM_ACCESS_TOKEN][ApiInterface::RAML_KEY_DEFAULT]) === false
         ) {
             $this->setAccessTokenContent();
-            $fileForm  = FileManager::getModulePath($this->generator, true) . $this->generator->formRequestDir
+            $fileForm = FileManager::getModulePath($this->generator, true) . $this->generator->formRequestDir
                 . PhpInterface::SLASH . JSONApiInterface::CLASS_API_ACCESS_TOKEN
                 . PhpInterface::PHP_EXT;
 
@@ -285,7 +284,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets content for ApiRequestToken Requests class
      */
-    private function setAccessTokenContent()
+    private function setAccessTokenContent(): void
     {
         $this->setTag();
         $this->sourceCode .= PhpInterface::PHP_NAMESPACE . PhpInterface::SPACE .
@@ -310,7 +309,7 @@ class FormRequest extends FormRequestModel
     /**
      *  Sets content for ApiRequestToken Requests class handle() method
      */
-    private function setHandleMethodContent()
+    private function setHandleMethodContent(): void
     {
         $this->setTabs(2);
         $this->sourceCode .= PhpInterface::IF . PhpInterface::SPACE . PhpInterface::OPEN_PARENTHESES
@@ -341,6 +340,5 @@ class FormRequest extends FormRequestModel
         $this->setMethodReturn(PhpInterface::DOLLAR_SIGN . FromRequestInterface::METHOD_PARAM_NEXT
             . PhpInterface::OPEN_PARENTHESES . PhpInterface::DOLLAR_SIGN . FromRequestInterface::METHOD_PARAM_REQUEST
             . PhpInterface::CLOSE_PARENTHESES);
-
     }
 }
