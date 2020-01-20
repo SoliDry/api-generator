@@ -29,7 +29,6 @@ class Entities extends FormRequestModel
     private $className;
 
     protected $sourceCode   = '';
-    protected $localCode    = '';
     protected $isSoftDelete = false;
 
     public function __construct($generator)
@@ -269,7 +268,7 @@ class Entities extends FormRequestModel
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TABLE, PhpInterface::PHP_MODIFIER_PROTECTED,
-            strtolower($this->generator->objectName), true
+            MigrationsHelper::getTableName($this->generator->objectName), true
         );
         $this->createProperty(
             ModelsInterface::PROPERTY_TIMESTAMPS, PhpInterface::PHP_MODIFIER_PUBLIC,

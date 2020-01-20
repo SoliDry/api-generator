@@ -5,6 +5,7 @@ namespace SoliDry\Blocks;
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
+use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ModelsInterface;
@@ -133,7 +134,7 @@ trait RoutesTrait
      */
     private function composeBaseUri() : string
     {
-        return PhpInterface::QUOTES . PhpInterface::SLASH . strtolower($this->generator->objectName);
+        return PhpInterface::QUOTES . PhpInterface::SLASH . MigrationsHelper::getTableName($this->generator->objectName);
     }
 
     /**
@@ -142,7 +143,7 @@ trait RoutesTrait
      */
     private function composeRelationsBaseUri() : string
     {
-        return PhpInterface::QUOTES . PhpInterface::SLASH . strtolower($this->generator->objectName) .
+        return PhpInterface::QUOTES . PhpInterface::SLASH . MigrationsHelper::getTableName($this->generator->objectName) .
             PhpInterface::SLASH . PhpInterface::OPEN_BRACE
             . ApiInterface::RAML_ID . PhpInterface::CLOSE_BRACE;
     }

@@ -7,6 +7,7 @@ use SoliDry\Blocks\ContentManager;
 use SoliDry\Controllers\BaseCommand;
 use SoliDry\Extension\JSONApiInterface;
 use SoliDry\Helpers\Classes;
+use SoliDry\Helpers\MigrationsHelper;
 use SoliDry\Types\ApiInterface;
 use SoliDry\Types\DefaultInterface;
 use SoliDry\Types\DocumentationInterface;
@@ -21,7 +22,6 @@ use SoliDry\Types\PhpInterface;
  */
 abstract class Documentation
 {
-
     use ContentManager, RelationsDoc, BulksDoc;
 
     public const SUCCESSFUL_OPERATION = 'successful operation';
@@ -179,58 +179,58 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . '",', 1, 1);
+            . MigrationsHelper::getTableName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('summary="Get ' . $this->generator->objectName . 's ",', 1, 1);
+        $this->setStarredComment('summary="Get ' . Classes::getClassName($this->generator->objectName) . 's ",', 1, 1);
 
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . Classes::getClassName($this->generator->objectName) . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         // define params
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"include"',
+            'in' => '"query"',
+            'name' => '"include"',
             'required' => 'false',
         ]);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"page"',
+            'in' => '"query"',
+            'name' => '"page"',
             'required' => 'false',
         ], 'integer');
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"limit"',
+            'in' => '"query"',
+            'name' => '"limit"',
             'required' => 'false',
         ], 'integer');
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"sort"',
+            'in' => '"query"',
+            'name' => '"sort"',
             'required' => 'false',
         ]);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"data"',
+            'in' => '"query"',
+            'name' => '"data"',
             'required' => 'false',
         ]);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"filter"',
+            'in' => '"query"',
+            'name' => '"filter"',
             'required' => 'false',
         ]);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"order_by"',
+            'in' => '"query"',
+            'name' => '"order_by"',
             'required' => 'false',
         ]);
 
         $this->setResponse([
-            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
+            'response' => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
@@ -250,27 +250,27 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_GET . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
+            . MigrationsHelper::getTableName($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
 
-        $this->setStarredComment('summary="Get ' . $this->generator->objectName . '",', 1, 1);
+        $this->setStarredComment('summary="Get ' . Classes::getClassName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . Classes::getClassName($this->generator->objectName) . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"include"',
+            'in' => '"query"',
+            'name' => '"include"',
             'required' => 'false',
         ]);
 
         $this->setParameter([
-            'in'       => '"query"',
-            'name'     => '"data"',
+            'in' => '"query"',
+            'name' => '"data"',
             'required' => 'false',
         ]);
 
         $this->setResponse([
-            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
+            'response' => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
@@ -290,15 +290,15 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_POST . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . '",', 1, 1);
+            . MigrationsHelper::getTableName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('summary="Create ' . $this->generator->objectName . '",', 1, 1);
+        $this->setStarredComment('summary="Create ' . Classes::getClassName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . Classes::getClassName($this->generator->objectName) . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
+            'response' => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_CREATED . '"',
             'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
@@ -318,15 +318,15 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_PATCH . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
+            . MigrationsHelper::getTableName($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
 
-        $this->setStarredComment('summary="Update ' . $this->generator->objectName . '",', 1, 1);
+        $this->setStarredComment('summary="Update ' . Classes::getClassName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . Classes::getClassName($this->generator->objectName) . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
+            'response' => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_OK . '"',
             'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
@@ -346,15 +346,15 @@ abstract class Documentation
         $this->setStarredComment(DocumentationInterface::OA_DELETE . PhpInterface::OPEN_PARENTHESES);
 
         $this->setStarredComment('path="' . PhpInterface::SLASH . $this->generator->version . PhpInterface::SLASH
-            . strtolower($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
+            . MigrationsHelper::getTableName($this->generator->objectName) . PhpInterface::SLASH . '{id}",', 1, 1);
 
-        $this->setStarredComment('summary="Delete ' . $this->generator->objectName . '",', 1, 1);
+        $this->setStarredComment('summary="Delete ' . Classes::getClassName($this->generator->objectName) . '",', 1, 1);
 
-        $this->setStarredComment('tags={"' . $this->generator->objectName . DefaultInterface::CONTROLLER_POSTFIX
+        $this->setStarredComment('tags={"' . Classes::getClassName($this->generator->objectName) . DefaultInterface::CONTROLLER_POSTFIX
             . '"},', 1, 1);
 
         $this->setResponse([
-            'response'    => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
+            'response' => '"' . JSONApiInterface::HTTP_RESPONSE_CODE_NO_CONTENT . '"',
             'description' => '"' . self::SUCCESSFUL_OPERATION . '"',
         ]);
 
