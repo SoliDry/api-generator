@@ -21,7 +21,9 @@ class CustomSql
     public function __construct(string $entity)
     {
         $this->entity = ConfigHelper::getNestedParam(ConfigInterface::CUSTOM_SQL, MigrationsHelper::getTableName($entity));
-        $this->isEnabled = $this->entity[ConfigInterface::ENABLED];
+        if (empty($this->entity[ConfigInterface::ENABLED]) === false) {
+            $this->isEnabled = $this->entity[ConfigInterface::ENABLED];
+        }
     }
 
     /**
