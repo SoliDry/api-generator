@@ -70,7 +70,7 @@ class Entities extends FormRequestModel
             $this->sourceCode .= PHP_EOL;
             $relations        = $formRequest->relations();
             foreach ($relations as $relationEntity) {
-                $ucEntitty = ucfirst($relationEntity);
+                $ucEntitty = MigrationsHelper::getObjectName($relationEntity);
                 // determine if ManyToMany, OneToMany, OneToOne rels
                 $current = $this->getRelationType($this->generator->objectName);
                 $related = $this->getRelationType($ucEntitty);
