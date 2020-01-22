@@ -125,7 +125,7 @@ class Json extends JsonAbstract
     {
         $transformer = new DefaultTransformer($formRequest);
         if ($this->isCollection === true) {
-            $collection = new Collection($model, $transformer, strtolower($entity));
+            $collection = new Collection($model, $transformer, MigrationsHelper::getTableName($entity));
             if (empty($this->meta) === false) {
                 $collection->setMeta($this->meta);
             }
@@ -137,7 +137,7 @@ class Json extends JsonAbstract
             return $collection;
         }
 
-        $item = new Item($model, $transformer, strtolower($entity));
+        $item = new Item($model, $transformer, MigrationsHelper::getTableName($entity));
         $item->setMeta($this->meta);
 
         return $item;
