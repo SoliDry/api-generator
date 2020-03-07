@@ -64,13 +64,11 @@ trait ConfigTrait
             } else {
                 $value = PhpInterface::PHP_TYPES_BOOL_FALSE;
             }
-        } else {
-            if ($type !== ApiInterface::RAML_TYPE_NUMBER) {
-                if ($type === ApiInterface::RAML_TYPE_STRING) {
-                    $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
-                } else {
-                    settype($value, ApiInterface::RAML_TO_PHP_TYPES[$type]);
-                }
+        } else if ($type !== ApiInterface::RAML_TYPE_NUMBER) {
+            if ($type === ApiInterface::RAML_TYPE_STRING) {
+                $value = PhpInterface::QUOTES . $value . PhpInterface::QUOTES;
+            } else {
+                settype($value, ApiInterface::RAML_TO_PHP_TYPES[$type]);
             }
         }
         $this->setTabs($tabs);
