@@ -67,8 +67,17 @@ class ConfigHelper
         if ($lower === true) {
             $param = strtolower($param);
         }
-        $params = config(self::getConfigKey() . PhpInterface::DOT . $entity);
+        $params = self::getParam($entity);
 
         return empty($params[$param]) ? null : $params[$param];
+    }
+
+    /**
+     * @param string $entity
+     * @return \Illuminate\Config\Repository|mixed
+     */
+    public static function getParam(string $entity)
+    {
+        return config(self::getConfigKey() . PhpInterface::DOT . $entity);
     }
 }

@@ -38,7 +38,9 @@ interface ConfigInterface
     public const CACHE_METHOD         = 'setCacheOptions';
 
     // json-api attributes can be in one of: camel-case, snake-case, lisp-case
-    public const DEFAULT_CAMEL_CASE  = 'snake-case';
+    public const DEFAULT_CASE  = 'snake-case';
+    public const CAMEL_CASE = 'camel-case';
+    public const LISP_CASE = 'lisp-case';
 
     // todo: make this prop set via config for tests to run normally
     public const DEFAULT_ACTIVATE = 30;

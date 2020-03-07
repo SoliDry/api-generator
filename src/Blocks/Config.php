@@ -75,7 +75,7 @@ class Config implements ConfigInterface
         $this->setTag();
         $this->openRoot();
         $this->setParam(ModulesInterface::KEY_NAME, ApiInterface::RAML_TYPE_STRING, ucfirst($this->generator->version));
-        $this->setParam(ConfigInterface::ATTRIBUTES_CASE, ApiInterface::RAML_TYPE_STRING, ConfigInterface::DEFAULT_CAMEL_CASE);
+        $this->setParam(ConfigInterface::ATTRIBUTES_CASE, ApiInterface::RAML_TYPE_STRING, ConfigInterface::DEFAULT_CASE);
         $this->setQueryParams();
         $this->setTrees();
         $this->setJwtContent();

@@ -11,6 +11,7 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\Serializer\JsonApiSerializer;
+use SoliDry\Types\ConfigInterface;
 use SoliDry\Types\ModelsInterface;
 use SoliDry\Types\PhpInterface;
 use SoliDry\Types\ApiInterface;
@@ -33,28 +34,28 @@ class Json extends JsonAbstract
      * @param string $entity
      * @return array JSON API rels compatible array
      */
-    public static function getRelations($relations, string $entity) : array
+    public static function getRelations($relations, string $entity): array
     {
         $jsonArr = [];
         if ($relations instanceof \Illuminate\Database\Eloquent\Collection) {
             $cnt = \count($relations);
             if ($cnt > 1) {
                 foreach ($relations as $v) {
-                    $attrs     = $v->getAttributes();
+                    $attrs = $v->getAttributes();
                     $jsonArr[] = [ApiInterface::RAML_TYPE => $entity,
-                                  ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
+                        ApiInterface::RAML_ID => $attrs[ApiInterface::RAML_ID]];
                 }
             } else {
                 foreach ($relations as $v) {
-                    $attrs   = $v->getAttributes();
+                    $attrs = $v->getAttributes();
                     $jsonArr = [ApiInterface::RAML_TYPE => $entity,
-                                ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
+                        ApiInterface::RAML_ID => $attrs[ApiInterface::RAML_ID]];
                 }
             }
         } elseif ($relations instanceof Model) {
-            $attrs   = $relations->getAttributes();
+            $attrs = $relations->getAttributes();
             $jsonArr = [ApiInterface::RAML_TYPE => $entity,
-                        ApiInterface::RAML_ID   => $attrs[ApiInterface::RAML_ID]];
+                ApiInterface::RAML_ID => $attrs[ApiInterface::RAML_ID]];
         }
 
         return $jsonArr;
@@ -86,7 +87,7 @@ class Json extends JsonAbstract
      * @param array $errors
      * @return string
      */
-    public function getErrors(array $errors) : string
+    public function getErrors(array $errors): string
     {
         $arr[JSONApiInterface::CONTENT_ERRORS] = [];
         if (empty($errors) === false) {
@@ -103,7 +104,7 @@ class Json extends JsonAbstract
      * @param array $data
      * @return string
      */
-    public static function prepareSerializedRelations(Request $request, array $data) : string
+    public static function prepareSerializedRelations(Request $request, array $data): string
     {
         $arr[JSONApiInterface::CONTENT_LINKS] = [
             JSONApiInterface::CONTENT_SELF => $request->getUri(),
@@ -125,7 +126,7 @@ class Json extends JsonAbstract
     {
         $transformer = new DefaultTransformer($formRequest);
         if ($this->isCollection === true) {
-            $collection = new Collection($model, $transformer, MigrationsHelper::getTableName($entity));
+            $collection = new Collection($model, $transformer, strtolower($entity));
             if (empty($this->meta) === false) {
                 $collection->setMeta($this->meta);
             }
@@ -137,7 +138,7 @@ class Json extends JsonAbstract
             return $collection;
         }
 
-        $item = new Item($model, $transformer, MigrationsHelper::getTableName($entity));
+        $item = new Item($model, $transformer, strtolower($entity));
         $item->setMeta($this->meta);
 
         return $item;
@@ -150,7 +151,7 @@ class Json extends JsonAbstract
      * @param array $data
      * @return string
      */
-    public static function prepareSerializedData(ResourceInterface $resource, $data = ModelsInterface::DEFAULT_DATA) : string
+    public static function prepareSerializedData(ResourceInterface $resource, $data = ModelsInterface::DEFAULT_DATA): string
     {
         if (empty($resource->getData())) { // preventing 3d party libs (League etc) from crash on empty data
             return self::encode([
@@ -174,7 +175,7 @@ class Json extends JsonAbstract
      * @param array $data
      * @return string
      */
-    private static function getSelectedData(string $json, array $data) : string
+    private static function getSelectedData(string $json, array $data): string
     {
         if (current($data) === PhpInterface::ASTERISK) {// do nothing - grab all fields
             return $json;
@@ -198,7 +199,7 @@ class Json extends JsonAbstract
      * @param array &$json
      * @param array $data
      */
-    private static function unsetArray(array &$json, array $data) : void
+    private static function unsetArray(array &$json, array $data): void
     {
         foreach ($json as $type => &$jsonObject) {
 
@@ -224,17 +225,54 @@ class Json extends JsonAbstract
      * @param array $json
      * @param array $data
      */
-    private static function unsetObject(array &$json, array $data) : void
+    private static function unsetObject(array &$json, array $data): void
     {
-        if (empty($json[JSONApiInterface::CONTENT_DATA]) === false
-            && empty($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES]) === false) {
+        $isDataAndAttrs = empty($json[JSONApiInterface::CONTENT_DATA]) === false
+            && empty($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES]) === false;
 
+        if ($isDataAndAttrs) {
+            $attrsCase = ConfigHelper::getParam(ConfigInterface::ATTRIBUTES_CASE);
             foreach ($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES] as $k => $v) {
                 if (\in_array($k, $data, true) === false) {
                     unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
+                } else if ($attrsCase !== ConfigInterface::DEFAULT_CASE) {
+                    $changedKey = $k;
+                    if ($attrsCase === ConfigInterface::CAMEL_CASE) {
+                        $changedKey = self::changeParamKeyToLowerCamelCase($k);
+                    } else if ($attrsCase === ConfigInterface::LISP_CASE) {
+                        $changedKey = self::changeParamKeyToLispCase($k);
+                    }
+
+                    $json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$changedKey] = $v;
+                    if ($changedKey !== $k) {
+                        unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
+                    }
                 }
             }
         }
+    }
+
+    /**
+     * @param string $param
+     * @return string
+     */
+    public static function changeParamKeyToLowerCamelCase(string $param): string
+    {
+        return lcfirst(
+            str_replace(' ', '', ucwords(
+                    str_replace('_', ' ', $param)
+                )
+            )
+        );
+    }
+
+    /**
+     * @param string $param
+     * @return string
+     */
+    public static function changeParamKeyToLispCase(string $param): string
+    {
+        return lcfirst(str_replace('_', '-', $param));
     }
 
     /**
