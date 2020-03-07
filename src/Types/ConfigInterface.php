@@ -19,10 +19,7 @@ interface ConfigInterface
     public const CUSTOM_SQL       = 'custom_sql';
     public const QUERY            = 'query';
     public const BINDINGS         = 'bindings';
-    public const DATABASE         = 'database';
-    public const PASSWORD         = 'password';
-    public const HOST             = 'host';
-    public const PORT             = 'port';
+    public const ATTRIBUTES_CASE  = 'attributes_case';
 
     public const STATE_MACHINE = 'state_machine';
     public const SPELL_CHECK   = 'spell_check';
@@ -39,12 +36,11 @@ interface ConfigInterface
     public const SPELL_CHECK_METHOD   = 'setSpellOptions';
     public const BIT_MASK_METHOD      = 'setBitMaskOptions';
     public const CACHE_METHOD         = 'setCacheOptions';
-    public const JWT_METHOD           = 'setJwtOptions';
+
+    // json-api attributes can be in one of: camel-case, snake-case, lisp-case
+    public const DEFAULT_CAMEL_CASE  = 'snake-case';
 
     // todo: make this prop set via config for tests to run normally
     public const DEFAULT_ACTIVATE = 30;
     public const DEFAULT_EXPIRES  = 3600;
-
-    public const DEFAULT_REDIS_HOST = '127.0.0.1';
-    public const DEFAULT_REDIS_PORT = 6379;
 }
