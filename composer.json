@@ -28,7 +28,7 @@
         "php": ">=7.1",
         "ext-json": "*",
         "ext-pdo": "*",
-        "illuminate/container": "^5.8|^6.0",
+        "illuminate/container": ">=5.8",
         "lcobucci/jwt": "^3.2",
         "league/fractal": "~0.14",
         "nwidart/laravel-modules": ">=3.1",
