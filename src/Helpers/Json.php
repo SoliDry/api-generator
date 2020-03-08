@@ -201,6 +201,7 @@ class Json extends JsonAbstract
      */
     private static function unsetArray(array &$json, array $data): void
     {
+        $attrsCase = ConfigHelper::getParam(ConfigInterface::ATTRIBUTES_CASE);
         foreach ($json as $type => &$jsonObject) {
 
             if ($type === ApiInterface::RAML_DATA) { // unset only data->attributes fields
@@ -211,6 +212,8 @@ class Json extends JsonAbstract
 
                             if (\in_array($key, $data, true) === false) {
                                 unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
+                            } else if ($attrsCase !== ConfigInterface::DEFAULT_CASE) {
+                                self::changeParamKey($json, $k, $v, $attrsCase);
                             }
                         }
                     }
@@ -236,19 +239,30 @@ class Json extends JsonAbstract
                 if (\in_array($k, $data, true) === false) {
                     unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
                 } else if ($attrsCase !== ConfigInterface::DEFAULT_CASE) {
-                    $changedKey = $k;
-                    if ($attrsCase === ConfigInterface::CAMEL_CASE) {
-                        $changedKey = self::changeParamKeyToLowerCamelCase($k);
-                    } else if ($attrsCase === ConfigInterface::LISP_CASE) {
-                        $changedKey = self::changeParamKeyToLispCase($k);
-                    }
-
-                    $json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$changedKey] = $v;
-                    if ($changedKey !== $k) {
-                        unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
-                    }
+                    self::changeParamKey($json, $k, $v, $attrsCase);
                 }
             }
+        }
+    }
+
+    /**
+     * @param array $json
+     * @param string $k
+     * @param mixed $v
+     * @param string $attrsCase
+     */
+    public static function changeParamKey(array &$json, string $k, $v, string $attrsCase): void
+    {
+        $changedKey = $k;
+        if ($attrsCase === ConfigInterface::CAMEL_CASE) {
+            $changedKey = self::changeParamKeyToLowerCamelCase($k);
+        } else if ($attrsCase === ConfigInterface::LISP_CASE) {
+            $changedKey = self::changeParamKeyToLispCase($k);
+        }
+
+        $json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$changedKey] = $v;
+        if ($changedKey !== $k) {
+            unset($json[JSONApiInterface::CONTENT_DATA][JSONApiInterface::CONTENT_ATTRIBUTES][$k]);
         }
     }
 
