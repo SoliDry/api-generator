@@ -213,7 +213,7 @@ class Json extends JsonAbstract
                             if (\in_array($key, $data, true) === false) {
                                 unset($v[JSONApiInterface::CONTENT_ATTRIBUTES][$key]);
                             } else if ($attrsCase !== ConfigInterface::DEFAULT_CASE) {
-                                self::changeParamKey($json, $k, $v, $attrsCase);
+                                self::changeParamKey($json, $key, $attr, $attrsCase);
                             }
                         }
                     }
