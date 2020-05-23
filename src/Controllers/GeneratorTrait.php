@@ -27,11 +27,7 @@ trait GeneratorTrait
 
     // all generated entities/resources
     private $forms;
-    private $mappers;
     private $routes;
-    private $migrations;
-    private $controllers;
-    private $tests;
 
     // gen dir found in history
     private $genDir;
@@ -64,8 +60,8 @@ trait GeneratorTrait
                 $this->error($e->getTraceAsString());
             }
 
-            $this->tests = new Tests($this);
-            $this->tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
+            $tests = new Tests($this);
+            $tests->createEntity($this->formatFuncTestsPath(), DefaultInterface::FUNCTIONAL_POSTFIX);
         }
 
         $this->createMigrations();
@@ -95,17 +91,17 @@ trait GeneratorTrait
      */
     private function solveControllers(): void
     {
-        $this->controllers = new Controllers($this);
+        $controllers = new Controllers($this);
         $controllerPath = $this->formatControllersPath();
 
         if (empty($this->options[ConsoleInterface::OPTION_REGENERATE]) === false
-            && file_exists($this->controllers->getEntityFile($controllerPath,
+            && file_exists($controllers->getEntityFile($controllerPath,
                 DefaultInterface::CONTROLLER_POSTFIX)) === true) {
 
-            $this->controllers->recreateEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
+            $controllers->recreateEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
         } else {
-            $this->controllers->createDefault();
-            $this->controllers->createEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
+            $controllers->createDefault();
+            $controllers->createEntity($controllerPath, DefaultInterface::CONTROLLER_POSTFIX);
         }
     }
 
@@ -129,15 +125,15 @@ trait GeneratorTrait
     private function solveEntities(): void
     {
         // create entities/models
-        $this->mappers = new Entities($this);
-        $this->mappers->createPivot();
+        $mappers = new Entities($this);
+        $mappers->createPivot();
         $entitiesPath = $this->formatEntitiesPath();
 
         if (empty($this->options[ConsoleInterface::OPTION_MERGE]) === false
             && file_exists($this->forms->getEntityFile($entitiesPath)) === true) {
-            $this->mappers->recreateEntity($entitiesPath);
+            $mappers->recreateEntity($entitiesPath);
         } else {
-            $this->mappers->createEntity($entitiesPath);
+            $mappers->createEntity($entitiesPath);
         }
     }
 
@@ -155,9 +151,9 @@ trait GeneratorTrait
     private function createMigrations(): void
     {
         if (empty($this->options[ConsoleInterface::OPTION_MIGRATIONS]) === false) {
-            $this->migrations = new Migrations($this);
-            $this->migrations->create();
-            $this->migrations->createPivot();
+            $migrations = new Migrations($this);
+            $migrations->create();
+            $migrations->createPivot();
         }
     }
 }

@@ -30,7 +30,6 @@ class BaseCommand extends Command
     use GeneratorTrait;
 
     // dirs
-    public $rootDir = '';
     public $appDir = '';
     public $modulesDir = '';
     public $httpDir = '';
@@ -42,7 +41,6 @@ class BaseCommand extends Command
     public $version;
     public $objectName = '';
     public $defaultController = 'Default';
-    public $uriNamedParams;
     public $force;
     public $customTypes = [
         CustomsInterface::CUSTOM_TYPES_ID,
@@ -54,10 +52,8 @@ class BaseCommand extends Command
     public $types = [];
     public $currentTypes = [];
     public $historyTypes = [];
-    public $mergedTypes = [];
     public $diffTypes = [];
     public $objectProps = [];
-    public $generatedFiles = [];
     public $relationships = [];
     private $files = [];
 

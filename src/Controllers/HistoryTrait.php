@@ -9,7 +9,6 @@ use SoliDry\Types\DirsInterface;
 use SoliDry\Types\ErrorsInterface;
 use SoliDry\Types\ApiInterface;
 use SoliDry\Types\PhpInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * Trait HistoryTrait
