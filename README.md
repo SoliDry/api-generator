@@ -2282,4 +2282,4 @@ PS The purpose of this repo is to prevent doing the same things over and over ag
 
 Supporters gratitude:
 
-![alt JetBrains logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/jetbrains-logo.png =150x150)
+![alt JetBrains logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/jetbrains-logo.png){:height="166px" width="200px"}
