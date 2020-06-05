@@ -2279,3 +2279,7 @@ JSON-API support is provided, particularly for output, by Fractal package - http
 Happy coding ;-)
 
 PS The purpose of this repo is to prevent doing the same things over and over again, expecting different results. (Thx to Albert Einstein) 
+
+Supporters gratitude:
+
+![alt JetBrains logo](https://github.com/SoliDry/laravel-api/blob/master/tests/images/jetbrains-logo.png =150x150)
