@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Request;
 use Lcobucci\JWT\Parser;
 use Lcobucci\JWT\Token;
 use SoliDry\Extension\BaseJwt;
-use SoliDry\Extension\BaseModel;
-use SoliDry\Extension\JWTTrait;
 use SoliDry\Helpers\Jwt;
 use SoliDryTest\Unit\TestCase;
 
@@ -23,40 +21,31 @@ class JwtTest extends TestCase
     /**
      * @test
      */
-    public function it_creates_jwt_token() : array
+    public function it_creates_and_verifies_jwt_token(): string
     {
         /** @var Token $token */
         $id        = random_int(1, 1000);
-        $uniqueId  = uniqid('', true);
-        $jwtString = Jwt::create($id, $uniqueId);
+        $jwtString = Jwt::create($id);
         $token     = (new Parser())->parse($jwtString);
+
         $this->assertInstanceOf(Token::class, $token);
         $this->assertEquals($token->getClaim('uid'), $id);
-        return [$token, $uniqueId];
+        $this->assertTrue(Jwt::verify($token));
+
+        return $jwtString;
     }
 
     /**
      * @test
-     * @depends it_creates_jwt_token
-     * @param array $data
-     * @return array
+     * @depends it_creates_and_verifies_jwt_token
+     * @param string $jwt
      */
-    public function it_verifies_jwt_token(array $data) : array
-    {
-        $this->assertTrue(Jwt::verify($data[0], $data[1]));
-        return $data;
-    }
-
-    /**
-     * @test
-     * @depends it_verifies_jwt_token
-     * @param array $data
-     */
-    public function it_handles_jwt(array $data)
+    public function it_handles_jwt(string $jwt): void
     {
         $baseJwt      = new BaseJwt();
         $request      = new Request();
-        $request->jwt = $data[0];
+        $request->jwt = $jwt;
+
         $baseJwt->handle($request, function ($request) {
             $this->assertInstanceOf(Request::class, $request);
         });

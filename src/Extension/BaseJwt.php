@@ -34,7 +34,7 @@ class BaseJwt
                 die('JWT token required.');
             }
             $token = (new Parser())->parse((string)$request->jwt);
-            if(Jwt::verify($token, $token->getHeader('jti')) === false) {
+            if(Jwt::verify($token) === false) {
                 header('HTTP/1.1 403 Forbidden');
                 die('Access forbidden.');
             }

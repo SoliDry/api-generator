@@ -20,15 +20,15 @@ class Jwt
      * Fulfills the token with data and signs it with key
      *
      * @param int $uid
-     * @param string $generatedId
      *
      * @return string
      * @throws \BadMethodCallException
      */
-    public static function create(int $uid, string $generatedId) : string
+    public static function create(int $uid) : string
     {
         $signer = new Sha256();
 
+        $generatedId = uniqid('', true);
         return (new Builder())->setIssuer($_SERVER['HTTP_HOST'])// Configures the issuer (iss claim)
         ->setAudience($_SERVER['HTTP_HOST'])// Configures the audience (aud claim)
         ->setId($generatedId, true)// Configures the id (jti claim), replicating as a header item
@@ -50,12 +50,15 @@ class Jwt
      * @throws \BadMethodCallException
      * @throws \OutOfBoundsException
      */
-    public static function verify(Token $token, string $generatedId)
+    public static function verify(Token $token): bool
     {
+        $generatedId = $token->getHeader('jti');
+
         $data = new ValidationData(); // It will use the current time to validate (iat, nbf and exp)
         $data->setIssuer($_SERVER['HTTP_HOST']);
         $data->setAudience($_SERVER['HTTP_HOST']);
         $data->setId($generatedId);
+
         $signer = new Sha256();
         $uid    = $token->getClaim('uid');
         return $token->validate($data) && $token->verify($signer, $generatedId . config(self::JWT_SECRETE_KEY) . $uid);

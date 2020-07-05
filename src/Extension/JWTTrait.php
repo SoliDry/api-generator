@@ -30,10 +30,9 @@ trait JWTTrait
             );
         }
 
-        $uniqId          = uniqid();
         /** @var \Illuminate\Database\Eloquent\Model $model */
         $model           = $this->getEntity($this->model->id);
-        $model->jwt      = Jwt::create($this->model->id, $uniqId);
+        $model->jwt      = Jwt::create($this->model->id);
         $model->password = password_hash($this->model->password, PASSWORD_DEFAULT);
         $model->save();
         $this->model = $model;
@@ -56,8 +55,8 @@ trait JWTTrait
                 ]
             );
         }
-        $uniqId     = uniqid();
-        $model->jwt = Jwt::create($model->id, $uniqId);
+
+        $model->jwt = Jwt::create($model->id);
         unset($model->password);
     }
 }
