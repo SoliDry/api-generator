@@ -1221,6 +1221,8 @@ Note, that U have an ability to make any ranges for varchar, integer types throu
 For instance, integer can be set to unsigned smallint with 
 `minimum: 1` (any number > 0) and `maximum: 2` (any number <= 3 to fit smallint db type range).  
 
+If double/float types used, then maximum goes for display length (or M) and minimum for precision (or D) in SQL e.g.: DOUBLE(M, D)
+
 All migrations for specific module will be placed in ``` Modules/{ModuleName}/Database/Migrations/ ```
 
 To execute them all - run: ``` php artisan module:migrate ```

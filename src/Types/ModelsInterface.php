@@ -6,9 +6,6 @@ interface ModelsInterface
 {
     public const ID = 'id';
     // Laravel
-    public const LARAVEL_ACTIVE_RECORD   = 'Model';
-    public const LARAVEL_MIGRATION_CLASS = 'Migration';
-    public const LARAVEL_PROPERTY_TABLE  = 'table';
     public const DEFAULT_LIMIT           = 20;
     public const MAX_LIMIT               = 1000;
     public const DEFAULT_PAGE            = 1;
@@ -26,9 +23,6 @@ interface ModelsInterface
     public const LARAVEL_FILTER_MAX      = 'max';
     public const COLUMN                  = 'column';
     public const DIRECTION               = 'direction';
-    public const PARENT_ID               = 'parent_id';
-
-    public const COUNT = 'count';
 
     // Methods
     public const MODEL_METHOD_ALL      = 'all';
@@ -104,16 +98,18 @@ interface ModelsInterface
 
 
     public const ID_MAX_INCREMENTS = 10;
-    public const STRING_MAX_CHARS  = 32;
 
     // db indices
     public const INDEX_TYPE_INDEX   = 'index';
     public const INDEX_TYPE_UNIQUE  = 'unique';
     public const INDEX_TYPE_PRIMARY = 'primary';
     public const INDEX_TYPE_FOREIGN = 'foreign';
-    public const INDEX_COLUMN       = '_column';
     public const INDEX_REFERENCES   = 'references';
     public const INDEX_ON           = 'on';
     public const INDEX_ON_DELETE    = 'onDelete';
     public const INDEX_ON_UPDATE    = 'onUpdate';
+
+    // default double/float values
+    public const DEFAULT_DOUBLE_M = 16; // display length
+    public const DEFAULT_DOUBLE_D = 4; // precision
 }

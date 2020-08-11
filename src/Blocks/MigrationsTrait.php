@@ -121,8 +121,8 @@ trait MigrationsTrait
             && ($attrVal[ApiInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_DOUBLE
                 || $attrVal[ApiInterface::RAML_TYPE_FORMAT] === ModelsInterface::MIGRATION_METHOD_FLOAT)
         ) {
-            $max = empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MAX];
-            $min = empty($attrVal[ApiInterface::RAML_INTEGER_MIN]) ? PhpInterface::PHP_TYPES_ARRAY : $attrVal[ApiInterface::RAML_INTEGER_MIN];
+            $max = empty($attrVal[ApiInterface::RAML_INTEGER_MAX]) ? ModelsInterface::DEFAULT_DOUBLE_M : $attrVal[ApiInterface::RAML_INTEGER_MAX];
+            $min = empty($attrVal[ApiInterface::RAML_INTEGER_MIN]) ? ModelsInterface::DEFAULT_DOUBLE_D : $attrVal[ApiInterface::RAML_INTEGER_MIN];
 
             $this->setRow($attrVal[ApiInterface::RAML_TYPE_FORMAT], $attrKey, $max . PhpInterface::COMMA
                 . PhpInterface::SPACE . $min);
