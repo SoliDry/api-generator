@@ -22,7 +22,10 @@ class Console
     public const ANSI_COLOR_YELLOW = "\x1b[33m";
     public const ANSI_COLOR_RESET  = "\x1b[0m";
 
-    private static $colorMaps = [
+    /**
+     * @var array|string[]
+     */
+    private static array $colorMaps = [
         self::COLOR_RED    => self::ANSI_COLOR_RED,
         self::COLOR_GREEN  => self::ANSI_COLOR_GREEN,
         self::COLOR_YELLOW => self::ANSI_COLOR_YELLOW,

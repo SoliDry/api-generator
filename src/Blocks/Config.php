@@ -23,19 +23,29 @@ class Config implements ConfigInterface
 {
     use ContentManager, ConfigTrait;
 
-    protected $sourceCode = '';
-    /** @var BaseCommand generator */
-    protected $generator;
-    protected $className;
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
 
-    private $queryParams = [
+    /**
+     * @var BaseCommand
+     */
+    protected BaseCommand $generator;
+
+    /**
+     * @var string
+     */
+    protected string $className;
+
+    private array $queryParams = [
         ModelsInterface::PARAM_LIMIT,
         ModelsInterface::PARAM_SORT,
         ModelsInterface::PARAM_PAGE,
         JSONApiInterface::PARAM_ACCESS_TOKEN,
     ];
 
-    private $entityMethods = [
+    private array $entityMethods = [
         ConfigInterface::STATE_MACHINE => ConfigInterface::STATE_MACHINE_METHOD,
         ConfigInterface::SPELL_CHECK   => ConfigInterface::SPELL_CHECK_METHOD,
         ConfigInterface::BIT_MASK      => ConfigInterface::BIT_MASK_METHOD,

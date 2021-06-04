@@ -24,13 +24,31 @@ use SoliDry\Types\ApiInterface;
 class Entities extends FormRequestModel
 {
     use ContentManager, EntitiesTrait;
-    /** @var ApiGenerator $generator */
-    private $generator;
-    private $className;
 
-    protected $sourceCode   = '';
-    protected $isSoftDelete = false;
+    /**
+     * @var ApiGenerator
+     */
+    private ApiGenerator $generator;
 
+    /**
+     * @var string
+     */
+    private string $className;
+
+    /**
+     * @var string
+     */
+    protected string $sourceCode   = '';
+
+    /**
+     * @var bool
+     */
+    protected bool $isSoftDelete = false;
+
+    /**
+     * Entities constructor.
+     * @param $generator
+     */
     public function __construct($generator)
     {
         $this->generator = $generator;

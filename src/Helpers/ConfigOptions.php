@@ -7,7 +7,10 @@ namespace SoliDry\Helpers;
  */
 class ConfigOptions
 {
-    private $calledMethod = '';
+    /**
+     * @var string
+     */
+    private string $calledMethod = '';
 
     // query params
     private $queryLimit;
@@ -19,17 +22,41 @@ class ConfigOptions
     private $jwtTable;
     private $isJwtAction;
     // state machine
-    private $isStateMachine = false;
+    /**
+     * @var bool
+     */
+    private bool $isStateMachine = false;
     // spell check
-    private $spellCheck = false;
+    /**
+     * @var bool
+     */
+    private bool $spellCheck = false;
     // bit mask
-    private $isBitWise = false;
-    private $hiddenBitMask = false;
+    /**
+     * @var bool
+     */
+    private bool $isBitWise = false;
+
     // cache settings
-    private $isCached = false;
-    private $isXFetch = false;
-    private $cacheBeta = 1.0;
-    private $cacheTtl = 0;
+    /**
+     * @var bool
+     */
+    private bool $isCached = false;
+
+    /**
+     * @var bool
+     */
+    private bool $isXFetch = false;
+
+    /**
+     * @var float
+     */
+    private float $cacheBeta = 1.0;
+
+    /**
+     * @var int
+     */
+    private int $cacheTtl = 0;
 
     /**
      * @return mixed

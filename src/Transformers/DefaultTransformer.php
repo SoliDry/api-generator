@@ -23,7 +23,10 @@ class DefaultTransformer extends TransformerAbstract
 
     public const INCLUDE_PREFIX = 'include';
 
-    private $formRequest;
+    /**
+     * @var BaseFormRequest
+     */
+    private BaseFormRequest $formRequest;
 
     /**
      * DefaultTransformer constructor.

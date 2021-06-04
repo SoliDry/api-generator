@@ -14,7 +14,7 @@ use SoliDry\Types\ApiInterface;
  */
 trait ConfigTrait
 {
-    public $openedBrackets = [];
+    public array $openedBrackets = [];
 
     /**
      *  Opens config's root element

@@ -13,12 +13,36 @@ use SoliDry\Types\ModelsInterface;
  */
 class SqlOptions
 {
-    public $id      = 0;
-    public $limit   = ModelsInterface::DEFAULT_LIMIT;
-    public $page    = ModelsInterface::DEFAULT_PAGE;
-    public $orderBy = [];
-    public $data    = ModelsInterface::DEFAULT_DATA;
-    public $filter  = [];
+    /**
+     * @var int
+     */
+    public int $id      = 0;
+
+    /**
+     * @var int
+     */
+    public int $limit   = ModelsInterface::DEFAULT_LIMIT;
+
+    /**
+     * @var int
+     */
+    public int $page    = ModelsInterface::DEFAULT_PAGE;
+
+    /**
+     * @var array
+     */
+    public array $orderBy = [];
+
+    /**
+     * @var array|string[]
+     */
+    public array $data    = ModelsInterface::DEFAULT_DATA;
+
+    /**
+     * @var array
+     */
+    public array $filter  = [];
+
     public $formRequest;
 
     /**

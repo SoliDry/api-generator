@@ -15,18 +15,34 @@ class Routes
 
     use ContentManager, RoutesTrait;
 
-    /** @var ApiGenerator $generator */
-    private $generator;
-    protected $sourceCode = '';
+    /**
+     * @var ApiGenerator
+     */
+    private ApiGenerator $generator;
 
-    private $className;
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
 
+    /**
+     * @var string
+     */
+    private string $className;
+
+    /**
+     * Routes constructor.
+     * @param $generator
+     */
     public function __construct($generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
+    /**
+     * @param $generator
+     */
     public function setCodeState($generator): void
     {
         $this->generator = $generator;

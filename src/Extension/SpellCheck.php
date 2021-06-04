@@ -8,11 +8,29 @@ use SoliDry\Types\PhpInterface;
 
 class SpellCheck
 {
+    /**
+     * @var mixed|null
+     */
     private $entity    = [];
+
+    /**
+     * @var int|string|null
+     */
     private $field     = null;
-    private $isEnabled = false;
+
+    /**
+     * @var bool
+     */
+    private bool $isEnabled = false;
+
+    /**
+     * @var mixed|string
+     */
     private $language  = ConfigInterface::DEFAULT_LANGUAGE;
 
+    /**
+     * @var false|int|null
+     */
     private $speLink = null;
     /**
      * SpellCheck constructor.

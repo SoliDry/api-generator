@@ -19,7 +19,10 @@ use SoliDry\Helpers\SqlOptions;
  */
 trait BaseModelTrait
 {
-    private $pagination = false;
+    /**
+     * @var bool
+     */
+    private bool $pagination = false;
 
     /**
      * @param bool $pagination

@@ -17,7 +17,10 @@ abstract class FormRequestModel
 
     public const CHECK_MANY_BRACKETS = '[]';
 
-    private $legalTypes = [
+    /**
+     * @var array
+     */
+    private array $legalTypes = [
         ApiInterface::RAML_TYPE_DATETIME,
         ApiInterface::RAML_TYPE_STRING,
         ApiInterface::RAML_TYPE_INTEGER,
@@ -25,7 +28,10 @@ abstract class FormRequestModel
         ApiInterface::RAML_TYPE_ARRAY,
     ];
 
-    private $excludedKeys = [
+    /**
+     * @var array
+     */
+    private array $excludedKeys = [
         ApiInterface::RAML_KEY_DESCRIPTION,
         ApiInterface::RAML_KEY_DEFAULT,
     ];

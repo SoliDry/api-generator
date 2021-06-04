@@ -23,10 +23,25 @@ use SoliDry\Types\ApiInterface;
 trait OptionsTrait
 {
     // default query params value
-    private $defaultPage = ModelsInterface::DEFAULT_PAGE;
-    private $defaultLimit = ModelsInterface::DEFAULT_LIMIT;
-    private $defaultSort = '';
-    private $isTree = false;
+    /**
+     * @var int
+     */
+    private int $defaultPage = ModelsInterface::DEFAULT_PAGE;
+
+    /**
+     * @var int
+     */
+    private int $defaultLimit = ModelsInterface::DEFAULT_LIMIT;
+
+    /**
+     * @var string
+     */
+    private string $defaultSort = '';
+
+    /**
+     * @var bool
+     */
+    private bool $isTree = false;
 
     /**
      * Sets SqlOptions params

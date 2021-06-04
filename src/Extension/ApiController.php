@@ -34,27 +34,61 @@ class ApiController extends Controller implements JSONApiInterface
         CacheTrait;
 
     // JSON API support enabled by default
-    protected $jsonApi = true;
+    /**
+     * @var bool
+     */
+    protected bool $jsonApi = true;
 
-    protected $props = [];
+    /**
+     * @var array
+     */
+    protected array $props = [];
+
     protected $entity;
-    /** @var BaseModel $model */
-    protected $model;
-    /** @var EntitiesTrait $modelEntity */
-    private   $modelEntity;
+
+    /**
+     * @var BaseModel
+     */
+    protected BaseModel $model;
+
+    /**
+     * @var EntitiesTrait
+     */
+    private EntitiesTrait $modelEntity;
+
     protected $formRequest;
-    private   $relsRemoved    = false;
-    private   $defaultOrderBy = [];
-    /** @var ConfigOptions $configOptions */
-    protected $configOptions;
-    /** @var CustomSql $customSql */
-    protected $customSql;
-    /** @var BitMask $bitMask */
-    private $bitMask;
+
+    /**
+     * @var bool
+     */
+    private bool $relsRemoved    = false;
+
+    /**
+     * @var array
+     */
+    private array $defaultOrderBy = [];
+
+    /**
+     * @var ConfigOptions
+     */
+    protected ConfigOptions $configOptions;
+
+    /**
+     * @var CustomSql
+     */
+    protected CustomSql $customSql;
+
+    /**
+     * @var BitMask
+     */
+    private BitMask $bitMask;
 
     private $response;
 
-    private $jsonApiMethods = [
+    /**
+     * @var array
+     */
+    private array $jsonApiMethods = [
         JSONApiInterface::URI_METHOD_INDEX,
         JSONApiInterface::URI_METHOD_VIEW,
         JSONApiInterface::URI_METHOD_CREATE,

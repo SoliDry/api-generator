@@ -15,12 +15,25 @@ class Tests
 {
     use ContentManager;
 
-    private $className;
-    private $attributesState = [];
+    /**
+     * @var string
+     */
+    private string $className;
 
-    protected $sourceCode   = '';
-    protected $isSoftDelete = false;
+    /**
+     * @var array
+     */
+    private array $attributesState = [];
 
+    /**
+     * @var string
+     */
+    protected string $sourceCode   = '';
+
+    /**
+     * Tests constructor.
+     * @param $generator
+     */
     public function __construct($generator)
     {
         $this->generator = $generator;

@@ -13,17 +13,34 @@ class Module
 {
     use ContentManager;
 
-    protected $sourceCode = '';
-    /** @var ApiGenerator generator */
-    protected $generator;
-    protected $className;
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
 
+    /**
+     * @var ApiGenerator
+     */
+    protected ApiGenerator $generator;
+
+    /**
+     * @var string
+     */
+    protected string $className;
+
+    /**
+     * Module constructor.
+     * @param $generator
+     */
     public function __construct($generator)
     {
         $this->generator = $generator;
         $this->className = Classes::getClassName($this->generator->objectName);
     }
 
+    /**
+     * @param $generator
+     */
     public function setCodeState($generator)
     {
         $this->generator = $generator;

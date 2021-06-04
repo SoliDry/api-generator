@@ -169,7 +169,7 @@ Routes (JSON API compatible) and even migrations to help you create RDBMS struct
  
 ```oas/openapi.yaml``` - file in oas directory in the root of your project, 
 which should be prepared before or you may wish to just try by copying an example from 
-``` cp -R vendor/solidry/api-generator/tests/functional/oas/ oas/``` and probably rewrite it for your needs.
+```mkdir oas && curl 'https://raw.githubusercontent.com/SoliDry/api-generator/master/tests/functional/oas/openapi.yaml' > /oas/openapi.yaml``` and probably rewrite it for your needs.
 
 You can also use `.json` ext/format to produce the same results if required or more convenient for your environment.  
 

@@ -21,12 +21,11 @@ use League\Fractal\Resource\Collection as FractalCollection;
  */
 class Response
 {
-    private $json;
-    private $errors;
+    private Json $json;
+    private Errors $errors;
 
     private $formRequest;
     private $entity;
-    private $sqlOptions;
     private $method;
 
     /**

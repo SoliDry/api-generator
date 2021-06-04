@@ -17,11 +17,17 @@ abstract class MigrationsAbstract
 {
     use ContentManager, MigrationsTrait;
 
-    public static $counter = 10;
+    /**
+     * @var int
+     */
+    public static int $counter = 10;
 
     public const PATTERN_TIME = 'Y_m_d_Hi';
 
-    private $signedIntergerMap = [
+    /**
+     * @var array
+     */
+    private array $signedIntergerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
         ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_SMALL_INTEGER,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_MEDIUM_INTEGER,
@@ -29,7 +35,10 @@ abstract class MigrationsAbstract
         ModelsInterface::INT_DIGITS_BIGINT => ModelsInterface::MIGRATION_METHOD_BIG_INTEGER,
     ];
 
-    private $unsignedIntergerMap = [
+    /**
+     * @var array
+     */
+    private array $unsignedIntergerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_UTINYINT,
         ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_USMALLINT,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_UMEDIUMINT,

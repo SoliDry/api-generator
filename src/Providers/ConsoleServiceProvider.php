@@ -9,7 +9,10 @@ use SoliDry\ApiGenerator;
 class ConsoleServiceProvider extends ServiceProvider
 {
 
-    protected $commands = [
+    /**
+     * @var array|string[]
+     */
+    protected array $commands = [
         ApiGenerator::class,
     ];
 

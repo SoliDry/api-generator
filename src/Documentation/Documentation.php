@@ -26,9 +26,20 @@ abstract class Documentation
 
     public const SUCCESSFUL_OPERATION = 'successful operation';
 
-    protected $generator;
-    protected $sourceCode = '';
-    protected $className;
+    /**
+     * @var ApiGenerator
+     */
+    protected ApiGenerator $generator;
+
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
+
+    /**
+     * @var string
+     */
+    protected string $className;
 
     /**
      * Controllers constructor.

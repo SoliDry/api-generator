@@ -30,15 +30,34 @@ class FormRequest extends FormRequestModel
 {
     use ContentManager;
 
-    protected $sourceCode = '';
-    protected $resourceCode = '';
-    protected $generator;
-    private $additionalProps = [
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
+
+    /**
+     * @var string
+     */
+    protected string $resourceCode = '';
+
+    /**
+     * @var BaseCommand
+     */
+    protected BaseCommand $generator;
+
+    /**
+     * @var array|\string[][]
+     */
+    private array $additionalProps = [
         'id' => [
             'type' => 'integer',
         ],
     ];
-    private $className;
+
+    /**
+     * @var string
+     */
+    private string $className;
 
     /**
      * FormRequest constructor.

@@ -11,7 +11,11 @@ use SoliDry\Types\ErrorsInterface;
  */
 class BitMask
 {
-    private $entity    = [];
+    /**
+     * @var array
+     */
+    private array $entity;
+
     private $field;
     private $isEnabled;
 

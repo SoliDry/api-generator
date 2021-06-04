@@ -19,13 +19,30 @@ class Migrations extends MigrationsAbstract
 {
     use EntitiesTrait;
 
-    /** @var BaseCommand $generator */
-    protected $generator;
-    protected $sourceCode = '';
+    /**
+     * @var BaseCommand
+     */
+    protected BaseCommand $generator;
 
-    private $className = '';
-    private $tableName = '';
+    /**
+     * @var string
+     */
+    protected string $sourceCode = '';
 
+    /**
+     * @var string
+     */
+    private string $className;
+
+    /**
+     * @var string
+     */
+    private string $tableName;
+
+    /**
+     * Migrations constructor.
+     * @param $generator
+     */
     public function __construct($generator)
     {
         $this->generator = $generator;
@@ -33,6 +50,9 @@ class Migrations extends MigrationsAbstract
         $this->tableName = MigrationsHelper::getTableName($this->generator->objectName);
     }
 
+    /**
+     * @param $generator
+     */
     public function setCodeState($generator)
     {
         $this->generator = $generator;

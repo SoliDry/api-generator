@@ -16,7 +16,7 @@ use SoliDry\Types\PhpInterface;
  */
 class ConfigHelper
 {
-    private static $availableQueryParams = [
+    private static array $availableQueryParams = [
         ModelsInterface::PARAM_PAGE => ModelsInterface::DEFAULT_PAGE,
         ModelsInterface::PARAM_LIMIT => ModelsInterface::DEFAULT_LIMIT,
         ModelsInterface::PARAM_SORT => ModelsInterface::DEFAULT_SORT,

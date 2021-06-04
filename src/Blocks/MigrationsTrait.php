@@ -16,6 +16,7 @@ trait MigrationsTrait
     /**
      * @param string $entity
      * @param string $schemaMethod
+     * @throws \ReflectionException
      */
     public function openSchema(string $entity, $schemaMethod = ModelsInterface::MIGRATION_CREATE) : void
     {
@@ -40,6 +41,7 @@ trait MigrationsTrait
      *
      * @param string $method
      * @param string $entity
+     * @throws \ReflectionException
      */
     public function createSchema(string $method, string $entity) : void
     {

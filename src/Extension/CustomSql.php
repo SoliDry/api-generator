@@ -11,6 +11,9 @@ use SoliDry\Types\ConfigInterface;
  */
 class CustomSql
 {
+    /**
+     * @var mixed|null
+     */
     private $entity    = [];
     private $isEnabled;
 

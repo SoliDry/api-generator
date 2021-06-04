@@ -30,34 +30,104 @@ class BaseCommand extends Command
     use GeneratorTrait;
 
     // dirs
-    public $appDir = '';
-    public $modulesDir = '';
-    public $httpDir = '';
-    public $controllersDir = '';
-    public $formRequestDir = '';
-    public $entitiesDir = '';
-    public $migrationsDir = '';
+    /**
+     * @var string
+     */
+    public string $appDir = '';
+
+    /**
+     * @var string
+     */
+    public string $modulesDir = '';
+
+    /**
+     * @var string
+     */
+    public string $httpDir = '';
+
+    /**
+     * @var string
+     */
+    public string $controllersDir = '';
+
+    /**
+     * @var string
+     */
+    public string $formRequestDir = '';
+
+    /**
+     * @var string
+     */
+    public string $entitiesDir = '';
+
+    /**
+     * @var string
+     */
+    public string $migrationsDir = '';
 
     public $version;
-    public $objectName = '';
-    public $defaultController = 'Default';
+
+    /**
+     * @var string
+     */
+    public string $objectName = '';
+
+    /**
+     * @var string
+     */
+    public string $defaultController = 'Default';
+
     public $force;
-    public $customTypes = [
+
+    /**
+     * @var array
+     */
+    public array $customTypes = [
         CustomsInterface::CUSTOM_TYPES_ID,
         CustomsInterface::CUSTOM_TYPES_TYPE,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPE_REDIS,
     ];
 
-    public $types = [];
-    public $currentTypes = [];
-    public $historyTypes = [];
-    public $diffTypes = [];
-    public $objectProps = [];
-    public $relationships = [];
-    private $files = [];
+    /**
+     * @var array
+     */
+    public array $types = [];
 
-    public $excludedSubtypes = [
+    /**
+     * @var array
+     */
+    public array $currentTypes = [];
+
+    /**
+     * @var array
+     */
+    public array $historyTypes = [];
+
+    /**
+     * @var array
+     */
+    public array $diffTypes = [];
+
+    /**
+     * @var array
+     */
+    public array $objectProps = [];
+
+    /**
+     * @var array
+     */
+    public array $relationships = [];
+
+    /**
+     * @var array
+     */
+    private array $files = [];
+
+    /**
+     * @var array
+     */
+    public array $excludedSubtypes = [
         CustomsInterface::CUSTOM_TYPES_ATTRIBUTES,
         CustomsInterface::CUSTOM_TYPES_RELATIONSHIPS,
         CustomsInterface::CUSTOM_TYPES_QUERY_PARAMS,
@@ -65,17 +135,33 @@ class BaseCommand extends Command
         CustomsInterface::CUSTOM_TYPES_TREES,
     ];
 
-    public $options = [];
-    public $isMerge = false;
+    /**
+     * @var array
+     */
+    public array $options = [];
+
+    /**
+     * @var bool
+     */
+    public bool $isMerge = false;
+
     /** increment created routes to create file first and then append content */
-    public $routesCreated = 0;
+    public int $routesCreated = 0;
 
-    public $data = [];
+    /**
+     * @var array
+     */
+    public array $data = [];
 
-    public $isRollback = false;
+    /**
+     * @var bool
+     */
+    public bool $isRollback = false;
 
-    // parser class
-    private $parser = Yaml::class;
+    /**
+     * @var string
+     */
+    private string $parser = Yaml::class;
 
     /**
      * Generates api components for OAS

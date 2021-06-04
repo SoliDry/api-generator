@@ -10,11 +10,30 @@ use SoliDry\Types\PhpInterface;
  */
 class MethodOptions
 {
-    private $modifier = PhpInterface::PHP_MODIFIER_PUBLIC;
-    private $name = '';
-    private $returnType = '';
-    private $isStatic = false;
-    private $params = [];
+    /**
+     * @var string
+     */
+    private string $modifier = PhpInterface::PHP_MODIFIER_PUBLIC;
+
+    /**
+     * @var string
+     */
+    private string $name = '';
+
+    /**
+     * @var string
+     */
+    private string $returnType = '';
+
+    /**
+     * @var bool
+     */
+    private bool $isStatic = false;
+
+    /**
+     * @var array
+     */
+    private array $params = [];
 
     /**
      * @return string

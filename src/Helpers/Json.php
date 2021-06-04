@@ -26,8 +26,15 @@ use SoliDry\Helpers\Request as Req;
  */
 class Json extends JsonAbstract
 {
-    private $isCollection = false;
-    private $meta = [];
+    /**
+     * @var bool
+     */
+    private bool $isCollection = false;
+
+    /**
+     * @var array
+     */
+    private array $meta = [];
 
     /**
      * @param $relations      \Illuminate\Database\Eloquent\Collection
