@@ -1579,7 +1579,7 @@ Response will be similar to:
 ```
 Note if JWT ```enabled=true```, password will be hashed with ```password_hash``` and saved to password field internally.
 Do not bother with ```"password": null,``` attribute it is unset before output for safety.
-You can add additional checks on password or other fields ex.: length, strength etc in Model on befor/afterSave events.
+You can add additional checks on password or other fields ex.: length, strength etc in Model on before/afterSave events.
 
 An example for JWT refresh - ```http://example.com/api/v1/user/4```:
  
