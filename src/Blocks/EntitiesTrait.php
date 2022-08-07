@@ -203,7 +203,7 @@ trait EntitiesTrait
     }
 
     /**
-     * Deltes bulk by applying it to transaction/rollback procedure
+     * Deletes bulk by applying it to transaction/rollback procedure
      *
      * @param Request $request
      * @return Response
