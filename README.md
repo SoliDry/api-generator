@@ -217,7 +217,7 @@ servers:
       enum:
         - 80
         - 443
-      defualt: 80
+      default: 80
     basePath:
       default: v3 # this version will be used as Modules subdirectory and base path uri in routes e.g. /Modules/V2/ and /v2/articles 
 # to declare globally which files to include with other components declarations

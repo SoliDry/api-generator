@@ -11,7 +11,7 @@ servers:
       enum:
         - 80
         - 443
-      defualt: 80
+      default: 80
     basePath:
       default: v3
 components:

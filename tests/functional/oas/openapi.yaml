@@ -14,7 +14,7 @@ servers:
       enum:
         - 80
         - 443
-      defualt: 80
+      default: 80
     basePath:
       default: v3
 # to declare globally which files to include with other components declarations
