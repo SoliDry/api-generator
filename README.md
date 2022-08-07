@@ -200,7 +200,7 @@ You can see `Dockerfile` and `docker-compose.yml` files there.
 PS Any contributions to build a better containers are welcome.
 
 ### Open API Types and Declarations
-OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
+OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired of arguing with each other :smile:), thus it became quite popular and
 has been implemented for api-generator
 
 ```YAML
