@@ -200,7 +200,7 @@ You can see `Dockerfile` and `docker-compose.yml` files there.
 PS Any contributions to build a better containers are welcome.
 
 ### Open API Types and Declarations
-OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired to argue with each other :smile:), thus it became quite popular and 
+OAS (Open API Specification) was developed as merge of Swagger and RAML specs by two groups of developers (they tired of arguing with each other :smile:), thus it became quite popular and
 has been implemented for api-generator
 
 ```YAML
@@ -217,7 +217,7 @@ servers:
       enum:
         - 80
         - 443
-      defualt: 80
+      default: 80
     basePath:
       default: v3 # this version will be used as Modules subdirectory and base path uri in routes e.g. /Modules/V2/ and /v2/articles 
 # to declare globally which files to include with other components declarations
@@ -1579,7 +1579,7 @@ Response will be similar to:
 ```
 Note if JWT ```enabled=true```, password will be hashed with ```password_hash``` and saved to password field internally.
 Do not bother with ```"password": null,``` attribute it is unset before output for safety.
-You can add additional checks on password or other fields ex.: length, strength etc in Model on befor/afterSave events.
+You can add additional checks on password or other fields ex.: length, strength etc in Model on before/afterSave events.
 
 An example for JWT refresh - ```http://example.com/api/v1/user/4```:
  

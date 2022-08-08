@@ -121,7 +121,7 @@ class Migrations extends MigrationsAbstract
                     {
                         $file = $this->generator->formatMigrationsPath() . $migrationMask
                                 . PhpInterface::UNDERSCORE . $migrationName . PhpInterface::PHP_EXT;
-                        // if migration file with the same name ocasionally exists we do not override it
+                        // if migration file with the same name occasionally exists we do not override it
                         $isCreated = FileManager::createFile($file, $this->sourceCode);
                         if($isCreated)
                         {

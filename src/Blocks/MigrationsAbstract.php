@@ -27,7 +27,7 @@ abstract class MigrationsAbstract
     /**
      * @var array
      */
-    private array $signedIntergerMap = [
+    private array $signedIntegerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_TINY_INTEGER,
         ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_SMALL_INTEGER,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_MEDIUM_INTEGER,
@@ -38,7 +38,7 @@ abstract class MigrationsAbstract
     /**
      * @var array
      */
-    private array $unsignedIntergerMap = [
+    private array $unsignedIntegerMap = [
         ModelsInterface::INT_DIGITS_TINY => ModelsInterface::MIGRATION_METHOD_UTINYINT,
         ModelsInterface::INT_DIGITS_SMALL => ModelsInterface::MIGRATION_METHOD_USMALLINT,
         ModelsInterface::INT_DIGITS_MEDIUM => ModelsInterface::MIGRATION_METHOD_UMEDIUMINT,
@@ -196,17 +196,17 @@ abstract class MigrationsAbstract
     private function setIntegerDigit(string $key, int $max = null, bool $signed = false): void
     {
         if ($signed) {
-            foreach ($this->signedIntergerMap as $digits => $method) {
-                $next = next($this->signedIntergerMap);
-                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntergerMap)))) {
+            foreach ($this->signedIntegerMap as $digits => $method) {
+                $next = next($this->signedIntegerMap);
+                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->signedIntegerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
             }
         } else {
-            foreach ($this->unsignedIntergerMap as $digits => $method) {
-                $next = next($this->unsignedIntergerMap);
-                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntergerMap)))) {
+            foreach ($this->unsignedIntegerMap as $digits => $method) {
+                $next = next($this->unsignedIntegerMap);
+                if ($digits >= $max && ($next === false || ($next !== false && $max < key($this->unsignedIntegerMap)))) {
                     $this->setRow($method, $key);
                     break;
                 }
@@ -269,7 +269,7 @@ abstract class MigrationsAbstract
         $file = $this->generator->formatMigrationsPath() . $migrationMask . PhpInterface::UNDERSCORE .
             $migrationName . PhpInterface::PHP_EXT;
 
-        // if migration file with the same name ocasionally exists we do not override it
+        // if migration file with the same name occasionally exists we do not override it
         $isCreated = FileManager::createFile($file, $this->sourceCode);
         if ($isCreated) {
             Console::out($file . PhpInterface::SPACE . Console::CREATED, Console::COLOR_GREEN);

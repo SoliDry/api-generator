@@ -1123,8 +1123,8 @@ trait AcceptanceTesterActions
      * ``` php
      * <?php
      * $I->dontSeeInFormFields('form[name=myform]', [
-     *      'input1' => 'non-existent value',
-     *      'input2' => 'other non-existent value',
+     *      'input1' => 'nonexistent value',
+     *      'input2' => 'other nonexistent value',
      * ]);
      * ?>
      * ```
@@ -1171,8 +1171,8 @@ trait AcceptanceTesterActions
      * ``` php
      * <?php
      * $I->dontSeeInFormFields('form[name=myform]', [
-     *      'input1' => 'non-existent value',
-     *      'input2' => 'other non-existent value',
+     *      'input1' => 'nonexistent value',
+     *      'input2' => 'other nonexistent value',
      * ]);
      * ?>
      * ```

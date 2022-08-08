@@ -88,10 +88,10 @@ class Entities extends FormRequestModel
             $this->sourceCode .= PHP_EOL;
             $relations        = $formRequest->relations();
             foreach ($relations as $relationEntity) {
-                $ucEntitty = MigrationsHelper::getObjectName($relationEntity);
+                $ucEntity = MigrationsHelper::getObjectName($relationEntity);
                 // determine if ManyToMany, OneToMany, OneToOne rels
                 $current = $this->getRelationType($this->generator->objectName);
-                $related = $this->getRelationType($ucEntitty);
+                $related = $this->getRelationType($ucEntity);
                 if (empty($current) === false && empty($related) === false) {
                     $this->createRelationMethod($current, $related, $relationEntity);
                 }
@@ -106,13 +106,13 @@ class Entities extends FormRequestModel
      */
     private function createRelationMethod(string $current, string $related, string $relationEntity)
     {
-        $ucEntitty   = ucfirst($relationEntity);
+        $ucEntity    = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
         foreach ($relatedRels as $rel) {
             if (strpos($rel, $this->generator->objectName) !== false) {
                 foreach ($currentRels as $cur) {
-                    if (strpos($cur, $ucEntitty) !== false) {
+                    if (strpos($cur, $ucEntity) !== false) {
                         $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
                         $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
                         if ($isManyCurrent === false && $isManyRelated === false) {// OneToOne
@@ -179,15 +179,15 @@ class Entities extends FormRequestModel
             $relations        = $formRequest->relations();
             $this->sourceCode .= PHP_EOL; // margin top from props
             foreach ($relations as $relationEntity) {
-                $ucEntitty = ucfirst($relationEntity);
-                $file      = $this->generator->formatEntitiesPath()
+                $ucEntity = ucfirst($relationEntity);
+                $file     = $this->generator->formatEntitiesPath()
                     . PhpInterface::SLASH . ucfirst($relationEntity) . $this->generator->objectName .
                     PhpInterface::PHP_EXT;
                 // check if inverse Entity pivot exists
                 if (file_exists($file) === false) {
                     // determine if ManyToMany, OneToMany, OneToOne rels
                     $current = $this->getRelationType($this->generator->objectName);
-                    $related = $this->getRelationType($ucEntitty);
+                    $related = $this->getRelationType($ucEntity);
                     if (empty($current) === false && empty($related) === false) {
                         $this->createPivotClass($current, $related, $relationEntity);
                     }
@@ -204,17 +204,17 @@ class Entities extends FormRequestModel
      */
     private function createPivotClass(string $current, string $related, string $relationEntity): void
     {
-        $ucEntitty   = ucfirst($relationEntity);
+        $ucEntity    = ucfirst($relationEntity);
         $currentRels = explode(PhpInterface::PIPE, $current);
         $relatedRels = explode(PhpInterface::PIPE, $related);
         foreach ($relatedRels as $rel) {
             if (strpos($rel, $this->generator->objectName) !== false) {
                 foreach ($currentRels as $cur) {
-                    if (strpos($cur, $ucEntitty) !== false) {
+                    if (strpos($cur, $ucEntity) !== false) {
                         $isManyCurrent = strpos($cur, self::CHECK_MANY_BRACKETS);
                         $isManyRelated = strpos($rel, self::CHECK_MANY_BRACKETS);
                         if ($isManyCurrent !== false && $isManyRelated !== false) {// ManyToMany
-                            $this->setPivot($ucEntitty);
+                            $this->setPivot($ucEntity);
                         }
                     }
                 }
